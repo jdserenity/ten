@@ -1,0 +1,12 @@
+{
+  "name": "ten",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-words.js",
+    "build": "node scripts/generate-words.js"
+  },
+  "dependencies": {
+    "node-html-parser": "^6.1.13"
+  }
+}

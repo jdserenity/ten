@@ -1,4 +1,4 @@
-const CACHE = 'ten-v3';
+const CACHE = 'ten-v4';
 const ASSETS = ['/', '/index.html', '/words.json'];
 
 self.addEventListener('install', e => {

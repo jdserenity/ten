@@ -147,16 +147,37 @@
     .sentence {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+    }
+
+    .sentence-pt-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
     }
 
     .sentence-pt {
-      font-size: 15px;
+      font-size: 17px;
       line-height: 1.55;
+      flex: 1;
     }
 
+    .sentence-speak-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 2px 0 0;
+      opacity: 0.5;
+      transition: opacity 0.15s, transform 0.1s;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+    .sentence-speak-btn:active { transform: scale(0.88); }
+    .sentence-speak-btn.speaking { opacity: 1; }
+
     .sentence-en {
-      font-size: 13px;
+      font-size: 15px;
       color: var(--muted);
       line-height: 1.4;
     }
@@ -246,11 +267,17 @@
       <hr class="divider" />
       <span class="sentences-label">In use</span>
       <div class="sentence">
-        <span class="sentence-pt" id="s1-pt"></span>
+        <div class="sentence-pt-row">
+          <span class="sentence-pt" id="s1-pt"></span>
+          <button class="sentence-speak-btn" id="s1-speak-btn" title="Hear sentence">🔊</button>
+        </div>
         <span class="sentence-en" id="s1-en"></span>
       </div>
       <div class="sentence">
-        <span class="sentence-pt" id="s2-pt"></span>
+        <div class="sentence-pt-row">
+          <span class="sentence-pt" id="s2-pt"></span>
+          <button class="sentence-speak-btn" id="s2-speak-btn" title="Hear sentence">🔊</button>
+        </div>
         <span class="sentence-en" id="s2-en"></span>
       </div>
     </div>
@@ -352,7 +379,7 @@
         current = i;
         render(i);
         window.speechSynthesis?.cancel();
-        document.getElementById('speak-btn').classList.remove('speaking');
+        document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
       }
 
       document.getElementById('prev-btn').addEventListener('click', () => {
@@ -370,11 +397,11 @@
       });
 
       // Speech
-      function speak() {
+      function speakText(text, btn) {
         if (!window.speechSynthesis) return;
         window.speechSynthesis.cancel();
-        const btn = document.getElementById('speak-btn');
-        const utt = new SpeechSynthesisUtterance(todayWords[current].word);
+        document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+        const utt = new SpeechSynthesisUtterance(text);
         utt.lang = 'pt-BR';
         utt.rate = 0.85;
         utt.onstart = () => btn.classList.add('speaking');
@@ -382,7 +409,17 @@
         window.speechSynthesis.speak(utt);
       }
 
+      function speak() {
+        speakText(todayWords[current].word, document.getElementById('speak-btn'));
+      }
+
       document.getElementById('speak-btn').addEventListener('click', speak);
+      document.getElementById('s1-speak-btn').addEventListener('click', () => {
+        speakText(todayWords[current].sentences[0]?.pt ?? '', document.getElementById('s1-speak-btn'));
+      });
+      document.getElementById('s2-speak-btn').addEventListener('click', () => {
+        speakText(todayWords[current].sentences[1]?.pt ?? '', document.getElementById('s2-speak-btn'));
+      });
 
       // Go
       render(0);

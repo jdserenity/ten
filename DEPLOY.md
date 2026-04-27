@@ -1,35 +1,103 @@
 # Deploying
 
-## First deploy
+## Production target
+
+This app runs on your always-on backup MacBook (effectively 24/7):
+
+- Anki Desktop running continuously
+- AnkiConnect enabled in Anki
+- Ten Node server running continuously
+- Optional: LibreTranslate service running continuously (or remote endpoint)
+
+No Netlify, no static publish directory.
+
+## One-time setup on backup MacBook
+
+### 1) Install dependencies
 
 ```bash
-netlify login        # opens browser to authenticate
-netlify deploy --dir=public --prod
+cd /path/to/ten
+npm install
 ```
 
-The site is live at whatever URL Netlify assigns. You can rename it in the Netlify dashboard under **Site settings → Site details**.
+### 2) Ensure Anki + AnkiConnect are available
 
-## Redeploying
+- Install Anki Desktop
+- Install/enable AnkiConnect add-on
+- Confirm AnkiConnect is reachable locally (default `http://127.0.0.1:8765`)
 
-Any time you push to `main` on GitHub, Netlify redeploys automatically. So the normal flow is:
+### 3) Run Ten server
 
 ```bash
-git add -A
-git commit -m "your message"
-git push
+cd /path/to/ten
+npm run start
 ```
 
-That's it. Netlify picks it up within a few seconds.
+Default app URL: `http://localhost:3000`
 
-## After updating words.json
+## Access from phone
 
-Two things are required — skipping either will leave users (you) with stale cached content:
+Use one of these:
 
-1. **Bump the cache version in `public/sw.js`** — change `ten-vN` to the next number
-2. **Push to main** as above
+- Same Wi-Fi: open `http://<macbook-lan-ip>:3000`
+- Private overlay (recommended): Tailscale/ZeroTier
 
-The service worker version bump forces the browser to discard the old cache and fetch the new `words.json` on next load.
+Keep AnkiConnect bound so the Ten server on the same MacBook can reach it locally.
 
-## Checking a deploy
+## Keep it running 24/7 (macOS launchd)
 
-The Netlify dashboard at app.netlify.com shows deploy history and status. Each deploy takes ~10 seconds. If something looks wrong, you can roll back to a previous deploy from the dashboard with one click.
+Use `launchd` so the server restarts after reboot/crash.
+
+### Example plist (`~/Library/LaunchAgents/com.ten.app.plist`)
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.ten.app</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/zsh</string>
+    <string>-lc</string>
+    <string>cd /path/to/ten && npm run start</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>KeepAlive</key>
+  <true/>
+  <key>StandardOutPath</key>
+  <string>/tmp/ten.out.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/ten.err.log</string>
+</dict>
+</plist>
+```
+
+Load it:
+
+```bash
+launchctl load ~/Library/LaunchAgents/com.ten.app.plist
+```
+
+## Update flow
+
+When you change app code on the MacBook:
+
+```bash
+cd /path/to/ten
+git pull
+npm install
+```
+
+Then restart your launch agent/service if required.
+
+## words.json updates
+
+When `src/client/words.json` changes:
+
+1. Bump cache version in `src/client/sw.js` (`ten-vN` -> next number)
+2. Restart Ten server if needed
+
+The cache bump ensures clients fetch fresh PWA content.

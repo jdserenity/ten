@@ -12,7 +12,7 @@ The user is an intermediate Brazilian Portuguese learner and was catching these 
 
 ## Current approach
 
-Words are written directly by a language-capable agent (Claude) and committed as `public/words.json`. No scraping, no external APIs at generation time. The output is reviewed by the user before deployment.
+Words are written directly by a language-capable agent (Claude) and committed as `src/client/words.json`. No scraping, no external APIs at generation time. The output is reviewed by the user before deployment.
 
 ## Quality standards
 
@@ -36,7 +36,7 @@ Words are written directly by a language-capable agent (Claude) and committed as
 
 ## Format
 
-`public/words.json` is a JSON array. Each entry:
+`src/client/words.json` is a JSON array. Each entry:
 
 ```json
 {
@@ -68,8 +68,8 @@ The app shows 10 words per day from a randomly shuffled pool. With a pool of N w
    - A concise translation that captures real usage
    - 2 natural sentences in Brazilian Portuguese (20–140 chars each) that clearly demonstrate the primary meaning
    - Accurate, natural English translations of those sentences
-3. **Write the full array to `public/words.json`** — replace the file entirely; do not append (unless explicitly asked to extend an existing pool)
-4. **Bump the service worker cache version** in `public/sw.js` — change `ten-vN` to the next number. This is mandatory; without it, deployed browsers will keep serving the old cached `words.json` indefinitely.
+3. **Write the full array to `src/client/words.json`** — replace the file entirely; do not append (unless explicitly asked to extend an existing pool)
+4. **Bump the service worker cache version** in `src/client/sw.js` — change `ten-vN` to the next number. This is mandatory; without it, deployed browsers will keep serving the old cached `words.json` indefinitely.
 
 ### Checking the pool indicator
 

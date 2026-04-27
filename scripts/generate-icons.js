@@ -82,7 +82,7 @@ function createPNG(size) {
 
 for (const size of [192, 512]) {
   const png = createPNG(size);
-  const out = join(__dirname, `../public/icon-${size}.png`);
+  const out = join(__dirname, `../src/client/icon-${size}.png`);
   writeFileSync(out, png);
   console.log(`Written icon-${size}.png`);
 }

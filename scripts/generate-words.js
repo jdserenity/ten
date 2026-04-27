@@ -4,7 +4,7 @@
  * Fetches intermediate Brazilian Portuguese words from the Wiktionary
  * frequency list (skipping the top 500 most common/beginner words),
  * then pulls 2 real example sentences per word from Tatoeba.
- * Outputs public/words.json.
+ * Outputs src/client/words.json.
  */
 
 import { parse } from 'node-html-parser';
@@ -13,7 +13,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_FILE = join(__dirname, '../public/words.json');
+const OUT_FILE = join(__dirname, '../src/client/words.json');
 
 const TARGET_WORDS = 100;
 const SKIP_TOP_N = 500;       // skip the N most frequent (beginner)

@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
     "generate": "node scripts/generate-words.js",
-    "build": "node scripts/generate-words.js"
+    "generate:icons": "node scripts/generate-icons.js",
+    "build": "npm run generate:icons"
   },
   "dependencies": {
     "node-html-parser": "^6.1.13"

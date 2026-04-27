@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Ten" />
+  <title>Ten</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="loading">Loading...</div>
+  <div id="error" style="display:none"></div>
+
+  <div id="app">
+    <header>
+      <div>
+        <h1>Ten</h1>
+        <span id="date-label"></span>
+      </div>
+      <span id="due-pill">0 due</span>
+    </header>
+
+    <div id="top-tabs" role="tablist" aria-label="Main tabs">
+      <button class="top-tab active" data-tab="daily" role="tab" aria-selected="true">10/day</button>
+      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
+      <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
+    </div>
+
+    <section id="tab-daily" class="tab-panel active" role="tabpanel">
+      <div id="dots"></div>
+
+      <div id="card">
+        <div class="word-row">
+          <span id="word"></span>
+          <button id="speak-btn" title="Hear pronunciation">🔊</button>
+        </div>
+        <p id="translation"></p>
+        <hr class="divider" />
+        <span class="sentences-label">In use</span>
+        <div class="sentence">
+          <div class="sentence-pt-row">
+            <span class="sentence-pt" id="s1-pt"></span>
+            <button class="sentence-speak-btn" id="s1-speak-btn" title="Hear sentence">🔊</button>
+          </div>
+          <span class="sentence-en" id="s1-en"></span>
+        </div>
+        <div class="sentence">
+          <div class="sentence-pt-row">
+            <span class="sentence-pt" id="s2-pt"></span>
+            <button class="sentence-speak-btn" id="s2-speak-btn" title="Hear sentence">🔊</button>
+          </div>
+          <span class="sentence-en" id="s2-en"></span>
+        </div>
+      </div>
+
+      <nav id="daily-nav">
+        <button id="prev-btn">← Prev</button>
+        <button id="next-btn">Next →</button>
+      </nav>
+      <p id="counter"></p>
+      <p id="pool-info"></p>
+      <button id="save-daily-card-btn" class="wide-btn">+ Add current word to Anki</button>
+      <p id="daily-save-status" class="status-line"></p>
+    </section>
+
+    <section id="tab-translate" class="tab-panel" role="tabpanel">
+      <div class="surface-card">
+        <h2>Translate</h2>
+        <div class="field-grid">
+          <label class="field">
+            <span>From</span>
+            <select id="translate-source">
+              <option value="auto">Auto</option>
+              <option value="pt">Portuguese</option>
+              <option value="en">English</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>To</span>
+            <select id="translate-target">
+              <option value="en">English</option>
+              <option value="pt">Portuguese</option>
+            </select>
+          </label>
+        </div>
+        <label class="field">
+          <span>Text</span>
+          <textarea id="translate-input" rows="4" placeholder="Type or paste text to translate..."></textarea>
+        </label>
+        <button id="translate-btn" class="primary-btn">Translate</button>
+        <p id="translate-status" class="status-line"></p>
+      </div>
+
+      <div class="surface-card">
+        <h2>Flashcard draft</h2>
+        <label class="field">
+          <span>Front</span>
+          <input id="card-front-input" placeholder="Word or phrase you want to remember" />
+        </label>
+        <label class="field">
+          <span>Back</span>
+          <input id="card-back-input" placeholder="Translation or meaning" />
+        </label>
+        <label class="field">
+          <span>Context (optional)</span>
+          <textarea id="card-context-input" rows="3" placeholder="Sentence, nuance, or reminder"></textarea>
+        </label>
+        <div class="button-row">
+          <button id="save-card-btn" class="primary-btn">Add to Anki</button>
+          <button id="add-anki-btn">Add + Open Review</button>
+        </div>
+        <p id="card-save-status" class="status-line"></p>
+      </div>
+
+      <details class="surface-card">
+        <summary>Connection settings</summary>
+        <label class="field">
+          <span>LibreTranslate endpoint</span>
+          <input id="translate-endpoint-input" placeholder="https://your-server/translate" />
+        </label>
+        <label class="field">
+          <span>LibreTranslate API key (optional)</span>
+          <input id="translate-api-key-input" placeholder="Optional key" />
+        </label>
+        <label class="field">
+          <span>AnkiConnect endpoint</span>
+          <input id="anki-endpoint-input" placeholder="http://127.0.0.1:8765" />
+        </label>
+        <label class="field">
+          <span>Anki deck</span>
+          <input id="anki-deck-input" placeholder="Portuguese::Inbox" />
+        </label>
+        <label class="field">
+          <span>Anki note type</span>
+          <input id="anki-model-input" placeholder="Basic" />
+        </label>
+        <button id="save-settings-btn">Save settings</button>
+        <p id="settings-status" class="status-line"></p>
+      </details>
+    </section>
+
+    <section id="tab-review" class="tab-panel" role="tabpanel">
+      <div class="review-stats">
+        <div class="stat-box">
+          <span class="stat-label">Due now</span>
+          <span class="stat-value" id="review-due-count">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Total cards</span>
+          <span class="stat-value" id="review-total-count">0</span>
+        </div>
+      </div>
+
+      <div id="review-empty" class="surface-card">
+        <span class="caps-label">All clear</span>
+        <p>No cards are due right now in this Anki deck. Add cards from Translate or 10/day, then refresh.</p>
+      </div>
+
+      <div id="review-card-panel" class="surface-card hidden">
+        <span class="caps-label">Front</span>
+        <p id="review-front-text" class="review-front"></p>
+        <p id="review-context" class="review-context hidden"></p>
+
+        <div id="review-answer-wrap" class="hidden">
+          <span class="caps-label">Back</span>
+          <p id="review-back-text" class="review-back"></p>
+        </div>
+
+        <div class="button-row">
+          <button id="review-show-answer-btn" class="primary-btn">Show answer</button>
+          <button id="review-speak-btn">Speak front</button>
+        </div>
+
+        <div id="review-grade-row" class="grade-row hidden">
+          <button data-grade="again">Again</button>
+          <button data-grade="hard">Hard</button>
+          <button data-grade="good">Good</button>
+          <button data-grade="easy">Easy</button>
+        </div>
+      </div>
+
+      <button id="review-refresh-btn" class="wide-btn">Refresh from Anki</button>
+      <p id="review-status" class="status-line"></p>
+    </section>
+  </div>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>

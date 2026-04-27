@@ -1,2 +1,3 @@
-# Local Netlify folder
-.netlify
+# Local runtime/process files
+.DS_Store
+*.log

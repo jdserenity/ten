@@ -1,0 +1,2 @@
+1. Make it so that when you translate a word, if the word is on the frequency dictionary, it says its place / whether it's common or not
+  - When seeing a new word from the 10 words a day, show this frequency number as well

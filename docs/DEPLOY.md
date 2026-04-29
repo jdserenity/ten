@@ -35,6 +35,18 @@ npm run start
 
 Default app URL: `http://localhost:3000`
 
+### 4) Optional: run a local LibreTranslate service
+
+If you want fully local translation (no remote API), install and run LibreTranslate on the same MacBook:
+
+```bash
+cd /path/to/ten
+npm run libretranslate:install
+npm run libretranslate:start
+```
+
+Then keep the app Translate endpoint set to `http://127.0.0.1:5000/translate`.
+
 ## Access from phone
 
 Use one of these:

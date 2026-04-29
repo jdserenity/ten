@@ -53,17 +53,20 @@ header h1 {
   color: var(--muted);
 }
 
-#due-pill {
+#settings-toggle-btn {
   font-size: 12px;
   font-weight: 600;
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 4px 10px;
+  padding: 6px 12px;
+  background: var(--surface);
   color: var(--muted);
   white-space: nowrap;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
-#due-pill.warning {
+#settings-toggle-btn:hover {
   color: var(--accent);
   border-color: var(--accent-dim);
   background: var(--accent-dim);
@@ -74,6 +77,18 @@ header h1 {
   gap: 8px;
   margin-bottom: 12px;
   flex-shrink: 0;
+}
+
+#settings-panel {
+  margin-bottom: 12px;
+}
+
+body.settings-open #top-tabs {
+  display: none;
+}
+
+body.settings-open .tab-panel.active {
+  display: none;
 }
 
 .top-tab {
@@ -334,6 +349,22 @@ header h1 {
 .surface-card h2 {
   font-size: 16px;
   line-height: 1.2;
+}
+
+#translate-result-wrap {
+  border: 1px solid var(--border);
+  background: #111;
+  border-radius: 10px;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.translate-result-text {
+  font-size: 18px;
+  line-height: 1.35;
+  white-space: pre-wrap;
 }
 
 .field {

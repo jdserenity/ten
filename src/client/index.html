@@ -20,7 +20,7 @@
         <h1>Ten</h1>
         <span id="date-label"></span>
       </div>
-      <span id="due-pill">0 due</span>
+      <button id="settings-toggle-btn" type="button" aria-expanded="false" aria-controls="settings-panel">Settings</button>
     </header>
 
     <div id="top-tabs" role="tablist" aria-label="Main tabs">
@@ -28,6 +28,28 @@
       <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
       <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
     </div>
+
+    <section id="settings-panel" class="surface-card hidden">
+      <h2>Connection settings</h2>
+      <label class="field">
+        <span>LibreTranslate endpoint</span>
+        <input id="translate-endpoint-input" placeholder="https://your-server/translate" />
+      </label>
+      <label class="field">
+        <span>AnkiConnect endpoint</span>
+        <input id="anki-endpoint-input" placeholder="http://127.0.0.1:8765" />
+      </label>
+      <label class="field">
+        <span>Anki deck</span>
+        <input id="anki-deck-input" placeholder="Portuguese::Inbox" />
+      </label>
+      <label class="field">
+        <span>Anki note type</span>
+        <input id="anki-model-input" placeholder="Basic" />
+      </label>
+      <button id="save-settings-btn">Save settings</button>
+      <p id="settings-status" class="status-line"></p>
+    </section>
 
     <section id="tab-daily" class="tab-panel active" role="tabpanel">
       <div id="dots"></div>
@@ -73,8 +95,7 @@
           <label class="field">
             <span>From</span>
             <select id="translate-source">
-              <option value="auto">Auto</option>
-              <option value="pt">Portuguese</option>
+              <option value="pt">Brazilian</option>
               <option value="en">English</option>
             </select>
           </label>
@@ -82,7 +103,7 @@
             <span>To</span>
             <select id="translate-target">
               <option value="en">English</option>
-              <option value="pt">Portuguese</option>
+              <option value="pt">Brazilian</option>
             </select>
           </label>
         </div>
@@ -92,10 +113,19 @@
         </label>
         <button id="translate-btn" class="primary-btn">Translate</button>
         <p id="translate-status" class="status-line"></p>
+        <div id="translate-result-wrap" class="hidden">
+          <span class="caps-label">Result</span>
+          <p id="translate-result-text" class="translate-result-text"></p>
+        </div>
+        <div class="button-row">
+          <button id="quick-add-card-btn" class="primary-btn" disabled>Add to Anki</button>
+          <button id="toggle-note-config-btn" disabled>Configure note</button>
+        </div>
+        <p id="quick-add-status" class="status-line"></p>
       </div>
 
-      <div class="surface-card">
-        <h2>Flashcard draft</h2>
+      <div id="flashcard-draft-card" class="surface-card hidden">
+        <h2>Flashcard note config</h2>
         <label class="field">
           <span>Front</span>
           <input id="card-front-input" placeholder="Word or phrase you want to remember" />
@@ -114,32 +144,6 @@
         </div>
         <p id="card-save-status" class="status-line"></p>
       </div>
-
-      <details class="surface-card">
-        <summary>Connection settings</summary>
-        <label class="field">
-          <span>LibreTranslate endpoint</span>
-          <input id="translate-endpoint-input" placeholder="https://your-server/translate" />
-        </label>
-        <label class="field">
-          <span>LibreTranslate API key (optional)</span>
-          <input id="translate-api-key-input" placeholder="Optional key" />
-        </label>
-        <label class="field">
-          <span>AnkiConnect endpoint</span>
-          <input id="anki-endpoint-input" placeholder="http://127.0.0.1:8765" />
-        </label>
-        <label class="field">
-          <span>Anki deck</span>
-          <input id="anki-deck-input" placeholder="Portuguese::Inbox" />
-        </label>
-        <label class="field">
-          <span>Anki note type</span>
-          <input id="anki-model-input" placeholder="Basic" />
-        </label>
-        <button id="save-settings-btn">Save settings</button>
-        <p id="settings-status" class="status-line"></p>
-      </details>
     </section>
 
     <section id="tab-review" class="tab-panel" role="tabpanel">
@@ -171,7 +175,6 @@
 
         <div class="button-row">
           <button id="review-show-answer-btn" class="primary-btn">Show answer</button>
-          <button id="review-speak-btn">Speak front</button>
         </div>
 
         <div id="review-grade-row" class="grade-row hidden">
@@ -180,11 +183,16 @@
           <button data-grade="good">Good</button>
           <button data-grade="easy">Easy</button>
         </div>
+
+        <div class="button-row">
+          <button id="review-card-delete">Delete Card</button>
+        </div>
       </div>
 
       <button id="review-refresh-btn" class="wide-btn">Refresh from Anki</button>
       <p id="review-status" class="status-line"></p>
     </section>
+
   </div>
 
   <script src="/app.js" defer></script>

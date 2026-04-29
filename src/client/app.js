@@ -10,13 +10,16 @@ const DEFAULT_SETTINGS = {
   translateSource: 'auto',
   translateTarget: 'en',
   ankiEndpoint: 'http://127.0.0.1:8765',
-  ankiDeck: 'Portuguese::Inbox',
+  ankiDeck: 'Brazilian Portuguese',
   ankiModel: 'Basic'
 };
 
 const state = {
   activeTab: 'daily',
+  settingsOpen: false,
   settings: loadSettings(),
+  hasTranslatedInSession: false,
+  noteConfigOpen: false,
   words: [],
   todayWords: [],
   currentWordIndex: 0,
@@ -141,10 +144,15 @@ function updateDateLabel() {
     now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-function updateDuePill(dueCount) {
-  const duePill = document.getElementById('due-pill');
-  duePill.textContent = `${dueCount} due`;
-  duePill.classList.toggle('warning', dueCount > 0);
+function setSettingsOpen(open) {
+  state.settingsOpen = Boolean(open);
+  const panel = document.getElementById('settings-panel');
+  const button = document.getElementById('settings-toggle-btn');
+  if (!panel || !button) return;
+  panel.classList.toggle('hidden', !state.settingsOpen);
+  document.body.classList.toggle('settings-open', state.settingsOpen);
+  button.textContent = state.settingsOpen ? 'Close settings' : 'Settings';
+  button.setAttribute('aria-expanded', String(state.settingsOpen));
 }
 
 function buildDailyDots() {
@@ -231,7 +239,6 @@ function showDailyUnavailable(reason) {
 
 function fillSettingsInputs() {
   document.getElementById('translate-endpoint-input').value = state.settings.translateEndpoint;
-  document.getElementById('translate-api-key-input').value = state.settings.translateApiKey;
   document.getElementById('anki-endpoint-input').value = state.settings.ankiEndpoint;
   document.getElementById('anki-deck-input').value = state.settings.ankiDeck;
   document.getElementById('anki-model-input').value = state.settings.ankiModel;
@@ -242,21 +249,18 @@ function fillSettingsInputs() {
 function collectSettingsFromInputs() {
   return {
     translateEndpoint: document.getElementById('translate-endpoint-input').value.trim(),
-    translateApiKey: document.getElementById('translate-api-key-input').value.trim(),
     translateSource: document.getElementById('translate-source').value,
     translateTarget: document.getElementById('translate-target').value,
     ankiEndpoint: document.getElementById('anki-endpoint-input').value.trim(),
-    ankiDeck: document.getElementById('anki-deck-input').value.trim() || 'Portuguese::Inbox',
-    ankiModel: document.getElementById('anki-model-input').value.trim() || 'Basic'
+    ankiDeck: document.getElementById('anki-deck-input').value.trim(),
+    ankiModel: document.getElementById('anki-model-input').value.trim(),
   };
 }
 
 function persistSettingsFromInputs(showMessage = false) {
   state.settings = { ...DEFAULT_SETTINGS, ...collectSettingsFromInputs() };
   saveSettings(state.settings);
-  if (showMessage) {
-    setStatus('settings-status', 'Settings saved locally on this device.', 'success');
-  }
+  if (showMessage) { setStatus('settings-status', 'Settings saved locally on this device.', 'success'); }
   return state.settings;
 }
 
@@ -280,7 +284,8 @@ async function libreTranslate(settings, text, source, target) {
   });
 
   if (!response.ok) {
-    throw new Error(`Translate request failed (${response.status}).`);
+    const details = await extractErrorDetails(response);
+    throw new Error(`Translate request failed (${response.status})${details ? `: ${details}` : '.'}`);
   }
 
   const body = await response.json();
@@ -288,6 +293,23 @@ async function libreTranslate(settings, text, source, target) {
     throw new Error('Unexpected translate response.');
   }
   return body.translatedText.trim();
+}
+
+async function extractErrorDetails(response) {
+  const contentType = String(response.headers.get('content-type') || '').toLowerCase();
+  try {
+    if (contentType.includes('application/json')) {
+      const body = await response.json();
+      if (body && typeof body.error === 'string' && body.error.trim()) return body.error.trim();
+      if (body && typeof body.message === 'string' && body.message.trim()) return body.message.trim();
+      return '';
+    }
+
+    const text = (await response.text()).trim();
+    return text ? text.slice(0, 240) : '';
+  } catch (_) {
+    return '';
+  }
 }
 
 async function ankiInvoke(settings, action, params = {}) {
@@ -300,9 +322,7 @@ async function ankiInvoke(settings, action, params = {}) {
     body: JSON.stringify({ endpoint, action, version: 6, params })
   });
 
-  if (!response.ok) {
-    throw new Error(`AnkiConnect request failed (${response.status}).`);
-  }
+  if (!response.ok) { throw new Error(`AnkiConnect request failed (${response.status}).`); }
 
   const body = await response.json();
   if (body && body.error) throw new Error(body.error);
@@ -348,6 +368,11 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
   }
 }
 
+async function removeNoteFromAnki (noteId) {
+  const settings = persistSettingsFromInputs(false);
+  await ankiInvoke(settings, 'deleteNotes', {"notes": [noteId]})
+}
+
 function mapCardInfoToReviewCard(info) {
   const fields = info && info.fields && typeof info.fields === 'object' ? info.fields : {};
   const frontRaw = fields.Front?.value ?? info.question ?? '';
@@ -359,6 +384,7 @@ function mapCardInfoToReviewCard(info) {
 
   return {
     cardId: Number(info.cardId),
+    noteId: Number(info.note),
     due: Number(info.due) || 0,
     front: htmlToText(frontRaw),
     back: htmlToText(backRaw),
@@ -377,14 +403,12 @@ function renderReview() {
   const dueCount = state.reviewCards.length;
   document.getElementById('review-due-count').textContent = String(dueCount);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
-  updateDuePill(dueCount);
 
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');
   const answerWrap = document.getElementById('review-answer-wrap');
   const gradeRow = document.getElementById('review-grade-row');
   const showAnswerBtn = document.getElementById('review-show-answer-btn');
-  const speakBtn = document.getElementById('review-speak-btn');
 
   const card = getCurrentReviewCard();
   if (!card) {
@@ -393,7 +417,6 @@ function renderReview() {
     showAnswerBtn.classList.remove('hidden');
     answerWrap.classList.add('hidden');
     gradeRow.classList.add('hidden');
-    speakBtn.disabled = true;
     return;
   }
 
@@ -407,7 +430,6 @@ function renderReview() {
   showAnswerBtn.classList.toggle('hidden', state.reviewAnswerVisible);
   answerWrap.classList.toggle('hidden', !state.reviewAnswerVisible);
   gradeRow.classList.toggle('hidden', !state.reviewAnswerVisible);
-  speakBtn.disabled = !card.front;
 
   empty.classList.add('hidden');
   cardPanel.classList.remove('hidden');
@@ -532,6 +554,32 @@ function getDraftFields() {
   };
 }
 
+function setNoteConfigOpen(open) {
+  const draftCard = document.getElementById('flashcard-draft-card');
+  const configureBtn = document.getElementById('toggle-note-config-btn');
+  const canConfigure = state.hasTranslatedInSession;
+  state.noteConfigOpen = canConfigure ? Boolean(open) : false;
+  if (draftCard) {
+    draftCard.classList.toggle('hidden', !state.noteConfigOpen);
+  }
+  if (configureBtn) {
+    configureBtn.disabled = !canConfigure;
+    configureBtn.textContent = state.noteConfigOpen ? 'Hide note config' : 'Configure note';
+  }
+}
+
+function updateTranslateResultUi() {
+  const resultWrap = document.getElementById('translate-result-wrap');
+  const quickAddBtn = document.getElementById('quick-add-card-btn');
+  if (resultWrap) {
+    resultWrap.classList.toggle('hidden', !state.hasTranslatedInSession);
+  }
+  if (quickAddBtn) {
+    quickAddBtn.disabled = !state.hasTranslatedInSession;
+  }
+  setNoteConfigOpen(state.noteConfigOpen);
+}
+
 function setupTabEvents() {
   document.querySelectorAll('.top-tab').forEach(button => {
     button.addEventListener('click', () => setActiveTab(button.dataset.tab));
@@ -599,10 +647,6 @@ function setupDailyKeyboard() {
 }
 
 function setupTranslateEvents() {
-  document.getElementById('save-settings-btn').addEventListener('click', () => {
-    persistSettingsFromInputs(true);
-  });
-
   document.getElementById('translate-btn').addEventListener('click', async () => {
     const text = document.getElementById('translate-input').value.trim();
     if (!text) {
@@ -619,17 +663,29 @@ function setupTranslateEvents() {
 
     try {
       const translated = await libreTranslate(settings, text, source, target);
+      document.getElementById('translate-result-text').textContent = translated;
       document.getElementById('card-front-input').value = text;
       document.getElementById('card-back-input').value = translated;
-      if (text.split(/\s+/).length > 1) {
-        document.getElementById('card-context-input').value = text;
-      }
-      setStatus('translate-status', 'Translated. Review and add to Anki.', 'success');
+      document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
+      state.hasTranslatedInSession = true;
+      setStatus('translate-status', 'Translated.', 'success');
+      setStatus('quick-add-status', '');
+      updateTranslateResultUi();
     } catch (error) {
       setStatus('translate-status', formatError(error), 'error');
     } finally {
       translateBtn.disabled = false;
     }
+  });
+
+  document.getElementById('quick-add-card-btn').addEventListener('click', async () => {
+    if (!state.hasTranslatedInSession) return;
+    const draft = getDraftFields();
+    await addNoteToAnki(draft, 'quick-add-status');
+  });
+
+  document.getElementById('toggle-note-config-btn').addEventListener('click', () => {
+    setNoteConfigOpen(!state.noteConfigOpen);
   });
 
   document.getElementById('save-card-btn').addEventListener('click', async () => {
@@ -646,16 +702,21 @@ function setupTranslateEvents() {
   });
 }
 
+function setupSettingsEvents() {
+  document.getElementById('settings-toggle-btn').addEventListener('click', () => {
+    setSettingsOpen(!state.settingsOpen);
+  });
+
+  document.getElementById('save-settings-btn').addEventListener('click', () => {
+    persistSettingsFromInputs(true);
+  });
+}
+
 function setupReviewEvents() {
   document.getElementById('review-show-answer-btn').addEventListener('click', () => {
     if (!getCurrentReviewCard()) return;
     state.reviewAnswerVisible = true;
     renderReview();
-  });
-
-  document.getElementById('review-speak-btn').addEventListener('click', () => {
-    const card = getCurrentReviewCard();
-    speakText(card ? card.front : '', document.getElementById('review-speak-btn'));
   });
 
   document.getElementById('review-refresh-btn').addEventListener('click', () => {
@@ -667,6 +728,11 @@ function setupReviewEvents() {
       submitReviewGrade(button.dataset.grade);
     });
   });
+
+  document.getElementById('review-card-delete').addEventListener('click', async () => {
+    await removeNoteFromAnki(getCurrentReviewCard().noteId)
+    loadReviewFromAnki()
+  })
 }
 
 async function initDailyWords() {
@@ -696,15 +762,15 @@ async function init() {
   setupDailyEvents();
   setupDailyKeyboard();
   setupTranslateEvents();
+  setupSettingsEvents();
   setupReviewEvents();
+  updateTranslateResultUi();
+  setNoteConfigOpen(false);
+  setSettingsOpen(false);
 
-  try {
-    await initDailyWords();
-  } catch (error) {
-    showDailyUnavailable(formatError(error));
-  }
+  try { await initDailyWords();
+  } catch (error) { showDailyUnavailable(formatError(error)); }
 
-  updateDuePill(0);
   renderReview();
   document.body.classList.add('ready');
 

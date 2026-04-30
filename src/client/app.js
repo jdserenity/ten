@@ -25,6 +25,7 @@ const state = {
   currentWordIndex: 0,
   seenWordIndexes: new Set(),
   reviewCards: [],
+  reviewDueCount: 0,
   reviewTotalCount: 0,
   reviewCurrentIndex: 0,
   reviewAnswerVisible: false,
@@ -420,8 +421,34 @@ function getCurrentReviewCard() {
   return state.reviewCards[state.reviewCurrentIndex];
 }
 
+function removeCurrentReviewCard() {
+  const card = getCurrentReviewCard();
+  if (!card) return null;
+  state.reviewCards.splice(state.reviewCurrentIndex, 1);
+  if (state.reviewCurrentIndex >= state.reviewCards.length) {
+    state.reviewCurrentIndex = Math.max(0, state.reviewCards.length - 1);
+  }
+  state.reviewAnswerVisible = false;
+  state.reviewDueCount = Math.max(0, state.reviewDueCount - 1);
+  return card;
+}
+
+function removeReviewCardsByNoteId(noteId) {
+  const before = state.reviewCards.length;
+  state.reviewCards = state.reviewCards.filter(card => card.noteId !== noteId);
+  const removed = before - state.reviewCards.length;
+  if (removed > 0) {
+    state.reviewDueCount = Math.max(0, state.reviewDueCount - removed);
+    if (state.reviewCurrentIndex >= state.reviewCards.length) {
+      state.reviewCurrentIndex = Math.max(0, state.reviewCards.length - 1);
+    }
+    state.reviewAnswerVisible = false;
+  }
+  return removed;
+}
+
 function renderReview() {
-  const dueCount = state.reviewCards.length;
+  const dueCount = state.reviewDueCount;
   document.getElementById('review-due-count').textContent = String(dueCount);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
 
@@ -456,12 +483,14 @@ function renderReview() {
   cardPanel.classList.remove('hidden');
 }
 
-async function loadReviewFromAnki() {
+async function loadReviewFromAnki(options = {}) {
+  const refreshTotal = Boolean(options.refreshTotal) || state.reviewTotalCount <= 0;
   const settings = persistSettingsFromInputs(false);
   const deck = String(settings.ankiDeck || '').trim();
   if (!deck) {
     setStatus('review-status', 'Set an Anki deck in Connection settings first.', 'error');
     state.reviewCards = [];
+    state.reviewDueCount = 0;
     state.reviewTotalCount = 0;
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
@@ -477,11 +506,11 @@ async function loadReviewFromAnki() {
 
     const [dueIds, totalIds] = await Promise.all([
       ankiInvoke(settings, 'findCards', { query: `${baseQuery} is:due` }),
-      ankiInvoke(settings, 'findCards', { query: baseQuery })
+      refreshTotal ? ankiInvoke(settings, 'findCards', { query: baseQuery }) : Promise.resolve(null)
     ]);
 
     const dueList = Array.isArray(dueIds) ? dueIds : [];
-    const totalList = Array.isArray(totalIds) ? totalIds : [];
+    const totalList = Array.isArray(totalIds) ? totalIds : null;
 
     let cards = [];
     if (dueList.length) {
@@ -493,7 +522,12 @@ async function loadReviewFromAnki() {
     }
 
     state.reviewCards = cards;
-    state.reviewTotalCount = totalList.length;
+    state.reviewDueCount = cards.length;
+    if (totalList) {
+      state.reviewTotalCount = totalList.length;
+    } else {
+      state.reviewTotalCount = Math.max(state.reviewTotalCount, cards.length);
+    }
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
 
@@ -508,6 +542,7 @@ async function loadReviewFromAnki() {
       setStatus('review-status', message, 'error');
     }
     state.reviewCards = [];
+    state.reviewDueCount = 0;
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
     renderReview();
@@ -529,8 +564,14 @@ async function submitReviewGrade(grade) {
       answers: [{ cardId: card.cardId, ease }]
     });
 
-    setStatus('review-status', `Saved "${grade}". Loading next due card...`, 'success');
-    await loadReviewFromAnki();
+    removeCurrentReviewCard();
+    renderReview();
+    const remaining = state.reviewDueCount;
+    if (remaining > 0) {
+      setStatus('review-status', `Saved "${grade}". ${remaining} due card(s) left in queue.`, 'success');
+    } else {
+      setStatus('review-status', `Saved "${grade}". Queue complete. Tap refresh to re-sync.`, 'success');
+    }
   } catch (error) {
     const message = formatError(error);
     const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
@@ -781,7 +822,7 @@ function setupReviewEvents() {
   });
 
   document.getElementById('review-refresh-btn').addEventListener('click', () => {
-    loadReviewFromAnki();
+    loadReviewFromAnki({ refreshTotal: true });
   });
 
   document.querySelectorAll('#review-grade-row button[data-grade]').forEach(button => {
@@ -791,9 +832,28 @@ function setupReviewEvents() {
   });
 
   document.getElementById('review-card-delete').addEventListener('click', async () => {
-    await removeNoteFromAnki(getCurrentReviewCard().noteId)
-    loadReviewFromAnki()
-  })
+    const card = getCurrentReviewCard();
+    if (!card || state.reviewSubmitting) return;
+
+    setStatus('review-status', 'Deleting note from Anki...');
+    state.reviewSubmitting = true;
+    try {
+      await removeNoteFromAnki(card.noteId);
+      const removed = removeReviewCardsByNoteId(card.noteId);
+      const totalReduction = removed > 0 ? removed : 1;
+      state.reviewTotalCount = Math.max(0, state.reviewTotalCount - totalReduction);
+      renderReview();
+      if (state.reviewDueCount > 0) {
+        setStatus('review-status', 'Deleted note from Anki.', 'success');
+      } else {
+        setStatus('review-status', 'Deleted note from Anki. Queue complete. Tap refresh to re-sync.', 'success');
+      }
+    } catch (error) {
+      setStatus('review-status', formatError(error), 'error');
+    } finally {
+      state.reviewSubmitting = false;
+    }
+  });
 }
 
 async function initDailyWords() {

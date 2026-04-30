@@ -711,6 +711,7 @@ function setupTranslateEvents() {
       setStatus('translate-status', 'Enter text before translating.', 'error');
       return;
     }
+    const textForTranslation = text.toLocaleLowerCase();
 
     const settings = persistSettingsFromInputs(false);
     const source = settings.translateSource;
@@ -720,7 +721,7 @@ function setupTranslateEvents() {
     setStatus('translate-status', 'Translating...');
 
     try {
-      const translated = await libreTranslate(settings, text, source, target);
+      const translated = await libreTranslate(settings, textForTranslation, source, target);
       document.getElementById('translate-result-text').textContent = translated;
       const englishText = target === 'pb' ? text : translated;
       const portugueseText = target === 'pb' ? translated : text;

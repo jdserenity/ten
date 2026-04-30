@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node server/index.js",
+    "start": "node server/index.js",
     "generate": "node scripts/generate-words.js",
     "generate:icons": "node scripts/generate-icons.js",
     "build": "npm run generate:icons",

@@ -33,9 +33,7 @@ npm run start
 
 Default app URL: `http://localhost:3000`
 
-### 4) Optional: run a local LibreTranslate service
-
-If you want fully local translation (no remote API), install and run LibreTranslate on the same MacBook:
+### 4) run a local LibreTranslate service
 
 ```bash
 cd /path/to/ten

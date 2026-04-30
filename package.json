@@ -8,7 +8,7 @@
     "generate:icons": "node scripts/generate-icons.js",
     "build": "npm run generate:icons",
     "libretranslate:install": "python3 -m venv .venv-libretranslate && . .venv-libretranslate/bin/activate && pip install LibreTranslate",
-    "libretranslate:start": ". .venv-libretranslate/bin/activate && libretranslate --host 127.0.0.1 --port 5000 --load-only en,pt",
+    "libretranslate:start": ". .venv-libretranslate/bin/activate && libretranslate --host 127.0.0.1 --port 5000 --load-only en,pb",
     "libretranslate:check": "node scripts/check-libretranslate.js"
   },
   "dependencies": {

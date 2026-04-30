@@ -16,7 +16,7 @@ async function main() {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       q: 'Bom dia',
-      source: 'pt',
+      source: 'pb',
       target: 'en',
       format: 'text'
     })

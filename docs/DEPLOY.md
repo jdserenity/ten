@@ -45,10 +45,12 @@ Then keep the app Translate endpoint set to `http://127.0.0.1:5000/translate`.
 
 ## Access from phone
 
-Use one of these:
+Expose through Tailscale:
 
-- Same Wi-Fi: open `http://<macbook-lan-ip>:3000`
-- Private overlay (recommended): Tailscale/ZeroTier
+1. Install Tailscale on the backup MacBook and your phone.
+2. Sign both devices into the same tailnet.
+3. On the backup MacBook, run `tailscale ip -4` and copy the Tailscale IP.
+4. Open `http://<tailscale-ip>:3000` from your phone.
 
 Keep AnkiConnect bound so the Ten server on the same MacBook can reach it locally.
 

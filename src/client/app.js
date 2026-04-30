@@ -59,10 +59,10 @@ function saveSettings(settings) {
 }
 
 function normalizeTranslateDirection(source, target) {
-  const sourceLang = source === 'en' ? 'en' : 'pt';
-  let targetLang = target === 'pt' ? 'pt' : 'en';
+  const sourceLang = source === 'en' ? 'en' : 'pb';
+  let targetLang = target === 'pb' ? 'pb' : 'en';
   if (sourceLang === targetLang) {
-    targetLang = sourceLang === 'pt' ? 'en' : 'pt';
+    targetLang = sourceLang === 'pb' ? 'en' : 'pb';
   }
   return { source: sourceLang, target: targetLang };
 }
@@ -610,8 +610,8 @@ function updateTranslateDirectionUi() {
 }
 
 function swapTranslateDirection() {
-  const nextSource = state.settings.translateTarget === 'en' ? 'en' : 'pt';
-  const nextTarget = nextSource === 'en' ? 'pt' : 'en';
+  const nextSource = state.settings.translateTarget === 'en' ? 'en' : 'pb';
+  const nextTarget = nextSource === 'en' ? 'pb' : 'en';
   state.settings.translateSource = nextSource;
   state.settings.translateTarget = nextTarget;
   saveSettings(state.settings);
@@ -722,8 +722,8 @@ function setupTranslateEvents() {
     try {
       const translated = await libreTranslate(settings, text, source, target);
       document.getElementById('translate-result-text').textContent = translated;
-      const englishText = target === 'pt' ? text : translated;
-      const portugueseText = target === 'pt' ? translated : text;
+      const englishText = target === 'pb' ? text : translated;
+      const portugueseText = target === 'pb' ? translated : text;
       document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
       document.getElementById('card-back-input').value = capitalizeFirstWord(portugueseText);
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';

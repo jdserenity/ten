@@ -91,27 +91,25 @@
     <section id="tab-translate" class="tab-panel" role="tabpanel">
       <div class="surface-card">
         <h2>Translate</h2>
-        <div class="field-grid">
-          <label class="field">
-            <span>From</span>
-            <select id="translate-source">
-              <option value="pt">Brazilian</option>
-              <option value="en">English</option>
-            </select>
-          </label>
-          <label class="field">
-            <span>To</span>
-            <select id="translate-target">
-              <option value="en">English</option>
-              <option value="pt">Brazilian</option>
-            </select>
-          </label>
+        <div class="translate-direction-row" aria-label="Translation direction">
+          <div class="translate-direction-side">
+            <span class="translate-direction-caption">From</span>
+            <span id="translate-from-label" class="translate-direction-lang">Brazilian</span>
+          </div>
+          <button id="swap-languages-btn" type="button" class="swap-languages-btn" aria-label="Swap languages" title="Swap languages">⇄</button>
+          <div class="translate-direction-side">
+            <span class="translate-direction-caption">To</span>
+            <span id="translate-to-label" class="translate-direction-lang">English</span>
+          </div>
         </div>
         <label class="field">
           <span>Text</span>
           <textarea id="translate-input" rows="4" placeholder="Type or paste text to translate..."></textarea>
         </label>
-        <button id="translate-btn" class="primary-btn">Translate</button>
+        <div class="translate-action-row">
+          <button id="translate-btn" class="primary-btn">Translate</button>
+          <button id="clear-translate-btn" type="button" class="clear-translate-btn" aria-label="Clear translation input and result" title="Clear">✕</button>
+        </div>
         <p id="translate-status" class="status-line"></p>
         <div id="translate-result-wrap" class="hidden">
           <span class="caps-label">Result</span>
@@ -127,12 +125,12 @@
       <div id="flashcard-draft-card" class="surface-card hidden">
         <h2>Flashcard note config</h2>
         <label class="field">
-          <span>Front</span>
-          <input id="card-front-input" placeholder="Word or phrase you want to remember" />
+          <span>Front (English)</span>
+          <input id="card-front-input" placeholder="English word, phrase, or sentence" />
         </label>
         <label class="field">
-          <span>Back</span>
-          <input id="card-back-input" placeholder="Translation or meaning" />
+          <span>Back (Portuguese)</span>
+          <input id="card-back-input" placeholder="Portuguese translation" />
         </label>
         <label class="field">
           <span>Context (optional)</span>

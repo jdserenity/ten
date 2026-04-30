@@ -381,6 +381,90 @@ body.settings-open .tab-panel.active {
   gap: 10px;
 }
 
+.translate-direction-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.translate-direction-side {
+  border: 1px solid var(--border);
+  background: #111;
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.translate-direction-caption {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.translate-direction-lang {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.swap-languages-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.swap-languages-btn:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+}
+
+.swap-languages-btn:active {
+  transform: scale(0.92);
+}
+
+.translate-action-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.translate-action-row .primary-btn {
+  flex: 1;
+}
+
+.clear-translate-btn {
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+}
+
+.clear-translate-btn:hover {
+  background: var(--border);
+  color: var(--text);
+}
+
+.clear-translate-btn:active {
+  transform: scale(0.92);
+}
+
 input,
 select,
 textarea {

@@ -7,9 +7,7 @@ This app runs on your always-on backup MacBook (effectively 24/7):
 - Anki Desktop running continuously
 - AnkiConnect enabled in Anki
 - Ten Node server running continuously
-- Optional: LibreTranslate service running continuously (or remote endpoint)
-
-No Netlify, no static publish directory.
+- LibreTranslate service running continuously
 
 ## One-time setup on backup MacBook
 

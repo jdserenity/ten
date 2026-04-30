@@ -58,6 +58,15 @@ function saveSettings(settings) {
   writeStoredJson(STORAGE_KEYS.settings, settings);
 }
 
+function normalizeTranslateDirection(source, target) {
+  const sourceLang = source === 'en' ? 'en' : 'pt';
+  let targetLang = target === 'pt' ? 'pt' : 'en';
+  if (sourceLang === targetLang) {
+    targetLang = sourceLang === 'pt' ? 'en' : 'pt';
+  }
+  return { source: sourceLang, target: targetLang };
+}
+
 function formatError(error) {
   if (!error) return 'Something went wrong.';
   if (typeof error === 'string') return error;
@@ -78,6 +87,15 @@ function htmlToText(html) {
   const div = document.createElement('div');
   div.innerHTML = String(html || '');
   return (div.textContent || '').trim();
+}
+
+function capitalizeFirstWord(value) {
+  const text = String(value || '').trim();
+  if (!text) return '';
+  const firstLetterIndex = text.search(/\p{L}/u);
+  if (firstLetterIndex < 0) return text;
+  const firstLetter = text[firstLetterIndex];
+  return `${text.slice(0, firstLetterIndex)}${firstLetter.toLocaleUpperCase()}${text.slice(firstLetterIndex + 1)}`;
 }
 
 function escapeAnkiQuery(value) {
@@ -242,15 +260,18 @@ function fillSettingsInputs() {
   document.getElementById('anki-endpoint-input').value = state.settings.ankiEndpoint;
   document.getElementById('anki-deck-input').value = state.settings.ankiDeck;
   document.getElementById('anki-model-input').value = state.settings.ankiModel;
-  document.getElementById('translate-source').value = state.settings.translateSource;
-  document.getElementById('translate-target').value = state.settings.translateTarget;
+  const direction = normalizeTranslateDirection(state.settings.translateSource, state.settings.translateTarget);
+  state.settings.translateSource = direction.source;
+  state.settings.translateTarget = direction.target;
+  updateTranslateDirectionUi();
 }
 
 function collectSettingsFromInputs() {
+  const direction = normalizeTranslateDirection(state.settings.translateSource, state.settings.translateTarget);
   return {
     translateEndpoint: document.getElementById('translate-endpoint-input').value.trim(),
-    translateSource: document.getElementById('translate-source').value,
-    translateTarget: document.getElementById('translate-target').value,
+    translateSource: direction.source,
+    translateTarget: direction.target,
     ankiEndpoint: document.getElementById('anki-endpoint-input').value.trim(),
     ankiDeck: document.getElementById('anki-deck-input').value.trim(),
     ankiModel: document.getElementById('anki-model-input').value.trim(),
@@ -331,8 +352,8 @@ async function ankiInvoke(settings, action, params = {}) {
 
 async function addNoteToAnki({ front, back, context }, statusElementId) {
   const settings = persistSettingsFromInputs(false);
-  const cleanFront = String(front || '').trim();
-  const cleanBack = String(back || '').trim();
+  const cleanFront = capitalizeFirstWord(front);
+  const cleanBack = capitalizeFirstWord(back);
   const cleanContext = String(context || '').trim();
 
   if (!cleanFront || !cleanBack) {
@@ -548,8 +569,8 @@ function isTypingContext() {
 
 function getDraftFields() {
   return {
-    front: document.getElementById('card-front-input').value.trim(),
-    back: document.getElementById('card-back-input').value.trim(),
+    front: capitalizeFirstWord(document.getElementById('card-front-input').value),
+    back: capitalizeFirstWord(document.getElementById('card-back-input').value),
     context: document.getElementById('card-context-input').value.trim()
   };
 }
@@ -578,6 +599,36 @@ function updateTranslateResultUi() {
     quickAddBtn.disabled = !state.hasTranslatedInSession;
   }
   setNoteConfigOpen(state.noteConfigOpen);
+}
+
+function updateTranslateDirectionUi() {
+  const fromLabel = document.getElementById('translate-from-label');
+  const toLabel = document.getElementById('translate-to-label');
+  if (!fromLabel || !toLabel) return;
+  fromLabel.textContent = state.settings.translateSource === 'en' ? 'English' : 'Brazilian';
+  toLabel.textContent = state.settings.translateTarget === 'en' ? 'English' : 'Brazilian';
+}
+
+function swapTranslateDirection() {
+  const nextSource = state.settings.translateTarget === 'en' ? 'en' : 'pt';
+  const nextTarget = nextSource === 'en' ? 'pt' : 'en';
+  state.settings.translateSource = nextSource;
+  state.settings.translateTarget = nextTarget;
+  saveSettings(state.settings);
+  updateTranslateDirectionUi();
+}
+
+function clearTranslateDraft() {
+  document.getElementById('translate-input').value = '';
+  document.getElementById('translate-result-text').textContent = '';
+  document.getElementById('card-front-input').value = '';
+  document.getElementById('card-back-input').value = '';
+  document.getElementById('card-context-input').value = '';
+  state.hasTranslatedInSession = false;
+  setStatus('translate-status', '');
+  setStatus('quick-add-status', '');
+  setStatus('card-save-status', '');
+  updateTranslateResultUi();
 }
 
 function setupTabEvents() {
@@ -621,7 +672,7 @@ function setupDailyEvents() {
       .join('\n');
 
     await addNoteToAnki(
-      { front: word.word, back: word.translation, context },
+      { front: word.translation, back: word.word, context },
       'daily-save-status'
     );
   });
@@ -647,6 +698,13 @@ function setupDailyKeyboard() {
 }
 
 function setupTranslateEvents() {
+  document.getElementById('swap-languages-btn').addEventListener('click', () => {
+    swapTranslateDirection();
+  });
+  document.getElementById('clear-translate-btn').addEventListener('click', () => {
+    clearTranslateDraft();
+  });
+
   document.getElementById('translate-btn').addEventListener('click', async () => {
     const text = document.getElementById('translate-input').value.trim();
     if (!text) {
@@ -655,8 +713,8 @@ function setupTranslateEvents() {
     }
 
     const settings = persistSettingsFromInputs(false);
-    const source = document.getElementById('translate-source').value;
-    const target = document.getElementById('translate-target').value;
+    const source = settings.translateSource;
+    const target = settings.translateTarget;
     const translateBtn = document.getElementById('translate-btn');
     translateBtn.disabled = true;
     setStatus('translate-status', 'Translating...');
@@ -664,8 +722,10 @@ function setupTranslateEvents() {
     try {
       const translated = await libreTranslate(settings, text, source, target);
       document.getElementById('translate-result-text').textContent = translated;
-      document.getElementById('card-front-input').value = text;
-      document.getElementById('card-back-input').value = translated;
+      const englishText = target === 'pt' ? text : translated;
+      const portugueseText = target === 'pt' ? translated : text;
+      document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
+      document.getElementById('card-back-input').value = capitalizeFirstWord(portugueseText);
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
       state.hasTranslatedInSession = true;
       setStatus('translate-status', 'Translated.', 'success');

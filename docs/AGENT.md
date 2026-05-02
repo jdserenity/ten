@@ -15,6 +15,7 @@ This is a personal app for one user. There is no roadmap to support multiple use
 - **Don't over-engineer.** This is a small personal tool. Prefer the simplest working solution.
 - **Update .md files with frequency** You should be updating AGENT.md, ARCHITECTURE.md, DEPLOY.md, and README.md with frequency. They are all guideline files and so when the guidelines change, you should update the files so future agents and yourself know what the deal is.
 - **Lean Readme.** I don't like bulky readme's. This project is just for me. I'm the only person that's going to be looking at it.
+- **Mobile-first interaction assumptions.** This is a mobile PWA first, so avoid desktop-only UX suggestions (for example, `Esc` shortcuts) unless explicitly requested.
 
 ## Deployment
 

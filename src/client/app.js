@@ -660,7 +660,8 @@ function swapTranslateDirection() {
 }
 
 function clearTranslateDraft() {
-  document.getElementById('translate-input').value = '';
+  const translateInput = document.getElementById('translate-input');
+  translateInput.value = '';
   document.getElementById('translate-result-text').textContent = '';
   document.getElementById('card-front-input').value = '';
   document.getElementById('card-back-input').value = '';
@@ -670,6 +671,8 @@ function clearTranslateDraft() {
   setStatus('quick-add-status', '');
   setStatus('card-save-status', '');
   updateTranslateResultUi();
+  translateInput.focus({ preventScroll: true });
+  translateInput.setSelectionRange(0, 0);
 }
 
 function setupTabEvents() {

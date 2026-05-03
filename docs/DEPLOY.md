@@ -7,8 +7,9 @@ This app runs on your always-on backup MacBook (effectively 24/7):
 - Anki Desktop running continuously
 - AnkiConnect enabled in Anki
 - Ten Node server running continuously
-- Internet access for DeepL API requests
-- A DeepL API Free key
+- Internet access for translation API requests
+- A Google Translate API key (for short inputs)
+- A DeepL API Free key (for longer inputs)
 
 ## One-time setup on backup MacBook
 
@@ -30,18 +31,27 @@ npm install
 ```bash
 cd /path/to/ten
 export DEEPL_AUTH_KEY="your-deepl-auth-key"
+export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key"
 export ANKI_CONNECT_ENDPOINT="http://127.0.0.1:8765"   # optional if using default
 npm run start
 ```
 
 Default app URL: `http://localhost:3000`
 
-### 4) verify DeepL connection
+### 4) verify DeepL connection (6+ word path)
 
 ```bash
 cd /path/to/ten
 export DEEPL_AUTH_KEY="your-deepl-auth-key"
 npm run deepl:check
+```
+
+### 5) verify Google Translate connection (1-5 word path)
+
+```bash
+cd /path/to/ten
+export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key"
+npm run google:check
 ```
 
 ## Access from phone
@@ -72,7 +82,7 @@ Use `launchd` so the server restarts after reboot/crash.
   <array>
     <string>/bin/zsh</string>
     <string>-lc</string>
-    <string>cd /path/to/ten && export DEEPL_AUTH_KEY="your-deepl-auth-key" && export ANKI_CONNECT_ENDPOINT="http://127.0.0.1:8765" && npm run start</string>
+    <string>cd /path/to/ten && export DEEPL_AUTH_KEY="your-deepl-auth-key" && export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key" && export ANKI_CONNECT_ENDPOINT="http://127.0.0.1:8765" && npm run start</string>
   </array>
   <key>RunAtLoad</key>
   <true/>

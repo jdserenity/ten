@@ -3,6 +3,7 @@
 ## Context
 
 This is a personal app for one user. There is no roadmap to support multiple users, accounts, sharing, or any social feature. Do not propose or add any such functionality.
+Translation routing is intentional: use Google Translate for short inputs (1-5 words, punctuation ignored) and DeepL for 6+ words.
 
 ## Principles
 

@@ -12,7 +12,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Client**: Vanilla HTML/CSS/JS (`src/client/index.html`, `src/client/styles.css`, `src/client/app.js`)
 - **PWA**: Web manifest + service worker (`src/client/manifest.json`, `src/client/sw.js`)
 - **Word data**: Generated JSON (`src/client/words.json`)
-- **Translation path**: Client -> `/api/translate` -> DeepL Free API (`https://api-free.deepl.com/v2/translate`) using server env `DEEPL_AUTH_KEY`
+- **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
 - **Client persistence**: Session-only UI state (no persisted user settings)
@@ -43,7 +43,7 @@ scripts/
 1. `npm run start` starts the Node server on `PORT` (default `3000`)
 2. Server serves client assets from `src/client`
 3. Client calls:
-   - `POST /api/translate` to proxy DeepL translation requests
+   - `POST /api/translate` to proxy translation requests with provider routing (`GOOGLE_TRANSLATE_API_KEY` for 1-5 words, `DEEPL_AUTH_KEY` for 6+ words)
    - `POST /api/anki` to proxy AnkiConnect actions
 4. Daily words are fetched from `/words.json` and shown in deterministic 10/day order
 5. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`

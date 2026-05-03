@@ -7,7 +7,8 @@
     "generate": "node scripts/generate-words.js",
     "generate:icons": "node scripts/generate-icons.js",
     "build": "npm run generate:icons",
-    "deepl:check": "node scripts/check-deepl.js"
+    "deepl:check": "node scripts/check-deepl.js",
+    "google:check": "node scripts/check-google.js"
   },
   "dependencies": {
     "dotenv": "^17.4.2",

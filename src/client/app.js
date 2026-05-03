@@ -8,7 +8,7 @@ const APP_CONFIG = {
 };
 
 const state = {
-  activeTab: 'daily',
+  activeTab: 'translate',
   settings: { ...APP_CONFIG },
   lastDetectedSourceLang: '',
   hasTranslatedInSession: false,
@@ -273,7 +273,7 @@ function persistSettingsFromInputs() {
   return state.settings;
 }
 
-async function deeplTranslate(settings, text, target) {
+async function translateText(text, target) {
   const cleanText = String(text || '').trim();
   if (!cleanText) throw new Error('Enter text before translating.');
   const targetLang = toDeepLTargetLanguage(target);
@@ -758,7 +758,7 @@ function setupTranslateEvents() {
       return;
     }
     if (!navigator.onLine) {
-      setStatus('translate-status', 'Offline: DeepL requires internet access.', 'error');
+      setStatus('translate-status', 'Offline: translation requires internet access.', 'error');
       return;
     }
 
@@ -768,10 +768,10 @@ function setupTranslateEvents() {
     translateBtn.disabled = true;
     state.lastDetectedSourceLang = '';
     updateTranslateDirectionUi();
-    setStatus('translate-status', 'Translating...');
+    setStatus('translate-status', '');
 
     try {
-      const result = await deeplTranslate(settings, text, target);
+      const result = await translateText(text, target);
       state.lastDetectedSourceLang = result.detectedSourceLang;
       updateTranslateDirectionUi();
       document.getElementById('translate-result-text').textContent = result.translatedText;
@@ -781,7 +781,7 @@ function setupTranslateEvents() {
       document.getElementById('card-back-input').value = capitalizeFirstWord(portugueseText);
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
       state.hasTranslatedInSession = true;
-      setStatus('translate-status', 'Translated.', 'success');
+      setStatus('translate-status', '');
       setStatus('quick-add-status', '');
       updateTranslateResultUi();
     } catch (error) {

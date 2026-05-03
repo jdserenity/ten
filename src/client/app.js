@@ -1,23 +1,16 @@
 const WORDS_PER_DAY = 10;
 
-const STORAGE_KEYS = {
-  settings: 'ten-settings-v2'
-};
-
-const DEFAULT_SETTINGS = {
-  translateEndpoint: 'http://127.0.0.1:5000/translate',
-  translateApiKey: '',
-  translateSource: 'auto',
-  translateTarget: 'en',
-  ankiEndpoint: 'http://127.0.0.1:8765',
+const APP_CONFIG = {
+  translateSource: 'PT-BR',
+  translateTarget: 'EN',
   ankiDeck: 'Brazilian Portuguese',
   ankiModel: 'Basic'
 };
 
 const state = {
   activeTab: 'daily',
-  settingsOpen: false,
-  settings: loadSettings(),
+  settings: { ...APP_CONFIG },
+  lastDetectedSourceLang: '',
   hasTranslatedInSession: false,
   noteConfigOpen: false,
   words: [],
@@ -34,38 +27,59 @@ const state = {
 
 let dailyDots = [];
 
-function readStoredJson(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (!raw) return fallback;
-    return JSON.parse(raw);
-  } catch (_) {
-    return fallback;
-  }
+function canonicalizeTranslateLanguage(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
+  if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
+  return '';
 }
 
-function writeStoredJson(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-  } catch (_) {}
+function displayTranslateLanguage(code) {
+  return code === 'EN' ? 'English' : 'Brazilian';
 }
 
-function loadSettings() {
-  const stored = readStoredJson(STORAGE_KEYS.settings, {});
-  return { ...DEFAULT_SETTINGS, ...(stored && typeof stored === 'object' ? stored : {}) };
+function canonicalizeDetectedSourceLanguage(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (!code) return '';
+  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
+  if (code === 'PB' || code === 'PT-BR') return 'PT-BR';
+  if (code === 'PT-PT') return 'PT-PT';
+  if (code === 'PT') return 'PT';
+  return code;
 }
 
-function saveSettings(settings) {
-  writeStoredJson(STORAGE_KEYS.settings, settings);
+function displayDetectedSourceLanguage(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (!code) return '';
+  if (code === 'EN') return 'English';
+  if (code === 'EN-US') return 'English (US)';
+  if (code === 'EN-GB') return 'English (UK)';
+  if (code === 'PB' || code === 'PT-BR') return 'Brazilian Portuguese';
+  if (code === 'PT-PT') return 'European Portuguese';
+  if (code === 'PT') return 'Portuguese';
+  return code;
+}
+
+function shouldShowDetectedSourceMismatch(selectedSource, detectedSource) {
+  const selectedCanonical = canonicalizeTranslateLanguage(selectedSource);
+  const detectedCanonical = canonicalizeDetectedSourceLanguage(detectedSource);
+  if (!selectedCanonical || !detectedCanonical) return false;
+  if (selectedCanonical === 'PT-BR') return detectedCanonical !== 'PT-BR';
+  if (selectedCanonical === 'EN') return detectedCanonical !== 'EN';
+  return false;
 }
 
 function normalizeTranslateDirection(source, target) {
-  const sourceLang = source === 'en' ? 'en' : 'pb';
-  let targetLang = target === 'pb' ? 'pb' : 'en';
+  const sourceLang = canonicalizeTranslateLanguage(source) || 'PT-BR';
+  let targetLang = canonicalizeTranslateLanguage(target) || 'EN';
   if (sourceLang === targetLang) {
-    targetLang = sourceLang === 'pb' ? 'en' : 'pb';
+    targetLang = sourceLang === 'PT-BR' ? 'EN' : 'PT-BR';
   }
   return { source: sourceLang, target: targetLang };
+}
+
+function toDeepLTargetLanguage(code) {
+  return code === 'EN' ? 'EN' : 'PT-BR';
 }
 
 function formatError(error) {
@@ -163,17 +177,6 @@ function updateDateLabel() {
     now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
 
-function setSettingsOpen(open) {
-  state.settingsOpen = Boolean(open);
-  const panel = document.getElementById('settings-panel');
-  const button = document.getElementById('settings-toggle-btn');
-  if (!panel || !button) return;
-  panel.classList.toggle('hidden', !state.settingsOpen);
-  document.body.classList.toggle('settings-open', state.settingsOpen);
-  button.textContent = state.settingsOpen ? 'Close settings' : 'Settings';
-  button.setAttribute('aria-expanded', String(state.settingsOpen));
-}
-
 function buildDailyDots() {
   const dotsEl = document.getElementById('dots');
   dotsEl.innerHTML = '';
@@ -257,46 +260,26 @@ function showDailyUnavailable(reason) {
 }
 
 function fillSettingsInputs() {
-  document.getElementById('translate-endpoint-input').value = state.settings.translateEndpoint;
-  document.getElementById('anki-endpoint-input').value = state.settings.ankiEndpoint;
-  document.getElementById('anki-deck-input').value = state.settings.ankiDeck;
-  document.getElementById('anki-model-input').value = state.settings.ankiModel;
   const direction = normalizeTranslateDirection(state.settings.translateSource, state.settings.translateTarget);
   state.settings.translateSource = direction.source;
   state.settings.translateTarget = direction.target;
   updateTranslateDirectionUi();
 }
 
-function collectSettingsFromInputs() {
+function persistSettingsFromInputs() {
   const direction = normalizeTranslateDirection(state.settings.translateSource, state.settings.translateTarget);
-  return {
-    translateEndpoint: document.getElementById('translate-endpoint-input').value.trim(),
-    translateSource: direction.source,
-    translateTarget: direction.target,
-    ankiEndpoint: document.getElementById('anki-endpoint-input').value.trim(),
-    ankiDeck: document.getElementById('anki-deck-input').value.trim(),
-    ankiModel: document.getElementById('anki-model-input').value.trim(),
-  };
-}
-
-function persistSettingsFromInputs(showMessage = false) {
-  state.settings = { ...DEFAULT_SETTINGS, ...collectSettingsFromInputs() };
-  saveSettings(state.settings);
-  if (showMessage) { setStatus('settings-status', 'Settings saved locally on this device.', 'success'); }
+  state.settings.translateSource = direction.source;
+  state.settings.translateTarget = direction.target;
   return state.settings;
 }
 
-async function libreTranslate(settings, text, source, target) {
-  const endpoint = String(settings.translateEndpoint || '').trim();
-  if (!endpoint) throw new Error('Set a LibreTranslate endpoint first.');
-
+async function deeplTranslate(settings, text, target) {
+  const cleanText = String(text || '').trim();
+  if (!cleanText) throw new Error('Enter text before translating.');
+  const targetLang = toDeepLTargetLanguage(target);
   const payload = {
-    q: text,
-    source,
-    target,
-    format: 'text',
-    endpoint,
-    apiKey: settings.translateApiKey
+    text: cleanText,
+    targetLang
   };
 
   const response = await fetch('/api/translate', {
@@ -314,7 +297,10 @@ async function libreTranslate(settings, text, source, target) {
   if (!body || typeof body.translatedText !== 'string') {
     throw new Error('Unexpected translate response.');
   }
-  return body.translatedText.trim();
+  return {
+    translatedText: body.translatedText.trim(),
+    detectedSourceLang: String(body.detectedSourceLang || '').trim()
+  };
 }
 
 async function extractErrorDetails(response) {
@@ -334,17 +320,17 @@ async function extractErrorDetails(response) {
   }
 }
 
-async function ankiInvoke(settings, action, params = {}) {
-  const endpoint = String(settings.ankiEndpoint || '').trim();
-  if (!endpoint) throw new Error('Set an AnkiConnect endpoint first.');
-
+async function ankiInvoke(_settings, action, params = {}) {
   const response = await fetch('/api/anki', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ endpoint, action, version: 6, params })
+    body: JSON.stringify({ action, version: 6, params })
   });
 
-  if (!response.ok) { throw new Error(`AnkiConnect request failed (${response.status}).`); }
+  if (!response.ok) {
+    const details = await extractErrorDetails(response);
+    throw new Error(`AnkiConnect request failed (${response.status})${details ? `: ${details}` : '.'}`);
+  }
 
   const body = await response.json();
   if (body && body.error) throw new Error(body.error);
@@ -352,7 +338,7 @@ async function ankiInvoke(settings, action, params = {}) {
 }
 
 async function addNoteToAnki({ front, back, context }, statusElementId) {
-  const settings = persistSettingsFromInputs(false);
+  const settings = persistSettingsFromInputs();
   const cleanFront = capitalizeFirstWord(front);
   const cleanBack = capitalizeFirstWord(back);
   const cleanContext = String(context || '').trim();
@@ -391,7 +377,7 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
 }
 
 async function removeNoteFromAnki (noteId) {
-  const settings = persistSettingsFromInputs(false);
+  const settings = persistSettingsFromInputs();
   await ankiInvoke(settings, 'deleteNotes', {"notes": [noteId]})
 }
 
@@ -485,10 +471,10 @@ function renderReview() {
 
 async function loadReviewFromAnki(options = {}) {
   const refreshTotal = Boolean(options.refreshTotal) || state.reviewTotalCount <= 0;
-  const settings = persistSettingsFromInputs(false);
+  const settings = persistSettingsFromInputs();
   const deck = String(settings.ankiDeck || '').trim();
   if (!deck) {
-    setStatus('review-status', 'Set an Anki deck in Connection settings first.', 'error');
+    setStatus('review-status', 'Set a valid Anki deck in APP_CONFIG.', 'error');
     state.reviewCards = [];
     state.reviewDueCount = 0;
     state.reviewTotalCount = 0;
@@ -555,7 +541,7 @@ async function submitReviewGrade(grade) {
   const card = getCurrentReviewCard();
   if (!card || !ease || state.reviewSubmitting) return;
 
-  const settings = persistSettingsFromInputs(false);
+  const settings = persistSettingsFromInputs();
   setStatus('review-status', `Submitting "${grade}" to Anki...`);
   state.reviewSubmitting = true;
 
@@ -643,19 +629,34 @@ function updateTranslateResultUi() {
 }
 
 function updateTranslateDirectionUi() {
+  const fromSide = document.getElementById('translate-from-side');
+  const fromCaption = document.getElementById('translate-from-caption');
   const fromLabel = document.getElementById('translate-from-label');
   const toLabel = document.getElementById('translate-to-label');
-  if (!fromLabel || !toLabel) return;
-  fromLabel.textContent = state.settings.translateSource === 'en' ? 'English' : 'Brazilian';
-  toLabel.textContent = state.settings.translateTarget === 'en' ? 'English' : 'Brazilian';
+  if (!fromLabel || !toLabel || !fromCaption || !fromSide) return;
+
+  const selectedSourceLabel = displayTranslateLanguage(state.settings.translateSource);
+  const selectedTargetLabel = displayTranslateLanguage(state.settings.translateTarget);
+  const showMismatch = shouldShowDetectedSourceMismatch(state.settings.translateSource, state.lastDetectedSourceLang);
+  if (showMismatch) {
+    const detectedDisplay = displayDetectedSourceLanguage(state.lastDetectedSourceLang);
+    fromCaption.textContent = 'Auto-detected';
+    fromLabel.textContent = `${detectedDisplay} (selected ${selectedSourceLabel})`;
+    fromSide.classList.add('detected-mismatch');
+  } else {
+    fromCaption.textContent = 'From';
+    fromLabel.textContent = selectedSourceLabel;
+    fromSide.classList.remove('detected-mismatch');
+  }
+  toLabel.textContent = selectedTargetLabel;
 }
 
 function swapTranslateDirection() {
-  const nextSource = state.settings.translateTarget === 'en' ? 'en' : 'pb';
-  const nextTarget = nextSource === 'en' ? 'pb' : 'en';
+  const nextSource = state.settings.translateTarget === 'EN' ? 'EN' : 'PT-BR';
+  const nextTarget = nextSource === 'EN' ? 'PT-BR' : 'EN';
   state.settings.translateSource = nextSource;
   state.settings.translateTarget = nextTarget;
-  saveSettings(state.settings);
+  state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
 }
 
@@ -666,6 +667,7 @@ function clearTranslateDraft() {
   document.getElementById('card-front-input').value = '';
   document.getElementById('card-back-input').value = '';
   document.getElementById('card-context-input').value = '';
+  state.lastDetectedSourceLang = '';
   state.hasTranslatedInSession = false;
   setStatus('translate-status', '');
   setStatus('quick-add-status', '');
@@ -755,20 +757,26 @@ function setupTranslateEvents() {
       setStatus('translate-status', 'Enter text before translating.', 'error');
       return;
     }
-    const textForTranslation = text.toLocaleLowerCase();
+    if (!navigator.onLine) {
+      setStatus('translate-status', 'Offline: DeepL requires internet access.', 'error');
+      return;
+    }
 
-    const settings = persistSettingsFromInputs(false);
-    const source = settings.translateSource;
+    const settings = persistSettingsFromInputs();
     const target = settings.translateTarget;
     const translateBtn = document.getElementById('translate-btn');
     translateBtn.disabled = true;
+    state.lastDetectedSourceLang = '';
+    updateTranslateDirectionUi();
     setStatus('translate-status', 'Translating...');
 
     try {
-      const translated = await libreTranslate(settings, textForTranslation, source, target);
-      document.getElementById('translate-result-text').textContent = translated;
-      const englishText = target === 'pb' ? text : translated;
-      const portugueseText = target === 'pb' ? translated : text;
+      const result = await deeplTranslate(settings, text, target);
+      state.lastDetectedSourceLang = result.detectedSourceLang;
+      updateTranslateDirectionUi();
+      document.getElementById('translate-result-text').textContent = result.translatedText;
+      const englishText = target === 'PT-BR' ? text : result.translatedText;
+      const portugueseText = target === 'PT-BR' ? result.translatedText : text;
       document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
       document.getElementById('card-back-input').value = capitalizeFirstWord(portugueseText);
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
@@ -804,16 +812,6 @@ function setupTranslateEvents() {
     if (ok) {
       setActiveTab('review');
     }
-  });
-}
-
-function setupSettingsEvents() {
-  document.getElementById('settings-toggle-btn').addEventListener('click', () => {
-    setSettingsOpen(!state.settingsOpen);
-  });
-
-  document.getElementById('save-settings-btn').addEventListener('click', () => {
-    persistSettingsFromInputs(true);
   });
 }
 
@@ -886,11 +884,9 @@ async function init() {
   setupDailyEvents();
   setupDailyKeyboard();
   setupTranslateEvents();
-  setupSettingsEvents();
   setupReviewEvents();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
-  setSettingsOpen(false);
 
   try { await initDailyWords();
   } catch (error) { showDailyUnavailable(formatError(error)); }

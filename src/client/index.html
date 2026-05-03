@@ -22,7 +22,6 @@
         <h1>Ten</h1>
         <span id="date-label"></span>
       </div>
-      <button id="settings-toggle-btn" type="button" aria-expanded="false" aria-controls="settings-panel">Settings</button>
     </header>
 
     <div id="top-tabs" role="tablist" aria-label="Main tabs">
@@ -30,28 +29,6 @@
       <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
       <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
     </div>
-
-    <section id="settings-panel" class="surface-card hidden">
-      <h2>Connection settings</h2>
-      <label class="field">
-        <span>LibreTranslate endpoint</span>
-        <input id="translate-endpoint-input" placeholder="https://your-server/translate" />
-      </label>
-      <label class="field">
-        <span>AnkiConnect endpoint</span>
-        <input id="anki-endpoint-input" placeholder="http://127.0.0.1:8765" />
-      </label>
-      <label class="field">
-        <span>Anki deck</span>
-        <input id="anki-deck-input" placeholder="Portuguese::Inbox" />
-      </label>
-      <label class="field">
-        <span>Anki note type</span>
-        <input id="anki-model-input" placeholder="Basic" />
-      </label>
-      <button id="save-settings-btn">Save settings</button>
-      <p id="settings-status" class="status-line"></p>
-    </section>
 
     <section id="tab-daily" class="tab-panel active" role="tabpanel">
       <div id="dots"></div>
@@ -94,8 +71,8 @@
       <div class="surface-card">
         <h2>Translate</h2>
         <div class="translate-direction-row" aria-label="Translation direction">
-          <div class="translate-direction-side">
-            <span class="translate-direction-caption">From</span>
+          <div id="translate-from-side" class="translate-direction-side">
+            <span id="translate-from-caption" class="translate-direction-caption">From</span>
             <span id="translate-from-label" class="translate-direction-lang">Brazilian</span>
           </div>
           <button id="swap-languages-btn" type="button" class="swap-languages-btn" aria-label="Swap languages" title="Swap languages">⇄</button>

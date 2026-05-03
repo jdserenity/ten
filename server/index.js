@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, extname, join, normalize } from 'node:path';
@@ -61,36 +62,74 @@ function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
 }
 
+function normalizeDeepLTargetLanguage(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
+  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
+  return code;
+}
+
 async function proxyTranslate(req, res) {
   let body;
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
 
-  const endpoint = String(body.endpoint || process.env.LIBRETRANSLATE_ENDPOINT || '').trim();
-  if (!endpoint) return sendJson(res, 400, { error: 'Missing LibreTranslate endpoint.' });
+  const text = String(body.text ?? body.q ?? '').trim();
+  if (!text) return sendJson(res, 400, { error: 'Missing text to translate.' });
 
-  const payload = {
-    q: String(body.q || ''),
-    source: String(body.source || 'auto'),
-    target: String(body.target || 'en'),
-    format: String(body.format || 'text')
-  };
+  const targetLang = normalizeDeepLTargetLanguage(body.targetLang ?? body.target ?? 'EN');
+  if (!targetLang) return sendJson(res, 400, { error: 'Missing DeepL target language.' });
 
-  const apiKey = String(body.apiKey || process.env.LIBRETRANSLATE_API_KEY || '').trim();
-  if (apiKey) payload.api_key = apiKey;
+  const authKey = String(body.authKey ?? body.apiKey ?? process.env.DEEPL_AUTH_KEY ?? '').trim();
+  if (!authKey) return sendJson(res, 400, { error: 'Missing DeepL auth key. Set DEEPL_AUTH_KEY in your server environment.' });
+
+  const endpoint = String(process.env.DEEPL_API_URL || 'https://api-free.deepl.com/v2/translate').trim();
+  const payload = new URLSearchParams();
+  payload.set('text', text);
+  payload.set('target_lang', targetLang);
 
   try {
     const upstream = await fetch(endpoint, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      headers: {
+        'Authorization': `DeepL-Auth-Key ${authKey}`,
+        'Content-Type': 'application/x-www-form-urlencoded'
+      },
+      body: payload.toString()
     });
-    const text = await upstream.text();
-    res.writeHead(upstream.status, {
-      'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8'
+
+    const raw = await upstream.text();
+    const contentType = String(upstream.headers.get('content-type') || '').toLowerCase();
+    const parsedBody = contentType.includes('application/json')
+      ? (() => {
+          try { return JSON.parse(raw); }
+          catch { return null; }
+        })()
+      : null;
+
+    if (!upstream.ok) {
+      const detail =
+        String(parsedBody?.message || parsedBody?.detail || parsedBody?.error || raw || '')
+          .trim()
+          .slice(0, 300);
+      const suffix = detail ? `: ${detail}` : '.';
+      return sendJson(res, upstream.status, { error: `DeepL request failed (${upstream.status})${suffix}` });
+    }
+
+    const translatedText = String(parsedBody?.translations?.[0]?.text || '').trim();
+    if (!translatedText) {
+      return sendJson(res, 502, { error: 'DeepL response did not include translated text.' });
+    }
+
+    return sendJson(res, 200, {
+      translatedText,
+      detectedSourceLang: String(parsedBody?.translations?.[0]?.detected_source_language || '').trim(),
+      billedCharacters: Number(parsedBody?.billed_characters) || undefined,
+      modelTypeUsed: String(parsedBody?.model_type_used || '').trim() || undefined
     });
-    res.end(text);
-  } catch (error) { sendJson(res, 502, { error: `Failed to reach LibreTranslate: ${error.message}` }); }
+  } catch (error) {
+    sendJson(res, 502, { error: `Failed to reach DeepL. Check internet access and key validity: ${error.message}` });
+  }
 }
 
 async function proxyAnki(req, res) {
@@ -98,8 +137,8 @@ async function proxyAnki(req, res) {
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
 
-  const endpoint = String(body.endpoint || process.env.ANKI_CONNECT_ENDPOINT || '').trim();
-  if (!endpoint) return sendJson(res, 400, { error: 'Missing AnkiConnect endpoint.' });
+  const endpoint = String(process.env.ANKI_CONNECT_ENDPOINT || 'http://127.0.0.1:8765').trim();
+  if (!endpoint) return sendJson(res, 400, { error: 'Missing AnkiConnect endpoint. Set ANKI_CONNECT_ENDPOINT.' });
 
   const payload = {
     action: String(body.action || ''),

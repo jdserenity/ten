@@ -5,6 +5,7 @@
 This is a personal app for one user. There is no roadmap to support multiple users, accounts, sharing, or any social feature. Do not propose or add any such functionality.
 Translation routing is intentional: use Google Translate for short inputs (1-5 words, punctuation ignored) and DeepL for 6+ words, for both PT-BR and French modes.
 The app has two learning tracks (Brazilian Portuguese and French). Portuguese stays intermediate-oriented; French starts from beginner top-frequency vocabulary.
+Frequency dictionaries are bundled static files (`frequency-pt-br.json` and `frequency-fr.json`) and learned highlighting is based on words physically seen in the 10/day tab.
 
 ## Principles
 

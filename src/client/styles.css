@@ -9,6 +9,7 @@
   --accent: #4a9eff;
   --accent-dim: #1a3a5c;
   --green: #4caf7d;
+  --green-bright: #39ff74;
   --danger: #d96a70;
   --radius: 12px;
 }
@@ -205,6 +206,11 @@ header h1 {
   font-size: 15px;
   color: var(--muted);
   font-style: italic;
+}
+
+.frequency-meta {
+  font-size: 12px;
+  color: var(--muted);
 }
 
 .divider {
@@ -529,6 +535,70 @@ details.surface-card[open] { gap: 10px; }
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+
+.frequency-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.frequency-language-row {
+  display: flex;
+  gap: 8px;
+}
+
+.frequency-language-btn {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 14px;
+  padding: 10px 8px;
+  cursor: pointer;
+}
+
+.frequency-language-btn.active {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+  color: var(--accent);
+}
+
+.frequency-list {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  max-height: 58vh;
+  overflow-y: auto;
+}
+
+.frequency-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.frequency-item:last-child {
+  border-bottom: none;
+}
+
+.frequency-rank {
+  font-size: 12px;
+  color: var(--muted);
+  min-width: 52px;
+}
+
+.frequency-word {
+  font-size: 16px;
+  color: var(--text);
+}
+
+.frequency-item.seen .frequency-word,
+.frequency-item.seen .frequency-rank {
+  color: var(--green-bright);
 }
 
 .stat-box {

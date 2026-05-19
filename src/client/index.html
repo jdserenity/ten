@@ -34,6 +34,7 @@
       <button class="top-tab" data-tab="daily" role="tab" aria-selected="false">10/day</button>
       <button class="top-tab active" data-tab="translate" role="tab" aria-selected="true">Translate</button>
       <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
+      <button class="top-tab" data-tab="frequency" role="tab" aria-selected="false">Frequency dictionary</button>
     </div>
 
     <section id="tab-daily" class="tab-panel" role="tabpanel">
@@ -45,6 +46,7 @@
           <button id="speak-btn" title="Hear pronunciation">🔊</button>
         </div>
         <p id="translation"></p>
+        <p id="daily-frequency-rank" class="frequency-meta"></p>
         <hr class="divider" />
         <span class="sentences-label" id="sentence-language-label">Portuguese in use</span>
         <div class="sentence">
@@ -100,6 +102,7 @@
           <span class="caps-label">Result</span>
           <p id="translate-result-text" class="translate-result-text"></p>
         </div>
+        <p id="translate-frequency-rank" class="status-line"></p>
         <div class="button-row">
           <button id="quick-add-card-btn" class="primary-btn" disabled>Add to Anki</button>
           <button id="toggle-note-config-btn" disabled>Configure note</button>
@@ -174,6 +177,22 @@
 
       <button id="review-refresh-btn" class="wide-btn">Refresh from Anki</button>
       <p id="review-status" class="status-line"></p>
+    </section>
+
+    <section id="tab-frequency" class="tab-panel" role="tabpanel">
+      <span id="frequency-mode-label" class="caps-label">Brazilian dictionary</span>
+      <div class="frequency-summary">
+        <div class="stat-box">
+          <span class="stat-label">Entries</span>
+          <span class="stat-value" id="frequency-total-count">0</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-label">Seen in 10/day</span>
+          <span class="stat-value" id="frequency-seen-count">0</span>
+        </div>
+      </div>
+      <p id="frequency-status" class="status-line"></p>
+      <div id="frequency-list" class="frequency-list" aria-live="polite"></div>
     </section>
 
   </div>

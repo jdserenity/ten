@@ -8,7 +8,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const ROOT = normalize(join(__dirname, '..'));
 const CLIENT_DIR = join(ROOT, 'src/client');
-const PORT = Number(process.env.PORT || 3001);
+const BASE_PORT = Number(process.env.PORT || 3001);
+const MAX_PORT_SCAN_ATTEMPTS = 100;
 
 const CONTENT_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -340,4 +341,19 @@ const server = createServer(async (req, res) => {
   return serveStatic(pathname, res);
 });
 
-server.listen(PORT, () => console.log(`Ten server running on http://localhost:${PORT}`) );
+function listenWithPortFallback(startPort, attemptsLeft = MAX_PORT_SCAN_ATTEMPTS) {
+  const port = Number.isFinite(startPort) ? startPort : 3001;
+  server.once('error', error => {
+    if (error && error.code === 'EADDRINUSE' && attemptsLeft > 0) {
+      const nextPort = port + 1;
+      console.warn(`Port ${port} in use. Trying ${nextPort}...`);
+      listenWithPortFallback(nextPort, attemptsLeft - 1);
+      return;
+    }
+    throw error;
+  });
+
+  server.listen(port, () => console.log(`Ten server running on http://localhost:${port}`));
+}
+
+listenWithPortFallback(BASE_PORT);

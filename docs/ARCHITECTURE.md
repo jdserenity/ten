@@ -12,6 +12,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Client**: Vanilla HTML/CSS/JS (`src/client/index.html`, `src/client/styles.css`, `src/client/app.js`)
 - **PWA**: Web manifest + service worker (`src/client/manifest.json`, `src/client/sw.js`)
 - **Word data**: Generated JSON pools (`src/client/words.pt.json` for PT-BR, `src/client/words.fr.json` for French)
+- **Frequency data**: Bundled JSON dictionaries (`src/client/frequency-pt-br.json`, `src/client/frequency-fr.json`)
 - **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
@@ -30,12 +31,15 @@ src/
     app.js              # App logic
     words.pt.json       # Brazilian Portuguese word pool
     words.fr.json       # French word pool
+    frequency-pt-br.json # PT-BR frequency dictionary
+    frequency-fr.json   # French frequency dictionary
     sw.js               # Service worker
     manifest.json       # PWA manifest
     icon-192.png
     icon-512.png
 scripts/
   generate-words.js
+  download-frequency-dictionaries.js
   generate-icons.js
 ```
 
@@ -47,7 +51,8 @@ scripts/
    - `POST /api/translate` to proxy translation requests with provider routing (`GOOGLE_TRANSLATE_API_KEY` for 1-5 words, `DEEPL_AUTH_KEY` for 6+ words)
    - `POST /api/anki` to proxy AnkiConnect actions
 4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order
-5. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`
+5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day (persisted in local storage)
+6. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`
 
 ## Word pool generation
 

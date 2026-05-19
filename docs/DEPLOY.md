@@ -126,3 +126,10 @@ When `src/client/words.pt.json` or `src/client/words.fr.json` changes:
 2. Restart Ten server if needed
 
 The cache bump ensures clients fetch fresh PWA content.
+
+## Frequency dictionary updates
+
+When refreshing frequency dictionaries:
+
+1. Run `npm run frequency:download`
+2. Bump cache version in `src/client/sw.js` (`ten-vN` -> next number)

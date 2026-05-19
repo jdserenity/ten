@@ -1,4 +1,9 @@
 const WORDS_PER_DAY = 10;
+const FREQUENCY_FILE_BY_LANGUAGE = {
+  'PT-BR': '/frequency-pt-br.json',
+  FR: '/frequency-fr.json'
+};
+const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -52,7 +57,20 @@ const state = {
   reviewTotalCount: 0,
   reviewCurrentIndex: 0,
   reviewAnswerVisible: false,
-  reviewSubmitting: false
+  reviewSubmitting: false,
+  frequencyByLanguage: {
+    'PT-BR': [],
+    FR: []
+  },
+  frequencyMapByLanguage: {
+    'PT-BR': new Map(),
+    FR: new Map()
+  },
+  seenDailyWordsByLanguage: {
+    'PT-BR': new Set(),
+    FR: new Set()
+  },
+  frequencyLoadedLanguages: new Set()
 };
 
 let dailyDots = [];
@@ -80,6 +98,18 @@ function displayTranslateLanguage(code) {
   if (canonical === 'FR') return 'French';
   if (canonical === 'PT-BR') return 'Brazilian Portuguese';
   return code || '';
+}
+
+function displayFrequencyLanguage(code) {
+  const canonical = canonicalizeTranslateLanguage(code);
+  if (canonical === 'FR') return 'French';
+  return 'Brazilian Portuguese';
+}
+
+function updateFrequencyModeLabel() {
+  const label = document.getElementById('frequency-mode-label');
+  if (!label) return;
+  label.textContent = `${displayFrequencyLanguage(getFrequencyLanguageForMode())} dictionary`;
 }
 
 function canonicalizeDetectedSourceLanguage(value) {
@@ -164,6 +194,92 @@ function escapeAnkiQuery(value) {
   return String(value || '')
     .replace(/\\/g, '\\\\')
     .replace(/"/g, '\\"');
+}
+
+function normalizeFrequencyWord(value) {
+  return String(value || '')
+    .trim()
+    .toLocaleLowerCase()
+    .normalize('NFC');
+}
+
+function getFrequencyLanguageForMode(modeId = state.activeMode) {
+  return getModeConfig(modeId).learningLang;
+}
+
+function getSeenDailyWordsSet(language = getFrequencyLanguageForMode()) {
+  if (!state.seenDailyWordsByLanguage[language]) {
+    state.seenDailyWordsByLanguage[language] = new Set();
+  }
+  return state.seenDailyWordsByLanguage[language];
+}
+
+function loadSeenDailyWordsFromStorage() {
+  const base = {
+    'PT-BR': new Set(),
+    FR: new Set()
+  };
+  try {
+    const raw = localStorage.getItem(SEEN_DAILY_WORDS_STORAGE_KEY);
+    if (!raw) return base;
+    const parsed = JSON.parse(raw);
+    if (!parsed || typeof parsed !== 'object') return base;
+    Object.keys(base).forEach(language => {
+      const words = Array.isArray(parsed[language]) ? parsed[language] : [];
+      base[language] = new Set(words.map(normalizeFrequencyWord).filter(Boolean));
+    });
+    return base;
+  } catch (_) {
+    return base;
+  }
+}
+
+function persistSeenDailyWordsToStorage() {
+  try {
+    const payload = {};
+    Object.keys(state.seenDailyWordsByLanguage).forEach(language => {
+      payload[language] = Array.from(state.seenDailyWordsByLanguage[language] || []);
+    });
+    localStorage.setItem(SEEN_DAILY_WORDS_STORAGE_KEY, JSON.stringify(payload));
+  } catch (_) {}
+}
+
+function markCurrentDailyWordSeen() {
+  const word = state.todayWords[state.currentWordIndex];
+  if (!word || !word.word) return;
+  state.seenWordIndexes.add(state.currentWordIndex);
+  const language = getFrequencyLanguageForMode();
+  const seenSet = getSeenDailyWordsSet(language);
+  seenSet.add(normalizeFrequencyWord(word.word));
+  persistSeenDailyWordsToStorage();
+}
+
+function getCurrentDailyWordFrequencyRank() {
+  const word = state.todayWords[state.currentWordIndex];
+  if (!word || !word.word) return null;
+  const language = getFrequencyLanguageForMode();
+  const rankMap = state.frequencyMapByLanguage[language];
+  if (!(rankMap instanceof Map)) return null;
+  return rankMap.get(normalizeFrequencyWord(word.word)) || null;
+}
+
+function getFrequencyTierLabel(rank) {
+  if (!rank) return '';
+  if (rank <= 500) return 'very common';
+  if (rank <= 1000) return 'common';
+  if (rank <= 2500) return 'mid-frequency';
+  return 'less common';
+}
+
+function countWordsIgnoringPunctuation(text) {
+  const matches = String(text || '').match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu);
+  return matches ? matches.length : 0;
+}
+
+function getFrequencyRank(language, word) {
+  const map = state.frequencyMapByLanguage[language];
+  if (!(map instanceof Map)) return null;
+  return map.get(normalizeFrequencyWord(word)) || null;
 }
 
 function setStatus(elementId, message, tone = '') {
@@ -256,6 +372,7 @@ function renderDailyWord(index) {
   if (!word) {
     document.getElementById('word').textContent = 'Daily words unavailable';
     document.getElementById('translation').textContent = 'Word list could not be loaded.';
+    document.getElementById('daily-frequency-rank').textContent = '';
     document.getElementById('s1-l2').textContent = '';
     document.getElementById('s1-en').textContent = '';
     document.getElementById('s2-l2').textContent = '';
@@ -270,7 +387,9 @@ function renderDailyWord(index) {
   }
 
   state.currentWordIndex = index;
-  state.seenWordIndexes.add(index);
+  if (state.activeTab === 'daily') {
+    markCurrentDailyWordSeen();
+  }
 
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
@@ -279,6 +398,10 @@ function renderDailyWord(index) {
 
   document.getElementById('word').textContent = word.word;
   document.getElementById('translation').textContent = word.translation;
+  const rank = getCurrentDailyWordFrequencyRank();
+  document.getElementById('daily-frequency-rank').textContent = rank
+    ? `Frequency rank #${rank} (${getFrequencyTierLabel(rank)})`
+    : 'Frequency rank unavailable';
   document.getElementById('s1-l2').textContent = firstSentenceText;
   document.getElementById('s1-en').textContent = firstSentence.en || '';
   document.getElementById('s2-l2').textContent = secondSentenceText;
@@ -355,15 +478,24 @@ async function setLearningMode(modeId, options = {}) {
 
     updateModeToggleUi();
     updateLanguageCopy();
+    updateFrequencyModeLabel();
     fillSettingsInputs();
 
     if (resetTranslate) clearTranslateDraft();
 
     try {
       await initDailyWords();
+      try {
+        await ensureFrequencyLanguageLoaded(mode.learningLang);
+      } catch (_) {}
+      renderDailyWord(state.currentWordIndex);
       setStatus('daily-save-status', '');
     } catch (error) {
       showDailyUnavailable(formatError(error));
+    }
+
+    if (state.activeTab === 'frequency') {
+      await loadFrequencyTabData();
     }
 
     if (state.activeTab === 'review') {
@@ -688,6 +820,111 @@ async function submitReviewGrade(grade) {
   }
 }
 
+async function ensureFrequencyLanguageLoaded(language) {
+  if (state.frequencyLoadedLanguages.has(language)) return;
+  const path = FREQUENCY_FILE_BY_LANGUAGE[language];
+  if (!path) throw new Error(`No frequency file configured for ${language}.`);
+  const response = await fetch(path);
+  if (!response.ok) {
+    throw new Error(`Failed to load ${path} (${response.status}).`);
+  }
+  const words = await response.json();
+  if (!Array.isArray(words) || !words.length) {
+    throw new Error(`${path} is empty.`);
+  }
+  const entries = words.map((word, index) => ({
+    rank: index + 1,
+    word: String(word || '').trim(),
+    normalizedWord: normalizeFrequencyWord(word)
+  })).filter(entry => entry.word && entry.normalizedWord);
+  state.frequencyByLanguage[language] = entries;
+  state.frequencyMapByLanguage[language] = new Map(entries.map(entry => [entry.normalizedWord, entry.rank]));
+  state.frequencyLoadedLanguages.add(language);
+}
+
+function renderFrequencyDictionary() {
+  const listEl = document.getElementById('frequency-list');
+  const totalEl = document.getElementById('frequency-total-count');
+  const seenEl = document.getElementById('frequency-seen-count');
+  if (!listEl || !totalEl || !seenEl) return;
+
+  const language = getFrequencyLanguageForMode();
+  const entries = Array.isArray(state.frequencyByLanguage[language]) ? state.frequencyByLanguage[language] : [];
+  const seenSet = getSeenDailyWordsSet(language);
+  let seenCount = 0;
+  const fragment = document.createDocumentFragment();
+
+  entries.forEach(entry => {
+    const row = document.createElement('div');
+    const seen = seenSet.has(entry.normalizedWord);
+    if (seen) seenCount++;
+    row.className = `frequency-item${seen ? ' seen' : ''}`;
+
+    const rank = document.createElement('span');
+    rank.className = 'frequency-rank';
+    rank.textContent = `#${entry.rank}`;
+
+    const word = document.createElement('span');
+    word.className = 'frequency-word';
+    word.textContent = entry.word;
+
+    row.append(rank, word);
+    fragment.appendChild(row);
+  });
+
+  listEl.innerHTML = '';
+  listEl.appendChild(fragment);
+  totalEl.textContent = String(entries.length);
+  seenEl.textContent = String(seenCount);
+}
+
+async function loadFrequencyTabData() {
+  setStatus('frequency-status', 'Loading frequency dictionary...');
+  const language = getFrequencyLanguageForMode();
+  try {
+    await ensureFrequencyLanguageLoaded(language);
+    renderFrequencyDictionary();
+    setStatus('frequency-status', `Showing ${displayFrequencyLanguage(language)} frequency dictionary.`, 'success');
+  } catch (error) {
+    renderFrequencyDictionary();
+    setStatus('frequency-status', formatError(error), 'error');
+  }
+}
+
+function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, targetLang) {
+  const outputEl = document.getElementById('translate-frequency-rank');
+  if (!outputEl) return;
+
+  const learningLanguage = getFrequencyLanguageForMode();
+  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
+  const targetCanonical = canonicalizeTranslateLanguage(targetLang);
+  const inputSingleWord = countWordsIgnoringPunctuation(inputText) === 1;
+  const translatedSingleWord = countWordsIgnoringPunctuation(translatedText) === 1;
+
+  let rank = null;
+  let label = '';
+
+  if (sourceCanonical === learningLanguage && inputSingleWord) {
+    rank = getFrequencyRank(learningLanguage, inputText);
+    label = 'Input';
+  } else if (targetCanonical === learningLanguage && translatedSingleWord) {
+    rank = getFrequencyRank(learningLanguage, translatedText);
+    label = 'Result';
+  } else {
+    outputEl.textContent = '';
+    outputEl.className = 'status-line';
+    return;
+  }
+
+  if (rank) {
+    outputEl.textContent = `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;
+    outputEl.className = 'status-line success';
+  } else {
+    outputEl.textContent = `${label} frequency rank unavailable`;
+    outputEl.className = 'status-line';
+  }
+}
+
 function setActiveTab(tabId) {
   if (!tabId) return;
   state.activeTab = tabId;
@@ -699,8 +936,16 @@ function setActiveTab(tabId) {
   document.querySelectorAll('.tab-panel').forEach(panel => {
     panel.classList.toggle('active', panel.id === `tab-${tabId}`);
   });
+  if (tabId === 'daily') {
+    markCurrentDailyWordSeen();
+    updateDailyDots();
+    renderFrequencyDictionary();
+  }
   if (tabId === 'review') {
     loadReviewFromAnki();
+  }
+  if (tabId === 'frequency') {
+    loadFrequencyTabData();
   }
 }
 
@@ -788,6 +1033,7 @@ function clearTranslateDraft() {
   state.lastDetectedSourceLang = '';
   state.hasTranslatedInSession = false;
   setStatus('translate-status', '');
+  setStatus('translate-frequency-rank', '');
   setStatus('quick-add-status', '');
   setStatus('card-save-status', '');
   updateTranslateResultUi();
@@ -845,10 +1091,13 @@ function setupDailyEvents() {
       .filter(Boolean)
       .join('\n');
 
-    await addNoteToAnki(
+    const added = await addNoteToAnki(
       { front: word.translation, back: word.word, context },
       'daily-save-status'
     );
+    if (added && state.activeTab === 'frequency') {
+      renderFrequencyDictionary();
+    }
   });
 }
 
@@ -901,6 +1150,10 @@ function setupTranslateEvents() {
 
     try {
       const result = await translateText(text, source, target);
+      const learningLanguage = getFrequencyLanguageForMode();
+      try {
+        await ensureFrequencyLanguageLoaded(learningLanguage);
+      } catch (_) {}
       state.lastDetectedSourceLang = result.detectedSourceLang;
       updateTranslateDirectionUi();
       document.getElementById('translate-result-text').textContent = result.translatedText;
@@ -911,10 +1164,12 @@ function setupTranslateEvents() {
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
       state.hasTranslatedInSession = true;
       setStatus('translate-status', '');
+      updateTranslateFrequencyRank(text, result.translatedText, source, target);
       setStatus('quick-add-status', '');
       updateTranslateResultUi();
     } catch (error) {
       setStatus('translate-status', formatError(error), 'error');
+      setStatus('translate-frequency-rank', '');
     } finally {
       translateBtn.disabled = false;
     }
@@ -997,7 +1252,12 @@ async function initDailyWords() {
   const seed = hashDate(dateKey());
   state.todayWords = seededShuffle(words, seed).slice(0, WORDS_PER_DAY);
   state.currentWordIndex = 0;
-  state.seenWordIndexes = new Set();
+  const seenSet = getSeenDailyWordsSet(getFrequencyLanguageForMode());
+  state.seenWordIndexes = new Set(
+    state.todayWords
+      .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
+      .filter(idx => idx >= 0)
+  );
   buildDailyDots();
   renderDailyWord(0);
 
@@ -1009,6 +1269,7 @@ async function initDailyWords() {
 
 async function init() {
   updateDateLabel();
+  state.seenDailyWordsByLanguage = loadSeenDailyWordsFromStorage();
   const savedMode = sessionStorage.getItem('ten-active-mode');
   if (savedMode && MODE_CONFIGS[savedMode]) {
     state.activeMode = savedMode;
@@ -1019,6 +1280,7 @@ async function init() {
   setupDailyKeyboard();
   setupTranslateEvents();
   setupReviewEvents();
+  updateFrequencyModeLabel();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
   await setLearningMode(state.activeMode, { force: true, resetTranslate: false });

@@ -3,6 +3,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { addUnlockedWord, getAllUnlockedWords, importUnlockedWords, initDb } from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -60,7 +61,7 @@ function getFilePath(pathname) {
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
 }
 
 function normalizeTargetLanguage(value) {
@@ -276,6 +277,46 @@ async function proxyTranslate(req, res) {
   }
 }
 
+function handleUnlockedWordsGet(res) {
+  return sendJson(res, 200, { wordsByLanguage: getAllUnlockedWords() });
+}
+
+async function handleUnlockedWordsPost(req, res) {
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const language = String(body.language || '').trim();
+  const word = String(body.word || '').trim();
+  if (!language || !word) {
+    return sendJson(res, 400, { error: 'Missing language or word.' });
+  }
+
+  const result = addUnlockedWord(language, word);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid language or word.' });
+  return sendJson(res, 200, { ok: true, added: result.added });
+}
+
+async function handleUnlockedWordsImport(req, res) {
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const wordsByLanguage = body.wordsByLanguage;
+  if (!wordsByLanguage || typeof wordsByLanguage !== 'object') {
+    return sendJson(res, 400, { error: 'Missing wordsByLanguage object.' });
+  }
+
+  const { imported } = importUnlockedWords(wordsByLanguage);
+  return sendJson(res, 200, { ok: true, imported, wordsByLanguage: getAllUnlockedWords() });
+}
+
 async function proxyAnki(req, res) {
   let body;
   try { body = await readJsonBody(req); }
@@ -334,6 +375,11 @@ const server = createServer(async (req, res) => {
 
   if (pathname === '/api/translate' && req.method === 'POST') return proxyTranslate(req, res);
   if (pathname === '/api/anki' && req.method === 'POST') return proxyAnki(req, res);
+  if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(res);
+  if (pathname === '/api/unlocked-words' && req.method === 'POST') return handleUnlockedWordsPost(req, res);
+  if (pathname === '/api/unlocked-words/import' && req.method === 'POST') {
+    return handleUnlockedWordsImport(req, res);
+  }
   if (pathname === '/api/health' && req.method === 'GET') return sendJson(res, 200, { ok: true });
 
   if (req.method !== 'GET') return sendJson(res, 405, { error: 'Method not allowed' });
@@ -356,4 +402,5 @@ function listenWithPortFallback(startPort, attemptsLeft = MAX_PORT_SCAN_ATTEMPTS
   server.listen(port, () => console.log(`Ten server running on http://localhost:${port}`));
 }
 
+initDb();
 listenWithPortFallback(BASE_PORT);

@@ -543,6 +543,24 @@ details.surface-card[open] { gap: 10px; }
   gap: 10px;
 }
 
+.frequency-stat-box {
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.frequency-stat-box.active {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+}
+
+.frequency-seen-value {
+  color: var(--green-bright);
+}
+
 .frequency-search-field {
   flex-shrink: 0;
 }

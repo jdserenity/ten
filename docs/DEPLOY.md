@@ -117,6 +117,10 @@ npm install
 
 Then restart your launch agent/service if required.
 
+## Database backup
+
+Unlocked frequency words live in `data/ten.db` (or `TEN_DB_PATH` if set). Back up that file with Time Machine or copy it before major changes.
+
 ## App-side config in code
 
 Translate direction, Anki deck, and Anki note type are set per language mode in `src/client/app.js` under `MODE_CONFIGS`.

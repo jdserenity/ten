@@ -70,7 +70,8 @@ const state = {
     'PT-BR': new Set(),
     FR: new Set()
   },
-  frequencyLoadedLanguages: new Set()
+  frequencyLoadedLanguages: new Set(),
+  frequencyShowUnlockedOnly: false
 };
 
 let dailyDots = [];
@@ -214,7 +215,7 @@ function getSeenDailyWordsSet(language = getFrequencyLanguageForMode()) {
   return state.seenDailyWordsByLanguage[language];
 }
 
-function loadSeenDailyWordsFromStorage() {
+function loadSeenDailyWordsFromLocalStorage() {
   const base = {
     'PT-BR': new Set(),
     FR: new Set()
@@ -234,14 +235,70 @@ function loadSeenDailyWordsFromStorage() {
   }
 }
 
-function persistSeenDailyWordsToStorage() {
+async function persistUnlockedWordToServer(language, normalized) {
+  if (!normalized) return;
   try {
-    const payload = {};
-    Object.keys(state.seenDailyWordsByLanguage).forEach(language => {
-      payload[language] = Array.from(state.seenDailyWordsByLanguage[language] || []);
+    await fetch('/api/unlocked-words', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ language, word: normalized })
     });
-    localStorage.setItem(SEEN_DAILY_WORDS_STORAGE_KEY, JSON.stringify(payload));
   } catch (_) {}
+}
+
+async function initUnlockedWordsFromServer() {
+  const languages = ['PT-BR', 'FR'];
+  const merged = {
+    'PT-BR': new Set(),
+    FR: new Set()
+  };
+
+  try {
+    const response = await fetch('/api/unlocked-words');
+    if (response.ok) {
+      const body = await response.json();
+      const wordsByLanguage = body?.wordsByLanguage;
+      if (wordsByLanguage && typeof wordsByLanguage === 'object') {
+        languages.forEach(language => {
+          const words = Array.isArray(wordsByLanguage[language]) ? wordsByLanguage[language] : [];
+          merged[language] = new Set(words.map(normalizeFrequencyWord).filter(Boolean));
+        });
+      }
+    }
+  } catch (_) {}
+
+  const local = loadSeenDailyWordsFromLocalStorage();
+  const localPayload = {};
+  let hasLocal = false;
+  languages.forEach(language => {
+    if (!local[language].size) return;
+    hasLocal = true;
+    localPayload[language] = Array.from(local[language]);
+    local[language].forEach(word => merged[language].add(word));
+  });
+
+  if (hasLocal) {
+    try {
+      const response = await fetch('/api/unlocked-words/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wordsByLanguage: localPayload })
+      });
+      if (response.ok) {
+        const body = await response.json();
+        const wordsByLanguage = body?.wordsByLanguage;
+        if (wordsByLanguage && typeof wordsByLanguage === 'object') {
+          languages.forEach(language => {
+            const words = Array.isArray(wordsByLanguage[language]) ? wordsByLanguage[language] : [];
+            merged[language] = new Set(words.map(normalizeFrequencyWord).filter(Boolean));
+          });
+        }
+        localStorage.removeItem(SEEN_DAILY_WORDS_STORAGE_KEY);
+      }
+    } catch (_) {}
+  }
+
+  return merged;
 }
 
 function markLearningWordSeenInFrequency(rawWord) {
@@ -249,8 +306,9 @@ function markLearningWordSeenInFrequency(rawWord) {
   if (!normalized) return;
   const language = getFrequencyLanguageForMode();
   const seenSet = getSeenDailyWordsSet(language);
+  const isNew = !seenSet.has(normalized);
   seenSet.add(normalized);
-  persistSeenDailyWordsToStorage();
+  if (isNew) persistUnlockedWordToServer(language, normalized);
   state.todayWords.forEach((entry, idx) => {
     if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
       state.seenWordIndexes.add(idx);
@@ -432,6 +490,9 @@ function renderDailyWord(index) {
 function gotoDailyWord(index) {
   if (!state.todayWords.length) return;
   const bounded = Math.max(0, Math.min(index, state.todayWords.length - 1));
+  if (bounded !== state.currentWordIndex) {
+    setStatus('daily-save-status', '');
+  }
   renderDailyWord(bounded);
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
@@ -865,7 +926,24 @@ function getFrequencySearchQuery() {
 function clearFrequencySearch() {
   const input = document.getElementById('frequency-search-input');
   if (input) input.value = '';
-  updateFrequencySearchHint('', 0, false);
+  state.frequencyShowUnlockedOnly = false;
+  updateFrequencyStatFilterUi();
+  updateFrequencySearchHint(0, 0, false);
+}
+
+function updateFrequencyStatFilterUi() {
+  const unlockedBtn = document.getElementById('frequency-unlocked-stat');
+  const showUnlockedOnly = state.frequencyShowUnlockedOnly;
+  if (unlockedBtn) {
+    unlockedBtn.classList.toggle('active', showUnlockedOnly);
+    unlockedBtn.setAttribute('aria-pressed', String(showUnlockedOnly));
+  }
+}
+
+function setFrequencyListFilter(filter) {
+  state.frequencyShowUnlockedOnly = filter === 'unlocked';
+  updateFrequencyStatFilterUi();
+  renderFrequencyDictionary();
 }
 
 function parseFrequencySearchQuery(raw) {
@@ -918,16 +996,21 @@ function renderFrequencyDictionary() {
   const seenSet = getSeenDailyWordsSet(language);
   const parsed = parseFrequencySearchQuery(getFrequencySearchQuery());
   const hasQuery = parsed.type !== 'none';
-  let seenCount = 0;
+  const showUnlockedOnly = state.frequencyShowUnlockedOnly;
+  const totalUnlocked = entries.reduce(
+    (count, entry) => count + (seenSet.has(entry.normalizedWord) ? 1 : 0),
+    0
+  );
   let matchCount = 0;
   const fragment = document.createDocumentFragment();
+  const listTotal = showUnlockedOnly ? totalUnlocked : entries.length;
 
   entries.forEach(entry => {
+    const seen = seenSet.has(entry.normalizedWord);
+    if (showUnlockedOnly && !seen) return;
     if (!entryMatchesFrequencySearch(entry, parsed)) return;
     matchCount++;
     const row = document.createElement('div');
-    const seen = seenSet.has(entry.normalizedWord);
-    if (seen) seenCount++;
     row.className = `frequency-item${seen ? ' seen' : ''}`;
 
     const rank = document.createElement('span');
@@ -945,17 +1028,16 @@ function renderFrequencyDictionary() {
   listEl.innerHTML = '';
   listEl.appendChild(fragment);
   totalEl.textContent = String(entries.length);
-  seenEl.textContent = String(seenCount);
-  updateFrequencySearchHint(matchCount, entries.length, hasQuery);
+  seenEl.textContent = String(totalUnlocked);
+  updateFrequencySearchHint(matchCount, listTotal, hasQuery);
 }
 
 async function loadFrequencyTabData() {
-  setStatus('frequency-status', 'Loading frequency dictionary...');
   const language = getFrequencyLanguageForMode();
   try {
     await ensureFrequencyLanguageLoaded(language);
     renderFrequencyDictionary();
-    setStatus('frequency-status', `Showing ${displayFrequencyLanguage(language)} frequency dictionary.`, 'success');
+    setStatus('frequency-status', '');
   } catch (error) {
     renderFrequencyDictionary();
     setStatus('frequency-status', formatError(error), 'error');
@@ -1120,12 +1202,23 @@ function clearTranslateDraft() {
 
 function setupFrequencyEvents() {
   const searchInput = document.getElementById('frequency-search-input');
-  if (!searchInput) return;
-  searchInput.addEventListener('input', () => {
-    renderFrequencyDictionary();
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      renderFrequencyDictionary();
+    });
+    searchInput.addEventListener('search', () => {
+      renderFrequencyDictionary();
+    });
+  }
+
+  document.getElementById('frequency-entries-stat')?.addEventListener('click', () => {
+    if (state.frequencyShowUnlockedOnly) {
+      setFrequencyListFilter('all');
+    }
   });
-  searchInput.addEventListener('search', () => {
-    renderFrequencyDictionary();
+
+  document.getElementById('frequency-unlocked-stat')?.addEventListener('click', () => {
+    setFrequencyListFilter(state.frequencyShowUnlockedOnly ? 'all' : 'unlocked');
   });
 }
 
@@ -1357,7 +1450,7 @@ async function initDailyWords() {
 
 async function init() {
   updateDateLabel();
-  state.seenDailyWordsByLanguage = loadSeenDailyWordsFromStorage();
+  state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
   const savedMode = sessionStorage.getItem('ten-active-mode');
   if (savedMode && MODE_CONFIGS[savedMode]) {
     state.activeMode = savedMode;

@@ -182,14 +182,14 @@
     <section id="tab-frequency" class="tab-panel" role="tabpanel">
       <span id="frequency-mode-label" class="caps-label">Brazilian dictionary</span>
       <div class="frequency-summary">
-        <div class="stat-box">
+        <button type="button" class="stat-box frequency-stat-box" id="frequency-entries-stat">
           <span class="stat-label">Entries</span>
           <span class="stat-value" id="frequency-total-count">0</span>
-        </div>
-        <div class="stat-box">
+        </button>
+        <button type="button" class="stat-box frequency-stat-box" id="frequency-unlocked-stat" aria-pressed="false">
           <span class="stat-label">Unlocked</span>
-          <span class="stat-value" id="frequency-seen-count">0</span>
-        </div>
+          <span class="stat-value frequency-seen-value" id="frequency-seen-count">0</span>
+        </button>
       </div>
       <label class="field frequency-search-field">
         <span>Search</span>

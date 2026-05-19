@@ -509,6 +509,7 @@ async function setLearningMode(modeId, options = {}) {
     }
 
     if (state.activeTab === 'frequency') {
+      clearFrequencySearch();
       await loadFrequencyTabData();
     }
 
@@ -856,6 +857,56 @@ async function ensureFrequencyLanguageLoaded(language) {
   state.frequencyLoadedLanguages.add(language);
 }
 
+function getFrequencySearchQuery() {
+  const input = document.getElementById('frequency-search-input');
+  return input ? input.value.trim() : '';
+}
+
+function clearFrequencySearch() {
+  const input = document.getElementById('frequency-search-input');
+  if (input) input.value = '';
+  updateFrequencySearchHint('', 0, false);
+}
+
+function parseFrequencySearchQuery(raw) {
+  const query = String(raw || '').trim();
+  if (!query) return { type: 'none' };
+  const rankQuery = query.replace(/^#/, '');
+  if (/^\d+$/.test(rankQuery)) {
+    return { type: 'rank', rankDigits: rankQuery };
+  }
+  return { type: 'word', normalized: normalizeFrequencyWord(query) };
+}
+
+function entryMatchesFrequencySearch(entry, parsed) {
+  if (!parsed || parsed.type === 'none') return true;
+  if (parsed.type === 'rank') {
+    return String(entry.rank).startsWith(parsed.rankDigits);
+  }
+  if (parsed.type === 'word') {
+    return entry.normalizedWord.includes(parsed.normalized);
+  }
+  return true;
+}
+
+function updateFrequencySearchHint(matchCount, totalCount, hasQuery) {
+  const hintEl = document.getElementById('frequency-search-hint');
+  if (!hintEl) return;
+  if (!hasQuery) {
+    hintEl.textContent = '';
+    hintEl.classList.add('hidden');
+    return;
+  }
+  hintEl.classList.remove('hidden');
+  if (matchCount === 0) {
+    hintEl.textContent = 'No matches';
+    return;
+  }
+  hintEl.textContent = matchCount === totalCount
+    ? `${matchCount} entries`
+    : `${matchCount} of ${totalCount} entries`;
+}
+
 function renderFrequencyDictionary() {
   const listEl = document.getElementById('frequency-list');
   const totalEl = document.getElementById('frequency-total-count');
@@ -865,10 +916,15 @@ function renderFrequencyDictionary() {
   const language = getFrequencyLanguageForMode();
   const entries = Array.isArray(state.frequencyByLanguage[language]) ? state.frequencyByLanguage[language] : [];
   const seenSet = getSeenDailyWordsSet(language);
+  const parsed = parseFrequencySearchQuery(getFrequencySearchQuery());
+  const hasQuery = parsed.type !== 'none';
   let seenCount = 0;
+  let matchCount = 0;
   const fragment = document.createDocumentFragment();
 
   entries.forEach(entry => {
+    if (!entryMatchesFrequencySearch(entry, parsed)) return;
+    matchCount++;
     const row = document.createElement('div');
     const seen = seenSet.has(entry.normalizedWord);
     if (seen) seenCount++;
@@ -890,6 +946,7 @@ function renderFrequencyDictionary() {
   listEl.appendChild(fragment);
   totalEl.textContent = String(entries.length);
   seenEl.textContent = String(seenCount);
+  updateFrequencySearchHint(matchCount, entries.length, hasQuery);
 }
 
 async function loadFrequencyTabData() {
@@ -1059,6 +1116,17 @@ function clearTranslateDraft() {
   updateTranslateResultUi();
   translateInput.focus({ preventScroll: true });
   translateInput.setSelectionRange(0, 0);
+}
+
+function setupFrequencyEvents() {
+  const searchInput = document.getElementById('frequency-search-input');
+  if (!searchInput) return;
+  searchInput.addEventListener('input', () => {
+    renderFrequencyDictionary();
+  });
+  searchInput.addEventListener('search', () => {
+    renderFrequencyDictionary();
+  });
 }
 
 function setupTabEvents() {
@@ -1299,6 +1367,7 @@ async function init() {
   setupDailyEvents();
   setupDailyKeyboard();
   setupTranslateEvents();
+  setupFrequencyEvents();
   setupReviewEvents();
   updateFrequencyModeLabel();
   updateTranslateResultUi();

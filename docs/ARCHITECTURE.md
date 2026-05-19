@@ -16,7 +16,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
-- **Client persistence**: Session-only UI state (active language mode persists in session storage)
+- **Client persistence**: Unlocked frequency words in `localStorage`; active language mode in `sessionStorage`; no database
 - **Tooling**: Node scripts for words and icons in `scripts/`
 
 ## Directory structure

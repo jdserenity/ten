@@ -187,10 +187,15 @@
           <span class="stat-value" id="frequency-total-count">0</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Seen in 10/day</span>
+          <span class="stat-label">Unlocked</span>
           <span class="stat-value" id="frequency-seen-count">0</span>
         </div>
       </div>
+      <label class="field frequency-search-field">
+        <span>Search</span>
+        <input id="frequency-search-input" type="search" inputmode="search" autocomplete="off" enterkeyhint="search" placeholder="Rank (#42) or word…" />
+      </label>
+      <p id="frequency-search-hint" class="status-line frequency-search-hint hidden" aria-live="polite"></p>
       <p id="frequency-status" class="status-line"></p>
       <div id="frequency-list" class="frequency-list" aria-live="polite"></div>
     </section>

@@ -543,6 +543,14 @@ details.surface-card[open] { gap: 10px; }
   gap: 10px;
 }
 
+.frequency-search-field {
+  flex-shrink: 0;
+}
+
+.frequency-search-hint {
+  margin-top: -4px;
+}
+
 .frequency-language-row {
   display: flex;
   gap: 8px;

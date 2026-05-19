@@ -51,7 +51,7 @@ scripts/
    - `POST /api/translate` to proxy translation requests with provider routing (`GOOGLE_TRANSLATE_API_KEY` for 1-5 words, `DEEPL_AUTH_KEY` for 6+ words)
    - `POST /api/anki` to proxy AnkiConnect actions
 4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order
-5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day (persisted in local storage)
+5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day or via a single-word translate (persisted in local storage)
 6. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`
 
 ## Word pool generation

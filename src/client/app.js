@@ -244,14 +244,28 @@ function persistSeenDailyWordsToStorage() {
   } catch (_) {}
 }
 
+function markLearningWordSeenInFrequency(rawWord) {
+  const normalized = normalizeFrequencyWord(rawWord);
+  if (!normalized) return;
+  const language = getFrequencyLanguageForMode();
+  const seenSet = getSeenDailyWordsSet(language);
+  seenSet.add(normalized);
+  persistSeenDailyWordsToStorage();
+  state.todayWords.forEach((entry, idx) => {
+    if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
+      state.seenWordIndexes.add(idx);
+    }
+  });
+  updateDailyDots();
+  if (state.activeTab === 'frequency') {
+    renderFrequencyDictionary();
+  }
+}
+
 function markCurrentDailyWordSeen() {
   const word = state.todayWords[state.currentWordIndex];
   if (!word || !word.word) return;
-  state.seenWordIndexes.add(state.currentWordIndex);
-  const language = getFrequencyLanguageForMode();
-  const seenSet = getSeenDailyWordsSet(language);
-  seenSet.add(normalizeFrequencyWord(word.word));
-  persistSeenDailyWordsToStorage();
+  markLearningWordSeenInFrequency(word.word);
 }
 
 function getCurrentDailyWordFrequencyRank() {
@@ -891,30 +905,36 @@ async function loadFrequencyTabData() {
   }
 }
 
+function getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang) {
+  const learningLanguage = getFrequencyLanguageForMode();
+  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
+  const targetCanonical = canonicalizeTranslateLanguage(targetLang);
+  if (sourceCanonical === learningLanguage && countWordsIgnoringPunctuation(inputText) === 1) {
+    return inputText;
+  }
+  if (targetCanonical === learningLanguage && countWordsIgnoringPunctuation(translatedText) === 1) {
+    return translatedText;
+  }
+  return null;
+}
+
 function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, targetLang) {
   const outputEl = document.getElementById('translate-frequency-rank');
   if (!outputEl) return;
 
-  const learningLanguage = getFrequencyLanguageForMode();
-  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
-  const targetCanonical = canonicalizeTranslateLanguage(targetLang);
-  const inputSingleWord = countWordsIgnoringPunctuation(inputText) === 1;
-  const translatedSingleWord = countWordsIgnoringPunctuation(translatedText) === 1;
-
-  let rank = null;
-  let label = '';
-
-  if (sourceCanonical === learningLanguage && inputSingleWord) {
-    rank = getFrequencyRank(learningLanguage, inputText);
-    label = 'Input';
-  } else if (targetCanonical === learningLanguage && translatedSingleWord) {
-    rank = getFrequencyRank(learningLanguage, translatedText);
-    label = 'Result';
-  } else {
+  const learningWord = getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang);
+  if (!learningWord) {
     outputEl.textContent = '';
     outputEl.className = 'status-line';
     return;
   }
+
+  markLearningWordSeenInFrequency(learningWord);
+
+  const learningLanguage = getFrequencyLanguageForMode();
+  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
+  const label = sourceCanonical === learningLanguage ? 'Input' : 'Result';
+  const rank = getFrequencyRank(learningLanguage, learningWord);
 
   if (rank) {
     outputEl.textContent = `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;

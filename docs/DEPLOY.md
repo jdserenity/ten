@@ -26,31 +26,34 @@ npm install
 - Install/enable AnkiConnect add-on
 - Confirm AnkiConnect is reachable locally (default `http://127.0.0.1:8765`)
 
-### 3) Run Ten server
+### 3) Configure environment
 
 ```bash
 cd /path/to/ten
-export DEEPL_AUTH_KEY="your-deepl-auth-key"
-export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key"
-export ANKI_CONNECT_ENDPOINT="http://127.0.0.1:8765"   # optional if using default
+cp .env.example .env
+# Edit .env and set DEEPL_AUTH_KEY and GOOGLE_TRANSLATE_API_KEY
+```
+
+### 4) Run Ten server
+
+```bash
+cd /path/to/ten
 npm run start
 ```
 
 Default app URL: `http://localhost:3000`
 
-### 4) verify DeepL connection (6+ word path)
+### 5) verify DeepL connection (6+ word path)
 
 ```bash
 cd /path/to/ten
-export DEEPL_AUTH_KEY="your-deepl-auth-key"
 npm run deepl:check
 ```
 
-### 5) verify Google Translate connection (1-5 word path)
+### 6) verify Google Translate connection (1-5 word path)
 
 ```bash
 cd /path/to/ten
-export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key"
 npm run google:check
 ```
 
@@ -82,7 +85,7 @@ Use `launchd` so the server restarts after reboot/crash.
   <array>
     <string>/bin/zsh</string>
     <string>-lc</string>
-    <string>cd /path/to/ten && export DEEPL_AUTH_KEY="your-deepl-auth-key" && export GOOGLE_TRANSLATE_API_KEY="your-google-translate-api-key" && export ANKI_CONNECT_ENDPOINT="http://127.0.0.1:8765" && npm run start</string>
+    <string>cd /path/to/ten && npm run start</string>
   </array>
   <key>RunAtLoad</key>
   <true/>

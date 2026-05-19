@@ -3,488 +3,4200 @@
     "word": "je",
     "translation": "I",
     "sentences": [
-      { "fr": "Je suis tres fatigue aujourd'hui.", "en": "I am very tired today." },
-      { "fr": "Je veux apprendre le francais.", "en": "I want to learn French." }
+      {
+        "fr": "Je suis tres fatigue aujourd'hui.",
+        "en": "I am very tired today."
+      },
+      {
+        "fr": "Je veux apprendre le francais.",
+        "en": "I want to learn French."
+      }
     ]
   },
   {
     "word": "tu",
     "translation": "you (informal singular)",
     "sentences": [
-      { "fr": "Tu viens avec moi ce soir.", "en": "You are coming with me tonight." },
-      { "fr": "Tu peux repeter la question.", "en": "You can repeat the question." }
+      {
+        "fr": "Tu viens avec moi ce soir.",
+        "en": "You are coming with me tonight."
+      },
+      {
+        "fr": "Tu peux repeter la question.",
+        "en": "You can repeat the question."
+      }
     ]
   },
   {
     "word": "il",
     "translation": "he, it",
     "sentences": [
-      { "fr": "Il habite pres de l'ecole.", "en": "He lives near the school." },
-      { "fr": "Il fait froid ce matin.", "en": "It is cold this morning." }
+      {
+        "fr": "Il habite pres de l'ecole.",
+        "en": "He lives near the school."
+      },
+      {
+        "fr": "Il fait froid ce matin.",
+        "en": "It is cold this morning."
+      }
     ]
   },
   {
     "word": "elle",
     "translation": "she, it",
     "sentences": [
-      { "fr": "Elle parle avec sa soeur.", "en": "She is speaking with her sister." },
-      { "fr": "Elle arrive dans dix minutes.", "en": "She is arriving in ten minutes." }
+      {
+        "fr": "Elle parle avec sa soeur.",
+        "en": "She is speaking with her sister."
+      },
+      {
+        "fr": "Elle arrive dans dix minutes.",
+        "en": "She is arriving in ten minutes."
+      }
     ]
   },
   {
     "word": "nous",
     "translation": "we",
     "sentences": [
-      { "fr": "Nous allons au marche demain.", "en": "We are going to the market tomorrow." },
-      { "fr": "Nous avons une reunion a midi.", "en": "We have a meeting at noon." }
+      {
+        "fr": "Nous allons au marche demain.",
+        "en": "We are going to the market tomorrow."
+      },
+      {
+        "fr": "Nous avons une reunion a midi.",
+        "en": "We have a meeting at noon."
+      }
     ]
   },
   {
     "word": "vous",
     "translation": "you (formal or plural)",
     "sentences": [
-      { "fr": "Vous etes prets pour commencer.", "en": "You are ready to start." },
-      { "fr": "Vous voulez un cafe ou un the.", "en": "Do you want a coffee or a tea?" }
+      {
+        "fr": "Vous etes prets pour commencer.",
+        "en": "You are ready to start."
+      },
+      {
+        "fr": "Vous voulez un cafe ou un the.",
+        "en": "Do you want a coffee or a tea?"
+      }
     ]
   },
   {
     "word": "ils",
     "translation": "they (masculine or mixed)",
     "sentences": [
-      { "fr": "Ils jouent au parc apres l'ecole.", "en": "They play at the park after school." },
-      { "fr": "Ils regardent le match ensemble.", "en": "They watch the game together." }
+      {
+        "fr": "Ils jouent au parc apres l'ecole.",
+        "en": "They play at the park after school."
+      },
+      {
+        "fr": "Ils regardent le match ensemble.",
+        "en": "They watch the game together."
+      }
     ]
   },
   {
     "word": "etre",
     "translation": "to be",
     "sentences": [
-      { "fr": "Je veux etre calme pendant l'examen.", "en": "I want to be calm during the exam." },
-      { "fr": "C'est important d'etre patient.", "en": "It is important to be patient." }
+      {
+        "fr": "Je veux etre calme pendant l'examen.",
+        "en": "I want to be calm during the exam."
+      },
+      {
+        "fr": "C'est important d'etre patient.",
+        "en": "It is important to be patient."
+      }
     ]
   },
   {
     "word": "avoir",
     "translation": "to have",
     "sentences": [
-      { "fr": "Nous allons avoir plus de temps demain.", "en": "We are going to have more time tomorrow." },
-      { "fr": "J'aime avoir un plan simple.", "en": "I like having a simple plan." }
+      {
+        "fr": "Nous allons avoir plus de temps demain.",
+        "en": "We are going to have more time tomorrow."
+      },
+      {
+        "fr": "J'aime avoir un plan simple.",
+        "en": "I like having a simple plan."
+      }
     ]
   },
   {
     "word": "faire",
     "translation": "to do, to make",
     "sentences": [
-      { "fr": "Je dois faire mes devoirs ce soir.", "en": "I have to do my homework tonight." },
-      { "fr": "On va faire un gateau ensemble.", "en": "We are going to make a cake together." }
+      {
+        "fr": "Je dois faire mes devoirs ce soir.",
+        "en": "I have to do my homework tonight."
+      },
+      {
+        "fr": "On va faire un gateau ensemble.",
+        "en": "We are going to make a cake together."
+      }
     ]
   },
   {
     "word": "aller",
     "translation": "to go",
     "sentences": [
-      { "fr": "Je vais aller au bureau a huit heures.", "en": "I am going to go to the office at eight." },
-      { "fr": "Tu veux aller au cinema vendredi.", "en": "Do you want to go to the movies on Friday?" }
+      {
+        "fr": "Je vais aller au bureau a huit heures.",
+        "en": "I am going to go to the office at eight."
+      },
+      {
+        "fr": "Tu veux aller au cinema vendredi.",
+        "en": "Do you want to go to the movies on Friday?"
+      }
     ]
   },
   {
     "word": "dire",
     "translation": "to say, to tell",
     "sentences": [
-      { "fr": "Peux-tu dire la verite maintenant.", "en": "Can you tell the truth now?" },
-      { "fr": "Je vais lui dire merci demain.", "en": "I will tell him thanks tomorrow." }
+      {
+        "fr": "Peux-tu dire la verite maintenant.",
+        "en": "Can you tell the truth now?"
+      },
+      {
+        "fr": "Je vais lui dire merci demain.",
+        "en": "I will tell him thanks tomorrow."
+      }
     ]
   },
   {
     "word": "pouvoir",
     "translation": "to be able to, can",
     "sentences": [
-      { "fr": "Je peux finir ce travail aujourd'hui.", "en": "I can finish this work today." },
-      { "fr": "Nous ne pouvons pas rester longtemps.", "en": "We cannot stay long." }
+      {
+        "fr": "Je peux finir ce travail aujourd'hui.",
+        "en": "I can finish this work today."
+      },
+      {
+        "fr": "Nous ne pouvons pas rester longtemps.",
+        "en": "We cannot stay long."
+      }
     ]
   },
   {
     "word": "vouloir",
     "translation": "to want",
     "sentences": [
-      { "fr": "Je veux apprendre dix mots par jour.", "en": "I want to learn ten words per day." },
-      { "fr": "Ils veulent partir plus tot.", "en": "They want to leave earlier." }
+      {
+        "fr": "Je veux apprendre dix mots par jour.",
+        "en": "I want to learn ten words per day."
+      },
+      {
+        "fr": "Ils veulent partir plus tot.",
+        "en": "They want to leave earlier."
+      }
     ]
   },
   {
     "word": "devoir",
     "translation": "to have to, must",
     "sentences": [
-      { "fr": "Je dois appeler ma mere ce soir.", "en": "I must call my mother tonight." },
-      { "fr": "Nous devons etre a l'heure demain.", "en": "We have to be on time tomorrow." }
+      {
+        "fr": "Je dois appeler ma mere ce soir.",
+        "en": "I must call my mother tonight."
+      },
+      {
+        "fr": "Nous devons etre a l'heure demain.",
+        "en": "We have to be on time tomorrow."
+      }
     ]
   },
   {
     "word": "savoir",
     "translation": "to know (a fact, how to)",
     "sentences": [
-      { "fr": "Je sais ou est la gare.", "en": "I know where the station is." },
-      { "fr": "Elle sait parler espagnol aussi.", "en": "She knows how to speak Spanish too." }
+      {
+        "fr": "Je sais ou est la gare.",
+        "en": "I know where the station is."
+      },
+      {
+        "fr": "Elle sait parler espagnol aussi.",
+        "en": "She knows how to speak Spanish too."
+      }
     ]
   },
   {
     "word": "voir",
     "translation": "to see",
     "sentences": [
-      { "fr": "Je veux voir ce film demain.", "en": "I want to see this movie tomorrow." },
-      { "fr": "On peut voir la montagne d'ici.", "en": "We can see the mountain from here." }
+      {
+        "fr": "Je veux voir ce film demain.",
+        "en": "I want to see this movie tomorrow."
+      },
+      {
+        "fr": "On peut voir la montagne d'ici.",
+        "en": "We can see the mountain from here."
+      }
     ]
   },
   {
     "word": "venir",
     "translation": "to come",
     "sentences": [
-      { "fr": "Tu peux venir chez moi apres le travail.", "en": "You can come to my place after work." },
-      { "fr": "Elle vient toujours en avance.", "en": "She always comes early." }
+      {
+        "fr": "Tu peux venir chez moi apres le travail.",
+        "en": "You can come to my place after work."
+      },
+      {
+        "fr": "Elle vient toujours en avance.",
+        "en": "She always comes early."
+      }
     ]
   },
   {
     "word": "prendre",
     "translation": "to take",
     "sentences": [
-      { "fr": "Je vais prendre le bus ce matin.", "en": "I am going to take the bus this morning." },
-      { "fr": "Peux-tu prendre cette boite pour moi.", "en": "Can you take this box for me?" }
+      {
+        "fr": "Je vais prendre le bus ce matin.",
+        "en": "I am going to take the bus this morning."
+      },
+      {
+        "fr": "Peux-tu prendre cette boite pour moi.",
+        "en": "Can you take this box for me?"
+      }
     ]
   },
   {
     "word": "donner",
     "translation": "to give",
     "sentences": [
-      { "fr": "Je vais donner ce livre a mon ami.", "en": "I am going to give this book to my friend." },
-      { "fr": "Elle donne des conseils utiles.", "en": "She gives useful advice." }
+      {
+        "fr": "Je vais donner ce livre a mon ami.",
+        "en": "I am going to give this book to my friend."
+      },
+      {
+        "fr": "Elle donne des conseils utiles.",
+        "en": "She gives useful advice."
+      }
     ]
   },
   {
     "word": "parler",
     "translation": "to speak, to talk",
     "sentences": [
-      { "fr": "Je veux parler francais tous les jours.", "en": "I want to speak French every day." },
-      { "fr": "Nous parlons de nos plans demain.", "en": "We are talking about our plans tomorrow." }
+      {
+        "fr": "Je veux parler francais tous les jours.",
+        "en": "I want to speak French every day."
+      },
+      {
+        "fr": "Nous parlons de nos plans demain.",
+        "en": "We are talking about our plans tomorrow."
+      }
     ]
   },
   {
     "word": "aimer",
     "translation": "to like, to love",
     "sentences": [
-      { "fr": "J'aime apprendre de nouveaux mots.", "en": "I like learning new words." },
-      { "fr": "Elle aime lire le soir.", "en": "She likes to read in the evening." }
+      {
+        "fr": "J'aime apprendre de nouveaux mots.",
+        "en": "I like learning new words."
+      },
+      {
+        "fr": "Elle aime lire le soir.",
+        "en": "She likes to read in the evening."
+      }
     ]
   },
   {
     "word": "manger",
     "translation": "to eat",
     "sentences": [
-      { "fr": "Nous allons manger ensemble ce soir.", "en": "We are going to eat together tonight." },
-      { "fr": "Je mange une pomme le matin.", "en": "I eat an apple in the morning." }
+      {
+        "fr": "Nous allons manger ensemble ce soir.",
+        "en": "We are going to eat together tonight."
+      },
+      {
+        "fr": "Je mange une pomme le matin.",
+        "en": "I eat an apple in the morning."
+      }
     ]
   },
   {
     "word": "boire",
     "translation": "to drink",
     "sentences": [
-      { "fr": "Je bois de l'eau pendant la journee.", "en": "I drink water during the day." },
-      { "fr": "Ils boivent un cafe apres le repas.", "en": "They drink a coffee after the meal." }
+      {
+        "fr": "Je bois de l'eau pendant la journee.",
+        "en": "I drink water during the day."
+      },
+      {
+        "fr": "Ils boivent un cafe apres le repas.",
+        "en": "They drink a coffee after the meal."
+      }
     ]
   },
   {
     "word": "maison",
     "translation": "house, home",
     "sentences": [
-      { "fr": "Ma maison est pres du parc.", "en": "My house is near the park." },
-      { "fr": "Je reste a la maison ce soir.", "en": "I am staying at home tonight." }
+      {
+        "fr": "Ma maison est pres du parc.",
+        "en": "My house is near the park."
+      },
+      {
+        "fr": "Je reste a la maison ce soir.",
+        "en": "I am staying at home tonight."
+      }
     ]
   },
   {
     "word": "travail",
     "translation": "work, job",
     "sentences": [
-      { "fr": "J'ai beaucoup de travail aujourd'hui.", "en": "I have a lot of work today." },
-      { "fr": "Le travail commence a neuf heures.", "en": "Work starts at nine o'clock." }
+      {
+        "fr": "J'ai beaucoup de travail aujourd'hui.",
+        "en": "I have a lot of work today."
+      },
+      {
+        "fr": "Le travail commence a neuf heures.",
+        "en": "Work starts at nine o'clock."
+      }
     ]
   },
   {
     "word": "ecole",
     "translation": "school",
     "sentences": [
-      { "fr": "L'ecole est fermee le dimanche.", "en": "The school is closed on Sunday." },
-      { "fr": "Mon fils va a l'ecole en bus.", "en": "My son goes to school by bus." }
+      {
+        "fr": "L'ecole est fermee le dimanche.",
+        "en": "The school is closed on Sunday."
+      },
+      {
+        "fr": "Mon fils va a l'ecole en bus.",
+        "en": "My son goes to school by bus."
+      }
     ]
   },
   {
     "word": "ami",
     "translation": "friend",
     "sentences": [
-      { "fr": "Mon ami habite a Montreal.", "en": "My friend lives in Montreal." },
-      { "fr": "Je parle avec un ami chaque soir.", "en": "I talk with a friend every evening." }
+      {
+        "fr": "Mon ami habite a Montreal.",
+        "en": "My friend lives in Montreal."
+      },
+      {
+        "fr": "Je parle avec un ami chaque soir.",
+        "en": "I talk with a friend every evening."
+      }
     ]
   },
   {
     "word": "famille",
     "translation": "family",
     "sentences": [
-      { "fr": "Ma famille vient diner dimanche.", "en": "My family is coming for dinner on Sunday." },
-      { "fr": "Nous passons du temps en famille.", "en": "We spend time with family." }
+      {
+        "fr": "Ma famille vient diner dimanche.",
+        "en": "My family is coming for dinner on Sunday."
+      },
+      {
+        "fr": "Nous passons du temps en famille.",
+        "en": "We spend time with family."
+      }
     ]
   },
   {
     "word": "temps",
     "translation": "time, weather",
     "sentences": [
-      { "fr": "Je n'ai pas le temps ce matin.", "en": "I do not have time this morning." },
-      { "fr": "Le temps est beau aujourd'hui.", "en": "The weather is nice today." }
+      {
+        "fr": "Je n'ai pas le temps ce matin.",
+        "en": "I do not have time this morning."
+      },
+      {
+        "fr": "Le temps est beau aujourd'hui.",
+        "en": "The weather is nice today."
+      }
     ]
   },
   {
     "word": "jour",
     "translation": "day",
     "sentences": [
-      { "fr": "Chaque jour je revise mes notes.", "en": "Every day I review my notes." },
-      { "fr": "C'est un grand jour pour nous.", "en": "It is a big day for us." }
+      {
+        "fr": "Chaque jour je revise mes notes.",
+        "en": "Every day I review my notes."
+      },
+      {
+        "fr": "C'est un grand jour pour nous.",
+        "en": "It is a big day for us."
+      }
     ]
   },
   {
     "word": "nuit",
     "translation": "night",
     "sentences": [
-      { "fr": "La nuit est calme dans ce quartier.", "en": "The night is calm in this neighborhood." },
-      { "fr": "Je dors mieux la nuit.", "en": "I sleep better at night." }
+      {
+        "fr": "La nuit est calme dans ce quartier.",
+        "en": "The night is calm in this neighborhood."
+      },
+      {
+        "fr": "Je dors mieux la nuit.",
+        "en": "I sleep better at night."
+      }
     ]
   },
   {
     "word": "matin",
     "translation": "morning",
     "sentences": [
-      { "fr": "Je fais du sport le matin.", "en": "I exercise in the morning." },
-      { "fr": "Le matin commence avec un cafe.", "en": "The morning starts with a coffee." }
+      {
+        "fr": "Je fais du sport le matin.",
+        "en": "I exercise in the morning."
+      },
+      {
+        "fr": "Le matin commence avec un cafe.",
+        "en": "The morning starts with a coffee."
+      }
     ]
   },
   {
     "word": "soir",
     "translation": "evening",
     "sentences": [
-      { "fr": "On se voit ce soir a huit heures.", "en": "We are seeing each other tonight at eight." },
-      { "fr": "Le soir, je lis avant de dormir.", "en": "In the evening, I read before sleeping." }
+      {
+        "fr": "On se voit ce soir a huit heures.",
+        "en": "We are seeing each other tonight at eight."
+      },
+      {
+        "fr": "Le soir, je lis avant de dormir.",
+        "en": "In the evening, I read before sleeping."
+      }
     ]
   },
   {
     "word": "aujourd'hui",
     "translation": "today",
     "sentences": [
-      { "fr": "Aujourd'hui je reste a la maison.", "en": "Today I am staying at home." },
-      { "fr": "Nous avons cours aujourd'hui.", "en": "We have class today." }
+      {
+        "fr": "Aujourd'hui je reste a la maison.",
+        "en": "Today I am staying at home."
+      },
+      {
+        "fr": "Nous avons cours aujourd'hui.",
+        "en": "We have class today."
+      }
     ]
   },
   {
     "word": "demain",
     "translation": "tomorrow",
     "sentences": [
-      { "fr": "Je commence un nouveau livre demain.", "en": "I start a new book tomorrow." },
-      { "fr": "On part tot demain matin.", "en": "We are leaving early tomorrow morning." }
+      {
+        "fr": "Je commence un nouveau livre demain.",
+        "en": "I start a new book tomorrow."
+      },
+      {
+        "fr": "On part tot demain matin.",
+        "en": "We are leaving early tomorrow morning."
+      }
     ]
   },
   {
     "word": "maintenant",
     "translation": "now",
     "sentences": [
-      { "fr": "Je dois partir maintenant.", "en": "I need to leave now." },
-      { "fr": "Nous pouvons parler maintenant.", "en": "We can talk now." }
+      {
+        "fr": "Je dois partir maintenant.",
+        "en": "I need to leave now."
+      },
+      {
+        "fr": "Nous pouvons parler maintenant.",
+        "en": "We can talk now."
+      }
     ]
   },
   {
     "word": "ici",
     "translation": "here",
     "sentences": [
-      { "fr": "Je suis ici depuis dix minutes.", "en": "I have been here for ten minutes." },
-      { "fr": "Tu peux t'asseoir ici.", "en": "You can sit here." }
+      {
+        "fr": "Je suis ici depuis dix minutes.",
+        "en": "I have been here for ten minutes."
+      },
+      {
+        "fr": "Tu peux t'asseoir ici.",
+        "en": "You can sit here."
+      }
     ]
   },
   {
     "word": "la",
     "translation": "there",
     "sentences": [
-      { "fr": "Le bus est la devant nous.", "en": "The bus is there in front of us." },
-      { "fr": "On va la apres le diner.", "en": "We are going there after dinner." }
+      {
+        "fr": "Le bus est la devant nous.",
+        "en": "The bus is there in front of us."
+      },
+      {
+        "fr": "On va la apres le diner.",
+        "en": "We are going there after dinner."
+      }
     ]
   },
   {
     "word": "pourquoi",
     "translation": "why",
     "sentences": [
-      { "fr": "Pourquoi tu es en retard aujourd'hui.", "en": "Why are you late today?" },
-      { "fr": "Je ne comprends pas pourquoi il part.", "en": "I do not understand why he is leaving." }
+      {
+        "fr": "Pourquoi tu es en retard aujourd'hui.",
+        "en": "Why are you late today?"
+      },
+      {
+        "fr": "Je ne comprends pas pourquoi il part.",
+        "en": "I do not understand why he is leaving."
+      }
     ]
   },
   {
     "word": "comment",
     "translation": "how",
     "sentences": [
-      { "fr": "Comment tu apprends le francais.", "en": "How are you learning French?" },
-      { "fr": "Montre-moi comment faire ca.", "en": "Show me how to do that." }
+      {
+        "fr": "Comment tu apprends le francais.",
+        "en": "How are you learning French?"
+      },
+      {
+        "fr": "Montre-moi comment faire ca.",
+        "en": "Show me how to do that."
+      }
     ]
   },
   {
     "word": "quand",
     "translation": "when",
     "sentences": [
-      { "fr": "Quand est-ce que le train arrive.", "en": "When does the train arrive?" },
-      { "fr": "Dis-moi quand tu es libre.", "en": "Tell me when you are free." }
+      {
+        "fr": "Quand est-ce que le train arrive.",
+        "en": "When does the train arrive?"
+      },
+      {
+        "fr": "Dis-moi quand tu es libre.",
+        "en": "Tell me when you are free."
+      }
     ]
   },
   {
     "word": "ou",
     "translation": "where",
     "sentences": [
-      { "fr": "Ou est la station de metro.", "en": "Where is the metro station?" },
-      { "fr": "Je sais ou acheter ce livre.", "en": "I know where to buy this book." }
+      {
+        "fr": "Ou est la station de metro.",
+        "en": "Where is the metro station?"
+      },
+      {
+        "fr": "Je sais ou acheter ce livre.",
+        "en": "I know where to buy this book."
+      }
     ]
   },
   {
     "word": "oui",
     "translation": "yes",
     "sentences": [
-      { "fr": "Oui, je comprends cette phrase.", "en": "Yes, I understand this sentence." },
-      { "fr": "Elle dit oui tout de suite.", "en": "She says yes right away." }
+      {
+        "fr": "Oui, je comprends cette phrase.",
+        "en": "Yes, I understand this sentence."
+      },
+      {
+        "fr": "Elle dit oui tout de suite.",
+        "en": "She says yes right away."
+      }
     ]
   },
   {
     "word": "non",
     "translation": "no",
     "sentences": [
-      { "fr": "Non, je ne peux pas venir.", "en": "No, I cannot come." },
-      { "fr": "Il repond non avec un sourire.", "en": "He answers no with a smile." }
+      {
+        "fr": "Non, je ne peux pas venir.",
+        "en": "No, I cannot come."
+      },
+      {
+        "fr": "Il repond non avec un sourire.",
+        "en": "He answers no with a smile."
+      }
     ]
   },
   {
     "word": "bonjour",
     "translation": "hello, good morning",
     "sentences": [
-      { "fr": "Je dis bonjour a mes voisins.", "en": "I say hello to my neighbors." },
-      { "fr": "Bonjour, comment allez-vous aujourd'hui.", "en": "Hello, how are you today?" }
+      {
+        "fr": "Je dis bonjour a mes voisins.",
+        "en": "I say hello to my neighbors."
+      },
+      {
+        "fr": "Bonjour, comment allez-vous aujourd'hui.",
+        "en": "Hello, how are you today?"
+      }
     ]
   },
   {
     "word": "merci",
     "translation": "thank you",
     "sentences": [
-      { "fr": "Merci pour ton aide ce matin.", "en": "Thank you for your help this morning." },
-      { "fr": "Je dis merci apres chaque cours.", "en": "I say thank you after each class." }
+      {
+        "fr": "Merci pour ton aide ce matin.",
+        "en": "Thank you for your help this morning."
+      },
+      {
+        "fr": "Je dis merci apres chaque cours.",
+        "en": "I say thank you after each class."
+      }
     ]
   },
   {
     "word": "s'il vous plait",
     "translation": "please",
     "sentences": [
-      { "fr": "Un cafe, s'il vous plait.", "en": "A coffee, please." },
-      { "fr": "Parlez plus lentement, s'il vous plait.", "en": "Speak more slowly, please." }
+      {
+        "fr": "Un cafe, s'il vous plait.",
+        "en": "A coffee, please."
+      },
+      {
+        "fr": "Parlez plus lentement, s'il vous plait.",
+        "en": "Speak more slowly, please."
+      }
     ]
   },
   {
     "word": "pardon",
     "translation": "sorry, excuse me",
     "sentences": [
-      { "fr": "Pardon, je n'ai pas entendu.", "en": "Sorry, I did not hear." },
-      { "fr": "Pardon, ou est la sortie.", "en": "Excuse me, where is the exit?" }
+      {
+        "fr": "Pardon, je n'ai pas entendu.",
+        "en": "Sorry, I did not hear."
+      },
+      {
+        "fr": "Pardon, ou est la sortie.",
+        "en": "Excuse me, where is the exit?"
+      }
     ]
   },
   {
     "word": "eau",
     "translation": "water",
     "sentences": [
-      { "fr": "Je bois de l'eau froide apres le sport.", "en": "I drink cold water after exercise." },
-      { "fr": "Peux-tu apporter un verre d'eau.", "en": "Can you bring a glass of water?" }
+      {
+        "fr": "Je bois de l'eau froide apres le sport.",
+        "en": "I drink cold water after exercise."
+      },
+      {
+        "fr": "Peux-tu apporter un verre d'eau.",
+        "en": "Can you bring a glass of water?"
+      }
     ]
   },
   {
     "word": "pain",
     "translation": "bread",
     "sentences": [
-      { "fr": "Je mange du pain avec du fromage.", "en": "I eat bread with cheese." },
-      { "fr": "Le pain est encore chaud.", "en": "The bread is still warm." }
+      {
+        "fr": "Je mange du pain avec du fromage.",
+        "en": "I eat bread with cheese."
+      },
+      {
+        "fr": "Le pain est encore chaud.",
+        "en": "The bread is still warm."
+      }
     ]
   },
   {
     "word": "cafe",
     "translation": "coffee",
     "sentences": [
-      { "fr": "Je prends un cafe chaque matin.", "en": "I have a coffee every morning." },
-      { "fr": "Ce cafe est tres fort.", "en": "This coffee is very strong." }
+      {
+        "fr": "Je prends un cafe chaque matin.",
+        "en": "I have a coffee every morning."
+      },
+      {
+        "fr": "Ce cafe est tres fort.",
+        "en": "This coffee is very strong."
+      }
     ]
   },
   {
     "word": "argent",
     "translation": "money",
     "sentences": [
-      { "fr": "Je n'ai pas assez d'argent aujourd'hui.", "en": "I do not have enough money today." },
-      { "fr": "Il economise de l'argent chaque mois.", "en": "He saves money every month." }
+      {
+        "fr": "Je n'ai pas assez d'argent aujourd'hui.",
+        "en": "I do not have enough money today."
+      },
+      {
+        "fr": "Il economise de l'argent chaque mois.",
+        "en": "He saves money every month."
+      }
     ]
   },
   {
     "word": "voiture",
     "translation": "car",
     "sentences": [
-      { "fr": "Ma voiture est garee devant la maison.", "en": "My car is parked in front of the house." },
-      { "fr": "Nous allons en voiture au travail.", "en": "We go to work by car." }
+      {
+        "fr": "Ma voiture est garee devant la maison.",
+        "en": "My car is parked in front of the house."
+      },
+      {
+        "fr": "Nous allons en voiture au travail.",
+        "en": "We go to work by car."
+      }
     ]
   },
   {
     "word": "bus",
     "translation": "bus",
     "sentences": [
-      { "fr": "Le bus arrive dans cinq minutes.", "en": "The bus arrives in five minutes." },
-      { "fr": "Je prends le bus pour l'ecole.", "en": "I take the bus to school." }
+      {
+        "fr": "Le bus arrive dans cinq minutes.",
+        "en": "The bus arrives in five minutes."
+      },
+      {
+        "fr": "Je prends le bus pour l'ecole.",
+        "en": "I take the bus to school."
+      }
     ]
   },
   {
     "word": "train",
     "translation": "train",
     "sentences": [
-      { "fr": "Le train part a sept heures.", "en": "The train leaves at seven o'clock." },
-      { "fr": "Nous attendons le train sur le quai.", "en": "We are waiting for the train on the platform." }
+      {
+        "fr": "Le train part a sept heures.",
+        "en": "The train leaves at seven o'clock."
+      },
+      {
+        "fr": "Nous attendons le train sur le quai.",
+        "en": "We are waiting for the train on the platform."
+      }
     ]
   },
   {
     "word": "livre",
     "translation": "book",
     "sentences": [
-      { "fr": "Ce livre est facile a lire.", "en": "This book is easy to read." },
-      { "fr": "Je lis un livre chaque semaine.", "en": "I read one book each week." }
+      {
+        "fr": "Ce livre est facile a lire.",
+        "en": "This book is easy to read."
+      },
+      {
+        "fr": "Je lis un livre chaque semaine.",
+        "en": "I read one book each week."
+      }
     ]
   },
   {
     "word": "mot",
     "translation": "word",
     "sentences": [
-      { "fr": "J'apprends un nouveau mot chaque jour.", "en": "I learn a new word every day." },
-      { "fr": "Ce mot est tres utile en conversation.", "en": "This word is very useful in conversation." }
+      {
+        "fr": "J'apprends un nouveau mot chaque jour.",
+        "en": "I learn a new word every day."
+      },
+      {
+        "fr": "Ce mot est tres utile en conversation.",
+        "en": "This word is very useful in conversation."
+      }
     ]
   },
   {
     "word": "question",
     "translation": "question",
     "sentences": [
-      { "fr": "J'ai une question sur ce verbe.", "en": "I have a question about this verb." },
-      { "fr": "Pose ta question maintenant.", "en": "Ask your question now." }
+      {
+        "fr": "J'ai une question sur ce verbe.",
+        "en": "I have a question about this verb."
+      },
+      {
+        "fr": "Pose ta question maintenant.",
+        "en": "Ask your question now."
+      }
     ]
   },
   {
     "word": "reponse",
     "translation": "answer",
     "sentences": [
-      { "fr": "Ta reponse est correcte.", "en": "Your answer is correct." },
-      { "fr": "Je cherche la bonne reponse.", "en": "I am looking for the right answer." }
+      {
+        "fr": "Ta reponse est correcte.",
+        "en": "Your answer is correct."
+      },
+      {
+        "fr": "Je cherche la bonne reponse.",
+        "en": "I am looking for the right answer."
+      }
     ]
   },
   {
     "word": "apprendre",
     "translation": "to learn",
     "sentences": [
-      { "fr": "Je veux apprendre le francais rapidement.", "en": "I want to learn French quickly." },
-      { "fr": "On peut apprendre avec dix mots par jour.", "en": "We can learn with ten words per day." }
+      {
+        "fr": "Je veux apprendre le francais rapidement.",
+        "en": "I want to learn French quickly."
+      },
+      {
+        "fr": "On peut apprendre avec dix mots par jour.",
+        "en": "We can learn with ten words per day."
+      }
+    ]
+  },
+  {
+    "word": "le",
+    "translation": "the (masculine singular)",
+    "sentences": [
+      {
+        "fr": "Le chat dort sur le sofa dans le salon.",
+        "en": "The cat sleeps on the sofa in the living room."
+      },
+      {
+        "fr": "Le garcon lit un livre apres l'ecole chaque jour.",
+        "en": "The boy reads a book after school every day."
+      }
+    ]
+  },
+  {
+    "word": "les",
+    "translation": "the (plural)",
+    "sentences": [
+      {
+        "fr": "Les enfants jouent dehors ce soir apres le souper.",
+        "en": "The children play outside tonight after supper."
+      },
+      {
+        "fr": "Les pommes sont dans le frigo pres de la porte.",
+        "en": "The apples are in the fridge near the door."
+      }
+    ]
+  },
+  {
+    "word": "un",
+    "translation": "a, an (masculine)",
+    "sentences": [
+      {
+        "fr": "J'ai un chat noir et blanc chez moi.",
+        "en": "I have a black and white cat at home."
+      },
+      {
+        "fr": "Il y a un cafe pres de chez nous au coin.",
+        "en": "There is a cafe near our place on the corner."
+      }
+    ]
+  },
+  {
+    "word": "une",
+    "translation": "a, an (feminine)",
+    "sentences": [
+      {
+        "fr": "Elle mange une pomme rouge a la pause.",
+        "en": "She eats a red apple at break time."
+      },
+      {
+        "fr": "C'est une bonne idee pour demain matin.",
+        "en": "That is a good idea for tomorrow morning."
+      }
+    ]
+  },
+  {
+    "word": "des",
+    "translation": "some (plural indefinite)",
+    "sentences": [
+      {
+        "fr": "J'achete des legumes au marche samedi matin.",
+        "en": "I buy some vegetables at the market on Saturday morning."
+      },
+      {
+        "fr": "Il y a des gens devant la porte du cinema.",
+        "en": "There are some people in front of the movie theater door."
+      }
+    ]
+  },
+  {
+    "word": "ce",
+    "translation": "this, that",
+    "sentences": [
+      {
+        "fr": "Ce livre est tres interessant pour les debutants.",
+        "en": "This book is very interesting for beginners."
+      },
+      {
+        "fr": "Ce n'est pas grave, on peut recommencer demain.",
+        "en": "It is not serious, we can start again tomorrow."
+      }
+    ]
+  },
+  {
+    "word": "cette",
+    "translation": "this (feminine)",
+    "sentences": [
+      {
+        "fr": "Cette fille est ma voisine depuis l'an dernier.",
+        "en": "This girl is my neighbor since last year."
+      },
+      {
+        "fr": "Cette maison est pres de l'ecole et du parc.",
+        "en": "This house is near the school and the park."
+      }
+    ]
+  },
+  {
+    "word": "ces",
+    "translation": "these, those",
+    "sentences": [
+      {
+        "fr": "Ces chaises sont dans le salon pres de la table.",
+        "en": "These chairs are in the living room near the table."
+      },
+      {
+        "fr": "Ces questions sont faciles pour la classe aujourd'hui.",
+        "en": "These questions are easy for the class today."
+      }
+    ]
+  },
+  {
+    "word": "cet",
+    "translation": "this (before vowel, masculine)",
+    "sentences": [
+      {
+        "fr": "Cet homme travaille ici depuis trois ans.",
+        "en": "This man has worked here for three years."
+      },
+      {
+        "fr": "Cet apres-midi, on va au parc avec les amis.",
+        "en": "This afternoon, we are going to the park with friends."
+      }
+    ]
+  },
+  {
+    "word": "cela",
+    "translation": "that (pronoun)",
+    "sentences": [
+      {
+        "fr": "Je ne comprends pas cela, peux-tu repeter.",
+        "en": "I do not understand that, can you repeat."
+      },
+      {
+        "fr": "Est-ce que cela te convient pour vendredi soir.",
+        "en": "Does that work for you for Friday evening."
+      }
+    ]
+  },
+  {
+    "word": "mon",
+    "translation": "my (masculine singular)",
+    "sentences": [
+      {
+        "fr": "Mon pere travaille a Montreal depuis longtemps.",
+        "en": "My father has worked in Montreal for a long time."
+      },
+      {
+        "fr": "Mon sac est sur la table dans la cuisine.",
+        "en": "My bag is on the table in the kitchen."
+      }
+    ]
+  },
+  {
+    "word": "ma",
+    "translation": "my (feminine singular)",
+    "sentences": [
+      {
+        "fr": "Ma mere prepare le souper pour toute la famille.",
+        "en": "My mother prepares supper for the whole family."
+      },
+      {
+        "fr": "Ma chambre est au deuxieme etage de la maison.",
+        "en": "My bedroom is on the second floor of the house."
+      }
+    ]
+  },
+  {
+    "word": "mes",
+    "translation": "my (plural)",
+    "sentences": [
+      {
+        "fr": "Mes amis viennent chez moi ce soir pour souper.",
+        "en": "My friends are coming to my place tonight for supper."
+      },
+      {
+        "fr": "Mes cles sont dans ma poche, je les cherche.",
+        "en": "My keys are in my pocket, I am looking for them."
+      }
+    ]
+  },
+  {
+    "word": "ton",
+    "translation": "your (masculine singular, informal)",
+    "sentences": [
+      {
+        "fr": "Ton frere est arrive hier soir a la maison.",
+        "en": "Your brother arrived at the house last night."
+      },
+      {
+        "fr": "Ton idee est vraiment bonne pour le projet scolaire.",
+        "en": "Your idea is really good for the school project."
+      }
+    ]
+  },
+  {
+    "word": "ta",
+    "translation": "your (feminine singular, informal)",
+    "sentences": [
+      {
+        "fr": "Ta soeur parle tres bien francais a l'ecole.",
+        "en": "Your sister speaks French very well at school."
+      },
+      {
+        "fr": "Ta maison est belle avec un grand jardin vert.",
+        "en": "Your house is beautiful with a big green garden."
+      }
+    ]
+  },
+  {
+    "word": "tes",
+    "translation": "your (plural, informal)",
+    "sentences": [
+      {
+        "fr": "Tes parents sont gentils avec moi chaque visite.",
+        "en": "Your parents are kind to me on every visit."
+      },
+      {
+        "fr": "Tes livres sont sur l'etagere dans ta chambre.",
+        "en": "Your books are on the shelf in your bedroom."
+      }
+    ]
+  },
+  {
+    "word": "son",
+    "translation": "his, her, its (masculine singular)",
+    "sentences": [
+      {
+        "fr": "Son chien aboie beaucoup le soir dans la cour.",
+        "en": "His dog barks a lot in the evening in the yard."
+      },
+      {
+        "fr": "Son travail commence a huit heures chaque matin.",
+        "en": "Her work starts at eight o'clock every morning."
+      }
+    ]
+  },
+  {
+    "word": "sa",
+    "translation": "his, her, its (feminine singular)",
+    "sentences": [
+      {
+        "fr": "Sa voiture est dans le garage pres de la maison.",
+        "en": "Her car is in the garage near the house."
+      },
+      {
+        "fr": "Sa famille habite au Quebec depuis plusieurs annees.",
+        "en": "His family has lived in Quebec for several years."
+      }
+    ]
+  },
+  {
+    "word": "ses",
+    "translation": "his, her, its (plural)",
+    "sentences": [
+      {
+        "fr": "Ses enfants vont a l'ecole demain matin tot.",
+        "en": "Her children go to school early tomorrow morning."
+      },
+      {
+        "fr": "Ses yeux sont bleu clair comme le ciel d'ete.",
+        "en": "His eyes are light blue like the summer sky."
+      }
+    ]
+  },
+  {
+    "word": "notre",
+    "translation": "our (masculine or feminine singular)",
+    "sentences": [
+      {
+        "fr": "Notre equipe gagne souvent le match le samedi.",
+        "en": "Our team often wins the game on Saturday."
+      },
+      {
+        "fr": "Notre cafe est pret, tu veux du lait ce matin.",
+        "en": "Our coffee is ready, do you want milk this morning."
+      }
+    ]
+  },
+  {
+    "word": "nos",
+    "translation": "our (plural)",
+    "sentences": [
+      {
+        "fr": "Nos voisins sont tres sympathiques avec toute la rue.",
+        "en": "Our neighbors are very friendly with the whole street."
+      },
+      {
+        "fr": "Nos plans pour samedi sont simples et pas chers.",
+        "en": "Our plans for Saturday are simple and not expensive."
+      }
+    ]
+  },
+  {
+    "word": "votre",
+    "translation": "your (formal or plural)",
+    "sentences": [
+      {
+        "fr": "Votre table est prete pres de la fenetre, madame.",
+        "en": "Your table is ready near the window, ma'am."
+      },
+      {
+        "fr": "Votre aide est importante pour nous ce semestre.",
+        "en": "Your help is important for us this semester."
+      }
+    ]
+  },
+  {
+    "word": "vos",
+    "translation": "your (plural, formal or plural)",
+    "sentences": [
+      {
+        "fr": "Vos questions sont bonnes pour la classe aujourd'hui.",
+        "en": "Your questions are good for the class today."
+      },
+      {
+        "fr": "Vos valises sont dans la chambre au fond du couloir.",
+        "en": "Your suitcases are in the room at the end of the hall."
+      }
+    ]
+  },
+  {
+    "word": "leur",
+    "translation": "their (masculine or feminine singular)",
+    "sentences": [
+      {
+        "fr": "Leur maison est au bout de la rue pres du parc.",
+        "en": "Their house is at the end of the street near the park."
+      },
+      {
+        "fr": "Leur chien est gentil avec les enfants du quartier.",
+        "en": "Their dog is gentle with the children in the neighborhood."
+      }
+    ]
+  },
+  {
+    "word": "leurs",
+    "translation": "their (plural)",
+    "sentences": [
+      {
+        "fr": "Leurs enfants jouent au parc apres l'ecole chaque jour.",
+        "en": "Their children play at the park after school every day."
+      },
+      {
+        "fr": "Leurs idees sont interessantes pour le projet de groupe.",
+        "en": "Their ideas are interesting for the group project."
+      }
+    ]
+  },
+  {
+    "word": "moi",
+    "translation": "me",
+    "sentences": [
+      {
+        "fr": "Tu viens avec moi au cinema ce soir, d'accord.",
+        "en": "You are coming with me to the movies tonight, okay."
+      },
+      {
+        "fr": "Donne le livre a moi, s'il te plait, merci beaucoup.",
+        "en": "Give the book to me, please, thank you very much."
+      }
+    ]
+  },
+  {
+    "word": "toi",
+    "translation": "you (stressed pronoun)",
+    "sentences": [
+      {
+        "fr": "Ce cadeau est pour toi, joyeux anniversaire mon ami.",
+        "en": "This gift is for you, happy birthday my friend."
+      },
+      {
+        "fr": "Je pense souvent a toi quand je voyage loin.",
+        "en": "I often think about you when I travel far away."
+      }
+    ]
+  },
+  {
+    "word": "on",
+    "translation": "we (informal), one, people",
+    "sentences": [
+      {
+        "fr": "On va au cinema samedi soir avec nos amis.",
+        "en": "We are going to the movies Saturday evening with our friends."
+      },
+      {
+        "fr": "On dit que la meteo sera belle demain au Quebec.",
+        "en": "People say the weather will be nice tomorrow in Quebec."
+      }
+    ]
+  },
+  {
+    "word": "eux",
+    "translation": "them (masculine)",
+    "sentences": [
+      {
+        "fr": "Je parle souvent avec eux apres le cours de francais.",
+        "en": "I often talk with them after the French class."
+      },
+      {
+        "fr": "Le professeur les attend, eux aussi, devant la porte.",
+        "en": "The teacher is waiting for them too, in front of the door."
+      }
+    ]
+  },
+  {
+    "word": "elles",
+    "translation": "they, them (feminine)",
+    "sentences": [
+      {
+        "fr": "Elles arrivent dans une heure, on peut attendre ici.",
+        "en": "They are arriving in an hour, we can wait here."
+      },
+      {
+        "fr": "Je les invite, elles sont mes amies depuis longtemps.",
+        "en": "I am inviting them, they have been my friends for a long time."
+      }
+    ]
+  },
+  {
+    "word": "et",
+    "translation": "and",
+    "sentences": [
+      {
+        "fr": "J'aime le the et le cafe le matin avant le travail.",
+        "en": "I like tea and coffee in the morning before work."
+      },
+      {
+        "fr": "Il prend son sac et ses cles avant de sortir.",
+        "en": "He takes his bag and his keys before going out."
+      }
+    ]
+  },
+  {
+    "word": "mais",
+    "translation": "but",
+    "sentences": [
+      {
+        "fr": "Il fait froid dehors, mais je vais sortir un peu.",
+        "en": "It is cold outside, but I am going out a little."
+      },
+      {
+        "fr": "J'aime le film, mais il est un peu trop long.",
+        "en": "I like the movie, but it is a little too long."
+      }
+    ]
+  },
+  {
+    "word": "donc",
+    "translation": "so, therefore",
+    "sentences": [
+      {
+        "fr": "Il pleut fort, donc je reste a la maison ce soir.",
+        "en": "It is raining hard, so I am staying home tonight."
+      },
+      {
+        "fr": "Tu es fatigue, donc repose-toi un peu avant souper.",
+        "en": "You are tired, so rest a little before supper."
+      }
+    ]
+  },
+  {
+    "word": "car",
+    "translation": "because, for",
+    "sentences": [
+      {
+        "fr": "Je reste ici car j'attends mon ami devant la porte.",
+        "en": "I am staying here because I am waiting for my friend in front of the door."
+      },
+      {
+        "fr": "Elle sourit car elle est contente de te voir.",
+        "en": "She is smiling because she is happy to see you."
+      }
+    ]
+  },
+  {
+    "word": "ni",
+    "translation": "neither, nor",
+    "sentences": [
+      {
+        "fr": "Je ne veux ni the ni cafe ce matin, merci.",
+        "en": "I want neither tea nor coffee this morning, thanks."
+      },
+      {
+        "fr": "Il n'a ni chat ni chien chez lui pour le moment.",
+        "en": "He has neither a cat nor a dog at his place for now."
+      }
+    ]
+  },
+  {
+    "word": "comme",
+    "translation": "like, as",
+    "sentences": [
+      {
+        "fr": "Elle chante comme une pro devant toute la classe.",
+        "en": "She sings like a pro in front of the whole class."
+      },
+      {
+        "fr": "Il travaille comme un infirmier a l'hopital du quartier.",
+        "en": "He works as a nurse at the neighborhood hospital."
+      }
+    ]
+  },
+  {
+    "word": "alors",
+    "translation": "so, then, well",
+    "sentences": [
+      {
+        "fr": "Alors, on commence le cours maintenant, tout le monde.",
+        "en": "So, we are starting the class now, everyone."
+      },
+      {
+        "fr": "Tu es pret pour partir? Alors, allons-y ensemble.",
+        "en": "Are you ready to leave? Then, let's go together."
+      }
+    ]
+  },
+  {
+    "word": "dans",
+    "translation": "in, into",
+    "sentences": [
+      {
+        "fr": "Le chat est dans la boite sur le plancher.",
+        "en": "The cat is in the box on the floor."
+      },
+      {
+        "fr": "Nous habitons dans une petite ville pres du fleuve.",
+        "en": "We live in a small town near the river."
+      }
+    ]
+  },
+  {
+    "word": "sur",
+    "translation": "on, upon",
+    "sentences": [
+      {
+        "fr": "Le livre est sur la table dans la cuisine.",
+        "en": "The book is on the table in the kitchen."
+      },
+      {
+        "fr": "Il marche sur la plage le matin avant le travail.",
+        "en": "He walks on the beach in the morning before work."
+      }
+    ]
+  },
+  {
+    "word": "sous",
+    "translation": "under",
+    "sentences": [
+      {
+        "fr": "Le chien dort sous la table pendant que je mange.",
+        "en": "The dog sleeps under the table while I eat."
+      },
+      {
+        "fr": "Il y a un vieux tapis sous le lit dans la chambre.",
+        "en": "There is an old rug under the bed in the bedroom."
+      }
+    ]
+  },
+  {
+    "word": "avec",
+    "translation": "with",
+    "sentences": [
+      {
+        "fr": "Je vais au parc avec mes amis apres l'ecole.",
+        "en": "I am going to the park with my friends after school."
+      },
+      {
+        "fr": "Je prends mon cafe avec du lait chaque matin.",
+        "en": "I have my coffee with milk every morning."
+      }
+    ]
+  },
+  {
+    "word": "sans",
+    "translation": "without",
+    "sentences": [
+      {
+        "fr": "Je ne peux pas partir sans mon telephone et mes cles.",
+        "en": "I cannot leave without my phone and my keys."
+      },
+      {
+        "fr": "Elle boit son the sans sucre le matin a la maison.",
+        "en": "She drinks her tea without sugar in the morning at home."
+      }
+    ]
+  },
+  {
+    "word": "pour",
+    "translation": "for, in order to",
+    "sentences": [
+      {
+        "fr": "Ce cadeau est pour toi, c'est ton anniversaire.",
+        "en": "This gift is for you, it is your birthday."
+      },
+      {
+        "fr": "Je travaille pour payer mes cours de francais l'hiver.",
+        "en": "I work to pay for my French classes in the winter."
+      }
+    ]
+  },
+  {
+    "word": "par",
+    "translation": "by, through",
+    "sentences": [
+      {
+        "fr": "Je passe par la rue principale pour aller au travail.",
+        "en": "I go through the main street to get to work."
+      },
+      {
+        "fr": "Il envoie un message par texto a sa mere.",
+        "en": "He sends a text message to his mother."
+      }
+    ]
+  },
+  {
+    "word": "entre",
+    "translation": "between, among",
+    "sentences": [
+      {
+        "fr": "Le cafe est entre la banque et la pharmacie au centre.",
+        "en": "The cafe is between the bank and the pharmacy downtown."
+      },
+      {
+        "fr": "Ca reste entre nous, ne le dis a personne.",
+        "en": "It stays between us, do not tell anyone."
+      }
+    ]
+  },
+  {
+    "word": "chez",
+    "translation": "at the home of, at",
+    "sentences": [
+      {
+        "fr": "On dine chez ma grand-mere dimanche apres-midi.",
+        "en": "We are having dinner at my grandmother's on Sunday afternoon."
+      },
+      {
+        "fr": "Il y a beaucoup de monde chez le voisin ce soir.",
+        "en": "There are a lot of people at the neighbor's tonight."
+      }
+    ]
+  },
+  {
+    "word": "depuis",
+    "translation": "since, for (time)",
+    "sentences": [
+      {
+        "fr": "J'habite ici depuis deux ans et j'aime la ville.",
+        "en": "I have lived here for two years and I like the city."
+      },
+      {
+        "fr": "Il pleut depuis ce matin, alors je reste dedans.",
+        "en": "It has been raining since this morning, so I am staying inside."
+      }
+    ]
+  },
+  {
+    "word": "avant",
+    "translation": "before",
+    "sentences": [
+      {
+        "fr": "Arrive avant midi, s'il te plait, on commence tot.",
+        "en": "Arrive before noon, please, we are starting early."
+      },
+      {
+        "fr": "Je lis un peu avant de dormir chaque soir.",
+        "en": "I read a little before sleeping every evening."
+      }
+    ]
+  },
+  {
+    "word": "apres",
+    "translation": "after",
+    "sentences": [
+      {
+        "fr": "On mange ensemble apres le cours de francais.",
+        "en": "We eat together after the French class."
+      },
+      {
+        "fr": "Apres le travail, je vais courir au parc un peu.",
+        "en": "After work, I am going to run at the park a little."
+      }
+    ]
+  },
+  {
+    "word": "vers",
+    "translation": "toward, around (time)",
+    "sentences": [
+      {
+        "fr": "Il marche vers la gare pour prendre le train.",
+        "en": "He walks toward the station to take the train."
+      },
+      {
+        "fr": "On part vers huit heures ce soir, sois pret.",
+        "en": "We are leaving around eight o'clock tonight, be ready."
+      }
+    ]
+  },
+  {
+    "word": "devant",
+    "translation": "in front of",
+    "sentences": [
+      {
+        "fr": "Le bus s'arrete devant l'ecole chaque matin.",
+        "en": "The bus stops in front of the school every morning."
+      },
+      {
+        "fr": "Elle attend devant la porte avec son manteau.",
+        "en": "She is waiting in front of the door with her coat."
+      }
+    ]
+  },
+  {
+    "word": "bien",
+    "translation": "well, good, very",
+    "sentences": [
+      {
+        "fr": "Je me sens bien aujourd'hui, merci de demander.",
+        "en": "I feel well today, thanks for asking."
+      },
+      {
+        "fr": "Il parle bien francais pour un debutant au Quebec.",
+        "en": "He speaks French well for a beginner in Quebec."
+      }
+    ]
+  },
+  {
+    "word": "aussi",
+    "translation": "also, too",
+    "sentences": [
+      {
+        "fr": "J'aime le hockey aussi, surtout en hiver ici.",
+        "en": "I like hockey too, especially in winter here."
+      },
+      {
+        "fr": "Elle travaille ici aussi le samedi quelques heures.",
+        "en": "She also works here on Saturday for a few hours."
+      }
+    ]
+  },
+  {
+    "word": "encore",
+    "translation": "still, again",
+    "sentences": [
+      {
+        "fr": "Il est encore au travail ce soir, il revient tard.",
+        "en": "He is still at work tonight, he will come back late."
+      },
+      {
+        "fr": "Tu peux repeter encore une fois, s'il te plait.",
+        "en": "You can repeat it one more time, please."
+      }
+    ]
+  },
+  {
+    "word": "toujours",
+    "translation": "always",
+    "sentences": [
+      {
+        "fr": "Elle est toujours gentille avec moi a l'ecole.",
+        "en": "She is always kind to me at school."
+      },
+      {
+        "fr": "Je prends toujours un cafe le matin avant le bus.",
+        "en": "I always have a coffee in the morning before the bus."
+      }
+    ]
+  },
+  {
+    "word": "jamais",
+    "translation": "never",
+    "sentences": [
+      {
+        "fr": "Je n'oublie jamais ton anniversaire, c'est important.",
+        "en": "I never forget your birthday, it is important."
+      },
+      {
+        "fr": "Il n'est jamais en retard pour le bus du matin.",
+        "en": "He is never late for the morning bus."
+      }
+    ]
+  },
+  {
+    "word": "beaucoup",
+    "translation": "a lot, much",
+    "sentences": [
+      {
+        "fr": "Merci beaucoup pour ton aide avec mes devoirs.",
+        "en": "Thank you very much for your help with my homework."
+      },
+      {
+        "fr": "Il y a beaucoup de monde au marche samedi matin.",
+        "en": "There are a lot of people at the market Saturday morning."
+      }
+    ]
+  },
+  {
+    "word": "peu",
+    "translation": "little, few",
+    "sentences": [
+      {
+        "fr": "Je dors peu la nuit avant un gros examen.",
+        "en": "I sleep little at night before a big exam."
+      },
+      {
+        "fr": "Il y a peu de place dans le bus ce matin.",
+        "en": "There is little room on the bus this morning."
+      }
+    ]
+  },
+  {
+    "word": "trop",
+    "translation": "too much, too",
+    "sentences": [
+      {
+        "fr": "Il fait trop chaud pour courir l'apres-midi.",
+        "en": "It is too hot to run in the afternoon."
+      },
+      {
+        "fr": "Tu manges trop de sucre chaque jour, fais attention.",
+        "en": "You eat too much sugar every day, be careful."
+      }
+    ]
+  },
+  {
+    "word": "vite",
+    "translation": "quickly",
+    "sentences": [
+      {
+        "fr": "Il court vite pour attraper le bus du matin.",
+        "en": "He runs quickly to catch the morning bus."
+      },
+      {
+        "fr": "Fais vite, le train part dans cinq minutes.",
+        "en": "Hurry up, the train leaves in five minutes."
+      }
+    ]
+  },
+  {
+    "word": "ensemble",
+    "translation": "together",
+    "sentences": [
+      {
+        "fr": "Nous travaillons ensemble sur le projet pour vendredi.",
+        "en": "We are working together on the project for Friday."
+      },
+      {
+        "fr": "On va au cinema ensemble samedi soir, ca te va.",
+        "en": "We are going to the movies together Saturday evening, does that work."
+      }
+    ]
+  },
+  {
+    "word": "seulement",
+    "translation": "only",
+    "sentences": [
+      {
+        "fr": "Il y a seulement une place libre dans le bus.",
+        "en": "There is only one free seat on the bus."
+      },
+      {
+        "fr": "Je veux seulement un verre d'eau, merci beaucoup.",
+        "en": "I only want a glass of water, thank you very much."
+      }
+    ]
+  },
+  {
+    "word": "vraiment",
+    "translation": "really, truly",
+    "sentences": [
+      {
+        "fr": "Le film etait vraiment bon, on devrait le revoir.",
+        "en": "The movie was really good, we should watch it again."
+      },
+      {
+        "fr": "Je suis vraiment content de te voir aujourd'hui.",
+        "en": "I am really happy to see you today."
+      }
+    ]
+  },
+  {
+    "word": "quelque",
+    "translation": "some (before noun)",
+    "sentences": [
+      {
+        "fr": "J'ai quelque chose a te dire apres le cours.",
+        "en": "I have something to tell you after class."
+      },
+      {
+        "fr": "Il reste quelque pain sur la table pour le souper.",
+        "en": "There is some bread left on the table for supper."
+      }
+    ]
+  },
+  {
+    "word": "chaque",
+    "translation": "each, every",
+    "sentences": [
+      {
+        "fr": "Chaque matin, je prends mon cafe avant le travail.",
+        "en": "Every morning, I have my coffee before work."
+      },
+      {
+        "fr": "Chaque eleve a un livre dans la classe aujourd'hui.",
+        "en": "Each student has a book in the class today."
+      }
+    ]
+  },
+  {
+    "word": "aucun",
+    "translation": "none, not any (masculine)",
+    "sentences": [
+      {
+        "fr": "Je n'ai aucun probleme avec ce plan pour demain.",
+        "en": "I have no problem with this plan for tomorrow."
+      },
+      {
+        "fr": "Aucun eleve n'est en retard pour le cours ce matin.",
+        "en": "No student is late for class this morning."
+      }
+    ]
+  },
+  {
+    "word": "autre",
+    "translation": "other, another",
+    "sentences": [
+      {
+        "fr": "Je veux un autre cafe, s'il te plait, merci.",
+        "en": "I want another coffee, please, thanks."
+      },
+      {
+        "fr": "L'autre rue est plus calme pour marcher le soir.",
+        "en": "The other street is quieter for walking in the evening."
+      }
+    ]
+  },
+  {
+    "word": "tous",
+    "translation": "all (masculine plural)",
+    "sentences": [
+      {
+        "fr": "Tous les eleves sont dans la cour a la pause.",
+        "en": "All the students are in the yard at break time."
+      },
+      {
+        "fr": "Nous sommes tous fatigues apres le long voyage.",
+        "en": "We are all tired after the long trip."
+      }
+    ]
+  },
+  {
+    "word": "deux",
+    "translation": "two",
+    "sentences": [
+      {
+        "fr": "J'ai deux freres et une soeur dans ma famille.",
+        "en": "I have two brothers and one sister in my family."
+      },
+      {
+        "fr": "Le bus arrive dans deux minutes, debpeche-toi.",
+        "en": "The bus arrives in two minutes, hurry up."
+      }
+    ]
+  },
+  {
+    "word": "trois",
+    "translation": "three",
+    "sentences": [
+      {
+        "fr": "Il y a trois chaises dans la cuisine pres de la table.",
+        "en": "There are three chairs in the kitchen near the table."
+      },
+      {
+        "fr": "Nous attendons depuis trois heures devant la porte.",
+        "en": "We have been waiting for three hours in front of the door."
+      }
+    ]
+  },
+  {
+    "word": "quelques",
+    "translation": "a few, some",
+    "sentences": [
+      {
+        "fr": "Je vais acheter quelques pommes au marche demain.",
+        "en": "I am going to buy a few apples at the market tomorrow."
+      },
+      {
+        "fr": "Quelques amis viennent chez nous ce soir pour souper.",
+        "en": "A few friends are coming to our place tonight for supper."
+      }
+    ]
+  },
+  {
+    "word": "combien",
+    "translation": "how much, how many",
+    "sentences": [
+      {
+        "fr": "Combien ca coute, s'il te plait, pour ce sandwich.",
+        "en": "How much does it cost, please, for this sandwich."
+      },
+      {
+        "fr": "Combien d'enfants sont dans la classe ce matin.",
+        "en": "How many children are in the class this morning."
+      }
+    ]
+  },
+  {
+    "word": "chose",
+    "translation": "thing",
+    "sentences": [
+      {
+        "fr": "C'est une chose importante a savoir pour le voyage.",
+        "en": "It is an important thing to know for the trip."
+      },
+      {
+        "fr": "Il dit la chose la plus simple du monde a l'enfant.",
+        "en": "He says the simplest thing in the world to the child."
+      }
+    ]
+  },
+  {
+    "word": "choses",
+    "translation": "things",
+    "sentences": [
+      {
+        "fr": "J'ai beaucoup de choses a faire demain a la maison.",
+        "en": "I have a lot of things to do tomorrow at home."
+      },
+      {
+        "fr": "Les petites choses comptent beaucoup pour moi chaque jour.",
+        "en": "Little things matter a lot to me every day."
+      }
+    ]
+  },
+  {
+    "word": "monde",
+    "translation": "world, people",
+    "sentences": [
+      {
+        "fr": "Il veut voyager autour du monde l'ete prochain.",
+        "en": "He wants to travel around the world next summer."
+      },
+      {
+        "fr": "Il y a du monde au marche samedi, c'est anime.",
+        "en": "There are a lot of people at the market Saturday, it is lively."
+      }
+    ]
+  },
+  {
+    "word": "pays",
+    "translation": "country",
+    "sentences": [
+      {
+        "fr": "Le Canada est un beau pays avec beaucoup de nature.",
+        "en": "Canada is a beautiful country with a lot of nature."
+      },
+      {
+        "fr": "Mon pays est petit, mais je l'aime beaucoup.",
+        "en": "My country is small, but I love it a lot."
+      }
+    ]
+  },
+  {
+    "word": "ville",
+    "translation": "city, town",
+    "sentences": [
+      {
+        "fr": "Notre ville a un beau parc au centre-ville.",
+        "en": "Our town has a beautiful park downtown."
+      },
+      {
+        "fr": "Il habite dans une grande ville pres du fleuve.",
+        "en": "He lives in a big city near the river."
+      }
+    ]
+  },
+  {
+    "word": "place",
+    "translation": "place, seat, square",
+    "sentences": [
+      {
+        "fr": "Il y a une place libre pres de la fenetre.",
+        "en": "There is a free seat near the window."
+      },
+      {
+        "fr": "La place du village est calme le soir apres souper.",
+        "en": "The village square is quiet in the evening after supper."
+      }
+    ]
+  },
+  {
+    "word": "porte",
+    "translation": "door",
+    "sentences": [
+      {
+        "fr": "Ferme la porte, il fait froid dehors ce soir.",
+        "en": "Close the door, it is cold outside tonight."
+      },
+      {
+        "fr": "La porte de la maison est bleue et tres vieille.",
+        "en": "The door of the house is blue and very old."
+      }
+    ]
+  },
+  {
+    "word": "homme",
+    "translation": "man",
+    "sentences": [
+      {
+        "fr": "Cet homme travaille au centre-ville.",
+        "en": "This man works downtown."
+      },
+      {
+        "fr": "L'homme attend le bus avec patience.",
+        "en": "The man waits for the bus patiently."
+      }
+    ]
+  },
+  {
+    "word": "femme",
+    "translation": "woman",
+    "sentences": [
+      {
+        "fr": "La femme parle francais tres bien.",
+        "en": "The woman speaks French very well."
+      },
+      {
+        "fr": "Une femme m'a aide a trouver la rue.",
+        "en": "A woman helped me find the street."
+      }
+    ]
+  },
+  {
+    "word": "fille",
+    "translation": "girl, daughter",
+    "sentences": [
+      {
+        "fr": "La fille joue dehors avec ses amis.",
+        "en": "The girl plays outside with her friends."
+      },
+      {
+        "fr": "Ma fille a sept ans et elle aime lire.",
+        "en": "My daughter is seven and she likes to read."
+      }
+    ]
+  },
+  {
+    "word": "fils",
+    "translation": "son",
+    "sentences": [
+      {
+        "fr": "Mon fils va a l'ecole chaque matin.",
+        "en": "My son goes to school every morning."
+      },
+      {
+        "fr": "Le fils de ma voisine est tres gentil.",
+        "en": "My neighbor's son is very kind."
+      }
+    ]
+  },
+  {
+    "word": "enfant",
+    "translation": "child",
+    "sentences": [
+      {
+        "fr": "L'enfant mange une pomme apres l'ecole.",
+        "en": "The child eats an apple after school."
+      },
+      {
+        "fr": "Chaque enfant a besoin de repos le soir.",
+        "en": "Every child needs rest in the evening."
+      }
+    ]
+  },
+  {
+    "word": "enfants",
+    "translation": "children",
+    "sentences": [
+      {
+        "fr": "Les enfants jouent dans le parc ce soir.",
+        "en": "The children are playing in the park tonight."
+      },
+      {
+        "fr": "Nos enfants aiment le hockey en hiver.",
+        "en": "Our children like hockey in winter."
+      }
+    ]
+  },
+  {
+    "word": "gens",
+    "translation": "people",
+    "sentences": [
+      {
+        "fr": "Les gens attendent devant la station de metro.",
+        "en": "People are waiting in front of the metro station."
+      },
+      {
+        "fr": "Beaucoup de gens viennent au festival ici.",
+        "en": "Many people come to the festival here."
+      }
+    ]
+  },
+  {
+    "word": "personne",
+    "translation": "person, nobody",
+    "sentences": [
+      {
+        "fr": "Cette personne travaille a la bibliotheque.",
+        "en": "This person works at the library."
+      },
+      {
+        "fr": "Il n'y a personne dans la salle maintenant.",
+        "en": "There is nobody in the room right now."
+      }
+    ]
+  },
+  {
+    "word": "amis",
+    "translation": "friends",
+    "sentences": [
+      {
+        "fr": "Mes amis viennent souper chez nous samedi.",
+        "en": "My friends are coming for supper at our place on Saturday."
+      },
+      {
+        "fr": "J'ai de bons amis dans mon quartier.",
+        "en": "I have good friends in my neighborhood."
+      }
+    ]
+  },
+  {
+    "word": "semaine",
+    "translation": "week",
+    "sentences": [
+      {
+        "fr": "La semaine prochaine, je pars en vacances.",
+        "en": "Next week, I am leaving on vacation."
+      },
+      {
+        "fr": "J'ai eu une semaine tres chargee au travail.",
+        "en": "I had a very busy week at work."
+      }
+    ]
+  },
+  {
+    "word": "moment",
+    "translation": "moment, time",
+    "sentences": [
+      {
+        "fr": "Attends un moment, je reviens tout de suite.",
+        "en": "Wait a moment, I will be right back."
+      },
+      {
+        "fr": "C'est le bon moment pour commencer le cours.",
+        "en": "It is the right time to start the class."
+      }
+    ]
+  },
+  {
+    "word": "raison",
+    "translation": "reason, right",
+    "sentences": [
+      {
+        "fr": "Tu as raison, il vaut mieux partir tot.",
+        "en": "You are right, it is better to leave early."
+      },
+      {
+        "fr": "Je ne comprends pas la raison de ce retard.",
+        "en": "I do not understand the reason for this delay."
+      }
+    ]
+  },
+  {
+    "word": "chance",
+    "translation": "luck, chance",
+    "sentences": [
+      {
+        "fr": "J'ai eu de la chance avec la meteo aujourd'hui.",
+        "en": "I was lucky with the weather today."
+      },
+      {
+        "fr": "Bonne chance pour ton examen demain matin.",
+        "en": "Good luck on your exam tomorrow morning."
+      }
+    ]
+  },
+  {
+    "word": "histoire",
+    "translation": "story, history",
+    "sentences": [
+      {
+        "fr": "Ma grand-mere raconte une belle histoire.",
+        "en": "My grandmother tells a beautiful story."
+      },
+      {
+        "fr": "On etudie l'histoire du Quebec en classe.",
+        "en": "We study the history of Quebec in class."
+      }
+    ]
+  },
+  {
+    "word": "partie",
+    "translation": "part, game, match",
+    "sentences": [
+      {
+        "fr": "La premiere partie du film est tres bonne.",
+        "en": "The first part of the movie is very good."
+      },
+      {
+        "fr": "On va regarder la partie de hockey ce soir.",
+        "en": "We are going to watch the hockey game tonight."
+      }
+    ]
+  },
+  {
+    "word": "bon",
+    "translation": "good (masculine)",
+    "sentences": [
+      {
+        "fr": "Ce cafe est vraiment bon ce matin.",
+        "en": "This coffee is really good this morning."
+      },
+      {
+        "fr": "C'est un bon livre pour les debutants.",
+        "en": "It is a good book for beginners."
+      }
+    ]
+  },
+  {
+    "word": "bonne",
+    "translation": "good (feminine)",
+    "sentences": [
+      {
+        "fr": "Tu as une bonne idee pour ce projet.",
+        "en": "You have a good idea for this project."
+      },
+      {
+        "fr": "Elle prepare une bonne soupe pour la famille.",
+        "en": "She is making a good soup for the family."
+      }
+    ]
+  },
+  {
+    "word": "grand",
+    "translation": "big, tall (masculine)",
+    "sentences": [
+      {
+        "fr": "Mon frere est grand et il joue au basketball.",
+        "en": "My brother is tall and he plays basketball."
+      },
+      {
+        "fr": "C'est un grand parc pres de chez nous.",
+        "en": "It is a big park near our place."
+      }
+    ]
+  },
+  {
+    "word": "grande",
+    "translation": "big, tall (feminine)",
+    "sentences": [
+      {
+        "fr": "Elle habite dans une grande maison au nord.",
+        "en": "She lives in a big house in the north."
+      },
+      {
+        "fr": "La ville a une grande bibliotheque publique.",
+        "en": "The city has a large public library."
+      }
+    ]
+  },
+  {
+    "word": "petit",
+    "translation": "small, little (masculine)",
+    "sentences": [
+      {
+        "fr": "Le chien est petit mais il court vite.",
+        "en": "The dog is small but it runs fast."
+      },
+      {
+        "fr": "On prend un petit cafe avant le travail.",
+        "en": "We have a small coffee before work."
+      }
+    ]
+  },
+  {
+    "word": "petite",
+    "translation": "small, little (feminine)",
+    "sentences": [
+      {
+        "fr": "Ma petite soeur apprend le francais a l'ecole.",
+        "en": "My little sister is learning French at school."
+      },
+      {
+        "fr": "J'ai une petite chambre mais elle est confortable.",
+        "en": "I have a small room but it is comfortable."
+      }
+    ]
+  },
+  {
+    "word": "nouveau",
+    "translation": "new (masculine)",
+    "sentences": [
+      {
+        "fr": "J'ai un nouveau telephone depuis hier.",
+        "en": "I have a new phone since yesterday."
+      },
+      {
+        "fr": "Le nouveau voisin est tres sympathique.",
+        "en": "The new neighbor is very friendly."
+      }
+    ]
+  },
+  {
+    "word": "nouvelle",
+    "translation": "new (feminine), news",
+    "sentences": [
+      {
+        "fr": "Ma nouvelle amie habite a Montreal.",
+        "en": "My new friend lives in Montreal."
+      },
+      {
+        "fr": "J'ai une bonne nouvelle pour toi aujourd'hui.",
+        "en": "I have good news for you today."
+      }
+    ]
+  },
+  {
+    "word": "vieux",
+    "translation": "old (masculine)",
+    "sentences": [
+      {
+        "fr": "Ce vieux pont est encore utilise chaque jour.",
+        "en": "This old bridge is still used every day."
+      },
+      {
+        "fr": "Mon vieux manteau est chaud pour l'hiver.",
+        "en": "My old coat is warm for winter."
+      }
+    ]
+  },
+  {
+    "word": "jeune",
+    "translation": "young",
+    "sentences": [
+      {
+        "fr": "Les jeunes etudiants etudient a la bibliotheque.",
+        "en": "The young students study at the library."
+      },
+      {
+        "fr": "Il est encore jeune et il apprend vite.",
+        "en": "He is still young and he learns quickly."
+      }
+    ]
+  },
+  {
+    "word": "belle",
+    "translation": "beautiful, fine",
+    "sentences": [
+      {
+        "fr": "C'est une belle journee pour marcher dehors.",
+        "en": "It is a beautiful day for walking outside."
+      },
+      {
+        "fr": "Elle porte une belle robe au mariage.",
+        "en": "She is wearing a beautiful dress at the wedding."
+      }
+    ]
+  },
+  {
+    "word": "vrai",
+    "translation": "true, real",
+    "sentences": [
+      {
+        "fr": "C'est vrai, le train arrive dans dix minutes.",
+        "en": "It is true, the train arrives in ten minutes."
+      },
+      {
+        "fr": "Il raconte une vraie histoire de son enfance.",
+        "en": "He tells a real story from his childhood."
+      }
+    ]
+  },
+  {
+    "word": "seul",
+    "translation": "alone, only (masculine)",
+    "sentences": [
+      {
+        "fr": "Il est seul a la maison ce soir.",
+        "en": "He is alone at home tonight."
+      },
+      {
+        "fr": "Tu es le seul qui peut m'aider maintenant.",
+        "en": "You are the only one who can help me now."
+      }
+    ]
+  },
+  {
+    "word": "seule",
+    "translation": "alone, only (feminine)",
+    "sentences": [
+      {
+        "fr": "Elle est seule au cafe ce matin.",
+        "en": "She is alone at the cafe this morning."
+      },
+      {
+        "fr": "Ma seule cle est sur la table de cuisine.",
+        "en": "My only key is on the kitchen table."
+      }
+    ]
+  },
+  {
+    "word": "possible",
+    "translation": "possible",
+    "sentences": [
+      {
+        "fr": "Est-ce possible de changer la date du rendez-vous?",
+        "en": "Is it possible to change the appointment date?"
+      },
+      {
+        "fr": "Tout est possible si on travaille fort.",
+        "en": "Everything is possible if you work hard."
+      }
+    ]
+  },
+  {
+    "word": "mal",
+    "translation": "badly, wrong, pain",
+    "sentences": [
+      {
+        "fr": "Je me sens mal depuis hier soir.",
+        "en": "I have been feeling unwell since last night."
+      },
+      {
+        "fr": "Il fait mal quand je bouge le bras.",
+        "en": "It hurts when I move my arm."
+      }
+    ]
+  },
+  {
+    "word": "mieux",
+    "translation": "better",
+    "sentences": [
+      {
+        "fr": "Je me sens mieux apres une bonne nuit de sommeil.",
+        "en": "I feel better after a good night's sleep."
+      },
+      {
+        "fr": "C'est mieux d'arriver dix minutes en avance.",
+        "en": "It is better to arrive ten minutes early."
+      }
+    ]
+  },
+  {
+    "word": "fort",
+    "translation": "strong, loud",
+    "sentences": [
+      {
+        "fr": "Le vent est fort dehors ce matin.",
+        "en": "The wind is strong outside this morning."
+      },
+      {
+        "fr": "Il parle fort quand il est nerveux.",
+        "en": "He speaks loudly when he is nervous."
+      }
+    ]
+  },
+  {
+    "word": "croire",
+    "translation": "to believe",
+    "sentences": [
+      {
+        "fr": "Je crois que tu as raison sur ce point.",
+        "en": "I believe you are right on this point."
+      },
+      {
+        "fr": "Il est difficile de croire cette nouvelle.",
+        "en": "It is hard to believe this news."
+      }
+    ]
+  },
+  {
+    "word": "chercher",
+    "translation": "to look for, to search",
+    "sentences": [
+      {
+        "fr": "Je cherche mes cles depuis vingt minutes.",
+        "en": "I have been looking for my keys for twenty minutes."
+      },
+      {
+        "fr": "On va chercher un bon restaurant pres d'ici.",
+        "en": "We are going to look for a good restaurant nearby."
+      }
+    ]
+  },
+  {
+    "word": "trouver",
+    "translation": "to find",
+    "sentences": [
+      {
+        "fr": "J'ai trouve mon portefeuille sous le lit.",
+        "en": "I found my wallet under the bed."
+      },
+      {
+        "fr": "Tu vas trouver la rue facilement avec ce plan.",
+        "en": "You will find the street easily with this map."
+      }
+    ]
+  },
+  {
+    "word": "demander",
+    "translation": "to ask",
+    "sentences": [
+      {
+        "fr": "Je vais demander l'addition au serveur.",
+        "en": "I am going to ask the server for the bill."
+      },
+      {
+        "fr": "N'hesite pas a demander de l'aide en classe.",
+        "en": "Do not hesitate to ask for help in class."
+      }
+    ]
+  },
+  {
+    "word": "rester",
+    "translation": "to stay, to remain",
+    "sentences": [
+      {
+        "fr": "On va rester a la maison ce soir.",
+        "en": "We are going to stay home tonight."
+      },
+      {
+        "fr": "Il veut rester calme pendant la reunion.",
+        "en": "He wants to stay calm during the meeting."
+      }
+    ]
+  },
+  {
+    "word": "passer",
+    "translation": "to pass, to spend (time)",
+    "sentences": [
+      {
+        "fr": "Je vais passer te voir apres le travail.",
+        "en": "I am going to stop by to see you after work."
+      },
+      {
+        "fr": "On va passer la fin de semaine au chalet.",
+        "en": "We are going to spend the weekend at the cottage."
+      }
+    ]
+  },
+  {
+    "word": "partir",
+    "translation": "to leave, to go",
+    "sentences": [
+      {
+        "fr": "Le train va partir dans cinq minutes.",
+        "en": "The train is going to leave in five minutes."
+      },
+      {
+        "fr": "On doit partir tot demain matin.",
+        "en": "We have to leave early tomorrow morning."
+      }
+    ]
+  },
+  {
+    "word": "sortir",
+    "translation": "to go out, to leave",
+    "sentences": [
+      {
+        "fr": "On va sortir prendre une marche ce soir.",
+        "en": "We are going out for a walk tonight."
+      },
+      {
+        "fr": "Il faut sortir le chien avant le souper.",
+        "en": "We need to take the dog out before supper."
+      }
+    ]
+  },
+  {
+    "word": "arriver",
+    "translation": "to arrive, to happen",
+    "sentences": [
+      {
+        "fr": "Le bus va arriver a la prochaine station.",
+        "en": "The bus will arrive at the next stop."
+      },
+      {
+        "fr": "Ca peut arriver a tout le monde parfois.",
+        "en": "That can happen to anyone sometimes."
+      }
+    ]
+  },
+  {
+    "word": "attendre",
+    "translation": "to wait",
+    "sentences": [
+      {
+        "fr": "Je dois attendre le medecin dans la salle.",
+        "en": "I have to wait for the doctor in the waiting room."
+      },
+      {
+        "fr": "Attends-moi devant la station de metro.",
+        "en": "Wait for me in front of the metro station."
+      }
+    ]
+  },
+  {
+    "word": "laisser",
+    "translation": "to let, to leave",
+    "sentences": [
+      {
+        "fr": "Laisse la porte ouverte, s'il te plait.",
+        "en": "Leave the door open, please."
+      },
+      {
+        "fr": "Ma mere me laisse utiliser sa voiture.",
+        "en": "My mother lets me use her car."
+      }
+    ]
+  },
+  {
+    "word": "mettre",
+    "translation": "to put, to put on",
+    "sentences": [
+      {
+        "fr": "Je vais mettre mon manteau, il fait froid.",
+        "en": "I am going to put on my coat, it is cold."
+      },
+      {
+        "fr": "Mets les cles sur la table, s'il te plait.",
+        "en": "Put the keys on the table, please."
+      }
+    ]
+  },
+  {
+    "word": "vivre",
+    "translation": "to live",
+    "sentences": [
+      {
+        "fr": "J'aimerais vivre pres du fleuve un jour.",
+        "en": "I would like to live near the river one day."
+      },
+      {
+        "fr": "Ils veulent vivre en paix dans leur quartier.",
+        "en": "They want to live in peace in their neighborhood."
+      }
+    ]
+  },
+  {
+    "word": "papa",
+    "translation": "dad, father",
+    "sentences": [
+      {
+        "fr": "Mon papa cuisine le souper ce soir.",
+        "en": "My dad is cooking supper tonight."
+      },
+      {
+        "fr": "Papa va me chercher a l'ecole a trois heures.",
+        "en": "Dad is going to pick me up at school at three."
+      }
+    ]
+  },
+  {
+    "word": "maman",
+    "translation": "mom, mother",
+    "sentences": [
+      {
+        "fr": "Maman travaille a l'hopital le lundi.",
+        "en": "Mom works at the hospital on Monday."
+      },
+      {
+        "fr": "Ma maman m'appelle tous les soirs.",
+        "en": "My mom calls me every evening."
+      }
+    ]
+  },
+  {
+    "word": "monsieur",
+    "translation": "sir, Mr.",
+    "sentences": [
+      {
+        "fr": "Bonjour monsieur, puis-je vous aider?",
+        "en": "Hello sir, may I help you?"
+      },
+      {
+        "fr": "Monsieur Tremblay habite dans notre immeuble.",
+        "en": "Mr. Tremblay lives in our building."
+      }
+    ]
+  },
+  {
+    "word": "madame",
+    "translation": "madam, Mrs.",
+    "sentences": [
+      {
+        "fr": "Madame, votre table est prete.",
+        "en": "Madam, your table is ready."
+      },
+      {
+        "fr": "Madame Gagnon est notre nouvelle professeure.",
+        "en": "Mrs. Gagnon is our new teacher."
+      }
+    ]
+  },
+  {
+    "word": "salut",
+    "translation": "hi, bye",
+    "sentences": [
+      {
+        "fr": "Salut, ca va? On se voit plus tard.",
+        "en": "Hi, how are you? See you later."
+      },
+      {
+        "fr": "Il a dit salut avant de partir au travail.",
+        "en": "He said bye before leaving for work."
+      }
+    ]
+  },
+  {
+    "word": "peur",
+    "translation": "fear",
+    "sentences": [
+      {
+        "fr": "J'ai peur des araignees depuis tout petit.",
+        "en": "I have been afraid of spiders since I was very little."
+      },
+      {
+        "fr": "Il n'a pas peur de parler en public.",
+        "en": "He is not afraid of speaking in public."
+      }
+    ]
+  },
+  {
+    "word": "air",
+    "translation": "air, appearance",
+    "sentences": [
+      {
+        "fr": "L'air est frais ce matin dehors.",
+        "en": "The air is fresh outside this morning."
+      },
+      {
+        "fr": "Il a l'air fatigue apres sa longue journee.",
+        "en": "He looks tired after his long day."
+      }
+    ]
+  },
+  {
+    "word": "corps",
+    "translation": "body",
+    "sentences": [
+      {
+        "fr": "Il faut bouger le corps chaque jour.",
+        "en": "You need to move your body every day."
+      },
+      {
+        "fr": "Le froid affecte tout le corps en hiver.",
+        "en": "The cold affects the whole body in winter."
+      }
+    ]
+  },
+  {
+    "word": "main",
+    "translation": "hand",
+    "sentences": [
+      {
+        "fr": "Lave tes mains avant de manger, s'il te plait.",
+        "en": "Wash your hands before eating, please."
+      },
+      {
+        "fr": "Il tient son cafe dans la main gauche.",
+        "en": "He holds his coffee in his left hand."
+      }
+    ]
+  },
+  {
+    "word": "yeux",
+    "translation": "eyes",
+    "sentences": [
+      {
+        "fr": "Elle a les yeux bleus comme sa mere.",
+        "en": "She has blue eyes like her mother."
+      },
+      {
+        "fr": "Ferme les yeux et respire calmement.",
+        "en": "Close your eyes and breathe calmly."
+      }
+    ]
+  },
+  {
+    "word": "boulot",
+    "translation": "job, work (informal)",
+    "sentences": [
+      {
+        "fr": "Je suis fatigue apres une longue journee de boulot.",
+        "en": "I am tired after a long day of work."
+      },
+      {
+        "fr": "Il cherche un nouveau boulot depuis mars.",
+        "en": "He has been looking for a new job since March."
+      }
+    ]
+  },
+  {
+    "word": "super",
+    "translation": "great, super",
+    "sentences": [
+      {
+        "fr": "C'est super, on va au cinema ce soir!",
+        "en": "That is great, we are going to the movies tonight!"
+      },
+      {
+        "fr": "Tu as fait un super travail sur ce projet.",
+        "en": "You did a great job on this project."
+      }
+    ]
+  },
+  {
+    "word": "accord",
+    "translation": "agreement",
+    "sentences": [
+      {
+        "fr": "On est d'accord pour se voir a midi.",
+        "en": "We agree to meet at noon."
+      },
+      {
+        "fr": "Ils ont signe un accord avec la compagnie.",
+        "en": "They signed an agreement with the company."
+      }
+    ]
+  },
+  {
+    "word": "besoin",
+    "translation": "need",
+    "sentences": [
+      {
+        "fr": "J'ai besoin d'aide pour porter ces boites.",
+        "en": "I need help carrying these boxes."
+      },
+      {
+        "fr": "On a besoin de plus de temps pour finir.",
+        "en": "We need more time to finish."
+      }
+    ]
+  },
+  {
+    "word": "vie",
+    "translation": "life",
+    "sentences": [
+      {
+        "fr": "La vie est belle quand on est avec des amis.",
+        "en": "Life is beautiful when you are with friends."
+      },
+      {
+        "fr": "Il parle de sa vie a Montreal avec joie.",
+        "en": "He talks about his life in Montreal with joy."
+      }
+    ]
+  },
+  {
+    "word": "mort",
+    "translation": "death, dead",
+    "sentences": [
+      {
+        "fr": "La mort fait partie de la vie humaine.",
+        "en": "Death is part of human life."
+      },
+      {
+        "fr": "Les fleurs sur la table sont mortes.",
+        "en": "The flowers on the table are dead."
+      }
+    ]
+  },
+  {
+    "word": "autres",
+    "translation": "others, other",
+    "sentences": [
+      {
+        "fr": "Les autres attendent dehors dans le froid.",
+        "en": "The others are waiting outside in the cold."
+      },
+      {
+        "fr": "J'ai d'autres questions pour le professeur.",
+        "en": "I have other questions for the teacher."
+      }
+    ]
+  },
+  {
+    "word": "toute",
+    "translation": "all, whole (feminine)",
+    "sentences": [
+      {
+        "fr": "Elle a travaille toute la journee sans pause.",
+        "en": "She worked all day without a break."
+      },
+      {
+        "fr": "Toute la famille vient souper dimanche.",
+        "en": "The whole family is coming for supper on Sunday."
+      }
+    ]
+  },
+  {
+    "word": "nom",
+    "translation": "name",
+    "sentences": [
+      {
+        "fr": "Quel est ton nom, s'il te plait?",
+        "en": "What is your name, please?"
+      },
+      {
+        "fr": "J'ai oublie le nom de cette rue.",
+        "en": "I forgot the name of this street."
+      }
+    ]
+  },
+  {
+    "word": "reste",
+    "translation": "rest, remains",
+    "sentences": [
+      {
+        "fr": "Mange le reste de la soupe ce soir.",
+        "en": "Eat the rest of the soup tonight."
+      },
+      {
+        "fr": "Il reste du pain sur la table de cuisine.",
+        "en": "There is bread left on the kitchen table."
+      }
+    ]
+  },
+  {
+    "word": "aider",
+    "translation": "to help",
+    "sentences": [
+      {
+        "fr": "Je peux t'aider avec tes devoirs ce soir.",
+        "en": "I can help you with your homework tonight."
+      },
+      {
+        "fr": "Il faut aider les voisins quand c'est possible.",
+        "en": "We should help neighbors when possible."
+      }
+    ]
+  },
+  {
+    "word": "gars",
+    "translation": "guy (informal)",
+    "sentences": [
+      {
+        "fr": "Le gars a la caisse est tres poli.",
+        "en": "The guy at the checkout is very polite."
+      },
+      {
+        "fr": "C'est un bon gars, tu peux lui faire confiance.",
+        "en": "He is a good guy, you can trust him."
+      }
+    ]
+  },
+  {
+    "word": "assez",
+    "translation": "enough, quite",
+    "sentences": [
+      {
+        "fr": "J'ai assez mange, merci beaucoup.",
+        "en": "I have eaten enough, thank you very much."
+      },
+      {
+        "fr": "Il fait assez froid pour mettre un manteau.",
+        "en": "It is cold enough to put on a coat."
+      }
+    ]
+  },
+  {
+    "word": "toutes",
+    "translation": "all (feminine plural)",
+    "sentences": [
+      {
+        "fr": "Toutes les filles jouent dans la cour.",
+        "en": "All the girls are playing in the yard."
+      },
+      {
+        "fr": "J'ai lu toutes les pages du livre.",
+        "en": "I read all the pages of the book."
+      }
+    ]
+  },
+  {
+    "word": "quelle",
+    "translation": "which, what (feminine)",
+    "sentences": [
+      {
+        "fr": "Quelle belle journee pour aller au parc!",
+        "en": "What a beautiful day to go to the park!"
+      },
+      {
+        "fr": "Quelle heure est-il? Je ne veux pas etre en retard.",
+        "en": "What time is it? I do not want to be late."
+      }
+    ]
+  },
+  {
+    "word": "pendant",
+    "translation": "during, for",
+    "sentences": [
+      {
+        "fr": "Pendant l'hiver, il neige souvent ici.",
+        "en": "During winter, it often snows here."
+      },
+      {
+        "fr": "J'ai dormi pendant tout le film.",
+        "en": "I slept through the whole movie."
+      }
+    ]
+  },
+  {
+    "word": "jours",
+    "translation": "days",
+    "sentences": [
+      {
+        "fr": "Il y a sept jours dans une semaine.",
+        "en": "There are seven days in a week."
+      },
+      {
+        "fr": "Les beaux jours arrivent enfin au printemps.",
+        "en": "The nice days are finally coming in spring."
+      }
+    ]
+  },
+  {
+    "word": "tard",
+    "translation": "late",
+    "sentences": [
+      {
+        "fr": "Il est tard, je vais me coucher.",
+        "en": "It is late, I am going to bed."
+      },
+      {
+        "fr": "Desole, je suis arrive en retard au cours.",
+        "en": "Sorry, I arrived late to class."
+      }
+    ]
+  },
+  {
+    "word": "puis",
+    "translation": "then",
+    "sentences": [
+      {
+        "fr": "Je mange, puis je vais me promener.",
+        "en": "I eat, then I go for a walk."
+      },
+      {
+        "fr": "On prend le metro, puis on marche un peu.",
+        "en": "We take the metro, then we walk a little."
+      }
+    ]
+  },
+  {
+    "word": "tant",
+    "translation": "so much, so many",
+    "sentences": [
+      {
+        "fr": "Merci tant pour ton aide aujourd'hui.",
+        "en": "Thank you so much for your help today."
+      },
+      {
+        "fr": "Il y a tant de monde au festival ce soir.",
+        "en": "There are so many people at the festival tonight."
+      }
+    ]
+  },
+  {
+    "word": "sens",
+    "translation": "meaning, direction, sense",
+    "sentences": [
+      {
+        "fr": "Je ne comprends pas le sens de ce mot.",
+        "en": "I do not understand the meaning of this word."
+      },
+      {
+        "fr": "La rue est a sens unique le matin.",
+        "en": "The street is one-way in the morning."
+      }
+    ]
+  },
+  {
+    "word": "heure",
+    "translation": "hour, time, o'clock",
+    "sentences": [
+      {
+        "fr": "Quelle heure est-il maintenant?",
+        "en": "What time is it now?"
+      },
+      {
+        "fr": "J'attends depuis une heure devant la porte.",
+        "en": "I have been waiting for an hour in front of the door."
+      }
+    ]
+  },
+  {
+    "word": "police",
+    "translation": "police",
+    "sentences": [
+      {
+        "fr": "La police est pas loin du depanneur.",
+        "en": "The police are not far from the corner store."
+      },
+      {
+        "fr": "On appelle la police si ca presse.",
+        "en": "We call the police if it is urgent."
+      }
+    ]
+  },
+  {
+    "word": "mois",
+    "translation": "month",
+    "sentences": [
+      {
+        "fr": "Le mois prochain, on demenage a Quebec.",
+        "en": "Next month, we are moving to Quebec City."
+      },
+      {
+        "fr": "Ca fait un mois qu'on s'est pas vus.",
+        "en": "It has been a month since we saw each other."
+      }
+    ]
+  },
+  {
+    "word": "longtemps",
+    "translation": "a long time",
+    "sentences": [
+      {
+        "fr": "J'ai pas attendu longtemps au depanneur.",
+        "en": "I did not wait long at the corner store."
+      },
+      {
+        "fr": "On se connait depuis longtemps, nous deux.",
+        "en": "We have known each other for a long time."
+      }
+    ]
+  },
+  {
+    "word": "aucune",
+    "translation": "none, not any (fem.)",
+    "sentences": [
+      {
+        "fr": "J'ai aucune idee de quoi repondre.",
+        "en": "I have no idea what to answer."
+      },
+      {
+        "fr": "Y a aucune place de libre au stationnement.",
+        "en": "There are no free spots in the parking lot."
+      }
+    ]
+  },
+  {
+    "word": "heures",
+    "translation": "hours, o'clock",
+    "sentences": [
+      {
+        "fr": "Le film dure deux heures environ.",
+        "en": "The movie lasts about two hours."
+      },
+      {
+        "fr": "On se voit a huit heures au cafe.",
+        "en": "We meet at eight o'clock at the cafe."
+      }
+    ]
+  },
+  {
+    "word": "attention",
+    "translation": "attention, care, watch out",
+    "sentences": [
+      {
+        "fr": "Attention, la rue est glissante ici.",
+        "en": "Watch out, the street is slippery here."
+      },
+      {
+        "fr": "Il faut faire attention en traversant.",
+        "en": "You have to be careful when crossing."
+      }
+    ]
+  },
+  {
+    "word": "affaire",
+    "translation": "business, matter, thing",
+    "sentences": [
+      {
+        "fr": "C'est pas ton affaire, laisse faire.",
+        "en": "It is not your business, let it go."
+      },
+      {
+        "fr": "J'ai une affaire a regler au bureau.",
+        "en": "I have a matter to settle at the office."
+      }
+    ]
+  },
+  {
+    "word": "endroit",
+    "translation": "place, spot",
+    "sentences": [
+      {
+        "fr": "C'est un bon endroit pour manger.",
+        "en": "It is a good place to eat."
+      },
+      {
+        "fr": "On cherche un endroit calme pour etudier.",
+        "en": "We are looking for a quiet spot to study."
+      }
+    ]
+  },
+  {
+    "word": "terre",
+    "translation": "earth, land, ground",
+    "sentences": [
+      {
+        "fr": "La terre est encore mouillee apres la pluie.",
+        "en": "The ground is still wet after the rain."
+      },
+      {
+        "fr": "Ils cultivent la terre a la campagne.",
+        "en": "They farm the land in the countryside."
+      }
+    ]
+  },
+  {
+    "word": "loin",
+    "translation": "far",
+    "sentences": [
+      {
+        "fr": "C'est pas loin, on peut marcher.",
+        "en": "It is not far, we can walk."
+      },
+      {
+        "fr": "Ma famille habite loin d'ici.",
+        "en": "My family lives far from here."
+      }
+    ]
+  },
+  {
+    "word": "mari",
+    "translation": "husband",
+    "sentences": [
+      {
+        "fr": "Son mari travaille de nuit cette semaine.",
+        "en": "Her husband works nights this week."
+      },
+      {
+        "fr": "Mon mari prepare le souper ce soir.",
+        "en": "My husband is making supper tonight."
+      }
+    ]
+  },
+  {
+    "word": "fin",
+    "translation": "end",
+    "sentences": [
+      {
+        "fr": "On arrive a la fin du film.",
+        "en": "We are reaching the end of the movie."
+      },
+      {
+        "fr": "A la fin de la semaine, on part.",
+        "en": "At the end of the week, we are leaving."
+      }
+    ]
+  },
+  {
+    "word": "bureau",
+    "translation": "office, desk",
+    "sentences": [
+      {
+        "fr": "Je suis au bureau jusqu'a cinq heures.",
+        "en": "I am at the office until five o'clock."
+      },
+      {
+        "fr": "Mets tes cles sur le bureau, s'il te plait.",
+        "en": "Put your keys on the desk, please."
+      }
+    ]
+  },
+  {
+    "word": "hier",
+    "translation": "yesterday",
+    "sentences": [
+      {
+        "fr": "Hier, j'ai manque l'autobus le matin.",
+        "en": "Yesterday, I missed the bus in the morning."
+      },
+      {
+        "fr": "On s'est parle hier au telephone.",
+        "en": "We talked on the phone yesterday."
+      }
+    ]
+  },
+  {
+    "word": "gros",
+    "translation": "big, fat",
+    "sentences": [
+      {
+        "fr": "Il fait un gros froid dehors ce matin.",
+        "en": "It is really cold outside this morning."
+      },
+      {
+        "fr": "J'ai achete un gros sac de patates.",
+        "en": "I bought a big bag of potatoes."
+      }
+    ]
+  },
+  {
+    "word": "filles",
+    "translation": "girls, daughters",
+    "sentences": [
+      {
+        "fr": "Les filles jouent dehors apres l'ecole.",
+        "en": "The girls are playing outside after school."
+      },
+      {
+        "fr": "Ils ont deux filles qui habitent a Montreal.",
+        "en": "They have two daughters who live in Montreal."
+      }
+    ]
+  },
+  {
+    "word": "mourir",
+    "translation": "to die",
+    "sentences": [
+      {
+        "fr": "Les fleurs vont mourir sans eau.",
+        "en": "The flowers will die without water."
+      },
+      {
+        "fr": "Personne veut mourir jeune, c'est sur.",
+        "en": "Nobody wants to die young, that is for sure."
+      }
+    ]
+  },
+  {
+    "word": "tout",
+    "translation": "all, everything",
+    "sentences": [
+      {
+        "fr": "J'ai tout mange, y restait rien.",
+        "en": "I ate everything, nothing was left."
+      },
+      {
+        "fr": "Tout le monde est pret pour partir.",
+        "en": "Everyone is ready to leave."
+      }
+    ]
+  },
+  {
+    "word": "plus",
+    "translation": "more, no longer",
+    "sentences": [
+      {
+        "fr": "J'en veux plus, c'est assez.",
+        "en": "I want more, that is enough."
+      },
+      {
+        "fr": "Il travaille plus ici depuis l'ete.",
+        "en": "He no longer works here since summer."
+      }
+    ]
+  },
+  {
+    "word": "quoi",
+    "translation": "what",
+    "sentences": [
+      {
+        "fr": "Tu fais quoi ce soir apres souper?",
+        "en": "What are you doing tonight after supper?"
+      },
+      {
+        "fr": "C'est quoi ca sur la table?",
+        "en": "What is that on the table?"
+      }
+    ]
+  },
+  {
+    "word": "rien",
+    "translation": "nothing",
+    "sentences": [
+      {
+        "fr": "Y a rien a manger dans le frigo.",
+        "en": "There is nothing to eat in the fridge."
+      },
+      {
+        "fr": "Il a rien dit quand je suis arrive.",
+        "en": "He said nothing when I arrived."
+      }
+    ]
+  },
+  {
+    "word": "juste",
+    "translation": "just, only, fair",
+    "sentences": [
+      {
+        "fr": "J'ai juste cinq dollars dans mon portefeuille.",
+        "en": "I only have five dollars in my wallet."
+      },
+      {
+        "fr": "C'est juste, on partage en deux.",
+        "en": "That is fair, we split it in two."
+      }
+    ]
+  },
+  {
+    "word": "meme",
+    "translation": "same, even",
+    "sentences": [
+      {
+        "fr": "On habite dans la meme rue.",
+        "en": "We live on the same street."
+      },
+      {
+        "fr": "Meme avec la pluie, on sort.",
+        "en": "Even with the rain, we are going out."
+      }
+    ]
+  },
+  {
+    "word": "peut-etre",
+    "translation": "maybe, perhaps",
+    "sentences": [
+      {
+        "fr": "Peut-etre qu'on va au cinema demain.",
+        "en": "Maybe we will go to the movies tomorrow."
+      },
+      {
+        "fr": "Tu viens ce soir? Peut-etre, je sais pas.",
+        "en": "Are you coming tonight? Maybe, I do not know."
+      }
+    ]
+  },
+  {
+    "word": "fois",
+    "translation": "time (occasion)",
+    "sentences": [
+      {
+        "fr": "C'est la premiere fois que je viens ici.",
+        "en": "It is the first time I come here."
+      },
+      {
+        "fr": "Deux fois par semaine, je cours au parc.",
+        "en": "Twice a week, I run at the park."
+      }
+    ]
+  },
+  {
+    "word": "pere",
+    "translation": "father",
+    "sentences": [
+      {
+        "fr": "Mon pere conduit au travail chaque matin.",
+        "en": "My father drives to work every morning."
+      },
+      {
+        "fr": "Son pere habite a cote du depanneur.",
+        "en": "His father lives next to the corner store."
+      }
+    ]
+  },
+  {
+    "word": "ans",
+    "translation": "years (old)",
+    "sentences": [
+      {
+        "fr": "Mon frere a vingt ans cette annee.",
+        "en": "My brother is twenty years old this year."
+      },
+      {
+        "fr": "Ca fait trois ans qu'on habite ici.",
+        "en": "We have lived here for three years."
+      }
+    ]
+  },
+  {
+    "word": "deja",
+    "translation": "already",
+    "sentences": [
+      {
+        "fr": "T'es deja pret? On part dans cinq minutes.",
+        "en": "You are already ready? We leave in five minutes."
+      },
+      {
+        "fr": "J'ai deja mange, merci pareil.",
+        "en": "I already ate, thanks anyway."
+      }
+    ]
+  },
+  {
+    "word": "mere",
+    "translation": "mother",
+    "sentences": [
+      {
+        "fr": "Ma mere fait la meilleure tarte aux pommes.",
+        "en": "My mother makes the best apple pie."
+      },
+      {
+        "fr": "Sa mere l'appelle souvent le soir.",
+        "en": "His mother calls him often in the evening."
+      }
+    ]
+  },
+  {
+    "word": "quel",
+    "translation": "which, what (masc.)",
+    "sentences": [
+      {
+        "fr": "Quel jour tu preferes pour se voir?",
+        "en": "Which day do you prefer to meet?"
+      },
+      {
+        "fr": "Quel beau temps on a aujourd'hui!",
+        "en": "What beautiful weather we have today!"
+      }
+    ]
+  },
+  {
+    "word": "desole",
+    "translation": "sorry (masc.)",
+    "sentences": [
+      {
+        "fr": "Desole, j'ai oublie ton message hier.",
+        "en": "Sorry, I forgot your message yesterday."
+      },
+      {
+        "fr": "Je suis desole pour le retard ce matin.",
+        "en": "I am sorry for being late this morning."
+      }
+    ]
+  },
+  {
+    "word": "voila",
+    "translation": "there is, here you go",
+    "sentences": [
+      {
+        "fr": "Voila, c'est fait, on peut partir.",
+        "en": "There, it is done, we can leave."
+      },
+      {
+        "fr": "Voila ton cafe, fais attention, c'est chaud.",
+        "en": "Here is your coffee, be careful, it is hot."
+      }
+    ]
+  },
+  {
+    "word": "moins",
+    "translation": "less, minus",
+    "sentences": [
+      {
+        "fr": "Je veux moins de sucre dans mon cafe.",
+        "en": "I want less sugar in my coffee."
+      },
+      {
+        "fr": "C'est a dix minutes en moins en voiture.",
+        "en": "It is ten minutes less by car."
+      }
+    ]
+  },
+  {
+    "word": "probleme",
+    "translation": "problem",
+    "sentences": [
+      {
+        "fr": "Y a pas de probleme, on va trouver une solution.",
+        "en": "No problem, we will find a solution."
+      },
+      {
+        "fr": "Le probleme, c'est que l'autobus est en retard.",
+        "en": "The problem is that the bus is late."
+      }
+    ]
+  },
+  {
+    "word": "tete",
+    "translation": "head",
+    "sentences": [
+      {
+        "fr": "J'ai mal a la tete depuis ce matin.",
+        "en": "My head has been hurting since this morning."
+      },
+      {
+        "fr": "Mets ton tuque, t'as froid a la tete.",
+        "en": "Put on your hat, your head is cold."
+      }
+    ]
+  },
+  {
+    "word": "idee",
+    "translation": "idea",
+    "sentences": [
+      {
+        "fr": "J'ai une bonne idee pour ce week-end.",
+        "en": "I have a good idea for this weekend."
+      },
+      {
+        "fr": "C'est une idee de fou, mais j'aime ca.",
+        "en": "It is a crazy idea, but I like it."
+      }
+    ]
+  },
+  {
+    "word": "desolee",
+    "translation": "sorry (fem.)",
+    "sentences": [
+      {
+        "fr": "Desolee, je peux pas venir ce soir.",
+        "en": "Sorry, I cannot come tonight."
+      },
+      {
+        "fr": "Elle est desolee d'avoir oublie ton anniversaire.",
+        "en": "She is sorry for forgetting your birthday."
+      }
+    ]
+  },
+  {
+    "word": "derniere",
+    "translation": "last (fem.)",
+    "sentences": [
+      {
+        "fr": "C'est ma derniere journee au bureau.",
+        "en": "It is my last day at the office."
+      },
+      {
+        "fr": "La derniere fois, on s'est perdus en route.",
+        "en": "Last time, we got lost on the way."
+      }
+    ]
+  },
+  {
+    "word": "frere",
+    "translation": "brother",
+    "sentences": [
+      {
+        "fr": "Mon frere habite a Gatineau maintenant.",
+        "en": "My brother lives in Gatineau now."
+      },
+      {
+        "fr": "Son frere joue au hockey le samedi.",
+        "en": "His brother plays hockey on Saturday."
+      }
+    ]
+  },
+  {
+    "word": "bebe",
+    "translation": "baby",
+    "sentences": [
+      {
+        "fr": "Le bebe dort dans sa chambre.",
+        "en": "The baby is sleeping in his room."
+      },
+      {
+        "fr": "Ils attendent un bebe pour l'automne.",
+        "en": "They are expecting a baby for fall."
+      }
+    ]
+  },
+  {
+    "word": "facon",
+    "translation": "way, manner",
+    "sentences": [
+      {
+        "fr": "C'est pas ma facon de faire les choses.",
+        "en": "That is not my way of doing things."
+      },
+      {
+        "fr": "De cette facon, on arrive plus vite.",
+        "en": "This way, we get there faster."
+      }
+    ]
+  },
+  {
+    "word": "voici",
+    "translation": "here is, here are",
+    "sentences": [
+      {
+        "fr": "Voici ton billet pour le show.",
+        "en": "Here is your ticket for the show."
+      },
+      {
+        "fr": "Voici les cles que tu cherchais.",
+        "en": "Here are the keys you were looking for."
+      }
+    ]
+  },
+  {
+    "word": "dont",
+    "translation": "of which, whose",
+    "sentences": [
+      {
+        "fr": "La maison dont je te parlais est vendue.",
+        "en": "The house I was telling you about is sold."
+      },
+      {
+        "fr": "C'est un livre dont j'ai besoin pour le cours.",
+        "en": "It is a book that I need for the course."
+      }
+    ]
+  },
+  {
+    "word": "type",
+    "translation": "guy, type, kind",
+    "sentences": [
+      {
+        "fr": "C'est quel type de sandwich que tu veux?",
+        "en": "What type of sandwich do you want?"
+      },
+      {
+        "fr": "Le type la-bas, c'est mon cousin.",
+        "en": "The guy over there is my cousin."
+      }
+    ]
+  },
+  {
+    "word": "premier",
+    "translation": "first (masc.)",
+    "sentences": [
+      {
+        "fr": "C'est mon premier hiver au Quebec.",
+        "en": "It is my first winter in Quebec."
+      },
+      {
+        "fr": "Le premier bus passe a sept heures.",
+        "en": "The first bus passes at seven o'clock."
+      }
+    ]
+  },
+  {
+    "word": "premiere",
+    "translation": "first (fem.)",
+    "sentences": [
+      {
+        "fr": "C'est la premiere fois que j'essaie ca.",
+        "en": "It is the first time I try this."
+      },
+      {
+        "fr": "La premiere lecon est facile a comprendre.",
+        "en": "The first lesson is easy to understand."
+      }
+    ]
+  },
+  {
+    "word": "cote",
+    "translation": "side",
+    "sentences": [
+      {
+        "fr": "Assieds-toi a cote de moi, s'il te plait.",
+        "en": "Sit next to me, please."
+      },
+      {
+        "fr": "La pharmacie est de l'autre cote de la rue.",
+        "en": "The pharmacy is on the other side of the street."
+      }
+    ]
+  },
+  {
+    "word": "point",
+    "translation": "point, at all (ne... point)",
+    "sentences": [
+      {
+        "fr": "On est rendus au point ou on decide.",
+        "en": "We have reached the point where we decide."
+      },
+      {
+        "fr": "Je comprends pas un point de ce qu'il dit.",
+        "en": "I do not understand one bit of what he says."
+      }
+    ]
+  },
+  {
+    "word": "tellement",
+    "translation": "so, so much",
+    "sentences": [
+      {
+        "fr": "Il fait tellement froid qu'on reste dedans.",
+        "en": "It is so cold that we stay inside."
+      },
+      {
+        "fr": "Je t'aime tellement, tu le sais ca.",
+        "en": "I love you so much, you know that."
+      }
+    ]
+  },
+  {
+    "word": "suite",
+    "translation": "rest, continuation, next",
+    "sentences": [
+      {
+        "fr": "On va voir la suite du film demain.",
+        "en": "We will watch the rest of the movie tomorrow."
+      },
+      {
+        "fr": "La suite, c'est a toi de parler.",
+        "en": "Next, it is your turn to speak."
+      }
+    ]
+  },
+  {
+    "word": "minutes",
+    "translation": "minutes",
+    "sentences": [
+      {
+        "fr": "Attends deux minutes, je suis presque pret.",
+        "en": "Wait two minutes, I am almost ready."
+      },
+      {
+        "fr": "Le trajet prend quinze minutes en autobus.",
+        "en": "The trip takes fifteen minutes by bus."
+      }
+    ]
+  },
+  {
+    "word": "enfin",
+    "translation": "finally, at last",
+    "sentences": [
+      {
+        "fr": "Enfin, on est arrives a la maison.",
+        "en": "Finally, we arrived home."
+      },
+      {
+        "fr": "Tu finis ton cafe? Enfin!",
+        "en": "You are finishing your coffee? At last!"
+      }
+    ]
+  },
+  {
+    "word": "cause",
+    "translation": "cause, reason",
+    "sentences": [
+      {
+        "fr": "A cause de la neige, l'ecole est fermee.",
+        "en": "Because of the snow, school is closed."
+      },
+      {
+        "fr": "Quelle est la cause du probleme?",
+        "en": "What is the cause of the problem?"
+      }
+    ]
+  },
+  {
+    "word": "chambre",
+    "translation": "room, bedroom",
+    "sentences": [
+      {
+        "fr": "Ma chambre est au deuxieme etage.",
+        "en": "My bedroom is on the second floor."
+      },
+      {
+        "fr": "Range ta chambre avant que maman arrive.",
+        "en": "Clean your room before mom arrives."
+      }
+    ]
+  },
+  {
+    "word": "droit",
+    "translation": "right, law",
+    "sentences": [
+      {
+        "fr": "Tourne a droite apres le depanneur.",
+        "en": "Turn right after the corner store."
+      },
+      {
+        "fr": "T'as le droit de dire non, tu sais.",
+        "en": "You have the right to say no, you know."
+      }
+    ]
+  },
+  {
+    "word": "esperer",
+    "translation": "to hope",
+    "sentences": [
+      {
+        "fr": "J'espere que tu vas bien ce matin.",
+        "en": "I hope you are doing well this morning."
+      },
+      {
+        "fr": "On espere avoir du beau temps demain.",
+        "en": "We hope to have nice weather tomorrow."
+      }
+    ]
+  },
+  {
+    "word": "si",
+    "translation": "if, so",
+    "sentences": [
+      {
+        "fr": "Si tu veux, on peut marcher ensemble.",
+        "en": "If you want, we can walk together."
+      },
+      {
+        "fr": "Il fait si beau qu'on sort dehors.",
+        "en": "It is so nice that we go outside."
+      }
+    ]
+  },
+  {
+    "word": "tres",
+    "translation": "very",
+    "sentences": [
+      {
+        "fr": "C'est tres bon, merci pour le souper.",
+        "en": "It is very good, thanks for supper."
+      },
+      {
+        "fr": "Je suis tres fatigue apres la journee.",
+        "en": "I am very tired after the day."
+      }
+    ]
+  },
+  {
+    "word": "rue",
+    "translation": "street",
+    "sentences": [
+      {
+        "fr": "On habite dans une rue tranquille.",
+        "en": "We live on a quiet street."
+      },
+      {
+        "fr": "La rue est bloquee a cause des travaux.",
+        "en": "The street is blocked because of construction."
+      }
+    ]
+  },
+  {
+    "word": "fenetre",
+    "translation": "window",
+    "sentences": [
+      {
+        "fr": "Ouvre la fenetre, il fait chaud ici.",
+        "en": "Open the window, it is hot in here."
+      },
+      {
+        "fr": "Regarde par la fenetre, il neige dehors.",
+        "en": "Look through the window, it is snowing outside."
+      }
+    ]
+  },
+  {
+    "word": "soeur",
+    "translation": "sister",
+    "sentences": [
+      {
+        "fr": "Ma soeur etudie a l'universite a Montreal.",
+        "en": "My sister studies at the university in Montreal."
+      },
+      {
+        "fr": "Sa soeur travaille au depanneur le soir.",
+        "en": "His sister works at the corner store in the evening."
+      }
+    ]
+  },
+  {
+    "word": "connaitre",
+    "translation": "to know (someone)",
+    "sentences": [
+      {
+        "fr": "Je connais pas encore beaucoup de monde ici.",
+        "en": "I do not know many people here yet."
+      },
+      {
+        "fr": "Tu connais le gars qui habite en face?",
+        "en": "Do you know the guy who lives across the street?"
+      }
+    ]
+  },
+  {
+    "word": "comprendre",
+    "translation": "to understand",
+    "sentences": [
+      {
+        "fr": "Je comprends pas, tu peux repeter?",
+        "en": "I do not understand, can you repeat?"
+      },
+      {
+        "fr": "Elle comprend vite quand on lui explique.",
+        "en": "She understands quickly when we explain to her."
+      }
+    ]
+  },
+  {
+    "word": "ecouter",
+    "translation": "to listen",
+    "sentences": [
+      {
+        "fr": "J'aime ecouter de la musique en conduisant.",
+        "en": "I like listening to music while driving."
+      },
+      {
+        "fr": "Ecoute bien, c'est important ce que je dis.",
+        "en": "Listen carefully, what I am saying is important."
+      }
+    ]
+  },
+  {
+    "word": "entendre",
+    "translation": "to hear",
+    "sentences": [
+      {
+        "fr": "J'entends pas bien avec tout ce bruit.",
+        "en": "I cannot hear well with all this noise."
+      },
+      {
+        "fr": "T'as entendu? Y a quelqu'un a la porte.",
+        "en": "Did you hear? There is someone at the door."
+      }
+    ]
+  },
+  {
+    "word": "regarder",
+    "translation": "to watch, to look",
+    "sentences": [
+      {
+        "fr": "On va regarder le match ce soir a la tele.",
+        "en": "We are going to watch the game on TV tonight."
+      },
+      {
+        "fr": "Regarde avant de traverser la rue.",
+        "en": "Look before you cross the street."
+      }
+    ]
+  },
+  {
+    "word": "lire",
+    "translation": "to read",
+    "sentences": [
+      {
+        "fr": "J'aime lire le soir avant de dormir.",
+        "en": "I like reading in the evening before sleeping."
+      },
+      {
+        "fr": "Tu lis quoi en ce moment comme livre?",
+        "en": "What are you reading as a book right now?"
+      }
+    ]
+  },
+  {
+    "word": "ecrire",
+    "translation": "to write",
+    "sentences": [
+      {
+        "fr": "Je dois ecrire un courriel pour demain.",
+        "en": "I have to write an email for tomorrow."
+      },
+      {
+        "fr": "Ecris-moi quand tu arrives a la maison.",
+        "en": "Write to me when you get home."
+      }
+    ]
+  },
+  {
+    "word": "contre",
+    "translation": "against",
+    "sentences": [
+      {
+        "fr": "Il joue contre son frere au hockey.",
+        "en": "He plays against his brother in hockey."
+      },
+      {
+        "fr": "Je suis contre cette idee pour le moment.",
+        "en": "I am against this idea for now."
+      }
+    ]
+  },
+  {
+    "word": "coup",
+    "translation": "blow, shot; all at once",
+    "sentences": [
+      {
+        "fr": "D'un coup, la lumiere s'est eteinte.",
+        "en": "All at once, the light went out."
+      },
+      {
+        "fr": "Il a recu un coup au bras en jouant.",
+        "en": "He got a hit on the arm while playing."
+      }
+    ]
+  },
+  {
+    "word": "amour",
+    "translation": "love",
+    "sentences": [
+      {
+        "fr": "L'amour de la famille est tres important.",
+        "en": "Love of family is very important."
+      },
+      {
+        "fr": "Il parle de l'amour avec beaucoup de respect.",
+        "en": "He talks about love with a lot of respect."
+      }
+    ]
+  },
+  {
+    "word": "etudier",
+    "translation": "to study",
+    "sentences": [
+      {
+        "fr": "Je dois etudier pour mon examen demain.",
+        "en": "I have to study for my exam tomorrow."
+      },
+      {
+        "fr": "Elle etudie le francais chaque soir.",
+        "en": "She studies French every evening."
+      }
+    ]
+  },
+  {
+    "word": "travailler",
+    "translation": "to work",
+    "sentences": [
+      {
+        "fr": "Je travaille au bureau du lundi au vendredi.",
+        "en": "I work at the office from Monday to Friday."
+      },
+      {
+        "fr": "Mon pere travaille de nuit cette semaine.",
+        "en": "My father works at night this week."
+      }
+    ]
+  },
+  {
+    "word": "dormir",
+    "translation": "to sleep",
+    "sentences": [
+      {
+        "fr": "Les enfants dorment tot le soir d'ecole.",
+        "en": "The children sleep early on school nights."
+      },
+      {
+        "fr": "Je dors mal quand il fait trop chaud.",
+        "en": "I sleep poorly when it is too hot."
+      }
+    ]
+  },
+  {
+    "word": "marcher",
+    "translation": "to walk",
+    "sentences": [
+      {
+        "fr": "On va marcher au parc apres le souper.",
+        "en": "We will walk to the park after supper."
+      },
+      {
+        "fr": "Je marche jusqu a la station chaque matin.",
+        "en": "I walk to the station every morning."
+      }
+    ]
+  },
+  {
+    "word": "ouvrir",
+    "translation": "to open",
+    "sentences": [
+      {
+        "fr": "Peux-tu ouvrir la porte, s'il te plait?",
+        "en": "Can you open the door, please?"
+      },
+      {
+        "fr": "Le magasin ouvre a neuf heures le matin.",
+        "en": "The store opens at nine in the morning."
+      }
+    ]
+  },
+  {
+    "word": "fermer",
+    "translation": "to close",
+    "sentences": [
+      {
+        "fr": "N'oublie pas de fermer la fenetre ce soir.",
+        "en": "Do not forget to close the window tonight."
+      },
+      {
+        "fr": "La banque ferme a cinq heures.",
+        "en": "The bank closes at five o'clock."
+      }
+    ]
+  },
+  {
+    "word": "acheter",
+    "translation": "to buy",
+    "sentences": [
+      {
+        "fr": "Je vais acheter du pain au marche demain.",
+        "en": "I am going to buy bread at the market tomorrow."
+      },
+      {
+        "fr": "On achete des legumes frais chaque semaine.",
+        "en": "We buy fresh vegetables every week."
+      }
+    ]
+  },
+  {
+    "word": "payer",
+    "translation": "to pay",
+    "sentences": [
+      {
+        "fr": "Je dois payer le loyer avant vendredi.",
+        "en": "I have to pay the rent before Friday."
+      },
+      {
+        "fr": "Tu peux payer par carte a la caisse.",
+        "en": "You can pay by card at the checkout."
+      }
+    ]
+  },
+  {
+    "word": "expliquer",
+    "translation": "to explain",
+    "sentences": [
+      {
+        "fr": "Peux-tu m'expliquer ce mot encore une fois?",
+        "en": "Can you explain this word to me one more time?"
+      },
+      {
+        "fr": "Le professeur explique la lecon lentement.",
+        "en": "The teacher explains the lesson slowly."
+      }
+    ]
+  },
+  {
+    "word": "finir",
+    "translation": "to finish",
+    "sentences": [
+      {
+        "fr": "Je dois finir mes devoirs avant le souper.",
+        "en": "I have to finish my homework before supper."
+      },
+      {
+        "fr": "Le film finit a dix heures ce soir.",
+        "en": "The movie ends at ten o'clock tonight."
+      }
+    ]
+  },
+  {
+    "word": "commencer",
+    "translation": "to begin, to start",
+    "sentences": [
+      {
+        "fr": "Le cours commence a huit heures precises.",
+        "en": "The class starts at eight o'clock sharp."
+      },
+      {
+        "fr": "On commence le projet lundi prochain.",
+        "en": "We are starting the project next Monday."
+      }
     ]
   }
 ]

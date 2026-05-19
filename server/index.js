@@ -66,13 +66,24 @@ function normalizeTargetLanguage(value) {
   const code = String(value || '').trim().toUpperCase();
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
   return code;
+}
+
+function normalizeSourceLanguage(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (!code) return '';
+  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
+  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  return '';
 }
 
 function toGoogleLanguageCode(value) {
   const code = String(value || '').trim().toUpperCase();
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'en';
-  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'pt';
+  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'pt-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'fr';
   return code.toLowerCase();
 }
 
@@ -81,6 +92,7 @@ function normalizeDetectedSourceLanguage(value) {
   if (!code) return '';
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
   return code;
 }
 
@@ -165,17 +177,18 @@ async function requestDeepLTranslation({ text, targetLang, authKey }) {
   };
 }
 
-async function requestGoogleTranslation({ text, targetLang, apiKey }) {
+async function requestGoogleTranslation({ text, sourceLang, targetLang, apiKey }) {
   const endpoint = String(process.env.GOOGLE_TRANSLATE_API_URL || 'https://translation.googleapis.com/language/translate/v2').trim();
+  const payload = {
+    q: text,
+    target: toGoogleLanguageCode(targetLang),
+    format: 'text'
+  };
+  if (sourceLang) payload.source = toGoogleLanguageCode(sourceLang);
   const upstream = await fetch(buildGoogleTranslateUrl(endpoint, apiKey), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      q: text,
-      source: 'pt-BR',
-      target: toGoogleLanguageCode(targetLang),
-      format: 'text'
-    })
+    body: JSON.stringify(payload)
   });
 
   const raw = await upstream.text();
@@ -225,6 +238,7 @@ async function proxyTranslate(req, res) {
 
   const targetLang = normalizeTargetLanguage(body.targetLang ?? body.target ?? 'EN');
   if (!targetLang) return sendJson(res, 400, { error: 'Missing target language.' });
+  const sourceLang = normalizeSourceLanguage(body.sourceLang ?? body.source ?? '');
 
   const { provider, wordCount } = chooseTranslateProvider(text);
 
@@ -235,7 +249,7 @@ async function proxyTranslate(req, res) {
         return sendJson(res, 400, { error: 'Missing Google Translate API key. Set GOOGLE_TRANSLATE_API_KEY in your server environment.' });
       }
 
-      const result = await requestGoogleTranslation({ text, targetLang, apiKey });
+      const result = await requestGoogleTranslation({ text, sourceLang, targetLang, apiKey });
       if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
       return sendJson(res, 200, {
         ...result.body,

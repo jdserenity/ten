@@ -1,11 +1,13 @@
 # Ten
 
-A personal PWA for learning Brazilian Portuguese.
+A personal PWA for learning Brazilian Portuguese and French.
 
 ## Features
 
-- **10/day tab**: Shows 10 deterministic words per day from a pre-generated pool, with translations and real example sentences.
+- **10/day tab**: Shows 10 deterministic words per day from the active language pool, with translations and real example sentences.
+- **Language toggle**: Top-right flag switch between Brazil (PT-BR) and Quebec French mode.
 - **Translate tab**: Uses Google Translate for very short inputs (1-5 words, punctuation ignored) and DeepL for 6+ words, then lets you save results instantly as a flashcard.
 - **Review tab**: Fully Anki-backed (loads due cards from AnkiConnect and submits grades back to Anki).
-- **Anki-first workflow**: Daily/Translate cards are added directly to your Anki deck.
-- **Text-to-speech**: PT-BR speech synthesis for words/sentences.
+- **Anki-first workflow**: Daily/Translate cards are added to the deck configured for the active language mode.
+- **Text-to-speech**: Mode-specific speech synthesis (`pt-BR` and `fr-CA`).
+- **Word generation**: `npm run generate:pt` (Portuguese), `npm run generate:fr` (French frequency dictionary based).

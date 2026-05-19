@@ -1,15 +1,45 @@
 const WORDS_PER_DAY = 10;
 
-const APP_CONFIG = {
-  translateSource: 'PT-BR',
-  translateTarget: 'EN',
-  ankiDeck: 'Brazilian Portuguese',
-  ankiModel: 'Basic'
+const MODE_CONFIGS = {
+  'pt-br': {
+    id: 'pt-br',
+    label: 'Brazilian Portuguese',
+    shortLabel: 'Brazilian',
+    translatorLabel: 'Portuguese',
+    wordsPath: '/words.pt.json',
+    sentenceKey: 'pt',
+    speechLang: 'pt-BR',
+    learningLang: 'PT-BR',
+    ankiDeck: 'Brazilian Portuguese',
+    ankiModel: 'Basic',
+    htmlLang: 'pt-BR',
+    flagLabel: 'Brazil'
+  },
+  fr: {
+    id: 'fr',
+    label: 'Quebec French',
+    shortLabel: 'Quebec',
+    translatorLabel: 'French',
+    wordsPath: '/words.fr.json',
+    sentenceKey: 'fr',
+    speechLang: 'fr-CA',
+    learningLang: 'FR',
+    ankiDeck: 'French',
+    ankiModel: 'Basic',
+    htmlLang: 'fr-CA',
+    flagLabel: 'Quebec'
+  }
 };
 
 const state = {
+  activeMode: 'pt-br',
   activeTab: 'translate',
-  settings: { ...APP_CONFIG },
+  settings: {
+    translateSource: MODE_CONFIGS['pt-br'].learningLang,
+    translateTarget: 'EN',
+    ankiDeck: MODE_CONFIGS['pt-br'].ankiDeck,
+    ankiModel: MODE_CONFIGS['pt-br'].ankiModel
+  },
   lastDetectedSourceLang: '',
   hasTranslatedInSession: false,
   noteConfigOpen: false,
@@ -26,25 +56,38 @@ const state = {
 };
 
 let dailyDots = [];
+let applyingMode = false;
+
+function getModeConfig(modeId = state.activeMode) {
+  return MODE_CONFIGS[modeId] || MODE_CONFIGS['pt-br'];
+}
+
+function getLearningLanguage(modeId = state.activeMode) {
+  return getModeConfig(modeId).learningLang;
+}
 
 function canonicalizeTranslateLanguage(value) {
   const code = String(value || '').trim().toUpperCase();
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
   return '';
 }
 
 function displayTranslateLanguage(code) {
-  return code === 'EN' ? 'English' : 'Brazilian';
+  const canonical = canonicalizeTranslateLanguage(code);
+  if (canonical === 'EN') return 'English';
+  if (canonical === 'FR') return 'French';
+  if (canonical === 'PT-BR') return 'Brazilian Portuguese';
+  return code || '';
 }
 
 function canonicalizeDetectedSourceLanguage(value) {
   const code = String(value || '').trim().toUpperCase();
   if (!code) return '';
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PB' || code === 'PT-BR') return 'PT-BR';
-  if (code === 'PT-PT') return 'PT-PT';
-  if (code === 'PT') return 'PT';
+  if (code === 'PB' || code === 'PT-BR' || code === 'PT-PT' || code === 'PT') return 'PT-BR';
+  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
   return code;
 }
 
@@ -57,6 +100,9 @@ function displayDetectedSourceLanguage(value) {
   if (code === 'PB' || code === 'PT-BR') return 'Brazilian Portuguese';
   if (code === 'PT-PT') return 'European Portuguese';
   if (code === 'PT') return 'Portuguese';
+  if (code === 'FR') return 'French';
+  if (code === 'FR-CA') return 'French (Canada)';
+  if (code === 'FR-FR') return 'French (France)';
   return code;
 }
 
@@ -64,22 +110,23 @@ function shouldShowDetectedSourceMismatch(selectedSource, detectedSource) {
   const selectedCanonical = canonicalizeTranslateLanguage(selectedSource);
   const detectedCanonical = canonicalizeDetectedSourceLanguage(detectedSource);
   if (!selectedCanonical || !detectedCanonical) return false;
-  if (selectedCanonical === 'PT-BR') return detectedCanonical !== 'PT-BR';
-  if (selectedCanonical === 'EN') return detectedCanonical !== 'EN';
-  return false;
+  return selectedCanonical !== detectedCanonical;
 }
 
 function normalizeTranslateDirection(source, target) {
-  const sourceLang = canonicalizeTranslateLanguage(source) || 'PT-BR';
+  const learningLang = getLearningLanguage();
+  const sourceLang = canonicalizeTranslateLanguage(source) || learningLang;
   let targetLang = canonicalizeTranslateLanguage(target) || 'EN';
-  if (sourceLang === targetLang) {
-    targetLang = sourceLang === 'PT-BR' ? 'EN' : 'PT-BR';
+  if (sourceLang !== 'EN' && sourceLang !== learningLang) {
+    return { source: learningLang, target: 'EN' };
   }
+  if (targetLang !== 'EN' && targetLang !== learningLang) targetLang = 'EN';
+  if (sourceLang === targetLang) targetLang = sourceLang === 'EN' ? learningLang : 'EN';
   return { source: sourceLang, target: targetLang };
 }
 
 function toDeepLTargetLanguage(code) {
-  return code === 'EN' ? 'EN' : 'PT-BR';
+  return canonicalizeTranslateLanguage(code) || 'EN';
 }
 
 function formatError(error) {
@@ -127,6 +174,12 @@ function setStatus(elementId, message, tone = '') {
   if (tone) el.classList.add(tone);
 }
 
+function getSentenceText(sentence) {
+  if (!sentence || typeof sentence !== 'object') return '';
+  const mode = getModeConfig();
+  return String(sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '').trim();
+}
+
 function speakText(text, button) {
   const phrase = String(text || '').trim();
   if (!phrase || !window.speechSynthesis) return;
@@ -135,7 +188,7 @@ function speakText(text, button) {
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
   const utt = new SpeechSynthesisUtterance(phrase);
-  utt.lang = 'pt-BR';
+  utt.lang = getModeConfig().speechLang;
   utt.rate = 0.85;
   if (button) {
     utt.onstart = () => button.classList.add('speaking');
@@ -202,10 +255,10 @@ function renderDailyWord(index) {
   const word = state.todayWords[index];
   if (!word) {
     document.getElementById('word').textContent = 'Daily words unavailable';
-    document.getElementById('translation').textContent = 'words.json could not be loaded.';
-    document.getElementById('s1-pt').textContent = '';
+    document.getElementById('translation').textContent = 'Word list could not be loaded.';
+    document.getElementById('s1-l2').textContent = '';
     document.getElementById('s1-en').textContent = '';
-    document.getElementById('s2-pt').textContent = '';
+    document.getElementById('s2-l2').textContent = '';
     document.getElementById('s2-en').textContent = '';
     document.getElementById('counter').textContent = '0 / 0';
     document.getElementById('prev-btn').disabled = true;
@@ -221,19 +274,21 @@ function renderDailyWord(index) {
 
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
+  const firstSentenceText = getSentenceText(firstSentence);
+  const secondSentenceText = getSentenceText(secondSentence);
 
   document.getElementById('word').textContent = word.word;
   document.getElementById('translation').textContent = word.translation;
-  document.getElementById('s1-pt').textContent = firstSentence.pt || '';
+  document.getElementById('s1-l2').textContent = firstSentenceText;
   document.getElementById('s1-en').textContent = firstSentence.en || '';
-  document.getElementById('s2-pt').textContent = secondSentence.pt || '';
+  document.getElementById('s2-l2').textContent = secondSentenceText;
   document.getElementById('s2-en').textContent = secondSentence.en || '';
   document.getElementById('counter').textContent = `${index + 1} / ${state.todayWords.length}`;
   document.getElementById('prev-btn').disabled = index === 0;
   document.getElementById('next-btn').disabled = index === state.todayWords.length - 1;
   document.getElementById('speak-btn').disabled = !word.word;
-  document.getElementById('s1-speak-btn').disabled = !firstSentence.pt;
-  document.getElementById('s2-speak-btn').disabled = !secondSentence.pt;
+  document.getElementById('s1-speak-btn').disabled = !firstSentenceText;
+  document.getElementById('s2-speak-btn').disabled = !secondSentenceText;
   updateDailyDots();
 }
 
@@ -256,7 +311,67 @@ function showDailyUnavailable(reason) {
   const poolInfo = document.getElementById('pool-info');
   poolInfo.textContent = reason;
   poolInfo.classList.add('warning');
-  setStatus('daily-save-status', 'Daily list is unavailable until words.json loads again.', 'error');
+  setStatus('daily-save-status', 'Daily list is unavailable until the active word list loads again.', 'error');
+}
+
+function updateModeToggleUi() {
+  const mode = getModeConfig();
+  document.querySelectorAll('.mode-toggle-btn').forEach(button => {
+    const isActive = button.dataset.mode === mode.id;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', String(isActive));
+  });
+}
+
+function updateLanguageCopy() {
+  const mode = getModeConfig();
+  const backLabel = document.getElementById('card-back-label');
+  const backInput = document.getElementById('card-back-input');
+  const sentenceLabel = document.getElementById('sentence-language-label');
+  const fromLabel = document.getElementById('translate-from-label');
+  if (backLabel) backLabel.textContent = `Back (${mode.translatorLabel})`;
+  if (backInput) backInput.placeholder = `${mode.translatorLabel} translation`;
+  if (sentenceLabel) sentenceLabel.textContent = `${mode.translatorLabel} in use`;
+  if (fromLabel && !state.lastDetectedSourceLang) fromLabel.textContent = mode.shortLabel;
+  document.documentElement.lang = mode.htmlLang;
+}
+
+async function setLearningMode(modeId, options = {}) {
+  const mode = getModeConfig(modeId);
+  const resetTranslate = options.resetTranslate !== false;
+  if (applyingMode || (state.activeMode === mode.id && !options.force)) return;
+  applyingMode = true;
+  try {
+    window.speechSynthesis?.cancel();
+    document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+
+    state.activeMode = mode.id;
+    sessionStorage.setItem('ten-active-mode', mode.id);
+    state.settings.translateSource = mode.learningLang;
+    state.settings.translateTarget = 'EN';
+    state.settings.ankiDeck = mode.ankiDeck;
+    state.settings.ankiModel = mode.ankiModel;
+    state.lastDetectedSourceLang = '';
+
+    updateModeToggleUi();
+    updateLanguageCopy();
+    fillSettingsInputs();
+
+    if (resetTranslate) clearTranslateDraft();
+
+    try {
+      await initDailyWords();
+      setStatus('daily-save-status', '');
+    } catch (error) {
+      showDailyUnavailable(formatError(error));
+    }
+
+    if (state.activeTab === 'review') {
+      await loadReviewFromAnki({ refreshTotal: true });
+    }
+  } finally {
+    applyingMode = false;
+  }
 }
 
 function fillSettingsInputs() {
@@ -273,12 +388,14 @@ function persistSettingsFromInputs() {
   return state.settings;
 }
 
-async function translateText(text, target) {
+async function translateText(text, source, target) {
   const cleanText = String(text || '').trim();
   if (!cleanText) throw new Error('Enter text before translating.');
+  const sourceLang = canonicalizeTranslateLanguage(source);
   const targetLang = toDeepLTargetLanguage(target);
   const payload = {
     text: cleanText,
+    sourceLang,
     targetLang
   };
 
@@ -474,7 +591,7 @@ async function loadReviewFromAnki(options = {}) {
   const settings = persistSettingsFromInputs();
   const deck = String(settings.ankiDeck || '').trim();
   if (!deck) {
-    setStatus('review-status', 'Set a valid Anki deck in APP_CONFIG.', 'error');
+    setStatus('review-status', 'Set a valid Anki deck in mode settings.', 'error');
     state.reviewCards = [];
     state.reviewDueCount = 0;
     state.reviewTotalCount = 0;
@@ -652,8 +769,9 @@ function updateTranslateDirectionUi() {
 }
 
 function swapTranslateDirection() {
-  const nextSource = state.settings.translateTarget === 'EN' ? 'EN' : 'PT-BR';
-  const nextTarget = nextSource === 'EN' ? 'PT-BR' : 'EN';
+  const learningLang = getLearningLanguage();
+  const nextSource = state.settings.translateTarget === 'EN' ? 'EN' : learningLang;
+  const nextTarget = nextSource === 'EN' ? learningLang : 'EN';
   state.settings.translateSource = nextSource;
   state.settings.translateTarget = nextTarget;
   state.lastDetectedSourceLang = '';
@@ -683,6 +801,16 @@ function setupTabEvents() {
   });
 }
 
+function setupModeEvents() {
+  document.querySelectorAll('.mode-toggle-btn').forEach(button => {
+    button.addEventListener('click', async () => {
+      const nextMode = button.dataset.mode;
+      if (!nextMode || nextMode === state.activeMode) return;
+      await setLearningMode(nextMode, { resetTranslate: true });
+    });
+  });
+}
+
 function setupDailyEvents() {
   document.getElementById('prev-btn').addEventListener('click', () => {
     gotoDailyWord(state.currentWordIndex - 1);
@@ -696,12 +824,12 @@ function setupDailyEvents() {
   });
   document.getElementById('s1-speak-btn').addEventListener('click', () => {
     const word = state.todayWords[state.currentWordIndex];
-    const text = word && word.sentences && word.sentences[0] ? word.sentences[0].pt : '';
+    const text = word && word.sentences && word.sentences[0] ? getSentenceText(word.sentences[0]) : '';
     speakText(text, document.getElementById('s1-speak-btn'));
   });
   document.getElementById('s2-speak-btn').addEventListener('click', () => {
     const word = state.todayWords[state.currentWordIndex];
-    const text = word && word.sentences && word.sentences[1] ? word.sentences[1].pt : '';
+    const text = word && word.sentences && word.sentences[1] ? getSentenceText(word.sentences[1]) : '';
     speakText(text, document.getElementById('s2-speak-btn'));
   });
 
@@ -713,7 +841,7 @@ function setupDailyEvents() {
     }
 
     const context = (word.sentences || [])
-      .map(sentence => sentence && sentence.pt ? sentence.pt : '')
+      .map(sentence => getSentenceText(sentence))
       .filter(Boolean)
       .join('\n');
 
@@ -763,6 +891,7 @@ function setupTranslateEvents() {
     }
 
     const settings = persistSettingsFromInputs();
+    const source = settings.translateSource;
     const target = settings.translateTarget;
     const translateBtn = document.getElementById('translate-btn');
     translateBtn.disabled = true;
@@ -771,14 +900,14 @@ function setupTranslateEvents() {
     setStatus('translate-status', '');
 
     try {
-      const result = await translateText(text, target);
+      const result = await translateText(text, source, target);
       state.lastDetectedSourceLang = result.detectedSourceLang;
       updateTranslateDirectionUi();
       document.getElementById('translate-result-text').textContent = result.translatedText;
-      const englishText = target === 'PT-BR' ? text : result.translatedText;
-      const portugueseText = target === 'PT-BR' ? result.translatedText : text;
+      const englishText = target === 'EN' ? result.translatedText : text;
+      const translatedLearningText = target === 'EN' ? text : result.translatedText;
       document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
-      document.getElementById('card-back-input').value = capitalizeFirstWord(portugueseText);
+      document.getElementById('card-back-input').value = capitalizeFirstWord(translatedLearningText);
       document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
       state.hasTranslatedInSession = true;
       setStatus('translate-status', '');
@@ -858,10 +987,11 @@ function setupReviewEvents() {
 }
 
 async function initDailyWords() {
-  const response = await fetch('/words.json');
-  if (!response.ok) throw new Error(`Failed to load words.json (${response.status}).`);
+  const mode = getModeConfig();
+  const response = await fetch(mode.wordsPath);
+  if (!response.ok) throw new Error(`Failed to load ${mode.wordsPath} (${response.status}).`);
   const words = await response.json();
-  if (!Array.isArray(words) || !words.length) throw new Error('words.json is empty.');
+  if (!Array.isArray(words) || !words.length) throw new Error(`${mode.wordsPath} is empty.`);
 
   state.words = words;
   const seed = hashDate(dateKey());
@@ -873,23 +1003,25 @@ async function initDailyWords() {
 
   const totalDays = Math.floor(words.length / WORDS_PER_DAY);
   const poolInfo = document.getElementById('pool-info');
-  poolInfo.textContent = `~${totalDays} day${totalDays !== 1 ? 's' : ''} left in pool`;
+  poolInfo.textContent = `~${totalDays} day${totalDays !== 1 ? 's' : ''} left in ${mode.flagLabel} pool`;
   poolInfo.classList.toggle('warning', totalDays <= 7);
 }
 
 async function init() {
   updateDateLabel();
-  fillSettingsInputs();
+  const savedMode = sessionStorage.getItem('ten-active-mode');
+  if (savedMode && MODE_CONFIGS[savedMode]) {
+    state.activeMode = savedMode;
+  }
   setupTabEvents();
+  setupModeEvents();
   setupDailyEvents();
   setupDailyKeyboard();
   setupTranslateEvents();
   setupReviewEvents();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
-
-  try { await initDailyWords();
-  } catch (error) { showDailyUnavailable(formatError(error)); }
+  await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
 
   renderReview();
   document.body.classList.add('ready');

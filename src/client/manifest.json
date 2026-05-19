@@ -1,7 +1,7 @@
 {
   "name": "Ten",
   "short_name": "Ten",
-  "description": "10 new Brazilian Portuguese words every day",
+  "description": "10 new words every day in Brazilian Portuguese or French",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0f0f0f",

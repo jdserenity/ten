@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -22,6 +22,12 @@
         <h1>Ten</h1>
         <span id="date-label"></span>
       </div>
+      <div class="mode-toggle-wrap">
+        <div class="mode-toggle" role="group" aria-label="Learning mode">
+          <button class="mode-toggle-btn active" type="button" data-mode="pt-br" aria-pressed="true" aria-label="Switch to Brazilian Portuguese">🇧🇷</button>
+          <button class="mode-toggle-btn" type="button" data-mode="fr" aria-pressed="false" aria-label="Switch to Quebec French">🇨🇦</button>
+        </div>
+      </div>
     </header>
 
     <div id="top-tabs" role="tablist" aria-label="Main tabs">
@@ -40,17 +46,17 @@
         </div>
         <p id="translation"></p>
         <hr class="divider" />
-        <span class="sentences-label">In use</span>
+        <span class="sentences-label" id="sentence-language-label">Portuguese in use</span>
         <div class="sentence">
-          <div class="sentence-pt-row">
-            <span class="sentence-pt" id="s1-pt"></span>
+          <div class="sentence-l2-row">
+            <span class="sentence-l2" id="s1-l2"></span>
             <button class="sentence-speak-btn" id="s1-speak-btn" title="Hear sentence">🔊</button>
           </div>
           <span class="sentence-en" id="s1-en"></span>
         </div>
         <div class="sentence">
-          <div class="sentence-pt-row">
-            <span class="sentence-pt" id="s2-pt"></span>
+          <div class="sentence-l2-row">
+            <span class="sentence-l2" id="s2-l2"></span>
             <button class="sentence-speak-btn" id="s2-speak-btn" title="Hear sentence">🔊</button>
           </div>
           <span class="sentence-en" id="s2-en"></span>
@@ -108,7 +114,7 @@
           <input id="card-front-input" placeholder="English word, phrase, or sentence" />
         </label>
         <label class="field">
-          <span>Back (Portuguese)</span>
+          <span id="card-back-label">Back (Portuguese)</span>
           <input id="card-back-input" placeholder="Portuguese translation" />
         </label>
         <label class="field">

@@ -116,11 +116,11 @@ Then restart your launch agent/service if required.
 
 ## App-side config in code
 
-Translate direction, Anki deck, and Anki note type are set in `src/client/app.js` under `APP_CONFIG`.
+Translate direction, Anki deck, and Anki note type are set per language mode in `src/client/app.js` under `MODE_CONFIGS`.
 
-## words.json updates
+## Word pool updates
 
-When `src/client/words.json` changes:
+When `src/client/words.pt.json` or `src/client/words.fr.json` changes:
 
 1. Bump cache version in `src/client/sw.js` (`ten-vN` -> next number)
 2. Restart Ten server if needed

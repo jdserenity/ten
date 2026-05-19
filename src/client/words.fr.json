@@ -1,0 +1,490 @@
+[
+  {
+    "word": "je",
+    "translation": "I",
+    "sentences": [
+      { "fr": "Je suis tres fatigue aujourd'hui.", "en": "I am very tired today." },
+      { "fr": "Je veux apprendre le francais.", "en": "I want to learn French." }
+    ]
+  },
+  {
+    "word": "tu",
+    "translation": "you (informal singular)",
+    "sentences": [
+      { "fr": "Tu viens avec moi ce soir.", "en": "You are coming with me tonight." },
+      { "fr": "Tu peux repeter la question.", "en": "You can repeat the question." }
+    ]
+  },
+  {
+    "word": "il",
+    "translation": "he, it",
+    "sentences": [
+      { "fr": "Il habite pres de l'ecole.", "en": "He lives near the school." },
+      { "fr": "Il fait froid ce matin.", "en": "It is cold this morning." }
+    ]
+  },
+  {
+    "word": "elle",
+    "translation": "she, it",
+    "sentences": [
+      { "fr": "Elle parle avec sa soeur.", "en": "She is speaking with her sister." },
+      { "fr": "Elle arrive dans dix minutes.", "en": "She is arriving in ten minutes." }
+    ]
+  },
+  {
+    "word": "nous",
+    "translation": "we",
+    "sentences": [
+      { "fr": "Nous allons au marche demain.", "en": "We are going to the market tomorrow." },
+      { "fr": "Nous avons une reunion a midi.", "en": "We have a meeting at noon." }
+    ]
+  },
+  {
+    "word": "vous",
+    "translation": "you (formal or plural)",
+    "sentences": [
+      { "fr": "Vous etes prets pour commencer.", "en": "You are ready to start." },
+      { "fr": "Vous voulez un cafe ou un the.", "en": "Do you want a coffee or a tea?" }
+    ]
+  },
+  {
+    "word": "ils",
+    "translation": "they (masculine or mixed)",
+    "sentences": [
+      { "fr": "Ils jouent au parc apres l'ecole.", "en": "They play at the park after school." },
+      { "fr": "Ils regardent le match ensemble.", "en": "They watch the game together." }
+    ]
+  },
+  {
+    "word": "etre",
+    "translation": "to be",
+    "sentences": [
+      { "fr": "Je veux etre calme pendant l'examen.", "en": "I want to be calm during the exam." },
+      { "fr": "C'est important d'etre patient.", "en": "It is important to be patient." }
+    ]
+  },
+  {
+    "word": "avoir",
+    "translation": "to have",
+    "sentences": [
+      { "fr": "Nous allons avoir plus de temps demain.", "en": "We are going to have more time tomorrow." },
+      { "fr": "J'aime avoir un plan simple.", "en": "I like having a simple plan." }
+    ]
+  },
+  {
+    "word": "faire",
+    "translation": "to do, to make",
+    "sentences": [
+      { "fr": "Je dois faire mes devoirs ce soir.", "en": "I have to do my homework tonight." },
+      { "fr": "On va faire un gateau ensemble.", "en": "We are going to make a cake together." }
+    ]
+  },
+  {
+    "word": "aller",
+    "translation": "to go",
+    "sentences": [
+      { "fr": "Je vais aller au bureau a huit heures.", "en": "I am going to go to the office at eight." },
+      { "fr": "Tu veux aller au cinema vendredi.", "en": "Do you want to go to the movies on Friday?" }
+    ]
+  },
+  {
+    "word": "dire",
+    "translation": "to say, to tell",
+    "sentences": [
+      { "fr": "Peux-tu dire la verite maintenant.", "en": "Can you tell the truth now?" },
+      { "fr": "Je vais lui dire merci demain.", "en": "I will tell him thanks tomorrow." }
+    ]
+  },
+  {
+    "word": "pouvoir",
+    "translation": "to be able to, can",
+    "sentences": [
+      { "fr": "Je peux finir ce travail aujourd'hui.", "en": "I can finish this work today." },
+      { "fr": "Nous ne pouvons pas rester longtemps.", "en": "We cannot stay long." }
+    ]
+  },
+  {
+    "word": "vouloir",
+    "translation": "to want",
+    "sentences": [
+      { "fr": "Je veux apprendre dix mots par jour.", "en": "I want to learn ten words per day." },
+      { "fr": "Ils veulent partir plus tot.", "en": "They want to leave earlier." }
+    ]
+  },
+  {
+    "word": "devoir",
+    "translation": "to have to, must",
+    "sentences": [
+      { "fr": "Je dois appeler ma mere ce soir.", "en": "I must call my mother tonight." },
+      { "fr": "Nous devons etre a l'heure demain.", "en": "We have to be on time tomorrow." }
+    ]
+  },
+  {
+    "word": "savoir",
+    "translation": "to know (a fact, how to)",
+    "sentences": [
+      { "fr": "Je sais ou est la gare.", "en": "I know where the station is." },
+      { "fr": "Elle sait parler espagnol aussi.", "en": "She knows how to speak Spanish too." }
+    ]
+  },
+  {
+    "word": "voir",
+    "translation": "to see",
+    "sentences": [
+      { "fr": "Je veux voir ce film demain.", "en": "I want to see this movie tomorrow." },
+      { "fr": "On peut voir la montagne d'ici.", "en": "We can see the mountain from here." }
+    ]
+  },
+  {
+    "word": "venir",
+    "translation": "to come",
+    "sentences": [
+      { "fr": "Tu peux venir chez moi apres le travail.", "en": "You can come to my place after work." },
+      { "fr": "Elle vient toujours en avance.", "en": "She always comes early." }
+    ]
+  },
+  {
+    "word": "prendre",
+    "translation": "to take",
+    "sentences": [
+      { "fr": "Je vais prendre le bus ce matin.", "en": "I am going to take the bus this morning." },
+      { "fr": "Peux-tu prendre cette boite pour moi.", "en": "Can you take this box for me?" }
+    ]
+  },
+  {
+    "word": "donner",
+    "translation": "to give",
+    "sentences": [
+      { "fr": "Je vais donner ce livre a mon ami.", "en": "I am going to give this book to my friend." },
+      { "fr": "Elle donne des conseils utiles.", "en": "She gives useful advice." }
+    ]
+  },
+  {
+    "word": "parler",
+    "translation": "to speak, to talk",
+    "sentences": [
+      { "fr": "Je veux parler francais tous les jours.", "en": "I want to speak French every day." },
+      { "fr": "Nous parlons de nos plans demain.", "en": "We are talking about our plans tomorrow." }
+    ]
+  },
+  {
+    "word": "aimer",
+    "translation": "to like, to love",
+    "sentences": [
+      { "fr": "J'aime apprendre de nouveaux mots.", "en": "I like learning new words." },
+      { "fr": "Elle aime lire le soir.", "en": "She likes to read in the evening." }
+    ]
+  },
+  {
+    "word": "manger",
+    "translation": "to eat",
+    "sentences": [
+      { "fr": "Nous allons manger ensemble ce soir.", "en": "We are going to eat together tonight." },
+      { "fr": "Je mange une pomme le matin.", "en": "I eat an apple in the morning." }
+    ]
+  },
+  {
+    "word": "boire",
+    "translation": "to drink",
+    "sentences": [
+      { "fr": "Je bois de l'eau pendant la journee.", "en": "I drink water during the day." },
+      { "fr": "Ils boivent un cafe apres le repas.", "en": "They drink a coffee after the meal." }
+    ]
+  },
+  {
+    "word": "maison",
+    "translation": "house, home",
+    "sentences": [
+      { "fr": "Ma maison est pres du parc.", "en": "My house is near the park." },
+      { "fr": "Je reste a la maison ce soir.", "en": "I am staying at home tonight." }
+    ]
+  },
+  {
+    "word": "travail",
+    "translation": "work, job",
+    "sentences": [
+      { "fr": "J'ai beaucoup de travail aujourd'hui.", "en": "I have a lot of work today." },
+      { "fr": "Le travail commence a neuf heures.", "en": "Work starts at nine o'clock." }
+    ]
+  },
+  {
+    "word": "ecole",
+    "translation": "school",
+    "sentences": [
+      { "fr": "L'ecole est fermee le dimanche.", "en": "The school is closed on Sunday." },
+      { "fr": "Mon fils va a l'ecole en bus.", "en": "My son goes to school by bus." }
+    ]
+  },
+  {
+    "word": "ami",
+    "translation": "friend",
+    "sentences": [
+      { "fr": "Mon ami habite a Montreal.", "en": "My friend lives in Montreal." },
+      { "fr": "Je parle avec un ami chaque soir.", "en": "I talk with a friend every evening." }
+    ]
+  },
+  {
+    "word": "famille",
+    "translation": "family",
+    "sentences": [
+      { "fr": "Ma famille vient diner dimanche.", "en": "My family is coming for dinner on Sunday." },
+      { "fr": "Nous passons du temps en famille.", "en": "We spend time with family." }
+    ]
+  },
+  {
+    "word": "temps",
+    "translation": "time, weather",
+    "sentences": [
+      { "fr": "Je n'ai pas le temps ce matin.", "en": "I do not have time this morning." },
+      { "fr": "Le temps est beau aujourd'hui.", "en": "The weather is nice today." }
+    ]
+  },
+  {
+    "word": "jour",
+    "translation": "day",
+    "sentences": [
+      { "fr": "Chaque jour je revise mes notes.", "en": "Every day I review my notes." },
+      { "fr": "C'est un grand jour pour nous.", "en": "It is a big day for us." }
+    ]
+  },
+  {
+    "word": "nuit",
+    "translation": "night",
+    "sentences": [
+      { "fr": "La nuit est calme dans ce quartier.", "en": "The night is calm in this neighborhood." },
+      { "fr": "Je dors mieux la nuit.", "en": "I sleep better at night." }
+    ]
+  },
+  {
+    "word": "matin",
+    "translation": "morning",
+    "sentences": [
+      { "fr": "Je fais du sport le matin.", "en": "I exercise in the morning." },
+      { "fr": "Le matin commence avec un cafe.", "en": "The morning starts with a coffee." }
+    ]
+  },
+  {
+    "word": "soir",
+    "translation": "evening",
+    "sentences": [
+      { "fr": "On se voit ce soir a huit heures.", "en": "We are seeing each other tonight at eight." },
+      { "fr": "Le soir, je lis avant de dormir.", "en": "In the evening, I read before sleeping." }
+    ]
+  },
+  {
+    "word": "aujourd'hui",
+    "translation": "today",
+    "sentences": [
+      { "fr": "Aujourd'hui je reste a la maison.", "en": "Today I am staying at home." },
+      { "fr": "Nous avons cours aujourd'hui.", "en": "We have class today." }
+    ]
+  },
+  {
+    "word": "demain",
+    "translation": "tomorrow",
+    "sentences": [
+      { "fr": "Je commence un nouveau livre demain.", "en": "I start a new book tomorrow." },
+      { "fr": "On part tot demain matin.", "en": "We are leaving early tomorrow morning." }
+    ]
+  },
+  {
+    "word": "maintenant",
+    "translation": "now",
+    "sentences": [
+      { "fr": "Je dois partir maintenant.", "en": "I need to leave now." },
+      { "fr": "Nous pouvons parler maintenant.", "en": "We can talk now." }
+    ]
+  },
+  {
+    "word": "ici",
+    "translation": "here",
+    "sentences": [
+      { "fr": "Je suis ici depuis dix minutes.", "en": "I have been here for ten minutes." },
+      { "fr": "Tu peux t'asseoir ici.", "en": "You can sit here." }
+    ]
+  },
+  {
+    "word": "la",
+    "translation": "there",
+    "sentences": [
+      { "fr": "Le bus est la devant nous.", "en": "The bus is there in front of us." },
+      { "fr": "On va la apres le diner.", "en": "We are going there after dinner." }
+    ]
+  },
+  {
+    "word": "pourquoi",
+    "translation": "why",
+    "sentences": [
+      { "fr": "Pourquoi tu es en retard aujourd'hui.", "en": "Why are you late today?" },
+      { "fr": "Je ne comprends pas pourquoi il part.", "en": "I do not understand why he is leaving." }
+    ]
+  },
+  {
+    "word": "comment",
+    "translation": "how",
+    "sentences": [
+      { "fr": "Comment tu apprends le francais.", "en": "How are you learning French?" },
+      { "fr": "Montre-moi comment faire ca.", "en": "Show me how to do that." }
+    ]
+  },
+  {
+    "word": "quand",
+    "translation": "when",
+    "sentences": [
+      { "fr": "Quand est-ce que le train arrive.", "en": "When does the train arrive?" },
+      { "fr": "Dis-moi quand tu es libre.", "en": "Tell me when you are free." }
+    ]
+  },
+  {
+    "word": "ou",
+    "translation": "where",
+    "sentences": [
+      { "fr": "Ou est la station de metro.", "en": "Where is the metro station?" },
+      { "fr": "Je sais ou acheter ce livre.", "en": "I know where to buy this book." }
+    ]
+  },
+  {
+    "word": "oui",
+    "translation": "yes",
+    "sentences": [
+      { "fr": "Oui, je comprends cette phrase.", "en": "Yes, I understand this sentence." },
+      { "fr": "Elle dit oui tout de suite.", "en": "She says yes right away." }
+    ]
+  },
+  {
+    "word": "non",
+    "translation": "no",
+    "sentences": [
+      { "fr": "Non, je ne peux pas venir.", "en": "No, I cannot come." },
+      { "fr": "Il repond non avec un sourire.", "en": "He answers no with a smile." }
+    ]
+  },
+  {
+    "word": "bonjour",
+    "translation": "hello, good morning",
+    "sentences": [
+      { "fr": "Je dis bonjour a mes voisins.", "en": "I say hello to my neighbors." },
+      { "fr": "Bonjour, comment allez-vous aujourd'hui.", "en": "Hello, how are you today?" }
+    ]
+  },
+  {
+    "word": "merci",
+    "translation": "thank you",
+    "sentences": [
+      { "fr": "Merci pour ton aide ce matin.", "en": "Thank you for your help this morning." },
+      { "fr": "Je dis merci apres chaque cours.", "en": "I say thank you after each class." }
+    ]
+  },
+  {
+    "word": "s'il vous plait",
+    "translation": "please",
+    "sentences": [
+      { "fr": "Un cafe, s'il vous plait.", "en": "A coffee, please." },
+      { "fr": "Parlez plus lentement, s'il vous plait.", "en": "Speak more slowly, please." }
+    ]
+  },
+  {
+    "word": "pardon",
+    "translation": "sorry, excuse me",
+    "sentences": [
+      { "fr": "Pardon, je n'ai pas entendu.", "en": "Sorry, I did not hear." },
+      { "fr": "Pardon, ou est la sortie.", "en": "Excuse me, where is the exit?" }
+    ]
+  },
+  {
+    "word": "eau",
+    "translation": "water",
+    "sentences": [
+      { "fr": "Je bois de l'eau froide apres le sport.", "en": "I drink cold water after exercise." },
+      { "fr": "Peux-tu apporter un verre d'eau.", "en": "Can you bring a glass of water?" }
+    ]
+  },
+  {
+    "word": "pain",
+    "translation": "bread",
+    "sentences": [
+      { "fr": "Je mange du pain avec du fromage.", "en": "I eat bread with cheese." },
+      { "fr": "Le pain est encore chaud.", "en": "The bread is still warm." }
+    ]
+  },
+  {
+    "word": "cafe",
+    "translation": "coffee",
+    "sentences": [
+      { "fr": "Je prends un cafe chaque matin.", "en": "I have a coffee every morning." },
+      { "fr": "Ce cafe est tres fort.", "en": "This coffee is very strong." }
+    ]
+  },
+  {
+    "word": "argent",
+    "translation": "money",
+    "sentences": [
+      { "fr": "Je n'ai pas assez d'argent aujourd'hui.", "en": "I do not have enough money today." },
+      { "fr": "Il economise de l'argent chaque mois.", "en": "He saves money every month." }
+    ]
+  },
+  {
+    "word": "voiture",
+    "translation": "car",
+    "sentences": [
+      { "fr": "Ma voiture est garee devant la maison.", "en": "My car is parked in front of the house." },
+      { "fr": "Nous allons en voiture au travail.", "en": "We go to work by car." }
+    ]
+  },
+  {
+    "word": "bus",
+    "translation": "bus",
+    "sentences": [
+      { "fr": "Le bus arrive dans cinq minutes.", "en": "The bus arrives in five minutes." },
+      { "fr": "Je prends le bus pour l'ecole.", "en": "I take the bus to school." }
+    ]
+  },
+  {
+    "word": "train",
+    "translation": "train",
+    "sentences": [
+      { "fr": "Le train part a sept heures.", "en": "The train leaves at seven o'clock." },
+      { "fr": "Nous attendons le train sur le quai.", "en": "We are waiting for the train on the platform." }
+    ]
+  },
+  {
+    "word": "livre",
+    "translation": "book",
+    "sentences": [
+      { "fr": "Ce livre est facile a lire.", "en": "This book is easy to read." },
+      { "fr": "Je lis un livre chaque semaine.", "en": "I read one book each week." }
+    ]
+  },
+  {
+    "word": "mot",
+    "translation": "word",
+    "sentences": [
+      { "fr": "J'apprends un nouveau mot chaque jour.", "en": "I learn a new word every day." },
+      { "fr": "Ce mot est tres utile en conversation.", "en": "This word is very useful in conversation." }
+    ]
+  },
+  {
+    "word": "question",
+    "translation": "question",
+    "sentences": [
+      { "fr": "J'ai une question sur ce verbe.", "en": "I have a question about this verb." },
+      { "fr": "Pose ta question maintenant.", "en": "Ask your question now." }
+    ]
+  },
+  {
+    "word": "reponse",
+    "translation": "answer",
+    "sentences": [
+      { "fr": "Ta reponse est correcte.", "en": "Your answer is correct." },
+      { "fr": "Je cherche la bonne reponse.", "en": "I am looking for the right answer." }
+    ]
+  },
+  {
+    "word": "apprendre",
+    "translation": "to learn",
+    "sentences": [
+      { "fr": "Je veux apprendre le francais rapidement.", "en": "I want to learn French quickly." },
+      { "fr": "On peut apprendre avec dix mots par jour.", "en": "We can learn with ten words per day." }
+    ]
+  }
+]

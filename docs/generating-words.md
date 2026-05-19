@@ -12,13 +12,22 @@ The user is an intermediate Brazilian Portuguese learner and was catching these 
 
 ## Current approach
 
-Words are written directly by a language-capable agent (Claude) and committed as `src/client/words.json`. No scraping, no external APIs at generation time. The output is reviewed by the user before deployment.
+Word pools are generated from language-specific workflows and committed as JSON files in `src/client/`.
+
+- `src/client/words.pt.json` -> Brazilian Portuguese pool
+- `src/client/words.fr.json` -> French pool
+
+French generation is frequency-dictionary-based (`scripts/generate-words-fr.js`), while Portuguese generation currently uses the legacy script (`scripts/generate-words.js`).
 
 ## Quality standards
 
 ### Words
-- **Must be genuine Brazilian Portuguese** — not English loanwords, not European Portuguese variants spelled differently
-- **Intermediate level (B1–B2)** — useful in everyday conversation but not among the most basic 500 words (those would be things like *e, não, ser, ter, com, para, que, mais*)
+- **Brazilian Portuguese pool (`words.pt.json`)**:
+  - Must be genuine Brazilian Portuguese (not European Portuguese spelling)
+  - **Intermediate level (B1–B2)** — avoid the most basic top-frequency words
+- **French pool (`words.fr.json`)**:
+  - Natural modern French suitable for Quebec learners
+  - **Beginner level (A1-ish)** — start from top/high-frequency dictionary words first
 - **Clean stems preferred** — avoid heavily inflected verb forms as the headword; use the infinitive or the base noun/adjective
 - **Good variety** — aim for a mix of nouns, verbs, and adjectives across a session
 
@@ -36,7 +45,7 @@ Words are written directly by a language-capable agent (Claude) and committed as
 
 ## Format
 
-`src/client/words.json` is a JSON array. Each entry:
+Word files are JSON arrays. Each entry:
 
 ```json
 {
@@ -48,6 +57,8 @@ Words are written directly by a language-capable agent (Claude) and committed as
   ]
 }
 ```
+
+For French entries, use `fr` instead of `pt` in sentence objects.
 
 ## How to generate
 
@@ -63,17 +74,24 @@ The app shows 10 words per day from a randomly shuffled pool. With a pool of N w
 
 ### Steps for an agent generating words
 
-1. **Pick intermediate Brazilian Portuguese words** — nouns, verbs, adjectives in a natural mix. Avoid the very common ones listed above.
+1. Pick words for the correct pool:
+   - PT-BR: intermediate vocabulary
+   - FR: beginner high-frequency vocabulary (starting from the top of the frequency dictionary)
 2. **For each word**, write:
    - A concise translation that captures real usage
-   - 2 natural sentences in Brazilian Portuguese (20–140 chars each) that clearly demonstrate the primary meaning
+   - 2 natural sentences in the pool language (20–140 chars each) that clearly demonstrate the primary meaning
    - Accurate, natural English translations of those sentences
-3. **Write the full array to `src/client/words.json`** — replace the file entirely; do not append (unless explicitly asked to extend an existing pool)
-4. **Bump the service worker cache version** in `src/client/sw.js` — change `ten-vN` to the next number. This is mandatory; without it, deployed browsers will keep serving the old cached `words.json` indefinitely.
+3. **Write the full array to the target file** (`src/client/words.pt.json` or `src/client/words.fr.json`) — replace the file entirely unless explicitly asked to append.
+4. **Bump the service worker cache version** in `src/client/sw.js` — change `ten-vN` to the next number. This is mandatory; without it, deployed browsers may keep serving old cached word files.
+
+### Commands
+
+- `npm run generate:pt` -> regenerate Portuguese pool
+- `npm run generate:fr` -> regenerate French pool from Wiktionary frequency lists (top-down)
 
 ### Checking the pool indicator
 
-After updating `words.json`, the app's footer shows `~N days left in pool`. It turns amber when ≤ 7 days remain. That is the signal to generate more words.
+After updating a word file, the app footer shows `~N days left in <mode> pool`. It turns amber when ≤ 7 days remain. That is the signal to generate more words.
 
 ## What to avoid
 

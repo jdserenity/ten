@@ -1,10 +1,11 @@
 /**
- * generate-words.js
+ * generate-words.js (PT-BR only)
  *
  * Fetches intermediate Brazilian Portuguese words from the Wiktionary
  * frequency list (skipping the top 500 most common/beginner words),
  * then pulls 2 real example sentences per word from Tatoeba.
- * Outputs src/client/words.json.
+ * Outputs src/client/words.pt.json (Brazilian Portuguese pool only).
+ * French words are managed separately in src/client/words.fr.json.
  */
 
 import { parse } from 'node-html-parser';
@@ -13,7 +14,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_FILE = join(__dirname, '../src/client/words.json');
+const OUT_FILE = join(__dirname, '../src/client/words.pt.json');
 
 const TARGET_WORDS = 100;
 const SKIP_TOP_N = 500;       // skip the N most frequent (beginner)
@@ -151,7 +152,7 @@ async function main() {
 
   console.log(`\nDone! Collected ${results.length} words. Writing to ${OUT_FILE}…`);
   writeFileSync(OUT_FILE, JSON.stringify(results, null, 2), 'utf-8');
-  console.log('words.json written.');
+  console.log('words.pt.json written.');
 }
 
 main().catch(err => {

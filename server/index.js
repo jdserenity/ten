@@ -3,7 +3,14 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { addUnlockedWord, getAllUnlockedWords, importUnlockedWords, initDb } from './db.js';
+import {
+  addUnlockedWord,
+  getAllUnlockedWords,
+  getDailyCardIndex,
+  importUnlockedWords,
+  initDb,
+  setDailyCardIndex
+} from './db.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -317,6 +324,36 @@ async function handleUnlockedWordsImport(req, res) {
   return sendJson(res, 200, { ok: true, imported, wordsByLanguage: getAllUnlockedWords() });
 }
 
+function handleDailyProgressGet(url, res) {
+  const language = String(url.searchParams.get('language') || '').trim();
+  const dateKey = String(url.searchParams.get('dateKey') || '').trim();
+  if (!language || !dateKey) {
+    return sendJson(res, 400, { error: 'Missing language or dateKey.' });
+  }
+  const cardIndex = getDailyCardIndex(language, dateKey);
+  return sendJson(res, 200, { cardIndex });
+}
+
+async function handleDailyProgressPost(req, res) {
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const language = String(body.language || '').trim();
+  const dateKey = String(body.dateKey || '').trim();
+  const cardIndex = body.cardIndex;
+  if (!language || !dateKey || cardIndex === undefined || cardIndex === null) {
+    return sendJson(res, 400, { error: 'Missing language, dateKey, or cardIndex.' });
+  }
+
+  const result = setDailyCardIndex(language, dateKey, cardIndex);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily progress payload.' });
+  return sendJson(res, 200, { ok: true, cardIndex: result.cardIndex });
+}
+
 async function proxyAnki(req, res) {
   let body;
   try { body = await readJsonBody(req); }
@@ -379,6 +416,12 @@ const server = createServer(async (req, res) => {
   if (pathname === '/api/unlocked-words' && req.method === 'POST') return handleUnlockedWordsPost(req, res);
   if (pathname === '/api/unlocked-words/import' && req.method === 'POST') {
     return handleUnlockedWordsImport(req, res);
+  }
+  if (pathname === '/api/daily-progress' && req.method === 'GET') {
+    return handleDailyProgressGet(url, res);
+  }
+  if (pathname === '/api/daily-progress' && req.method === 'POST') {
+    return handleDailyProgressPost(req, res);
   }
   if (pathname === '/api/health' && req.method === 'GET') return sendJson(res, 200, { ok: true });
 

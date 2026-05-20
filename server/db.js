@@ -37,6 +37,13 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
     );
     CREATE INDEX IF NOT EXISTS idx_unlocked_words_language
       ON unlocked_words (language);
+    CREATE TABLE IF NOT EXISTS daily_card_index (
+      language TEXT NOT NULL,
+      date_key TEXT NOT NULL,
+      card_index INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (language, date_key)
+    );
   `);
   return db;
 }
@@ -88,4 +95,35 @@ export function importUnlockedWords(wordsByLanguage) {
   });
   importMany(wordsByLanguage);
   return { imported };
+}
+
+export function getDailyCardIndex(language, dateKey) {
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  if (!lang || !key) return null;
+  const row = getDb()
+    .prepare('SELECT card_index FROM daily_card_index WHERE language = ? AND date_key = ?')
+    .get(lang, key);
+  if (!row) return null;
+  const index = Number(row.card_index);
+  return Number.isInteger(index) && index >= 0 ? index : null;
+}
+
+export function setDailyCardIndex(language, dateKey, cardIndex) {
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  const index = Number(cardIndex);
+  if (!lang || !key || !Number.isInteger(index) || index < 0) {
+    return { ok: false, reason: 'invalid' };
+  }
+  getDb()
+    .prepare(`
+      INSERT INTO daily_card_index (language, date_key, card_index, updated_at)
+      VALUES (?, ?, ?, unixepoch())
+      ON CONFLICT (language, date_key) DO UPDATE SET
+        card_index = excluded.card_index,
+        updated_at = excluded.updated_at
+    `)
+    .run(lang, key, index);
+  return { ok: true, language: lang, dateKey: key, cardIndex: index };
 }

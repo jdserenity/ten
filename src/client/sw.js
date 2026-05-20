@@ -1,4 +1,4 @@
-const CACHE = 'ten-v14';
+const CACHE = 'ten-v16';
 const ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/words.pt.json', '/words.fr.json', '/frequency-pt-br.json', '/frequency-fr.json', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {

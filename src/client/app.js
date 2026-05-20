@@ -71,7 +71,9 @@ const state = {
     FR: new Set()
   },
   frequencyLoadedLanguages: new Set(),
-  frequencyShowUnlockedOnly: false
+  frequencyShowUnlockedOnly: false,
+  frequencyInlineTranslations: new Map(),
+  frequencyTranslatingWords: new Set()
 };
 
 let dailyDots = [];
@@ -494,8 +496,34 @@ function gotoDailyWord(index) {
     setStatus('daily-save-status', '');
   }
   renderDailyWord(bounded);
+  persistDailyCardIndex(bounded);
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+}
+
+async function fetchDailyCardIndex(language, dayKey) {
+  try {
+    const params = new URLSearchParams({ language, dateKey: dayKey });
+    const response = await fetch(`/api/daily-progress?${params}`);
+    if (!response.ok) return null;
+    const body = await response.json();
+    const index = Number(body?.cardIndex);
+    return Number.isInteger(index) && index >= 0 ? index : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+function persistDailyCardIndex(cardIndex) {
+  if (!state.todayWords.length) return;
+  const language = getFrequencyLanguageForMode();
+  const dayKey = dateKey();
+  const bounded = Math.max(0, Math.min(cardIndex, state.todayWords.length - 1));
+  fetch('/api/daily-progress', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ language, dateKey: dayKey, cardIndex: bounded })
+  }).catch(() => {});
 }
 
 function showDailyUnavailable(reason) {
@@ -985,6 +1013,41 @@ function updateFrequencySearchHint(matchCount, totalCount, hasQuery) {
     : `${matchCount} of ${totalCount} entries`;
 }
 
+function formatFrequencyInlineTranslation(translation) {
+  return `= ${translation}`;
+}
+
+function frequencyTranslationKey(language, normalizedWord) {
+  return `${language}:${normalizedWord}`;
+}
+
+async function translateFrequencyWord(entry) {
+  const language = getFrequencyLanguageForMode();
+  const normalized = entry.normalizedWord;
+  const mapKey = frequencyTranslationKey(language, normalized);
+  if (!normalized || state.frequencyTranslatingWords.has(mapKey)) return;
+
+  state.frequencyTranslatingWords.add(mapKey);
+  renderFrequencyDictionary();
+
+  try {
+    const result = await translateText(entry.word, language, 'EN');
+    state.frequencyInlineTranslations.set(mapKey, {
+      text: formatFrequencyInlineTranslation(result.translatedText),
+      error: false
+    });
+    markLearningWordSeenInFrequency(entry.word);
+  } catch (error) {
+    state.frequencyInlineTranslations.set(mapKey, {
+      text: formatError(error),
+      error: true
+    });
+  } finally {
+    state.frequencyTranslatingWords.delete(mapKey);
+    renderFrequencyDictionary();
+  }
+}
+
 function renderFrequencyDictionary() {
   const listEl = document.getElementById('frequency-list');
   const totalEl = document.getElementById('frequency-total-count');
@@ -1017,11 +1080,36 @@ function renderFrequencyDictionary() {
     rank.className = 'frequency-rank';
     rank.textContent = `#${entry.rank}`;
 
-    const word = document.createElement('span');
-    word.className = 'frequency-word';
-    word.textContent = entry.word;
+    const wordWrap = document.createElement('div');
+    wordWrap.className = 'frequency-word-wrap';
 
-    row.append(rank, word);
+    const wordBtn = document.createElement('button');
+    wordBtn.type = 'button';
+    wordBtn.className = 'frequency-word';
+    wordBtn.textContent = entry.word;
+    const mapKey = frequencyTranslationKey(language, entry.normalizedWord);
+    const isTranslating = state.frequencyTranslatingWords.has(mapKey);
+    wordBtn.disabled = isTranslating;
+    wordBtn.addEventListener('click', () => {
+      translateFrequencyWord(entry);
+    });
+
+    const inline = state.frequencyInlineTranslations.get(mapKey);
+    if (isTranslating) {
+      const pending = document.createElement('span');
+      pending.className = 'frequency-inline-translation';
+      pending.textContent = '…';
+      wordWrap.append(wordBtn, pending);
+    } else if (inline) {
+      const translation = document.createElement('span');
+      translation.className = `frequency-inline-translation${inline.error ? ' error' : ''}`;
+      translation.textContent = inline.text;
+      wordWrap.append(wordBtn, translation);
+    } else {
+      wordWrap.append(wordBtn);
+    }
+
+    row.append(rank, wordWrap);
     fragment.appendChild(row);
   });
 
@@ -1137,6 +1225,44 @@ function setNoteConfigOpen(open) {
   }
 }
 
+function getTranslateSpeakText() {
+  const learningLang = getLearningLanguage();
+  const inputText = document.getElementById('translate-input')?.value.trim() || '';
+  const resultText = document.getElementById('translate-result-text')?.textContent.trim() || '';
+  if (canonicalizeTranslateLanguage(state.settings.translateSource) === learningLang) {
+    return inputText;
+  }
+  if (canonicalizeTranslateLanguage(state.settings.translateTarget) === learningLang) {
+    return resultText;
+  }
+  return '';
+}
+
+function getTranslateSpeakSlot() {
+  const learningLang = getLearningLanguage();
+  const sourceIsLearning =
+    canonicalizeTranslateLanguage(state.settings.translateSource) === learningLang;
+  return sourceIsLearning
+    ? document.getElementById('translate-speak-slot-input')
+    : document.getElementById('translate-speak-slot-result');
+}
+
+function updateTranslateSpeakUi() {
+  const speakBtn = document.getElementById('translate-speak-btn');
+  if (!speakBtn) return;
+
+  const hasSpeakText = Boolean(getTranslateSpeakText());
+  const show = state.hasTranslatedInSession && hasSpeakText;
+  const slot = getTranslateSpeakSlot();
+
+  speakBtn.disabled = !show;
+  speakBtn.classList.toggle('translate-speak-visible', show);
+
+  if (show && slot && speakBtn.parentElement !== slot) {
+    slot.appendChild(speakBtn);
+  }
+}
+
 function updateTranslateResultUi() {
   const resultWrap = document.getElementById('translate-result-wrap');
   const quickAddBtn = document.getElementById('quick-add-card-btn');
@@ -1146,6 +1272,7 @@ function updateTranslateResultUi() {
   if (quickAddBtn) {
     quickAddBtn.disabled = !state.hasTranslatedInSession;
   }
+  updateTranslateSpeakUi();
   setNoteConfigOpen(state.noteConfigOpen);
 }
 
@@ -1180,6 +1307,7 @@ function swapTranslateDirection() {
   state.settings.translateTarget = nextTarget;
   state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
+  updateTranslateSpeakUi();
 }
 
 function clearTranslateDraft() {
@@ -1309,6 +1437,11 @@ function setupTranslateEvents() {
     clearTranslateDraft();
   });
 
+  document.getElementById('translate-speak-btn')?.addEventListener('click', () => {
+    const text = getTranslateSpeakText();
+    speakText(text, document.getElementById('translate-speak-btn'));
+  });
+
   document.getElementById('translate-btn').addEventListener('click', async () => {
     const text = document.getElementById('translate-input').value.trim();
     if (!text) {
@@ -1430,17 +1563,24 @@ async function initDailyWords() {
   if (!Array.isArray(words) || !words.length) throw new Error(`${mode.wordsPath} is empty.`);
 
   state.words = words;
-  const seed = hashDate(dateKey());
+  const dayKey = dateKey();
+  const seed = hashDate(dayKey);
   state.todayWords = seededShuffle(words, seed).slice(0, WORDS_PER_DAY);
-  state.currentWordIndex = 0;
-  const seenSet = getSeenDailyWordsSet(getFrequencyLanguageForMode());
+  const language = getFrequencyLanguageForMode();
+  const savedIndex = await fetchDailyCardIndex(language, dayKey);
+  const maxIndex = Math.max(0, state.todayWords.length - 1);
+  state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
+  const seenSet = getSeenDailyWordsSet(language);
   state.seenWordIndexes = new Set(
     state.todayWords
       .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
       .filter(idx => idx >= 0)
   );
   buildDailyDots();
-  renderDailyWord(0);
+  renderDailyWord(state.currentWordIndex);
+  if (savedIndex !== null && state.currentWordIndex !== savedIndex) {
+    persistDailyCardIndex(state.currentWordIndex);
+  }
 
   const totalDays = Math.floor(words.length / WORDS_PER_DAY);
   const poolInfo = document.getElementById('pool-info');

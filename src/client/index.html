@@ -43,7 +43,7 @@
       <div id="card">
         <div class="word-row">
           <span id="word"></span>
-          <button id="speak-btn" title="Hear pronunciation">🔊</button>
+          <button id="speak-btn" class="speak-btn" type="button" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
         </div>
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
@@ -52,14 +52,14 @@
         <div class="sentence">
           <div class="sentence-l2-row">
             <span class="sentence-l2" id="s1-l2"></span>
-            <button class="sentence-speak-btn" id="s1-speak-btn" title="Hear sentence">🔊</button>
+            <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
           </div>
           <span class="sentence-en" id="s1-en"></span>
         </div>
         <div class="sentence">
           <div class="sentence-l2-row">
             <span class="sentence-l2" id="s2-l2"></span>
-            <button class="sentence-speak-btn" id="s2-speak-btn" title="Hear sentence">🔊</button>
+            <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
           </div>
           <span class="sentence-en" id="s2-en"></span>
         </div>
@@ -91,7 +91,10 @@
         </div>
         <label class="field">
           <span>Text</span>
-          <textarea id="translate-input" rows="4" placeholder="Type or paste text to translate..."></textarea>
+          <div class="translate-input-row">
+            <textarea id="translate-input" rows="4" placeholder="Type or paste text to translate..."></textarea>
+            <span id="translate-speak-slot-input" class="translate-speak-slot"></span>
+          </div>
         </label>
         <div class="translate-action-row">
           <button id="translate-btn" class="primary-btn">Translate</button>
@@ -100,8 +103,12 @@
         <p id="translate-status" class="status-line"></p>
         <div id="translate-result-wrap" class="hidden">
           <span class="caps-label">Result</span>
-          <p id="translate-result-text" class="translate-result-text"></p>
+          <div class="translate-result-row">
+            <p id="translate-result-text" class="translate-result-text"></p>
+            <span id="translate-speak-slot-result" class="translate-speak-slot"></span>
+          </div>
         </div>
+        <button id="translate-speak-btn" type="button" class="speak-btn" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
         <p id="translate-frequency-rank" class="status-line"></p>
         <div class="button-row">
           <button id="quick-add-card-btn" class="primary-btn" disabled>Add to Anki</button>

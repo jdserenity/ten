@@ -16,7 +16,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint; learning language is always on Back; `addNote` uses `allowDuplicate: false` so Anki rejects duplicate backs and the UI shows AnkiConnect’s error
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
-- **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words; active language mode in `sessionStorage`
+- **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words and daily 10-card stack position (per language + calendar day); active language mode in `sessionStorage`
 - **Tooling**: Node scripts for words and icons in `scripts/`
 
 ## Directory structure
@@ -54,7 +54,8 @@ scripts/
    - `POST /api/translate` to proxy translation requests with provider routing (`GOOGLE_TRANSLATE_API_KEY` for 1-5 words, `DEEPL_AUTH_KEY` for 6+ words)
    - `POST /api/anki` to proxy AnkiConnect actions
    - `GET /api/unlocked-words` and `POST /api/unlocked-words` for frequency unlock state (`POST /api/unlocked-words/import` for one-time localStorage migration)
-4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order
+   - `GET /api/daily-progress` and `POST /api/daily-progress` for which card (0–9) is open in today’s 10/day stack
+4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order; the open card index is restored after refresh
 5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day or via a single-word translate (persisted in SQLite via `/api/unlocked-words`)
 6. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`
 

@@ -183,24 +183,32 @@ header h1 {
   line-height: 1.05;
 }
 
-#speak-btn {
+#speak-btn,
+.speak-btn {
   background: var(--accent-dim);
   border: none;
   border-radius: 50%;
-  width: 44px;
-  height: 44px;
+  width: 54px;
+  height: 54px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   color: var(--accent);
-  font-size: 20px;
+  font-size: 22px;
+  line-height: 1;
   transition: background 0.15s, transform 0.1s;
   flex-shrink: 0;
 }
 
-#speak-btn:active { transform: scale(0.92); }
-#speak-btn.speaking { background: var(--accent); color: #fff; }
+#speak-btn:active,
+.speak-btn:active { transform: scale(0.92); }
+#speak-btn.speaking,
+.speak-btn.speaking { background: var(--accent); color: #fff; }
+.speak-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
 
 #translation {
   font-size: 15px;
@@ -246,20 +254,15 @@ header h1 {
 }
 
 .sentence-speak-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 2px 0 0;
-  opacity: 0.5;
-  transition: opacity 0.15s, transform 0.1s;
-  flex-shrink: 0;
-  color: var(--accent);
+  width: 46px;
+  height: 46px;
+  font-size: 20px;
 }
 
-.sentence-speak-btn:disabled { opacity: 0.25; cursor: default; }
-.sentence-speak-btn:active { transform: scale(0.88); }
-.sentence-speak-btn.speaking { opacity: 1; }
+.sentence-speak-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
 
 .sentence-en {
   font-size: 15px;
@@ -362,6 +365,32 @@ header h1 {
   line-height: 1.2;
 }
 
+#translate-speak-btn {
+  display: none;
+}
+
+#translate-speak-btn.translate-speak-visible {
+  display: flex;
+}
+
+.translate-input-row,
+.translate-result-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.translate-input-row textarea {
+  flex: 1;
+  min-width: 0;
+}
+
+.translate-speak-slot {
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+}
+
 #translate-result-wrap {
   border: 1px solid var(--border);
   background: #111;
@@ -373,6 +402,8 @@ header h1 {
 }
 
 .translate-result-text {
+  flex: 1;
+  min-width: 0;
   font-size: 18px;
   line-height: 1.35;
   white-space: pre-wrap;
@@ -617,14 +648,55 @@ details.surface-card[open] { gap: 10px; }
   min-width: 52px;
 }
 
+.frequency-word-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
 .frequency-word {
   font-size: 16px;
   color: var(--text);
+  background: none;
+  border: none;
+  padding: 4px 0;
+  margin: -4px 0;
+  font: inherit;
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.frequency-word:active {
+  opacity: 0.75;
+}
+
+.frequency-word:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.frequency-inline-translation {
+  font-size: 14px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.frequency-inline-translation.error {
+  color: var(--danger);
+  font-style: normal;
 }
 
 .frequency-item.seen .frequency-word,
 .frequency-item.seen .frequency-rank {
   color: var(--green-bright);
+}
+
+.frequency-item.seen .frequency-inline-translation {
+  color: var(--green);
 }
 
 .stat-box {

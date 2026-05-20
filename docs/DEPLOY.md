@@ -119,7 +119,7 @@ Then restart your launch agent/service if required.
 
 ## Database backup
 
-Unlocked frequency words live in `data/ten.db` (or `TEN_DB_PATH` if set). Back up that file with Time Machine or copy it before major changes.
+`data/ten.db` (or `TEN_DB_PATH` if set) stores unlocked frequency words and daily 10-card progress. Back up that file with Time Machine or copy it before major changes.
 
 ## App-side config in code
 

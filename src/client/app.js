@@ -856,6 +856,9 @@ function removeReviewCardsByNoteId(noteId) {
 }
 
 function renderReview() {
+  window.speechSynthesis?.cancel();
+  document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+
   const dueCount = state.reviewDueCount;
   document.getElementById('review-due-count').textContent = String(dueCount);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
@@ -887,6 +890,11 @@ function renderReview() {
   answerWrap.classList.toggle('hidden', !state.reviewAnswerVisible);
   gradeRow.classList.toggle('hidden', !state.reviewAnswerVisible);
 
+  const speakBtn = document.getElementById('review-speak-btn');
+  if (speakBtn) {
+    speakBtn.disabled = !state.reviewAnswerVisible || !card.back;
+  }
+
   empty.classList.add('hidden');
   cardPanel.classList.remove('hidden');
 }
@@ -906,7 +914,7 @@ async function loadReviewFromAnki(options = {}) {
     return;
   }
 
-  setStatus('review-status', 'Loading cards from Anki...');
+  setStatus('review-status', '');
 
   try {
     const escapedDeck = escapeAnkiQuery(deck);
@@ -933,9 +941,6 @@ async function loadReviewFromAnki(options = {}) {
       );
     }
 
-    const newCount = cards.filter(card => card.queueKind === 'new').length;
-    const dueCount = cards.length - newCount;
-
     state.reviewCards = cards;
     state.reviewDueCount = cards.length;
     if (totalList) {
@@ -947,15 +952,7 @@ async function loadReviewFromAnki(options = {}) {
     state.reviewAnswerVisible = false;
 
     renderReview();
-    if (!cards.length) {
-      setStatus('review-status', 'No new or due cards right now.');
-    } else if (newCount && dueCount) {
-      setStatus('review-status', `Loaded ${cards.length} card(s) from Anki (${newCount} new, ${dueCount} due).`);
-    } else if (newCount) {
-      setStatus('review-status', `Loaded ${newCount} new card(s) from Anki.`);
-    } else {
-      setStatus('review-status', `Loaded ${dueCount} due card(s) from Anki.`);
-    }
+    setStatus('review-status', '');
   } catch (error) {
     const message = formatError(error);
     const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
@@ -979,7 +976,7 @@ async function submitReviewGrade(grade) {
   if (!card || !ease || state.reviewSubmitting) return;
 
   const settings = persistSettingsFromInputs();
-  setStatus('review-status', `Submitting "${grade}" to Anki...`);
+  setStatus('review-status', '');
   state.reviewSubmitting = true;
 
   try {
@@ -989,12 +986,7 @@ async function submitReviewGrade(grade) {
 
     removeCurrentReviewCard();
     renderReview();
-    const remaining = state.reviewDueCount;
-    if (remaining > 0) {
-      setStatus('review-status', `Saved "${grade}". ${remaining} card(s) left in queue.`, 'success');
-    } else {
-      setStatus('review-status', `Saved "${grade}". Queue complete. Tap refresh to re-sync.`, 'success');
-    }
+    setStatus('review-status', '');
   } catch (error) {
     const message = formatError(error);
     const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
@@ -1479,13 +1471,8 @@ function setupDailyEvents() {
       return;
     }
 
-    const context = (word.sentences || [])
-      .map(sentence => getSentenceText(sentence))
-      .filter(Boolean)
-      .join('\n');
-
     const added = await addNoteToAnki(
-      { front: word.translation, back: word.word, context },
+      { front: word.translation, back: word.word },
       'daily-save-status'
     );
     if (added && state.activeTab === 'frequency') {
@@ -1602,6 +1589,12 @@ function setupReviewEvents() {
     if (!getCurrentReviewCard()) return;
     state.reviewAnswerVisible = true;
     renderReview();
+  });
+
+  document.getElementById('review-speak-btn')?.addEventListener('click', () => {
+    const card = getCurrentReviewCard();
+    if (!card || !state.reviewAnswerVisible) return;
+    speakText(card.back, document.getElementById('review-speak-btn'));
   });
 
   document.getElementById('review-refresh-btn').addEventListener('click', () => {

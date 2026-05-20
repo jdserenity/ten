@@ -734,7 +734,15 @@ details.surface-card[open] { gap: 10px; }
   line-height: 1.45;
 }
 
+.review-back-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
 .review-back {
+  flex: 1;
+  min-width: 0;
   font-size: 20px;
   line-height: 1.2;
 }

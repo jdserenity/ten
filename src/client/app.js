@@ -789,15 +789,37 @@ function mapCardInfoToReviewCard(info) {
     fields.Context?.value ??
     fields.Example?.value ??
     '';
+  const cardType = Number(info.type);
 
   return {
     cardId: Number(info.cardId),
     noteId: Number(info.note),
     due: Number(info.due) || 0,
+    queueKind: cardType === 0 ? 'new' : 'due',
     front: htmlToText(frontRaw),
     back: htmlToText(backRaw),
     context: htmlToText(contextRaw)
   };
+}
+
+function orderReviewCards(cards) {
+  return cards.sort((a, b) => {
+    if (a.queueKind !== b.queueKind) {
+      return a.queueKind === 'new' ? -1 : 1;
+    }
+    return a.due - b.due;
+  });
+}
+
+function mergeCardIdLists(primary, secondary) {
+  const seen = new Set();
+  const merged = [];
+  for (const id of [...primary, ...secondary]) {
+    if (seen.has(id)) continue;
+    seen.add(id);
+    merged.push(id);
+  }
+  return merged;
 }
 
 function getCurrentReviewCard() {
@@ -884,28 +906,35 @@ async function loadReviewFromAnki(options = {}) {
     return;
   }
 
-  setStatus('review-status', 'Loading due cards from Anki...');
+  setStatus('review-status', 'Loading cards from Anki...');
 
   try {
     const escapedDeck = escapeAnkiQuery(deck);
     const baseQuery = `deck:"${escapedDeck}"`;
 
-    const [dueIds, totalIds] = await Promise.all([
+    const [newIds, dueIds, totalIds] = await Promise.all([
+      ankiInvoke(settings, 'findCards', { query: `${baseQuery} is:new` }),
       ankiInvoke(settings, 'findCards', { query: `${baseQuery} is:due` }),
       refreshTotal ? ankiInvoke(settings, 'findCards', { query: baseQuery }) : Promise.resolve(null)
     ]);
 
+    const newList = Array.isArray(newIds) ? newIds : [];
     const dueList = Array.isArray(dueIds) ? dueIds : [];
+    const studyList = mergeCardIdLists(newList, dueList);
     const totalList = Array.isArray(totalIds) ? totalIds : null;
 
     let cards = [];
-    if (dueList.length) {
-      const infos = await ankiInvoke(settings, 'cardsInfo', { cards: dueList });
-      cards = (Array.isArray(infos) ? infos : [])
-        .map(mapCardInfoToReviewCard)
-        .filter(card => Number.isFinite(card.cardId))
-        .sort((a, b) => a.due - b.due);
+    if (studyList.length) {
+      const infos = await ankiInvoke(settings, 'cardsInfo', { cards: studyList });
+      cards = orderReviewCards(
+        (Array.isArray(infos) ? infos : [])
+          .map(mapCardInfoToReviewCard)
+          .filter(card => Number.isFinite(card.cardId))
+      );
     }
+
+    const newCount = cards.filter(card => card.queueKind === 'new').length;
+    const dueCount = cards.length - newCount;
 
     state.reviewCards = cards;
     state.reviewDueCount = cards.length;
@@ -918,7 +947,15 @@ async function loadReviewFromAnki(options = {}) {
     state.reviewAnswerVisible = false;
 
     renderReview();
-    setStatus('review-status', cards.length ? `Loaded ${cards.length} due card(s) from Anki.` : 'No due cards right now.');
+    if (!cards.length) {
+      setStatus('review-status', 'No new or due cards right now.');
+    } else if (newCount && dueCount) {
+      setStatus('review-status', `Loaded ${cards.length} card(s) from Anki (${newCount} new, ${dueCount} due).`);
+    } else if (newCount) {
+      setStatus('review-status', `Loaded ${newCount} new card(s) from Anki.`);
+    } else {
+      setStatus('review-status', `Loaded ${dueCount} due card(s) from Anki.`);
+    }
   } catch (error) {
     const message = formatError(error);
     const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
@@ -954,7 +991,7 @@ async function submitReviewGrade(grade) {
     renderReview();
     const remaining = state.reviewDueCount;
     if (remaining > 0) {
-      setStatus('review-status', `Saved "${grade}". ${remaining} due card(s) left in queue.`, 'success');
+      setStatus('review-status', `Saved "${grade}". ${remaining} card(s) left in queue.`, 'success');
     } else {
       setStatus('review-status', `Saved "${grade}". Queue complete. Tap refresh to re-sync.`, 'success');
     }

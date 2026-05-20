@@ -331,6 +331,7 @@ function handleDailyProgressGet(url, res) {
     return sendJson(res, 400, { error: 'Missing language or dateKey.' });
   }
   const cardIndex = getDailyCardIndex(language, dateKey);
+  res.setHeader('Cache-Control', 'no-store');
   return sendJson(res, 200, { cardIndex });
 }
 

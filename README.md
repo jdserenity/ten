@@ -12,5 +12,6 @@ A personal PWA for learning Brazilian Portuguese and French.
 - **Frequency rank hints**: Daily cards and single-word Translate results show frequency rank when available.
 - **Anki-first workflow**: Daily/Translate cards are added to the deck configured for the active language mode.
 - **Text-to-speech**: Mode-specific speech synthesis (`pt-BR` and `fr-CA`).
+- **Daily completion**: Confetti when you reach the 10th card (once per day per language).
 - **Word generation**: `npm run generate:pt` (Portuguese), `npm run generate:fr` (French frequency dictionary based).
 - **Dictionary refresh**: `npm run frequency:download` refreshes bundled frequency files.

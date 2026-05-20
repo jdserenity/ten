@@ -11,7 +11,7 @@ Frequency dictionaries are bundled static files (`frequency-pt-br.json` and `fre
 
 - **KEEP MY STYLE!** My style is extremely important to me.
 - **No frameworks.** The app is intentionally vanilla HTML/CSS/JS. Do not introduce React, Vue, Svelte, Vite, Webpack, Tailwind, or any equivalent.
-- **No unnecessary dependencies.** Runtime deps are `better-sqlite3` (unlock persistence), `dotenv`, and `node-html-parser` (generator script). Avoid adding more unless there is a compelling reason.
+- **No unnecessary dependencies.** Runtime deps are `better-sqlite3` (unlock persistence), `canvas-confetti` (vendored to `src/client/confetti.browser.js` for the daily completion effect), `dotenv`, and `node-html-parser` (generator script). Avoid adding more unless there is a compelling reason.
 - **Keep backend minimal.** This app now runs through a small Node server; avoid heavy frameworks or infrastructure unless explicitly requested.
 - **`src/client/words.pt.json` is generated, not hand-edited.** If PT-BR word data needs to change, update the generator script and re-run it.
 - **Keep the structure simple.** The app should stay lightweight and understandable; avoid unnecessary file sprawl or abstraction.

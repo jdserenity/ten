@@ -487,6 +487,7 @@ function renderDailyWord(index) {
   document.getElementById('s1-speak-btn').disabled = !firstSentenceText;
   document.getElementById('s2-speak-btn').disabled = !secondSentenceText;
   updateDailyDots();
+  maybeCelebrateDailyComplete(index);
 }
 
 function gotoDailyWord(index) {
@@ -496,7 +497,7 @@ function gotoDailyWord(index) {
     setStatus('daily-save-status', '');
   }
   renderDailyWord(bounded);
-  persistDailyCardIndex(bounded);
+  void persistDailyCardIndex(bounded);
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 }
@@ -504,26 +505,72 @@ function gotoDailyWord(index) {
 async function fetchDailyCardIndex(language, dayKey) {
   try {
     const params = new URLSearchParams({ language, dateKey: dayKey });
-    const response = await fetch(`/api/daily-progress?${params}`);
+    const response = await fetch(`/api/daily-progress?${params}`, { cache: 'no-store' });
     if (!response.ok) return null;
     const body = await response.json();
-    const index = Number(body?.cardIndex);
+    if (!body || body.cardIndex === null || body.cardIndex === undefined) return null;
+    const index = Number(body.cardIndex);
     return Number.isInteger(index) && index >= 0 ? index : null;
   } catch (_) {
     return null;
   }
 }
 
-function persistDailyCardIndex(cardIndex) {
+async function persistDailyCardIndex(cardIndex) {
   if (!state.todayWords.length) return;
   const language = getFrequencyLanguageForMode();
   const dayKey = dateKey();
   const bounded = Math.max(0, Math.min(cardIndex, state.todayWords.length - 1));
-  fetch('/api/daily-progress', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ language, dateKey: dayKey, cardIndex: bounded })
-  }).catch(() => {});
+  try {
+    await fetch('/api/daily-progress', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+      keepalive: true,
+      body: JSON.stringify({ language, dateKey: dayKey, cardIndex: bounded })
+    });
+  } catch (_) {}
+}
+
+const DAILY_CONFETTI_STORAGE_PREFIX = 'ten-daily-confetti-v1';
+
+function getDailyConfettiStorageKey() {
+  return `${DAILY_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
+}
+
+function hasCelebratedDailyCompleteToday() {
+  return sessionStorage.getItem(getDailyConfettiStorageKey()) === '1';
+}
+
+function markDailyCompleteCelebrated() {
+  sessionStorage.setItem(getDailyConfettiStorageKey(), '1');
+}
+
+function fireDailyCompleteConfetti() {
+  if (typeof confetti !== 'function') return;
+  const burst = (options = {}) =>
+    confetti({
+      disableForReducedMotion: true,
+      particleCount: 120,
+      spread: 100,
+      startVelocity: 42,
+      gravity: 0.9,
+      ticks: 220,
+      origin: { y: 0.62 },
+      ...options
+    });
+
+  burst({ angle: 60 });
+  burst({ angle: 120 });
+  setTimeout(() => {
+    burst({ particleCount: 80, spread: 130, origin: { x: 0.5, y: 0.55 } });
+  }, 180);
+}
+
+function maybeCelebrateDailyComplete(index) {
+  if (index !== WORDS_PER_DAY - 1 || hasCelebratedDailyCompleteToday()) return;
+  markDailyCompleteCelebrated();
+  fireDailyCompleteConfetti();
 }
 
 function showDailyUnavailable(reason) {

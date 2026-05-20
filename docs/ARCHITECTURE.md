@@ -55,7 +55,7 @@ scripts/
    - `POST /api/anki` to proxy AnkiConnect actions
    - `GET /api/unlocked-words` and `POST /api/unlocked-words` for frequency unlock state (`POST /api/unlocked-words/import` for one-time localStorage migration)
    - `GET /api/daily-progress` and `POST /api/daily-progress` for which card (0–9) is open in today’s 10/day stack
-4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order; the open card index is restored after refresh
+4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order; the open card index is restored after refresh. Reaching card 10 triggers a one-time `canvas-confetti` burst (per language + day, tracked in `sessionStorage`)
 5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day or via a single-word translate (persisted in SQLite via `/api/unlocked-words`)
 6. Review tab fetches due cards from Anki (`findCards` + `cardsInfo`) and submits grades via `answerCards`
 

@@ -1,5 +1,5 @@
-const CACHE = 'ten-v16';
-const ASSETS = ['/', '/index.html', '/styles.css', '/app.js', '/words.pt.json', '/words.fr.json', '/frequency-pt-br.json', '/frequency-fr.json', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'ten-v18';
+const ASSETS = ['/', '/index.html', '/styles.css', '/confetti.browser.js', '/app.js', '/words.pt.json', '/words.fr.json', '/frequency-pt-br.json', '/frequency-fr.json', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -16,7 +16,7 @@ self.addEventListener('fetch', e => {
 
   const requestUrl = new URL(e.request.url);
   const isSameOrigin = requestUrl.origin === self.location.origin;
-  if (!isSameOrigin) return;
+  if (!isSameOrigin || requestUrl.pathname.startsWith('/api/')) return;
 
   e.respondWith((async () => {
     const cache = await caches.open(CACHE);

@@ -237,20 +237,28 @@ header h1 {
 
 .sentence {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.sentence-l2-row {
-  display: flex;
   align-items: flex-start;
   gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.sentence:last-of-type {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.sentence-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .sentence-l2 {
   font-size: 17px;
   line-height: 1.55;
-  flex: 1;
 }
 
 .sentence-speak-btn {

@@ -339,6 +339,39 @@ header h1 {
   padding: 11px 10px;
 }
 
+.daily-add-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.daily-add-btn {
+  padding: 8px 4px;
+  font-size: 12px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-align: center;
+}
+
+.daily-add-btn:hover {
+  background: var(--accent-dim);
+  color: var(--accent);
+}
+
+.daily-add-btn:active {
+  transform: scale(0.97);
+}
+
+.daily-add-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
 #counter {
   text-align: center;
   font-size: 13px;

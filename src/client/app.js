@@ -457,6 +457,9 @@ function renderDailyWord(index) {
     document.getElementById('speak-btn').disabled = true;
     document.getElementById('s1-speak-btn').disabled = true;
     document.getElementById('s2-speak-btn').disabled = true;
+    ['add-word-btn','add-s1-btn','add-s2-btn','add-all-btn'].forEach(id => {
+      const b = document.getElementById(id); if (b) b.disabled = true;
+    });
     return;
   }
 
@@ -486,6 +489,16 @@ function renderDailyWord(index) {
   document.getElementById('speak-btn').disabled = !word.word;
   document.getElementById('s1-speak-btn').disabled = !firstSentenceText;
   document.getElementById('s2-speak-btn').disabled = !secondSentenceText;
+
+  const hasS1 = !!(firstSentenceText && firstSentence.en);
+  const hasS2 = !!(secondSentenceText && secondSentence.en);
+  const hasWord = !!word.word;
+
+  const btnWord = document.getElementById('add-word-btn'); if (btnWord) btnWord.disabled = !hasWord;
+  const btnS1 = document.getElementById('add-s1-btn'); if (btnS1) btnS1.disabled = !hasS1;
+  const btnS2 = document.getElementById('add-s2-btn'); if (btnS2) btnS2.disabled = !hasS2;
+  const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !(hasWord && hasS1 && hasS2);
+
   updateDailyDots();
   maybeCelebrateDailyComplete(index);
 }
@@ -782,6 +795,18 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
 async function removeNoteFromAnki (noteId) {
   const settings = persistSettingsFromInputs();
   await ankiInvoke(settings, 'deleteNotes', {"notes": [noteId]})
+}
+
+async function addSentenceToAnki(sentence, statusElementId) {
+  const mode = getModeConfig();
+  const l2 = String(sentence ? (sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '') : '').trim();
+  const en = String(sentence ? (sentence.en || '') : '').trim();
+  if (!l2 || !en) {
+    setStatus(statusElementId, 'Missing sentence or translation.', 'error');
+    return false;
+  }
+  // EN on Front, L2 sentence on Back — consistent with word cards (learning lang always Back)
+  return await addNoteToAnki({ front: en, back: l2 }, statusElementId);
 }
 
 function mapCardInfoToReviewCard(info) {
@@ -1467,7 +1492,8 @@ function setupDailyEvents() {
     speakText(text, document.getElementById('s2-speak-btn'));
   });
 
-  document.getElementById('save-daily-card-btn').addEventListener('click', async () => {
+  // 4 equal bottom buttons for Anki adds
+  document.getElementById('add-word-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
       setStatus('daily-save-status', 'No daily card available to add.', 'error');
@@ -1479,6 +1505,50 @@ function setupDailyEvents() {
       'daily-save-status'
     );
     if (added && state.activeTab === 'frequency') {
+      renderFrequencyDictionary();
+    }
+  });
+
+  document.getElementById('add-s1-btn').addEventListener('click', async () => {
+    const word = state.todayWords[state.currentWordIndex];
+    const sent = word && word.sentences && word.sentences[0] ? word.sentences[0] : null;
+    if (!sent) {
+      setStatus('daily-save-status', 'No sentence 1 available.', 'error');
+      return;
+    }
+    await addSentenceToAnki(sent, 'daily-save-status');
+  });
+
+  document.getElementById('add-s2-btn').addEventListener('click', async () => {
+    const word = state.todayWords[state.currentWordIndex];
+    const sent = word && word.sentences && word.sentences[1] ? word.sentences[1] : null;
+    if (!sent) {
+      setStatus('daily-save-status', 'No sentence 2 available.', 'error');
+      return;
+    }
+    await addSentenceToAnki(sent, 'daily-save-status');
+  });
+
+  document.getElementById('add-all-btn').addEventListener('click', async () => {
+    const word = state.todayWords[state.currentWordIndex];
+    if (!word) {
+      setStatus('daily-save-status', 'No daily card available.', 'error');
+      return;
+    }
+    const s1 = word.sentences && word.sentences[0] ? word.sentences[0] : null;
+    const s2 = word.sentences && word.sentences[1] ? word.sentences[1] : null;
+
+    setStatus('daily-save-status', 'Sending 3 cards to Anki...');
+
+    const wOk = await addNoteToAnki({ front: word.translation, back: word.word }, 'daily-save-status');
+    const s1Ok = s1 ? await addSentenceToAnki(s1, 'daily-save-status') : false;
+    const s2Ok = s2 ? await addSentenceToAnki(s2, 'daily-save-status') : false;
+
+    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0);
+    if (total > 0) {
+      setStatus('daily-save-status', `Added ${total} card${total > 1 ? 's' : ''}.`, 'success');
+    }
+    if (wOk && state.activeTab === 'frequency') {
       renderFrequencyDictionary();
     }
   });
@@ -1549,7 +1619,12 @@ function setupTranslateEvents() {
       const translatedLearningText = target === 'EN' ? text : result.translatedText;
       document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
       document.getElementById('card-back-input').value = capitalizeFirstWord(translatedLearningText);
-      document.getElementById('card-context-input').value = text.split(/\s+/).length > 1 ? text : '';
+      // Always start the draft with an empty context for a new translation result.
+      // This guarantees the Anki Back field receives *only* the learning-language
+      // phrase (the one instance the user wants on the back). Any extra nuance,
+      // example, or reminder must be typed manually via "Configure note".
+      document.getElementById('card-context-input').value = '';
+
       state.hasTranslatedInSession = true;
       setStatus('translate-status', '');
       updateTranslateFrequencyRank(text, result.translatedText, source, target);

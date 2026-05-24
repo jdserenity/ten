@@ -16,7 +16,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint; each mode uses its own deck and note type (`Basic-BR` for PT-BR, `Basic-FR` for French—cloned from Basic in Anki); learning language is always on Back; `addNote` uses `allowDuplicate: false` so Anki rejects duplicate first fields within the same note type
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
-- **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words and daily 10-card stack position (per language + calendar day); active language mode in `sessionStorage`
+- **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words and daily 10-card stack position (per language + calendar day); active language mode in `sessionStorage` (defaults to French when unset)
 - **Tooling**: Node scripts for words and frequency in `scripts/` (icons are now static high-quality assets in `src/client/`)
 
 ## Directory structure
@@ -54,7 +54,7 @@ scripts/
    - `POST /api/anki` to proxy AnkiConnect actions
    - `GET /api/unlocked-words` and `POST /api/unlocked-words` for frequency unlock state (`POST /api/unlocked-words/import` for one-time localStorage migration)
    - `GET /api/daily-progress` and `POST /api/daily-progress` for which card (0–9) is open in today’s 10/day stack
-4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order; the open card index is restored after refresh. Reaching card 10 triggers a one-time `canvas-confetti` burst (per language + day, tracked in `sessionStorage`)
+4. Daily words are fetched from the active mode pool (`/words.pt.json` or `/words.fr.json`) and shown in deterministic 10/day order; the open card index is restored after refresh. Reaching card 10 triggers a one-time `canvas-confetti` burst (per language + day, tracked in `localStorage` so it does not re-fire on subsequent app loads within the same calendar day)
 5. Frequency tab reads bundled dictionaries and highlights words seen in 10/day or via a single-word translate (persisted in SQLite via `/api/unlocked-words`)
 6. Review tab fetches new and due cards from Anki (`findCards` with `is:new` then `is:due`, `cardsInfo`) and submits grades via `answerCards`
 

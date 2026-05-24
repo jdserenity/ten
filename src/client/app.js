@@ -37,13 +37,13 @@ const MODE_CONFIGS = {
 };
 
 const state = {
-  activeMode: 'pt-br',
+  activeMode: 'fr',
   activeTab: 'translate',
   settings: {
-    translateSource: MODE_CONFIGS['pt-br'].learningLang,
+    translateSource: MODE_CONFIGS['fr'].learningLang,
     translateTarget: 'EN',
-    ankiDeck: MODE_CONFIGS['pt-br'].ankiDeck,
-    ankiModel: MODE_CONFIGS['pt-br'].ankiModel
+    ankiDeck: MODE_CONFIGS['fr'].ankiDeck,
+    ankiModel: MODE_CONFIGS['fr'].ankiModel
   },
   lastDetectedSourceLang: '',
   hasTranslatedInSession: false,
@@ -80,7 +80,7 @@ let dailyDots = [];
 let applyingMode = false;
 
 function getModeConfig(modeId = state.activeMode) {
-  return MODE_CONFIGS[modeId] || MODE_CONFIGS['pt-br'];
+  return MODE_CONFIGS[modeId] || MODE_CONFIGS['fr'];
 }
 
 function getLearningLanguage(modeId = state.activeMode) {
@@ -552,11 +552,11 @@ function getDailyConfettiStorageKey() {
 }
 
 function hasCelebratedDailyCompleteToday() {
-  return sessionStorage.getItem(getDailyConfettiStorageKey()) === '1';
+  return localStorage.getItem(getDailyConfettiStorageKey()) === '1';
 }
 
 function markDailyCompleteCelebrated() {
-  sessionStorage.setItem(getDailyConfettiStorageKey(), '1');
+  localStorage.setItem(getDailyConfettiStorageKey(), '1');
 }
 
 function fireDailyCompleteConfetti() {

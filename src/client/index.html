@@ -24,8 +24,8 @@
       </div>
       <div class="mode-toggle-wrap">
         <div class="mode-toggle" role="group" aria-label="Learning mode">
-          <button class="mode-toggle-btn active" type="button" data-mode="pt-br" aria-pressed="true" aria-label="Switch to Brazilian Portuguese">🇧🇷</button>
-          <button class="mode-toggle-btn" type="button" data-mode="fr" aria-pressed="false" aria-label="Switch to Quebec French">🇨🇦</button>
+          <button class="mode-toggle-btn" type="button" data-mode="pt-br" aria-pressed="false" aria-label="Switch to Brazilian Portuguese">🇧🇷</button>
+          <button class="mode-toggle-btn active" type="button" data-mode="fr" aria-pressed="true" aria-label="Switch to Quebec French">🇨🇦</button>
         </div>
       </div>
     </header>
@@ -49,7 +49,7 @@
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
         <hr class="divider" />
-        <span class="sentences-label" id="sentence-language-label">Portuguese in use</span>
+        <span class="sentences-label" id="sentence-language-label">French in use</span>
         <div class="sentence">
           <div class="sentence-content">
             <span class="sentence-l2" id="s1-l2"></span>
@@ -88,7 +88,7 @@
         <div class="translate-direction-row" aria-label="Translation direction">
           <div id="translate-from-side" class="translate-direction-side">
             <span id="translate-from-caption" class="translate-direction-caption">From</span>
-            <span id="translate-from-label" class="translate-direction-lang">Brazilian</span>
+            <span id="translate-from-label" class="translate-direction-lang">Quebec</span>
           </div>
           <button id="swap-languages-btn" type="button" class="swap-languages-btn" aria-label="Swap languages" title="Swap languages">⇄</button>
           <div class="translate-direction-side">
@@ -131,8 +131,8 @@
           <input id="card-front-input" placeholder="English word, phrase, or sentence" />
         </label>
         <label class="field">
-          <span id="card-back-label">Back (Portuguese)</span>
-          <input id="card-back-input" placeholder="Portuguese translation" />
+          <span id="card-back-label">Back (French)</span>
+          <input id="card-back-input" placeholder="French translation" />
         </label>
         <label class="field">
           <span>Context (optional)</span>
@@ -197,7 +197,7 @@
     </section>
 
     <section id="tab-frequency" class="tab-panel" role="tabpanel">
-      <span id="frequency-mode-label" class="caps-label">Brazilian dictionary</span>
+      <span id="frequency-mode-label" class="caps-label">French dictionary</span>
       <div class="frequency-summary">
         <button type="button" class="stat-box frequency-stat-box" id="frequency-entries-stat">
           <span class="stat-label">Entries</span>

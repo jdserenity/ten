@@ -8,8 +8,6 @@
     "generate:pt": "node scripts/generate-words.js",
     "generate:fr": "node scripts/generate-words-fr.js",
     "frequency:download": "node scripts/download-frequency-dictionaries.js",
-    "generate:icons": "node scripts/generate-icons.js",
-    "build": "npm run generate:icons",
     "deepl:check": "node scripts/check-deepl.js",
     "google:check": "node scripts/check-google.js"
   },

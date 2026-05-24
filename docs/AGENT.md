@@ -14,6 +14,7 @@ Frequency dictionaries are bundled static files (`frequency-pt-br.json` and `fre
 - **No unnecessary dependencies.** Runtime deps are `better-sqlite3` (unlock persistence), `canvas-confetti` (vendored to `src/client/confetti.browser.js` for the daily completion effect), `dotenv`, and `node-html-parser` (generator script). Avoid adding more unless there is a compelling reason.
 - **Keep backend minimal.** This app now runs through a small Node server; avoid heavy frameworks or infrastructure unless explicitly requested.
 - **`src/client/words.pt.json` is generated, not hand-edited.** If PT-BR word data needs to change, update the generator script and re-run it.
+- **PWA icons are static assets** (`src/client/icon-192.png` / `icon-512.png`). The current aurora borealis design was created with Grok Imagine and committed as high-quality PNGs (source kept in `design/icons/`). Changing the icon look means replacing the PNGs + bumping the SW cache. The old procedural generator was removed because it produced poor results at icon scale.
 - **Keep the structure simple.** The app should stay lightweight and understandable; avoid unnecessary file sprawl or abstraction.
 - **Don't over-engineer.** This is a small personal tool. Prefer the simplest working solution.
 - **Update .md files with frequency** You should be updating AGENT.md, ARCHITECTURE.md, DEPLOY.md, and README.md with frequency. They are all guideline files and so when the guidelines change, you should update the files so future agents and yourself know what the deal is.

@@ -141,3 +141,9 @@ When refreshing frequency dictionaries:
 
 1. Run `npm run frequency:download`
 2. Bump cache version in `src/client/sw.js` (`ten-vN` -> next number)
+
+## Icon updates
+
+The PWA icons (`icon-192.png` / `icon-512.png`) are now static high-quality assets (aurora borealis design). Changing them requires:
+
+1. Bump cache version in `src/client/sw.js` (`ten-vN` -> next number)

@@ -17,7 +17,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint; each mode uses its own deck and note type (`Basic-BR` for PT-BR, `Basic-FR` for French—cloned from Basic in Anki); learning language is always on Back; `addNote` uses `allowDuplicate: false` so Anki rejects duplicate first fields within the same note type
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
 - **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words and daily 10-card stack position (per language + calendar day); active language mode in `sessionStorage`
-- **Tooling**: Node scripts for words and icons in `scripts/`
+- **Tooling**: Node scripts for words and frequency in `scripts/` (icons are now static high-quality assets in `src/client/`)
 
 ## Directory structure
 
@@ -43,7 +43,6 @@ src/
 scripts/
   generate-words.js
   download-frequency-dictionaries.js
-  generate-icons.js
 ```
 
 ## Runtime model

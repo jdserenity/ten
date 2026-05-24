@@ -25,6 +25,7 @@ npm install
 - Install Anki Desktop
 - Install/enable AnkiConnect add-on
 - Confirm AnkiConnect is reachable locally (default `http://127.0.0.1:8765`)
+- In Anki: **Tools → Manage Note Types** → clone `Basic` twice; name them exactly `Basic-BR` and `Basic-FR` (Ten passes these names to AnkiConnect). Reassign existing cards to the matching type if you migrated from a shared `Basic` type.
 
 ### 3) Configure environment
 
@@ -123,7 +124,7 @@ Then restart your launch agent/service if required.
 
 ## App-side config in code
 
-Translate direction, Anki deck, and Anki note type are set per language mode in `src/client/app.js` under `MODE_CONFIGS`.
+Translate direction, Anki deck (`Brazilian Portuguese` / `French`), and note type (`Basic-BR` / `Basic-FR`) are set per language mode in `src/client/app.js` under `MODE_CONFIGS`.
 
 ## Word pool updates
 

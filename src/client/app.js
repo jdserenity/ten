@@ -16,7 +16,7 @@ const MODE_CONFIGS = {
     speechLang: 'pt-BR',
     learningLang: 'PT-BR',
     ankiDeck: 'Brazilian Portuguese',
-    ankiModel: 'Basic',
+    ankiModel: 'Basic-BR',
     htmlLang: 'pt-BR',
     flagLabel: 'Brazil'
   },
@@ -30,7 +30,7 @@ const MODE_CONFIGS = {
     speechLang: 'fr-CA',
     learningLang: 'FR',
     ankiDeck: 'French',
-    ankiModel: 'Basic',
+    ankiModel: 'Basic-FR',
     htmlLang: 'fr-CA',
     flagLabel: 'Quebec'
   }
@@ -763,7 +763,10 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
           Front: escapeHtml(cleanFront),
           Back: `${escapeHtml(cleanBack)}${contextHtml}`
         },
-        options: { allowDuplicate: false },
+        options: {
+          allowDuplicate: false,
+          duplicateScope: 'deck'
+        },
         tags: ['ten', 'ten-pwa']
       }
     });

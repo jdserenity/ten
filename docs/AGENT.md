@@ -4,7 +4,7 @@
 
 This is a personal app for one user. There is no roadmap to support multiple users, accounts, sharing, or any social feature. Do not propose or add any such functionality.
 Translation routing is intentional: use Google Translate for short inputs (1-5 words, punctuation ignored) and DeepL for 6+ words, for both PT-BR and French modes.
-The app has two learning tracks (Brazilian Portuguese and French). Portuguese stays intermediate-oriented; French starts from beginner top-frequency vocabulary.
+The app has two learning tracks (Brazilian Portuguese and French). Portuguese stays intermediate-oriented; French starts from beginner top-frequency vocabulary. Anki uses separate note types per track (`Basic-BR`, `Basic-FR`) so duplicate detection does not cross languages.
 Frequency dictionaries are bundled static files (`frequency-pt-br.json` and `frequency-fr.json`) and learned highlighting is based on words seen in the 10/day tab or unlocked by translating a single learning-language word in the translate tab. Unlock state and the current 10/day card index (per language + calendar day) are stored in SQLite (`data/ten.db`) via the Node server, not in the browser. Tapping a frequency-list word runs a live translate (learning language → English) inline.
 
 ## Principles

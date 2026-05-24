@@ -14,7 +14,7 @@ Ten is now a self-hosted web app with a lightweight Node server and a vanilla br
 - **Word data**: Generated JSON pools (`src/client/words.pt.json` for PT-BR, `src/client/words.fr.json` for French)
 - **Frequency data**: Bundled JSON dictionaries (`src/client/frequency-pt-br.json`, `src/client/frequency-fr.json`)
 - **Translation path**: Client -> `/api/translate` -> provider split by word count (1-5 words uses Google Translate, 6+ words uses DeepL; punctuation ignored)
-- **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint; learning language is always on Back; `addNote` uses `allowDuplicate: false` so Anki rejects duplicate backs and the UI shows AnkiConnect’s error
+- **Anki path**: Client -> `/api/anki` -> configurable AnkiConnect endpoint; each mode uses its own deck and note type (`Basic-BR` for PT-BR, `Basic-FR` for French—cloned from Basic in Anki); learning language is always on Back; `addNote` uses `allowDuplicate: false` so Anki rejects duplicate first fields within the same note type
 - **Review model**: Anki is the sole SRS source of truth (no local scheduler)
 - **Persistence**: SQLite (`data/ten.db`, override with `TEN_DB_PATH`) for unlocked frequency words and daily 10-card stack position (per language + calendar day); active language mode in `sessionStorage`
 - **Tooling**: Node scripts for words and icons in `scripts/`

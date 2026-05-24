@@ -457,7 +457,7 @@ function renderDailyWord(index) {
     document.getElementById('speak-btn').disabled = true;
     document.getElementById('s1-speak-btn').disabled = true;
     document.getElementById('s2-speak-btn').disabled = true;
-    ['add-word-btn','add-s1-btn','add-s2-btn','add-all-btn'].forEach(id => {
+    ['word-add-btn','s1-add-btn','s2-add-btn','add-all-btn'].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
     return;
@@ -494,9 +494,9 @@ function renderDailyWord(index) {
   const hasS2 = !!(secondSentenceText && secondSentence.en);
   const hasWord = !!word.word;
 
-  const btnWord = document.getElementById('add-word-btn'); if (btnWord) btnWord.disabled = !hasWord;
-  const btnS1 = document.getElementById('add-s1-btn'); if (btnS1) btnS1.disabled = !hasS1;
-  const btnS2 = document.getElementById('add-s2-btn'); if (btnS2) btnS2.disabled = !hasS2;
+  const btnWord = document.getElementById('word-add-btn'); if (btnWord) btnWord.disabled = !hasWord;
+  const btnS1 = document.getElementById('s1-add-btn'); if (btnS1) btnS1.disabled = !hasS1;
+  const btnS2 = document.getElementById('s2-add-btn'); if (btnS2) btnS2.disabled = !hasS2;
   const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !(hasWord && hasS1 && hasS2);
 
   updateDailyDots();
@@ -1492,14 +1492,13 @@ function setupDailyEvents() {
     speakText(text, document.getElementById('s2-speak-btn'));
   });
 
-  // 4 equal bottom buttons for Anki adds
-  document.getElementById('add-word-btn').addEventListener('click', async () => {
+  // Small + buttons (beside word and each sentence)
+  document.getElementById('word-add-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
       setStatus('daily-save-status', 'No daily card available to add.', 'error');
       return;
     }
-
     const added = await addNoteToAnki(
       { front: word.translation, back: word.word },
       'daily-save-status'
@@ -1509,26 +1508,27 @@ function setupDailyEvents() {
     }
   });
 
-  document.getElementById('add-s1-btn').addEventListener('click', async () => {
+  document.getElementById('s1-add-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     const sent = word && word.sentences && word.sentences[0] ? word.sentences[0] : null;
     if (!sent) {
-      setStatus('daily-save-status', 'No sentence 1 available.', 'error');
+      setStatus('daily-save-status', 'No sentence available.', 'error');
       return;
     }
     await addSentenceToAnki(sent, 'daily-save-status');
   });
 
-  document.getElementById('add-s2-btn').addEventListener('click', async () => {
+  document.getElementById('s2-add-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     const sent = word && word.sentences && word.sentences[1] ? word.sentences[1] : null;
     if (!sent) {
-      setStatus('daily-save-status', 'No sentence 2 available.', 'error');
+      setStatus('daily-save-status', 'No sentence available.', 'error');
       return;
     }
     await addSentenceToAnki(sent, 'daily-save-status');
   });
 
+  // Bottom "+Add all to Anki" — adds word + both sentences (3 cards)
   document.getElementById('add-all-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {

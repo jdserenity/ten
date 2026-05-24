@@ -278,6 +278,46 @@ header h1 {
   line-height: 1.4;
 }
 
+.sentence-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.add-btn-small {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.1s;
+  flex-shrink: 0;
+}
+
+.add-btn-small:hover {
+  background: var(--accent-dim);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.add-btn-small:active {
+  transform: scale(0.9);
+}
+
+.add-btn-small:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 #daily-nav {
   display: flex;
   gap: 10px;
@@ -337,39 +377,6 @@ header h1 {
 .wide-btn {
   width: 100%;
   padding: 11px 10px;
-}
-
-.daily-add-buttons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 6px;
-  margin-top: 4px;
-}
-
-.daily-add-btn {
-  padding: 8px 4px;
-  font-size: 12px;
-  border-radius: 8px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--text);
-  cursor: pointer;
-  transition: background 0.15s, transform 0.1s;
-  text-align: center;
-}
-
-.daily-add-btn:hover {
-  background: var(--accent-dim);
-  color: var(--accent);
-}
-
-.daily-add-btn:active {
-  transform: scale(0.97);
-}
-
-.daily-add-btn:disabled {
-  opacity: 0.5;
-  cursor: default;
 }
 
 #counter {

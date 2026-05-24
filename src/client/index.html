@@ -44,6 +44,7 @@
         <div class="word-row">
           <span id="word"></span>
           <button id="speak-btn" class="speak-btn" type="button" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
+          <button id="word-add-btn" class="add-btn-small" type="button" title="Add this word to Anki" aria-label="Add word to Anki">＋</button>
         </div>
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
@@ -54,14 +55,20 @@
             <span class="sentence-l2" id="s1-l2"></span>
             <span class="sentence-en" id="s1-en"></span>
           </div>
-          <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+          <div class="sentence-actions">
+            <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+            <button id="s1-add-btn" class="add-btn-small" type="button" title="Add this example sentence to Anki" aria-label="Add sentence to Anki">＋</button>
+          </div>
         </div>
         <div class="sentence">
           <div class="sentence-content">
             <span class="sentence-l2" id="s2-l2"></span>
             <span class="sentence-en" id="s2-en"></span>
           </div>
-          <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+          <div class="sentence-actions">
+            <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+            <button id="s2-add-btn" class="add-btn-small" type="button" title="Add this example sentence to Anki" aria-label="Add sentence to Anki">＋</button>
+          </div>
         </div>
       </div>
 
@@ -71,12 +78,7 @@
       </nav>
       <p id="counter"></p>
       <p id="pool-info"></p>
-      <div class="daily-add-buttons">
-        <button id="add-word-btn" class="daily-add-btn" type="button">Add word</button>
-        <button id="add-s1-btn" class="daily-add-btn" type="button">Add sentence 1</button>
-        <button id="add-s2-btn" class="daily-add-btn" type="button">Add sentence 2</button>
-        <button id="add-all-btn" class="daily-add-btn" type="button">Add all</button>
-      </div>
+      <button id="add-all-btn" class="wide-btn">+Add all to Anki</button>
       <p id="daily-save-status" class="status-line"></p>
     </section>
 

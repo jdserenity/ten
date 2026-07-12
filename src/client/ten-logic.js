@@ -64,6 +64,6 @@ export function formatTranslateFrequencyRank(label, rank) {
   return `${label} frequency rank unavailable`;
 }
 
-export function isReviewGradeButtonsDisabled({ reviewSubmitting, reviewEditSubmitting, reviewEditing }) {
-  return Boolean(reviewSubmitting || reviewEditSubmitting || reviewEditing);
+export function isReviewGradeButtonsDisabled({ reviewEditing }) {
+  return Boolean(reviewEditing);
 }

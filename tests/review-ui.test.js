@@ -4,24 +4,22 @@ import test from 'node:test';
 import { isReviewGradeButtonsDisabled } from '../src/client/ten-logic.js';
 
 test('isReviewGradeButtonsDisabled is false when review actions finished', () => {
-  assert.equal(isReviewGradeButtonsDisabled({
-    reviewSubmitting: false,
-    reviewEditSubmitting: false,
-    reviewEditing: false
-  }), false);
+  assert.equal(isReviewGradeButtonsDisabled({ reviewEditing: false }), false);
 });
 
-test('isReviewGradeButtonsDisabled stays true while a grade request is in flight', () => {
-  assert.equal(isReviewGradeButtonsDisabled({
-    reviewSubmitting: true,
-    reviewEditSubmitting: false,
-    reviewEditing: false
-  }), true);
+test('isReviewGradeButtonsDisabled is true only while editing a card', () => {
+  assert.equal(isReviewGradeButtonsDisabled({ reviewEditing: true }), true);
+});
+
+test('isReviewGradeButtonsDisabled ignores in-flight grade requests', () => {
+  assert.equal(isReviewGradeButtonsDisabled({ reviewEditing: false }), false);
 });
 
 test('review async handlers re-render after clearing busy flags', () => {
   const appPath = new URL('../src/client/app.js', import.meta.url);
   const app = readFileSync(appPath, 'utf8');
+
+  assert.doesNotMatch(app, /review-refresh-btn/, 'review refresh button should be removed');
 
   const gradeFinally = app.match(/async function submitReviewGrade[\s\S]*?} finally \{([\s\S]*?)\n  \}/);
   assert.ok(gradeFinally, 'submitReviewGrade finally block exists');

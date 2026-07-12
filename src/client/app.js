@@ -926,18 +926,15 @@ function renderReview() {
     speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back;
   }
 
-  const busy = isReviewGradeButtonsDisabled({
-    reviewSubmitting: state.reviewSubmitting,
-    reviewEditSubmitting: state.reviewEditSubmitting,
-    reviewEditing: editing
-  });
-  if (editBtn) editBtn.disabled = busy;
-  if (deleteBtn) deleteBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
-  if (showAnswerBtn) showAnswerBtn.disabled = busy;
-  if (saveBtn) saveBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
-  if (cancelBtn) cancelBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
+  const actionBusy = state.reviewSubmitting || state.reviewEditSubmitting;
+  const gradeButtonsDisabled = isReviewGradeButtonsDisabled({ reviewEditing: editing });
+  if (editBtn) editBtn.disabled = actionBusy || editing;
+  if (deleteBtn) deleteBtn.disabled = actionBusy;
+  if (showAnswerBtn) showAnswerBtn.disabled = actionBusy || editing;
+  if (saveBtn) saveBtn.disabled = actionBusy;
+  if (cancelBtn) cancelBtn.disabled = actionBusy;
   gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
-    button.disabled = busy;
+    button.disabled = gradeButtonsDisabled;
   });
 
   empty.classList.add('hidden');
@@ -973,6 +970,8 @@ async function loadReviewQueue(options = {}) {
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
     state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
 
     renderReview();
     setStatus('review-status', '');
@@ -983,6 +982,8 @@ async function loadReviewQueue(options = {}) {
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
     state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
     renderReview();
   }
 }
@@ -993,7 +994,6 @@ async function submitReviewGrade(grade) {
 
   setStatus('review-status', '');
   state.reviewSubmitting = true;
-  renderReview();
 
   try {
     const response = await fetch(`/api/cards/${card.id}/answer`, {
@@ -1655,10 +1655,6 @@ function setupReviewEvents() {
     speakText(card.back, document.getElementById('review-speak-btn'));
   });
 
-  document.getElementById('review-refresh-btn').addEventListener('click', () => {
-    loadReviewQueue({ refreshTotal: true });
-  });
-
   document.getElementById('review-card-edit')?.addEventListener('click', () => {
     const card = getCurrentReviewCard();
     if (!card || state.reviewSubmitting || state.reviewEditSubmitting) return;
@@ -1717,7 +1713,6 @@ function setupReviewEvents() {
 
     setStatus('review-status', 'Deleting card...');
     state.reviewSubmitting = true;
-    renderReview();
     try {
       await removeCard(card.id);
       removeReviewCardById(card.id);
@@ -1725,7 +1720,7 @@ function setupReviewEvents() {
       if (state.reviewDueCount > 0) {
         setStatus('review-status', 'Card deleted.', 'success');
       } else {
-        setStatus('review-status', 'Card deleted. Queue complete. Tap refresh to re-sync.', 'success');
+        setStatus('review-status', 'Card deleted. Queue complete.', 'success');
       }
     } catch (error) {
       setStatus('review-status', formatError(error), 'error');

@@ -25,3 +25,6 @@ Card/FSRS tests use SQLite via `better-sqlite3`. Use **better-sqlite3 ≥ 12** o
 
 ## Review async actions must re-render in `finally`
 If `renderReview()` runs while `reviewSubmitting` is still `true`, grade buttons stay disabled until something else triggers a re-render (e.g. switching tabs). Clear the busy flag and call `renderReview()` in the `finally` block — same pattern as review edit save.
+
+## Do not disable review grade buttons during submit
+Again/Hard/Good/Easy should stay tappable except while editing a card. Double-submit is blocked in `submitReviewGrade`; tying `disabled` to `reviewSubmitting` left buttons grey on the next card on some browsers even after the flag cleared.

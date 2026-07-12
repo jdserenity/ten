@@ -21,4 +21,4 @@ The 10/day completion burst is once per language per calendar day. That gate is 
 `npm run import:anki` talks to AnkiConnect on the machine running Anki. Run it before you retire Anki. It copies front/back text only — FSRS scheduling in Ten starts fresh (all imported cards are “new”). Re-running skips duplicates.
 
 ## `npm test` needs a working `better-sqlite3` native build
-Card/FSRS tests use in-memory SQLite via `better-sqlite3`. If `npm install` fails to compile the native addon on your Node version, fix the build environment or use an LTS Node with prebuilt binaries before trusting local test results.
+Card/FSRS tests use SQLite via `better-sqlite3`. Use **better-sqlite3 ≥ 12** on Node 24+ (v11 has no prebuilt binary for Node 24). If `npm install` still fails to compile, use Node 20 LTS or install Xcode Command Line Tools.

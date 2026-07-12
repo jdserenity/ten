@@ -7,9 +7,11 @@ import {
   addUnlockedWord,
   getAllUnlockedWords,
   getDailyCardIndex,
+  getDailyWordAssignment,
   importUnlockedWords,
   initDb,
-  setDailyCardIndex
+  setDailyCardIndex,
+  setDailyWordAssignment
 } from './db.js';
 import { addCard, answerCard, deleteCard, getReviewQueue } from './cards.js';
 
@@ -356,6 +358,37 @@ async function handleDailyProgressPost(req, res) {
   return sendJson(res, 200, { ok: true, cardIndex: result.cardIndex });
 }
 
+function handleDailyWordsGet(url, res) {
+  const language = String(url.searchParams.get('language') || '').trim();
+  const dateKey = String(url.searchParams.get('dateKey') || '').trim();
+  if (!language || !dateKey) {
+    return sendJson(res, 400, { error: 'Missing language or dateKey.' });
+  }
+  const words = getDailyWordAssignment(language, dateKey);
+  res.setHeader('Cache-Control', 'no-store');
+  return sendJson(res, 200, { words: words || [] });
+}
+
+async function handleDailyWordsPost(req, res) {
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const language = String(body.language || '').trim();
+  const dateKey = String(body.dateKey || '').trim();
+  const words = body.words;
+  if (!language || !dateKey || !Array.isArray(words)) {
+    return sendJson(res, 400, { error: 'Missing language, dateKey, or words.' });
+  }
+
+  const result = setDailyWordAssignment(language, dateKey, words);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily words payload.' });
+  return sendJson(res, 200, { ok: true, words: result.words });
+}
+
 async function handleCardsQueueGet(url, res) {
   const language = String(url.searchParams.get('language') || '').trim();
   if (!language) return sendJson(res, 400, { error: 'Missing language.' });
@@ -469,6 +502,12 @@ const server = createServer(async (req, res) => {
   }
   if (pathname === '/api/daily-progress' && req.method === 'POST') {
     return handleDailyProgressPost(req, res);
+  }
+  if (pathname === '/api/daily-words' && req.method === 'GET') {
+    return handleDailyWordsGet(url, res);
+  }
+  if (pathname === '/api/daily-words' && req.method === 'POST') {
+    return handleDailyWordsPost(req, res);
   }
   if (pathname === '/api/health' && req.method === 'GET') return sendJson(res, 200, { ok: true });
 

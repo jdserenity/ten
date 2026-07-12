@@ -65,6 +65,13 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
     );
     CREATE INDEX IF NOT EXISTS idx_cards_language_due ON cards (language, due);
     CREATE INDEX IF NOT EXISTS idx_cards_language_state ON cards (language, fsrs_state);
+    CREATE TABLE IF NOT EXISTS daily_word_assignment (
+      language TEXT NOT NULL,
+      date_key TEXT NOT NULL,
+      words_json TEXT NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (language, date_key)
+    );
   `);
   return db;
 }
@@ -149,4 +156,50 @@ export function setDailyCardIndex(language, dateKey, cardIndex) {
     `)
     .run(lang, key, index);
   return { ok: true, language: lang, dateKey: key, cardIndex: index };
+}
+
+function parseDailyWordList(words) {
+  if (!Array.isArray(words)) return null;
+  const normalized = [];
+  for (const word of words) {
+    const value = normalizeWord(word);
+    if (!value) return null;
+    normalized.push(value);
+  }
+  if (!normalized.length || normalized.length > 10) return null;
+  return normalized;
+}
+
+export function getDailyWordAssignment(language, dateKey) {
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  if (!lang || !key) return null;
+  const row = getDb()
+    .prepare('SELECT words_json FROM daily_word_assignment WHERE language = ? AND date_key = ?')
+    .get(lang, key);
+  if (!row) return null;
+  try {
+    const parsed = JSON.parse(row.words_json);
+    if (!Array.isArray(parsed) || !parsed.length) return null;
+    return parsed.map(word => String(word || '').trim()).filter(Boolean);
+  } catch (_) {
+    return null;
+  }
+}
+
+export function setDailyWordAssignment(language, dateKey, words) {
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  const normalized = parseDailyWordList(words);
+  if (!lang || !key || !normalized) return { ok: false, reason: 'invalid' };
+  getDb()
+    .prepare(`
+      INSERT INTO daily_word_assignment (language, date_key, words_json, updated_at)
+      VALUES (?, ?, ?, unixepoch())
+      ON CONFLICT (language, date_key) DO UPDATE SET
+        words_json = excluded.words_json,
+        updated_at = excluded.updated_at
+    `)
+    .run(lang, key, JSON.stringify(normalized));
+  return { ok: true, language: lang, dateKey: key, words: normalized };
 }

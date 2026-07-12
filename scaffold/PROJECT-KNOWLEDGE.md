@@ -22,3 +22,6 @@ The 10/day completion burst is once per language per calendar day. That gate is 
 
 ## `npm test` needs a working `better-sqlite3` native build
 Card/FSRS tests use SQLite via `better-sqlite3`. Use **better-sqlite3 ≥ 12** on Node 24+ (v11 has no prebuilt binary for Node 24). If `npm install` still fails to compile, use Node 20 LTS or install Xcode Command Line Tools.
+
+## Review async actions must re-render in `finally`
+If `renderReview()` runs while `reviewSubmitting` is still `true`, grade buttons stay disabled until something else triggers a re-render (e.g. switching tabs). Clear the busy flag and call `renderReview()` in the `finally` block — same pattern as review edit save.

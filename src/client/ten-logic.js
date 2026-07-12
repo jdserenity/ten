@@ -63,3 +63,7 @@ export function formatTranslateFrequencyRank(label, rank) {
   if (rank) return `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;
   return `${label} frequency rank unavailable`;
 }
+
+export function isReviewGradeButtonsDisabled({ reviewSubmitting, reviewEditSubmitting, reviewEditing }) {
+  return Boolean(reviewSubmitting || reviewEditSubmitting || reviewEditing);
+}

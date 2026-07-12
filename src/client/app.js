@@ -6,6 +6,7 @@ import {
   frequencyListTotal,
   getFrequencyTierLabel,
   nextFrequencyFilter,
+  isReviewGradeButtonsDisabled,
   resolveStartupTab
 } from './ten-logic.js';
 import {
@@ -925,14 +926,18 @@ function renderReview() {
     speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back;
   }
 
-  const busy = state.reviewSubmitting || state.reviewEditSubmitting;
-  if (editBtn) editBtn.disabled = busy || editing;
-  if (deleteBtn) deleteBtn.disabled = busy;
-  if (showAnswerBtn) showAnswerBtn.disabled = busy || editing;
-  if (saveBtn) saveBtn.disabled = busy;
-  if (cancelBtn) cancelBtn.disabled = busy;
+  const busy = isReviewGradeButtonsDisabled({
+    reviewSubmitting: state.reviewSubmitting,
+    reviewEditSubmitting: state.reviewEditSubmitting,
+    reviewEditing: editing
+  });
+  if (editBtn) editBtn.disabled = busy;
+  if (deleteBtn) deleteBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
+  if (showAnswerBtn) showAnswerBtn.disabled = busy;
+  if (saveBtn) saveBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
+  if (cancelBtn) cancelBtn.disabled = state.reviewSubmitting || state.reviewEditSubmitting;
   gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
-    button.disabled = busy || editing;
+    button.disabled = busy;
   });
 
   empty.classList.add('hidden');
@@ -988,6 +993,7 @@ async function submitReviewGrade(grade) {
 
   setStatus('review-status', '');
   state.reviewSubmitting = true;
+  renderReview();
 
   try {
     const response = await fetch(`/api/cards/${card.id}/answer`, {
@@ -1002,12 +1008,12 @@ async function submitReviewGrade(grade) {
     }
 
     removeCurrentReviewCard();
-    renderReview();
     setStatus('review-status', '');
   } catch (error) {
     setStatus('review-status', formatError(error), 'error');
   } finally {
     state.reviewSubmitting = false;
+    renderReview();
   }
 }
 
@@ -1711,11 +1717,11 @@ function setupReviewEvents() {
 
     setStatus('review-status', 'Deleting card...');
     state.reviewSubmitting = true;
+    renderReview();
     try {
       await removeCard(card.id);
       removeReviewCardById(card.id);
       state.reviewTotalCount = Math.max(0, state.reviewTotalCount - 1);
-      renderReview();
       if (state.reviewDueCount > 0) {
         setStatus('review-status', 'Card deleted.', 'success');
       } else {
@@ -1725,6 +1731,7 @@ function setupReviewEvents() {
       setStatus('review-status', formatError(error), 'error');
     } finally {
       state.reviewSubmitting = false;
+      renderReview();
     }
   });
 }

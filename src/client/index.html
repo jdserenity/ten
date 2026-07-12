@@ -44,7 +44,7 @@
         <div class="word-row">
           <span id="word"></span>
           <button id="speak-btn" class="speak-btn" type="button" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
-          <button id="word-add-btn" class="add-btn-small" type="button" title="Add this word to Anki" aria-label="Add word to Anki">＋</button>
+          <button id="word-add-btn" class="add-btn-small" type="button" title="Add this word as a card" aria-label="Add word as card">＋</button>
         </div>
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
@@ -57,7 +57,7 @@
           </div>
           <div class="sentence-actions">
             <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s1-add-btn" class="add-btn-small" type="button" title="Add this example sentence to Anki" aria-label="Add sentence to Anki">＋</button>
+            <button id="s1-add-btn" class="add-btn-small" type="button" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
           </div>
         </div>
         <div class="sentence">
@@ -67,7 +67,7 @@
           </div>
           <div class="sentence-actions">
             <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s2-add-btn" class="add-btn-small" type="button" title="Add this example sentence to Anki" aria-label="Add sentence to Anki">＋</button>
+            <button id="s2-add-btn" class="add-btn-small" type="button" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
           </div>
         </div>
       </div>
@@ -78,7 +78,7 @@
       </nav>
       <p id="counter"></p>
       <p id="pool-info"></p>
-      <button id="add-all-btn" class="wide-btn">+Add all to Anki</button>
+      <button id="add-all-btn" class="wide-btn">+Add all as cards</button>
       <p id="daily-save-status" class="status-line"></p>
     </section>
 
@@ -118,7 +118,7 @@
         <button id="translate-speak-btn" type="button" class="speak-btn" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
         <p id="translate-frequency-rank" class="status-line"></p>
         <div class="button-row">
-          <button id="quick-add-card-btn" class="primary-btn" disabled>Add to Anki</button>
+          <button id="quick-add-card-btn" class="primary-btn" disabled>Add card</button>
           <button id="toggle-note-config-btn" disabled>Configure note</button>
         </div>
         <p id="quick-add-status" class="status-line"></p>
@@ -139,8 +139,8 @@
           <textarea id="card-context-input" rows="3" placeholder="Sentence, nuance, or reminder"></textarea>
         </label>
         <div class="button-row">
-          <button id="save-card-btn" class="primary-btn">Add to Anki</button>
-          <button id="add-anki-btn">Add + Open Review</button>
+          <button id="save-card-btn" class="primary-btn">Add card</button>
+          <button id="add-review-btn">Add + Open Review</button>
         </div>
         <p id="card-save-status" class="status-line"></p>
       </div>
@@ -160,7 +160,7 @@
 
       <div id="review-empty" class="surface-card">
         <span class="caps-label">All clear</span>
-        <p>No new or due cards in this Anki deck. Add cards from Translate or 10/day, then refresh.</p>
+        <p>No new or due cards for this language. Add cards from Translate or 10/day, then refresh.</p>
       </div>
 
       <div id="review-card-panel" class="surface-card hidden">
@@ -192,7 +192,7 @@
         </div>
       </div>
 
-      <button id="review-refresh-btn" class="wide-btn">Refresh from Anki</button>
+      <button id="review-refresh-btn" class="wide-btn">Refresh</button>
       <p id="review-status" class="status-line"></p>
     </section>
 

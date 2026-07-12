@@ -11,6 +11,7 @@ import {
   initDb,
   setDailyCardIndex
 } from './db.js';
+import { addCard, answerCard, deleteCard, getReviewQueue } from './cards.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -68,7 +69,7 @@ function getFilePath(pathname) {
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
 }
 
 function normalizeTargetLanguage(value) {
@@ -355,28 +356,57 @@ async function handleDailyProgressPost(req, res) {
   return sendJson(res, 200, { ok: true, cardIndex: result.cardIndex });
 }
 
-async function proxyAnki(req, res) {
+async function handleCardsQueueGet(url, res) {
+  const language = String(url.searchParams.get('language') || '').trim();
+  if (!language) return sendJson(res, 400, { error: 'Missing language.' });
+  const result = getReviewQueue(language);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid language.' });
+  res.setHeader('Cache-Control', 'no-store');
+  return sendJson(res, 200, { cards: result.cards, totalCount: result.totalCount });
+}
+
+async function handleCardsPost(req, res) {
   let body;
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
 
-  const endpoint = String(process.env.ANKI_CONNECT_ENDPOINT || 'http://127.0.0.1:8765').trim();
-  if (!endpoint) return sendJson(res, 400, { error: 'Missing AnkiConnect endpoint. Set ANKI_CONNECT_ENDPOINT.' });
+  const language = String(body.language || '').trim();
+  const front = String(body.front || '').trim();
+  const back = String(body.back || '').trim();
+  const context = String(body.context || '').trim();
+  if (!language || !front || !back) {
+    return sendJson(res, 400, { error: 'Missing language, front, or back.' });
+  }
 
-  const payload = {
-    action: String(body.action || ''),
-    version: Number(body.version || 6),
-    params: body.params && typeof body.params === 'object' ? body.params : {}
-  };
+  const result = addCard(language, { front, back, context });
+  if (!result.ok && result.reason === 'duplicate') {
+    return sendJson(res, 409, { error: 'Card already exists for this language.' });
+  }
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid card payload.' });
+  return sendJson(res, 200, { ok: true, id: result.id });
+}
 
-  if (!payload.action) return sendJson(res, 400, { error: 'Missing action.' })
+async function handleCardAnswerPost(req, res, cardId) {
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
 
-  try {
-    const upstream = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    const text = await upstream.text();
-    res.writeHead(upstream.status, { 'Content-Type': upstream.headers.get('content-type') || 'application/json; charset=utf-8' });
-    res.end(text);
-  } catch (error) { sendJson(res, 502, { error: `Failed to reach AnkiConnect: ${error.message}` }); }
+  const rating = String(body.rating || '').trim().toLowerCase();
+  if (!rating) return sendJson(res, 400, { error: 'Missing rating.' });
+
+  const result = answerCard(cardId, rating);
+  if (!result.ok && result.reason === 'not_found') {
+    return sendJson(res, 404, { error: 'Card not found.' });
+  }
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid rating.' });
+  return sendJson(res, 200, { ok: true, id: result.id });
+}
+
+function handleCardDelete(res, cardId) {
+  const result = deleteCard(cardId);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid card id.' });
+  if (!result.deleted) return sendJson(res, 404, { error: 'Card not found.' });
+  return sendJson(res, 200, { ok: true });
 }
 
 async function serveStatic(pathname, res) {
@@ -416,7 +446,19 @@ const server = createServer(async (req, res) => {
   }
 
   if (pathname === '/api/translate' && req.method === 'POST') return proxyTranslate(req, res);
-  if (pathname === '/api/anki' && req.method === 'POST') return proxyAnki(req, res);
+  if (pathname === '/api/cards/queue' && req.method === 'GET') return handleCardsQueueGet(url, res);
+  if (pathname === '/api/cards' && req.method === 'POST') return handleCardsPost(req, res);
+
+  const cardAnswerMatch = pathname.match(/^\/api\/cards\/(\d+)\/answer$/);
+  if (cardAnswerMatch && req.method === 'POST') {
+    return handleCardAnswerPost(req, res, Number(cardAnswerMatch[1]));
+  }
+
+  const cardDeleteMatch = pathname.match(/^\/api\/cards\/(\d+)$/);
+  if (cardDeleteMatch && req.method === 'DELETE') {
+    return handleCardDelete(res, Number(cardDeleteMatch[1]));
+  }
+
   if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(res);
   if (pathname === '/api/unlocked-words' && req.method === 'POST') return handleUnlockedWordsPost(req, res);
   if (pathname === '/api/unlocked-words/import' && req.method === 'POST') {

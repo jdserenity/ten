@@ -4,13 +4,21 @@ import {
   nextFrequencyFilter,
   resolveStartupTab
 } from './ten-logic.js';
+import {
+  computePoolDaysLeft,
+  countUnseenPoolWords,
+  formatPoolDaysLabel,
+  pickDailyWords,
+  resolveDailyWordsFromAssignment,
+  WORDS_PER_DAY
+} from './daily-pool.js';
 
-const WORDS_PER_DAY = 10;
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
   FR: '/frequency-fr.json'
 };
 const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
+const ACTIVE_MODE_STORAGE_KEY = 'ten-active-mode';
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -300,6 +308,7 @@ function markLearningWordSeenInFrequency(rawWord) {
   if (state.activeTab === 'frequency') {
     renderFrequencyDictionary();
   }
+  updatePoolInfo();
 }
 
 function markCurrentDailyWordSeen() {
@@ -367,31 +376,21 @@ function speakText(text, button) {
   window.speechSynthesis.speak(utt);
 }
 
+function loadSavedActiveMode() {
+  const fromLocal = localStorage.getItem(ACTIVE_MODE_STORAGE_KEY);
+  if (fromLocal && MODE_CONFIGS[fromLocal]) return fromLocal;
+  const fromSession = sessionStorage.getItem(ACTIVE_MODE_STORAGE_KEY);
+  if (fromSession && MODE_CONFIGS[fromSession]) {
+    localStorage.setItem(ACTIVE_MODE_STORAGE_KEY, fromSession);
+    sessionStorage.removeItem(ACTIVE_MODE_STORAGE_KEY);
+    return fromSession;
+  }
+  return null;
+}
+
 function dateKey() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-}
-
-function hashDate(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(31, h) + str.charCodeAt(i) | 0;
-  }
-  return Math.abs(h);
-}
-
-function seededShuffle(arr, seed) {
-  const copy = [...arr];
-  let s = seed;
-  const next = () => {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0x100000000;
-  };
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(next() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
 }
 
 function updateDateLabel() {
@@ -495,6 +494,32 @@ function gotoDailyWord(index) {
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 }
 
+async function fetchDailyWordAssignment(language, dayKey) {
+  try {
+    const params = new URLSearchParams({ language, dateKey: dayKey });
+    const response = await fetch(`/api/daily-words?${params}`, { cache: 'no-store' });
+    if (!response.ok) return null;
+    const body = await response.json();
+    const words = body?.words;
+    return Array.isArray(words) && words.length ? words : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+async function persistDailyWordAssignment(language, dayKey, headwords) {
+  if (!Array.isArray(headwords) || !headwords.length) return;
+  try {
+    await fetch('/api/daily-words', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+      keepalive: true,
+      body: JSON.stringify({ language, dateKey: dayKey, words: headwords })
+    });
+  } catch (_) {}
+}
+
 async function fetchDailyCardIndex(language, dayKey) {
   try {
     const params = new URLSearchParams({ language, dateKey: dayKey });
@@ -566,6 +591,18 @@ function maybeCelebrateDailyComplete(index) {
   fireDailyCompleteConfetti();
 }
 
+function updatePoolInfo() {
+  if (!state.words.length) return;
+  const mode = getModeConfig();
+  const seenSet = getSeenDailyWordsSet();
+  const unseenCount = countUnseenPoolWords(state.words, seenSet);
+  const poolDays = computePoolDaysLeft(state.words.length, state.words.length - unseenCount, WORDS_PER_DAY);
+  const poolInfo = document.getElementById('pool-info');
+  if (!poolInfo) return;
+  poolInfo.textContent = formatPoolDaysLabel(poolDays, mode.flagLabel);
+  poolInfo.classList.toggle('warning', poolDays <= 7);
+}
+
 function showDailyUnavailable(reason) {
   state.words = [];
   state.todayWords = [];
@@ -612,7 +649,7 @@ async function setLearningMode(modeId, options = {}) {
     document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
     state.activeMode = mode.id;
-    sessionStorage.setItem('ten-active-mode', mode.id);
+    localStorage.setItem(ACTIVE_MODE_STORAGE_KEY, mode.id);
     state.settings.translateSource = mode.learningLang;
     state.settings.translateTarget = 'EN';
     state.lastDetectedSourceLang = '';
@@ -1627,13 +1664,25 @@ async function initDailyWords() {
 
   state.words = words;
   const dayKey = dateKey();
-  const seed = hashDate(dayKey);
-  state.todayWords = seededShuffle(words, seed).slice(0, WORDS_PER_DAY);
   const language = getFrequencyLanguageForMode();
+  const seenSet = getSeenDailyWordsSet(language);
+
+  let todayWords = [];
+  const savedAssignment = await fetchDailyWordAssignment(language, dayKey);
+  if (savedAssignment) {
+    todayWords = resolveDailyWordsFromAssignment(words, savedAssignment);
+  }
+  if (!todayWords.length) {
+    todayWords = pickDailyWords(words, seenSet, dayKey, WORDS_PER_DAY);
+    if (todayWords.length) {
+      await persistDailyWordAssignment(language, dayKey, todayWords.map(entry => entry.word));
+    }
+  }
+  state.todayWords = todayWords;
+
   const savedIndex = await fetchDailyCardIndex(language, dayKey);
   const maxIndex = Math.max(0, state.todayWords.length - 1);
   state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
-  const seenSet = getSeenDailyWordsSet(language);
   state.seenWordIndexes = new Set(
     state.todayWords
       .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
@@ -1645,17 +1694,14 @@ async function initDailyWords() {
     persistDailyCardIndex(state.currentWordIndex);
   }
 
-  const totalDays = Math.floor(words.length / WORDS_PER_DAY);
-  const poolInfo = document.getElementById('pool-info');
-  poolInfo.textContent = `~${totalDays} day${totalDays !== 1 ? 's' : ''} left in ${mode.flagLabel} pool`;
-  poolInfo.classList.toggle('warning', totalDays <= 7);
+  updatePoolInfo();
 }
 
 async function init() {
   updateDateLabel();
   state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
-  const savedMode = sessionStorage.getItem('ten-active-mode');
-  if (savedMode && MODE_CONFIGS[savedMode]) {
+  const savedMode = loadSavedActiveMode();
+  if (savedMode) {
     state.activeMode = savedMode;
   }
   setupTabEvents();

@@ -16,3 +16,9 @@ Portuguese pool content comes from `npm run generate:pt`. Hand edits get overwri
 
 ## Confetti is gated in localStorage on purpose
 The 10/day completion burst is once per language per calendar day. That gate is client `localStorage`, not SQLite, so a refresh after finishing does not fire confetti again. Daily card *position* is server-side; celebration “already fired” is not.
+
+## Anki import is one-shot and needs AnkiConnect live
+`npm run import:anki` talks to AnkiConnect on the machine running Anki. Run it before you retire Anki. It copies front/back text only — FSRS scheduling in Ten starts fresh (all imported cards are “new”). Re-running skips duplicates.
+
+## `npm test` needs a working `better-sqlite3` native build
+Card/FSRS tests use in-memory SQLite via `better-sqlite3`. If `npm install` fails to compile the native addon on your Node version, fix the build environment or use an LTS Node with prebuilt binaries before trusting local test results.

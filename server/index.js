@@ -390,7 +390,11 @@ async function serveStatic(pathname, res) {
     const stat = await readFile(filePath);
     const ext = extname(filePath).toLowerCase();
     const contentType = CONTENT_TYPES[ext] || 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': contentType, 'Content-Length': stat.byteLength });
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Content-Length': stat.byteLength,
+      'Cache-Control': 'no-cache'
+    });
     res.end(stat);
   } catch {
     if (pathname !== '/' && pathname !== '/index.html') return serveStatic('/', res);

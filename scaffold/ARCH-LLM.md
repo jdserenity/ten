@@ -20,7 +20,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 ## Stack
 - Node HTTP server: `server/index.js` (static + API proxies), `server/db.js` (SQLite).
 - Client: `src/client/index.html`, `styles.css`, `app.js`.
-- PWA: `src/client/manifest.json`, `sw.js` (cache name `ten-vN`), `icon-192.png` / `icon-512.png` (static aurora PNGs).
+- PWA: `src/client/manifest.json`, `icon-192.png` / `icon-512.png` (static aurora PNGs). No service worker — static assets are served with `Cache-Control: no-cache`.
 - Word pools: `src/client/words.pt.json`, `words.fr.json`.
 - Frequency dictionaries: `src/client/frequency-pt-br.json`, `frequency-fr.json` (up to ~5000 each).
 - TTS: mode speech langs `pt-BR` / `fr-CA`.
@@ -74,8 +74,7 @@ Languages: `PT-BR`, `FR`.
 ## Word / frequency data
 - `words.pt.json` is **generated** (`npm run generate:pt`) — do not hand-edit; change the generator and re-run. Editorial standards: `scaffold/generating-words.md`.
 - French pool: `npm run generate:fr` (frequency-dictionary-based).
-- Frequency refresh: `npm run frequency:download`, then bump SW cache.
-- After any change to SW-cached client assets (word files, frequency JSON, icons, CSS/JS shell), bump `ten-vN` in `src/client/sw.js`.
+- Frequency refresh: `npm run frequency:download`.
 
 ## Run / deploy
 ```bash

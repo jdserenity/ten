@@ -82,7 +82,6 @@ The app shows 10 words per day from a randomly shuffled pool. With a pool of N w
    - 2 natural sentences in the pool language (20–140 chars each) that clearly demonstrate the primary meaning
    - Accurate, natural English translations of those sentences
 3. **Write the full array to the target file** (`src/client/words.pt.json` or `src/client/words.fr.json`) — replace the file entirely unless explicitly asked to append.
-4. **Bump the service worker cache version** in `src/client/sw.js` — change `ten-vN` to the next number. This is mandatory; without it, deployed browsers may keep serving old cached word files.
 
 ### Commands
 

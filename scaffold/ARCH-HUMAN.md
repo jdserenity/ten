@@ -97,5 +97,3 @@ launchctl load ~/Library/LaunchAgents/com.ten.app.plist
 **After code updates:** `git pull && npm install`, then restart the launch agent if needed.
 
 **Back up** `data/ten.db` (or whatever `TEN_DB_PATH` points at) — that file holds unlocks and daily progress.
-
-**When word pools, frequency files, or icons change:** bump the cache name in `src/client/sw.js` (`ten-vN` → next number) so phones fetch fresh assets.

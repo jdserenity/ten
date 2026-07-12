@@ -15,8 +15,6 @@ const MODE_CONFIGS = {
     sentenceKey: 'pt',
     speechLang: 'pt-BR',
     learningLang: 'PT-BR',
-    ankiDeck: 'Brazilian Portuguese',
-    ankiModel: 'Basic-BR',
     htmlLang: 'pt-BR',
     flagLabel: 'Brazil'
   },
@@ -29,8 +27,6 @@ const MODE_CONFIGS = {
     sentenceKey: 'fr',
     speechLang: 'fr-CA',
     learningLang: 'FR',
-    ankiDeck: 'French',
-    ankiModel: 'Basic-FR',
     htmlLang: 'fr-CA',
     flagLabel: 'Quebec'
   }
@@ -41,9 +37,7 @@ const state = {
   activeTab: 'translate',
   settings: {
     translateSource: MODE_CONFIGS['fr'].learningLang,
-    translateTarget: 'EN',
-    ankiDeck: MODE_CONFIGS['fr'].ankiDeck,
-    ankiModel: MODE_CONFIGS['fr'].ankiModel
+    translateTarget: 'EN'
   },
   lastDetectedSourceLang: '',
   hasTranslatedInSession: false,
@@ -169,21 +163,6 @@ function formatError(error) {
   return 'Something went wrong.';
 }
 
-function escapeHtml(value) {
-  return String(value || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function htmlToText(html) {
-  const div = document.createElement('div');
-  div.innerHTML = String(html || '');
-  return (div.textContent || '').trim();
-}
-
 function capitalizeFirstWord(value) {
   const text = String(value || '').trim();
   if (!text) return '';
@@ -191,12 +170,6 @@ function capitalizeFirstWord(value) {
   if (firstLetterIndex < 0) return text;
   const firstLetter = text[firstLetterIndex];
   return `${text.slice(0, firstLetterIndex)}${firstLetter.toLocaleUpperCase()}${text.slice(firstLetterIndex + 1)}`;
-}
-
-function escapeAnkiQuery(value) {
-  return String(value || '')
-    .replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"');
 }
 
 function normalizeFrequencyWord(value) {
@@ -635,8 +608,6 @@ async function setLearningMode(modeId, options = {}) {
     sessionStorage.setItem('ten-active-mode', mode.id);
     state.settings.translateSource = mode.learningLang;
     state.settings.translateTarget = 'EN';
-    state.settings.ankiDeck = mode.ankiDeck;
-    state.settings.ankiModel = mode.ankiModel;
     state.lastDetectedSourceLang = '';
 
     updateModeToggleUi();
@@ -663,7 +634,7 @@ async function setLearningMode(modeId, options = {}) {
     }
 
     if (state.activeTab === 'review') {
-      await loadReviewFromAnki({ refreshTotal: true });
+      await loadReviewQueue({ refreshTotal: true });
     }
   } finally {
     applyingMode = false;
@@ -733,25 +704,8 @@ async function extractErrorDetails(response) {
   }
 }
 
-async function ankiInvoke(_settings, action, params = {}) {
-  const response = await fetch('/api/anki', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ action, version: 6, params })
-  });
-
-  if (!response.ok) {
-    const details = await extractErrorDetails(response);
-    throw new Error(`AnkiConnect request failed (${response.status})${details ? `: ${details}` : '.'}`);
-  }
-
-  const body = await response.json();
-  if (body && body.error) throw new Error(body.error);
-  return body ? body.result : null;
-}
-
-async function addNoteToAnki({ front, back, context }, statusElementId) {
-  const settings = persistSettingsFromInputs();
+async function addCard({ front, back, context }, statusElementId) {
+  const mode = getModeConfig();
   const cleanFront = capitalizeFirstWord(front);
   const cleanBack = capitalizeFirstWord(back);
   const cleanContext = String(context || '').trim();
@@ -761,30 +715,30 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
     return false;
   }
 
-  setStatus(statusElementId, 'Sending to AnkiConnect...');
+  setStatus(statusElementId, 'Saving card...');
 
   try {
-    const contextHtml = cleanContext
-      ? `<br><br><em>${escapeHtml(cleanContext).replace(/\n/g, '<br>')}</em>`
-      : '';
-
-    await ankiInvoke(settings, 'addNote', {
-      note: {
-        deckName: settings.ankiDeck,
-        modelName: settings.ankiModel,
-        fields: {
-          Front: escapeHtml(cleanFront),
-          Back: `${escapeHtml(cleanBack)}${contextHtml}`
-        },
-        options: {
-          allowDuplicate: false,
-          duplicateScope: 'deck'
-        },
-        tags: ['ten', 'ten-pwa']
-      }
+    const response = await fetch('/api/cards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        language: mode.learningLang,
+        front: cleanFront,
+        back: cleanBack,
+        context: cleanContext
+      })
     });
 
-    setStatus(statusElementId, 'Card sent to AnkiConnect.', 'success');
+    if (!response.ok) {
+      const details = await extractErrorDetails(response);
+      if (response.status === 409) {
+        setStatus(statusElementId, 'Card already exists.', 'error');
+        return false;
+      }
+      throw new Error(`Card request failed (${response.status})${details ? `: ${details}` : '.'}`);
+    }
+
+    setStatus(statusElementId, 'Card saved.', 'success');
     return true;
   } catch (error) {
     setStatus(statusElementId, formatError(error), 'error');
@@ -792,12 +746,15 @@ async function addNoteToAnki({ front, back, context }, statusElementId) {
   }
 }
 
-async function removeNoteFromAnki (noteId) {
-  const settings = persistSettingsFromInputs();
-  await ankiInvoke(settings, 'deleteNotes', {"notes": [noteId]})
+async function removeCard(cardId) {
+  const response = await fetch(`/api/cards/${cardId}`, { method: 'DELETE' });
+  if (!response.ok) {
+    const details = await extractErrorDetails(response);
+    throw new Error(`Delete failed (${response.status})${details ? `: ${details}` : '.'}`);
+  }
 }
 
-async function addSentenceToAnki(sentence, statusElementId) {
+async function addSentenceCard(sentence, statusElementId) {
   const mode = getModeConfig();
   const l2 = String(sentence ? (sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '') : '').trim();
   const en = String(sentence ? (sentence.en || '') : '').trim();
@@ -805,49 +762,24 @@ async function addSentenceToAnki(sentence, statusElementId) {
     setStatus(statusElementId, 'Missing sentence or translation.', 'error');
     return false;
   }
-  // EN on Front, L2 sentence on Back — consistent with word cards (learning lang always Back)
-  return await addNoteToAnki({ front: en, back: l2 }, statusElementId);
+  return await addCard({ front: en, back: l2 }, statusElementId);
 }
 
-function mapCardInfoToReviewCard(info) {
-  const fields = info && info.fields && typeof info.fields === 'object' ? info.fields : {};
-  const frontRaw = fields.Front?.value ?? info.question ?? '';
-  const backRaw = fields.Back?.value ?? info.answer ?? '';
-  const contextRaw =
-    fields.Context?.value ??
-    fields.Example?.value ??
-    '';
-  const cardType = Number(info.type);
-
+function mapApiCardToReviewCard(card) {
   return {
-    cardId: Number(info.cardId),
-    noteId: Number(info.note),
-    due: Number(info.due) || 0,
-    queueKind: cardType === 0 ? 'new' : 'due',
-    front: htmlToText(frontRaw),
-    back: htmlToText(backRaw),
-    context: htmlToText(contextRaw)
+    id: Number(card.id),
+    queueKind: card.queueKind === 'new' ? 'new' : 'due',
+    front: String(card.front || ''),
+    back: String(card.back || ''),
+    context: String(card.context || '')
   };
 }
 
 function orderReviewCards(cards) {
   return cards.sort((a, b) => {
-    if (a.queueKind !== b.queueKind) {
-      return a.queueKind === 'new' ? -1 : 1;
-    }
-    return a.due - b.due;
+    if (a.queueKind !== b.queueKind) return a.queueKind === 'new' ? -1 : 1;
+    return a.id - b.id;
   });
-}
-
-function mergeCardIdLists(primary, secondary) {
-  const seen = new Set();
-  const merged = [];
-  for (const id of [...primary, ...secondary]) {
-    if (seen.has(id)) continue;
-    seen.add(id);
-    merged.push(id);
-  }
-  return merged;
 }
 
 function getCurrentReviewCard() {
@@ -869,9 +801,9 @@ function removeCurrentReviewCard() {
   return card;
 }
 
-function removeReviewCardsByNoteId(noteId) {
+function removeReviewCardById(cardId) {
   const before = state.reviewCards.length;
-  state.reviewCards = state.reviewCards.filter(card => card.noteId !== noteId);
+  state.reviewCards = state.reviewCards.filter(card => card.id !== cardId);
   const removed = before - state.reviewCards.length;
   if (removed > 0) {
     state.reviewDueCount = Math.max(0, state.reviewDueCount - removed);
@@ -927,52 +859,29 @@ function renderReview() {
   cardPanel.classList.remove('hidden');
 }
 
-async function loadReviewFromAnki(options = {}) {
+async function loadReviewQueue(options = {}) {
   const refreshTotal = Boolean(options.refreshTotal) || state.reviewTotalCount <= 0;
-  const settings = persistSettingsFromInputs();
-  const deck = String(settings.ankiDeck || '').trim();
-  if (!deck) {
-    setStatus('review-status', 'Set a valid Anki deck in mode settings.', 'error');
-    state.reviewCards = [];
-    state.reviewDueCount = 0;
-    state.reviewTotalCount = 0;
-    state.reviewCurrentIndex = 0;
-    state.reviewAnswerVisible = false;
-    renderReview();
-    return;
-  }
-
+  const mode = getModeConfig();
   setStatus('review-status', '');
 
   try {
-    const escapedDeck = escapeAnkiQuery(deck);
-    const baseQuery = `deck:"${escapedDeck}"`;
-
-    const [newIds, dueIds, totalIds] = await Promise.all([
-      ankiInvoke(settings, 'findCards', { query: `${baseQuery} is:new` }),
-      ankiInvoke(settings, 'findCards', { query: `${baseQuery} is:due` }),
-      refreshTotal ? ankiInvoke(settings, 'findCards', { query: baseQuery }) : Promise.resolve(null)
-    ]);
-
-    const newList = Array.isArray(newIds) ? newIds : [];
-    const dueList = Array.isArray(dueIds) ? dueIds : [];
-    const studyList = mergeCardIdLists(newList, dueList);
-    const totalList = Array.isArray(totalIds) ? totalIds : null;
-
-    let cards = [];
-    if (studyList.length) {
-      const infos = await ankiInvoke(settings, 'cardsInfo', { cards: studyList });
-      cards = orderReviewCards(
-        (Array.isArray(infos) ? infos : [])
-          .map(mapCardInfoToReviewCard)
-          .filter(card => Number.isFinite(card.cardId))
-      );
+    const response = await fetch(`/api/cards/queue?language=${encodeURIComponent(mode.learningLang)}`);
+    if (!response.ok) {
+      const details = await extractErrorDetails(response);
+      throw new Error(`Review request failed (${response.status})${details ? `: ${details}` : '.'}`);
     }
+
+    const body = await response.json();
+    const cards = orderReviewCards(
+      (Array.isArray(body.cards) ? body.cards : [])
+        .map(mapApiCardToReviewCard)
+        .filter(card => Number.isFinite(card.id))
+    );
 
     state.reviewCards = cards;
     state.reviewDueCount = cards.length;
-    if (totalList) {
-      state.reviewTotalCount = totalList.length;
+    if (refreshTotal) {
+      state.reviewTotalCount = Number(body.totalCount) || cards.length;
     } else {
       state.reviewTotalCount = Math.max(state.reviewTotalCount, cards.length);
     }
@@ -982,13 +891,7 @@ async function loadReviewFromAnki(options = {}) {
     renderReview();
     setStatus('review-status', '');
   } catch (error) {
-    const message = formatError(error);
-    const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
-    if (unsupportedAnswerCards) {
-      setStatus('review-status', 'Your AnkiConnect does not support answerCards. Please update AnkiConnect.', 'error');
-    } else {
-      setStatus('review-status', message, 'error');
-    }
+    setStatus('review-status', formatError(error), 'error');
     state.reviewCards = [];
     state.reviewDueCount = 0;
     state.reviewCurrentIndex = 0;
@@ -998,31 +901,29 @@ async function loadReviewFromAnki(options = {}) {
 }
 
 async function submitReviewGrade(grade) {
-  const easeMap = { again: 1, hard: 2, good: 3, easy: 4 };
-  const ease = easeMap[grade];
   const card = getCurrentReviewCard();
-  if (!card || !ease || state.reviewSubmitting) return;
+  if (!card || !grade || state.reviewSubmitting) return;
 
-  const settings = persistSettingsFromInputs();
   setStatus('review-status', '');
   state.reviewSubmitting = true;
 
   try {
-    await ankiInvoke(settings, 'answerCards', {
-      answers: [{ cardId: card.cardId, ease }]
+    const response = await fetch(`/api/cards/${card.id}/answer`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating: grade })
     });
+
+    if (!response.ok) {
+      const details = await extractErrorDetails(response);
+      throw new Error(`Grade request failed (${response.status})${details ? `: ${details}` : '.'}`);
+    }
 
     removeCurrentReviewCard();
     renderReview();
     setStatus('review-status', '');
   } catch (error) {
-    const message = formatError(error);
-    const unsupportedAnswerCards = /unsupported action|unknown action|answerCards/i.test(message);
-    if (unsupportedAnswerCards) {
-      setStatus('review-status', 'answerCards is unavailable in your AnkiConnect version. Update the add-on.', 'error');
-    } else {
-      setStatus('review-status', message, 'error');
-    }
+    setStatus('review-status', formatError(error), 'error');
   } finally {
     state.reviewSubmitting = false;
   }
@@ -1293,7 +1194,7 @@ function setActiveTab(tabId) {
     renderFrequencyDictionary();
   }
   if (tabId === 'review') {
-    loadReviewFromAnki();
+    loadReviewQueue();
   }
   if (tabId === 'frequency') {
     loadFrequencyTabData();
@@ -1499,7 +1400,7 @@ function setupDailyEvents() {
       setStatus('daily-save-status', 'No daily card available to add.', 'error');
       return;
     }
-    const added = await addNoteToAnki(
+    const added = await addCard(
       { front: word.translation, back: word.word },
       'daily-save-status'
     );
@@ -1515,7 +1416,7 @@ function setupDailyEvents() {
       setStatus('daily-save-status', 'No sentence available.', 'error');
       return;
     }
-    await addSentenceToAnki(sent, 'daily-save-status');
+    await addSentenceCard(sent, 'daily-save-status');
   });
 
   document.getElementById('s2-add-btn').addEventListener('click', async () => {
@@ -1525,10 +1426,10 @@ function setupDailyEvents() {
       setStatus('daily-save-status', 'No sentence available.', 'error');
       return;
     }
-    await addSentenceToAnki(sent, 'daily-save-status');
+    await addSentenceCard(sent, 'daily-save-status');
   });
 
-  // Bottom "+Add all to Anki" — adds word + both sentences (3 cards)
+  // Bottom "+Add all" — adds word + both sentences (3 cards)
   document.getElementById('add-all-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
@@ -1538,11 +1439,11 @@ function setupDailyEvents() {
     const s1 = word.sentences && word.sentences[0] ? word.sentences[0] : null;
     const s2 = word.sentences && word.sentences[1] ? word.sentences[1] : null;
 
-    setStatus('daily-save-status', 'Sending 3 cards to Anki...');
+    setStatus('daily-save-status', 'Saving 3 cards...');
 
-    const wOk = await addNoteToAnki({ front: word.translation, back: word.word }, 'daily-save-status');
-    const s1Ok = s1 ? await addSentenceToAnki(s1, 'daily-save-status') : false;
-    const s2Ok = s2 ? await addSentenceToAnki(s2, 'daily-save-status') : false;
+    const wOk = await addCard({ front: word.translation, back: word.word }, 'daily-save-status');
+    const s1Ok = s1 ? await addSentenceCard(s1, 'daily-save-status') : false;
+    const s2Ok = s2 ? await addSentenceCard(s2, 'daily-save-status') : false;
 
     const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0);
     if (total > 0) {
@@ -1620,9 +1521,7 @@ function setupTranslateEvents() {
       document.getElementById('card-front-input').value = capitalizeFirstWord(englishText);
       document.getElementById('card-back-input').value = capitalizeFirstWord(translatedLearningText);
       // Always start the draft with an empty context for a new translation result.
-      // This guarantees the Anki Back field receives *only* the learning-language
-      // phrase (the one instance the user wants on the back). Any extra nuance,
-      // example, or reminder must be typed manually via "Configure note".
+      // The back field should receive only the learning-language phrase.
       document.getElementById('card-context-input').value = '';
 
       state.hasTranslatedInSession = true;
@@ -1641,7 +1540,7 @@ function setupTranslateEvents() {
   document.getElementById('quick-add-card-btn').addEventListener('click', async () => {
     if (!state.hasTranslatedInSession) return;
     const draft = getDraftFields();
-    await addNoteToAnki(draft, 'quick-add-status');
+    await addCard(draft, 'quick-add-status');
   });
 
   document.getElementById('toggle-note-config-btn').addEventListener('click', () => {
@@ -1650,12 +1549,12 @@ function setupTranslateEvents() {
 
   document.getElementById('save-card-btn').addEventListener('click', async () => {
     const draft = getDraftFields();
-    await addNoteToAnki(draft, 'card-save-status');
+    await addCard(draft, 'card-save-status');
   });
 
-  document.getElementById('add-anki-btn').addEventListener('click', async () => {
+  document.getElementById('add-review-btn').addEventListener('click', async () => {
     const draft = getDraftFields();
-    const ok = await addNoteToAnki(draft, 'card-save-status');
+    const ok = await addCard(draft, 'card-save-status');
     if (ok) {
       setActiveTab('review');
     }
@@ -1676,7 +1575,7 @@ function setupReviewEvents() {
   });
 
   document.getElementById('review-refresh-btn').addEventListener('click', () => {
-    loadReviewFromAnki({ refreshTotal: true });
+    loadReviewQueue({ refreshTotal: true });
   });
 
   document.querySelectorAll('#review-grade-row button[data-grade]').forEach(button => {
@@ -1689,18 +1588,17 @@ function setupReviewEvents() {
     const card = getCurrentReviewCard();
     if (!card || state.reviewSubmitting) return;
 
-    setStatus('review-status', 'Deleting note from Anki...');
+    setStatus('review-status', 'Deleting card...');
     state.reviewSubmitting = true;
     try {
-      await removeNoteFromAnki(card.noteId);
-      const removed = removeReviewCardsByNoteId(card.noteId);
-      const totalReduction = removed > 0 ? removed : 1;
-      state.reviewTotalCount = Math.max(0, state.reviewTotalCount - totalReduction);
+      await removeCard(card.id);
+      removeReviewCardById(card.id);
+      state.reviewTotalCount = Math.max(0, state.reviewTotalCount - 1);
       renderReview();
       if (state.reviewDueCount > 0) {
-        setStatus('review-status', 'Deleted note from Anki.', 'success');
+        setStatus('review-status', 'Card deleted.', 'success');
       } else {
-        setStatus('review-status', 'Deleted note from Anki. Queue complete. Tap refresh to re-sync.', 'success');
+        setStatus('review-status', 'Card deleted. Queue complete. Tap refresh to re-sync.', 'success');
       }
     } catch (error) {
       setStatus('review-status', formatError(error), 'error');

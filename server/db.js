@@ -44,9 +44,32 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
       updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
       PRIMARY KEY (language, date_key)
     );
+    CREATE TABLE IF NOT EXISTS cards (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      language TEXT NOT NULL,
+      front TEXT NOT NULL,
+      back TEXT NOT NULL,
+      context TEXT NOT NULL DEFAULT '',
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      due INTEGER NOT NULL,
+      stability REAL NOT NULL DEFAULT 0,
+      difficulty REAL NOT NULL DEFAULT 0,
+      elapsed_days REAL NOT NULL DEFAULT 0,
+      scheduled_days INTEGER NOT NULL DEFAULT 0,
+      learning_steps INTEGER NOT NULL DEFAULT 0,
+      reps INTEGER NOT NULL DEFAULT 0,
+      lapses INTEGER NOT NULL DEFAULT 0,
+      fsrs_state INTEGER NOT NULL DEFAULT 0,
+      last_review INTEGER,
+      UNIQUE (language, front, back)
+    );
+    CREATE INDEX IF NOT EXISTS idx_cards_language_due ON cards (language, due);
+    CREATE INDEX IF NOT EXISTS idx_cards_language_state ON cards (language, fsrs_state);
   `);
   return db;
 }
+
+export { normalizeLanguage };
 
 export function getDb() {
   if (!db) initDb();

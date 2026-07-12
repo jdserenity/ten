@@ -4,6 +4,8 @@
   "type": "module",
   "scripts": {
     "start": "node server/index.js",
+    "test": "node --test server/**/*.test.js",
+    "import:anki": "node scripts/import-anki-cards.js",
     "generate": "node scripts/generate-words.js",
     "generate:pt": "node scripts/generate-words.js",
     "generate:fr": "node scripts/generate-words-fr.js",
@@ -12,9 +14,10 @@
     "google:check": "node scripts/check-google.js"
   },
   "dependencies": {
-    "better-sqlite3": "^11.10.0",
+    "better-sqlite3": "^12.11.1",
     "canvas-confetti": "^1.9.4",
     "dotenv": "^17.4.2",
-    "node-html-parser": "^6.1.13"
+    "node-html-parser": "^6.1.13",
+    "ts-fsrs": "^5.4.1"
   }
 }

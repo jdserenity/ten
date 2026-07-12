@@ -62,6 +62,32 @@ export function deleteCard(id) {
   return { ok: true, deleted: result.changes > 0 };
 }
 
+export function updateCard(id, { front, back, context }) {
+  const cardId = Number(id);
+  if (!Number.isInteger(cardId) || cardId <= 0) return { ok: false, reason: 'invalid' };
+
+  const row = getCardById(cardId);
+  if (!row) return { ok: false, reason: 'not_found' };
+
+  const cleanFront = trimField(front);
+  const cleanBack = trimField(back);
+  const cleanContext = context === undefined ? trimField(row.context) : trimField(context);
+  if (!cleanFront || !cleanBack) return { ok: false, reason: 'invalid' };
+
+  try {
+    const result = getDb()
+      .prepare('UPDATE cards SET front = ?, back = ?, context = ? WHERE id = ?')
+      .run(cleanFront, cleanBack, cleanContext, cardId);
+    if (!result.changes) return { ok: false, reason: 'not_found' };
+    return { ok: true, id: cardId };
+  } catch (error) {
+    if (String(error?.message || '').includes('UNIQUE constraint failed')) {
+      return { ok: false, reason: 'duplicate' };
+    }
+    throw error;
+  }
+}
+
 export function getReviewQueue(language, nowMs = Date.now()) {
   const lang = normalizeLanguage(language);
   if (!lang) return { ok: false, reason: 'invalid' };

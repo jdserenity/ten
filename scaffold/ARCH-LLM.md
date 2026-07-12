@@ -56,6 +56,7 @@ Active language mode is stored in `localStorage` (last visited; defaults to `fr`
 | POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). |
 | GET | `/api/cards/queue?language=` | New + due cards for Review (new first). |
 | POST | `/api/cards` | Add card `{ language, front, back, context? }`. |
+| PATCH | `/api/cards/:id` | Update card `{ front, back, context? }`; FSRS state unchanged. |
 | POST | `/api/cards/:id/answer` | Grade `{ rating: again\|hard\|good\|easy }`. |
 | DELETE | `/api/cards/:id` | Delete card. |
 | GET/POST | `/api/unlocked-words` | Frequency unlock state. POST adds one word. |
@@ -68,7 +69,7 @@ Active language mode is stored in `localStorage` (last visited; defaults to `fr`
 - **10/day:** Picks up to 10 words per day from the active pool that have not been surfaced yet (viewed on a daily card or unlocked via single-word translate). Today's assignment is persisted in SQLite (`/api/daily-words`) so refresh keeps the same list; unviewed words from today are not marked surfaced and return to the pool. Card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` where N = unseen pool words ÷ 10 (one decimal when fractional; amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. `+` buttons save word/sentences as flashcards.
 - **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
 - **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
-- **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
+- **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. **Edit card** opens front/back fields and saves via `PATCH /api/cards/:id` (scheduling unchanged). Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
 
 ## Persistence (SQLite)
 Path: `TEN_DB_PATH` or `data/ten.db`.

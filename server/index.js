@@ -13,7 +13,7 @@ import {
   setDailyCardIndex,
   setDailyWordAssignment
 } from './db.js';
-import { addCard, answerCard, deleteCard, getReviewQueue } from './cards.js';
+import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -71,7 +71,7 @@ function getFilePath(pathname) {
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
 }
 
 function normalizeTargetLanguage(value) {
@@ -442,6 +442,29 @@ function handleCardDelete(res, cardId) {
   return sendJson(res, 200, { ok: true });
 }
 
+async function handleCardPatch(req, res, cardId) {
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const front = String(body.front || '').trim();
+  const back = String(body.back || '').trim();
+  const context = body.context === undefined ? undefined : String(body.context || '').trim();
+  if (!front || !back) {
+    return sendJson(res, 400, { error: 'Missing front or back.' });
+  }
+
+  const result = updateCard(cardId, { front, back, context });
+  if (!result.ok && result.reason === 'not_found') {
+    return sendJson(res, 404, { error: 'Card not found.' });
+  }
+  if (!result.ok && result.reason === 'duplicate') {
+    return sendJson(res, 409, { error: 'Card already exists for this language.' });
+  }
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid card payload.' });
+  return sendJson(res, 200, { ok: true, id: result.id });
+}
+
 async function serveStatic(pathname, res) {
   const filePath = getFilePath(normalizePathname(pathname));
   if (!filePath.startsWith(CLIENT_DIR)) {
@@ -490,6 +513,9 @@ const server = createServer(async (req, res) => {
   const cardDeleteMatch = pathname.match(/^\/api\/cards\/(\d+)$/);
   if (cardDeleteMatch && req.method === 'DELETE') {
     return handleCardDelete(res, Number(cardDeleteMatch[1]));
+  }
+  if (cardDeleteMatch && req.method === 'PATCH') {
+    return handleCardPatch(req, res, Number(cardDeleteMatch[1]));
   }
 
   if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(res);

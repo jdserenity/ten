@@ -5,8 +5,8 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierLabel,
-  nextFrequencyFilter,
   isReviewGradeButtonsDisabled,
+  nextFrequencyFilter,
   resolveStartupTab
 } from './ten-logic.js';
 import {
@@ -902,17 +902,17 @@ function renderReview() {
   const card = getCurrentReviewCard();
   if (!card) {
     setReviewEditing(false);
-    empty.classList.remove('hidden');
-    cardPanel.classList.add('hidden');
+    empty?.classList.remove('hidden');
+    cardPanel?.classList.add('hidden');
     return;
   }
 
   const editing = state.reviewEditing;
-  displayWrap.classList.toggle('hidden', editing);
-  editWrap.classList.toggle('hidden', !editing);
-  showAnswerBtn.classList.toggle('hidden', editing || state.reviewAnswerVisible);
-  answerWrap.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
-  gradeRow.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
+  displayWrap?.classList.toggle('hidden', editing);
+  editWrap?.classList.toggle('hidden', !editing);
+  showAnswerBtn?.classList.toggle('hidden', editing || state.reviewAnswerVisible);
+  answerWrap?.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
+  gradeRow?.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
 
   document.getElementById('review-front-text').textContent = card.front;
   document.getElementById('review-back-text').textContent = card.back;
@@ -933,9 +933,11 @@ function renderReview() {
   if (showAnswerBtn) showAnswerBtn.disabled = actionBusy || editing;
   if (saveBtn) saveBtn.disabled = actionBusy;
   if (cancelBtn) cancelBtn.disabled = actionBusy;
-  gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
-    button.disabled = gradeButtonsDisabled;
-  });
+  if (gradeRow) {
+    gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
+      button.disabled = gradeButtonsDisabled;
+    });
+  }
 
   empty.classList.add('hidden');
   cardPanel.classList.remove('hidden');
@@ -1643,7 +1645,7 @@ function setupTranslateEvents() {
 }
 
 function setupReviewEvents() {
-  document.getElementById('review-show-answer-btn').addEventListener('click', () => {
+  document.getElementById('review-show-answer-btn')?.addEventListener('click', () => {
     if (!getCurrentReviewCard()) return;
     state.reviewAnswerVisible = true;
     renderReview();
@@ -1707,7 +1709,7 @@ function setupReviewEvents() {
     });
   });
 
-  document.getElementById('review-card-delete').addEventListener('click', async () => {
+  document.getElementById('review-card-delete')?.addEventListener('click', async () => {
     const card = getCurrentReviewCard();
     if (!card || state.reviewSubmitting) return;
 
@@ -1802,8 +1804,11 @@ async function init() {
   }
 }
 
-init().catch(() => {
+init().catch(error => {
+  console.error('Ten init failed:', error);
   document.getElementById('loading').style.display = 'none';
-  document.getElementById('error').textContent = 'Failed to initialize app.';
-  document.getElementById('error').style.display = 'flex';
+  const errorEl = document.getElementById('error');
+  const detail = error instanceof Error ? error.message : String(error);
+  errorEl.textContent = detail ? `Failed to initialize app: ${detail}` : 'Failed to initialize app.';
+  errorEl.style.display = 'flex';
 });

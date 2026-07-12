@@ -28,3 +28,6 @@ If `renderReview()` runs while `reviewSubmitting` is still `true`, grade buttons
 
 ## Do not disable review grade buttons during submit
 Again/Hard/Good/Easy should stay tappable except while editing a card. Double-submit is blocked in `submitReviewGrade`; tying `disabled` to `reviewSubmitting` left buttons grey on the next card on some browsers even after the flag cleared.
+
+## When adding a ten-logic import, do not drop existing imports
+A missing `nextFrequencyFilter` import in `app.js` crashed startup (`ReferenceError` in `setupFrequencyEvents`) while the generic UI only showed "Failed to initialize app."

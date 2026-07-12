@@ -1,3 +1,10 @@
+import {
+  frequencyEntryMatchesFilter,
+  frequencyListTotal,
+  nextFrequencyFilter,
+  resolveStartupTab
+} from './ten-logic.js';
+
 const WORDS_PER_DAY = 10;
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
@@ -34,7 +41,7 @@ const MODE_CONFIGS = {
 
 const state = {
   activeMode: 'fr',
-  activeTab: 'translate',
+  activeTab: 'daily',
   settings: {
     translateSource: MODE_CONFIGS['fr'].learningLang,
     translateTarget: 'EN'
@@ -65,7 +72,7 @@ const state = {
     FR: new Set()
   },
   frequencyLoadedLanguages: new Set(),
-  frequencyShowUnlockedOnly: false,
+  frequencyListFilter: 'all',
   frequencyInlineTranslations: new Map(),
   frequencyTranslatingWords: new Set()
 };
@@ -959,22 +966,27 @@ function getFrequencySearchQuery() {
 function clearFrequencySearch() {
   const input = document.getElementById('frequency-search-input');
   if (input) input.value = '';
-  state.frequencyShowUnlockedOnly = false;
+  state.frequencyListFilter = 'all';
   updateFrequencyStatFilterUi();
   updateFrequencySearchHint(0, 0, false);
 }
 
 function updateFrequencyStatFilterUi() {
   const unlockedBtn = document.getElementById('frequency-unlocked-stat');
-  const showUnlockedOnly = state.frequencyShowUnlockedOnly;
+  const notLearnedBtn = document.getElementById('frequency-not-learned-stat');
+  const filter = state.frequencyListFilter;
   if (unlockedBtn) {
-    unlockedBtn.classList.toggle('active', showUnlockedOnly);
-    unlockedBtn.setAttribute('aria-pressed', String(showUnlockedOnly));
+    unlockedBtn.classList.toggle('active', filter === 'unlocked');
+    unlockedBtn.setAttribute('aria-pressed', String(filter === 'unlocked'));
+  }
+  if (notLearnedBtn) {
+    notLearnedBtn.classList.toggle('active', filter === 'not-learned');
+    notLearnedBtn.setAttribute('aria-pressed', String(filter === 'not-learned'));
   }
 }
 
 function setFrequencyListFilter(filter) {
-  state.frequencyShowUnlockedOnly = filter === 'unlocked';
+  state.frequencyListFilter = filter;
   updateFrequencyStatFilterUi();
   renderFrequencyDictionary();
 }
@@ -1055,27 +1067,27 @@ async function translateFrequencyWord(entry) {
 
 function renderFrequencyDictionary() {
   const listEl = document.getElementById('frequency-list');
-  const totalEl = document.getElementById('frequency-total-count');
   const seenEl = document.getElementById('frequency-seen-count');
-  if (!listEl || !totalEl || !seenEl) return;
+  const notLearnedEl = document.getElementById('frequency-not-learned-count');
+  if (!listEl || !seenEl || !notLearnedEl) return;
 
   const language = getFrequencyLanguageForMode();
   const entries = Array.isArray(state.frequencyByLanguage[language]) ? state.frequencyByLanguage[language] : [];
   const seenSet = getSeenDailyWordsSet(language);
   const parsed = parseFrequencySearchQuery(getFrequencySearchQuery());
   const hasQuery = parsed.type !== 'none';
-  const showUnlockedOnly = state.frequencyShowUnlockedOnly;
+  const filter = state.frequencyListFilter;
   const totalUnlocked = entries.reduce(
     (count, entry) => count + (seenSet.has(entry.normalizedWord) ? 1 : 0),
     0
   );
   let matchCount = 0;
   const fragment = document.createDocumentFragment();
-  const listTotal = showUnlockedOnly ? totalUnlocked : entries.length;
+  const listTotal = frequencyListTotal(entries.length, totalUnlocked, filter);
 
   entries.forEach(entry => {
     const seen = seenSet.has(entry.normalizedWord);
-    if (showUnlockedOnly && !seen) return;
+    if (!frequencyEntryMatchesFilter(seen, filter)) return;
     if (!entryMatchesFrequencySearch(entry, parsed)) return;
     matchCount++;
     const row = document.createElement('div');
@@ -1120,8 +1132,8 @@ function renderFrequencyDictionary() {
 
   listEl.innerHTML = '';
   listEl.appendChild(fragment);
-  totalEl.textContent = String(entries.length);
   seenEl.textContent = String(totalUnlocked);
+  notLearnedEl.textContent = String(entries.length - totalUnlocked);
   updateFrequencySearchHint(matchCount, listTotal, hasQuery);
 }
 
@@ -1344,14 +1356,12 @@ function setupFrequencyEvents() {
     });
   }
 
-  document.getElementById('frequency-entries-stat')?.addEventListener('click', () => {
-    if (state.frequencyShowUnlockedOnly) {
-      setFrequencyListFilter('all');
-    }
+  document.getElementById('frequency-unlocked-stat')?.addEventListener('click', () => {
+    setFrequencyListFilter(nextFrequencyFilter(state.frequencyListFilter, 'unlocked'));
   });
 
-  document.getElementById('frequency-unlocked-stat')?.addEventListener('click', () => {
-    setFrequencyListFilter(state.frequencyShowUnlockedOnly ? 'all' : 'unlocked');
+  document.getElementById('frequency-not-learned-stat')?.addEventListener('click', () => {
+    setFrequencyListFilter(nextFrequencyFilter(state.frequencyListFilter, 'not-learned'));
   });
 }
 
@@ -1660,11 +1670,13 @@ async function init() {
   setNoteConfigOpen(false);
   await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
 
+  setActiveTab(resolveStartupTab(hasCelebratedDailyCompleteToday()));
+
   renderReview();
   document.body.classList.add('ready');
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
   }
 }
 

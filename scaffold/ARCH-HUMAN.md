@@ -4,7 +4,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 
 ## What it is
 
-**Ten** — a personal phone-first web app (PWA) for learning **Brazilian Portuguese** and **Quebec French**. You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you’ve unlocked.
+**Ten** — a personal phone-first web app (PWA) for learning **Brazilian Portuguese** and **Quebec French**. You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you've unlocked.
 
 One user only. No accounts, sharing, or multi-user design.
 
@@ -24,12 +24,12 @@ One user only. No accounts, sharing, or multi-user design.
 
 | Tab | What you see |
 | --- | --- |
-| **10/day** | Ten fixed words for today from the active language pool, with translations and example sentences. Remembers which card you were on. Confetti once when you finish the tenth (per language per day). `+` saves word or sentences as flashcards. |
+| **10/day** | Ten fixed words for today from the active language pool, with translations and example sentences. Remembers which card you were on. Confetti once when you finish the tenth (per language per day). Opens first on refresh unless you already finished today — then Translate opens. `+` saves word or sentences as flashcards. |
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. |
 | **Review** | New and due cards for the active language (new first). Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. |
-| **Frequency** | Bundled top-frequency lists. Unlocked words light up green. Tap a word for an inline translation. |
+| **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
 
-Language switch (Brazil / Quebec) is top-right. Default on open is French. Each language has its own card pool in SQLite so duplicates don’t collide across languages.
+Language switch (Brazil / Quebec) is top-right. Default on open is French. Each language has its own card pool in SQLite so duplicates don't collide across languages.
 
 ## How the system is built
 
@@ -58,7 +58,7 @@ npm run google:check
 
 ## Production (VPS or always-on machine)
 
-Needs: Ten’s Node server running, internet for translate APIs, and the two API keys. No Anki required after migration.
+Needs: Ten's Node server running, internet for translate APIs, and the two API keys. No Anki required after migration.
 
 **Phone access:** open `http://<your-host>:3001` (or use Tailscale to reach a home server privately).
 
@@ -98,5 +98,3 @@ launchctl load ~/Library/LaunchAgents/com.ten.app.plist
 **Back up** `data/ten.db` (or whatever `TEN_DB_PATH` points at) — unlocks, daily progress, and all flashcards live there.
 
 **Migrating from Anki (one time):** while Anki Desktop + AnkiConnect still run on your Mac, `npm run import:anki`. Card text is copied; review scheduling starts fresh in Ten.
-
-**When word pools, frequency files, or icons change:** bump the cache name in `src/client/sw.js` (`ten-vN` → next number) so phones fetch fresh assets.

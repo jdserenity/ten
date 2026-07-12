@@ -4,14 +4,14 @@
   "type": "module",
   "scripts": {
     "start": "node server/index.js",
-    "test": "node --test server/**/*.test.js",
     "import:anki": "node scripts/import-anki-cards.js",
     "generate": "node scripts/generate-words.js",
     "generate:pt": "node scripts/generate-words.js",
     "generate:fr": "node scripts/generate-words-fr.js",
     "frequency:download": "node scripts/download-frequency-dictionaries.js",
     "deepl:check": "node scripts/check-deepl.js",
-    "google:check": "node scripts/check-google.js"
+    "google:check": "node scripts/check-google.js",
+    "test": "node --test server/**/*.test.js tests/**/*.test.js"
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",

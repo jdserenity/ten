@@ -20,7 +20,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 ## Stack
 - Node HTTP server: `server/index.js` (static + APIs), `server/db.js` (SQLite), `server/cards.js` + `server/fsrs.js` (card CRUD + scheduling).
 - Client: `src/client/index.html`, `styles.css`, `app.js`.
-- PWA: `src/client/manifest.json`, `sw.js` (cache name `ten-vN`), `icon-192.png` / `icon-512.png` (static aurora PNGs).
+- PWA: `src/client/manifest.json`, `icon-192.png` / `icon-512.png` (static aurora PNGs). No service worker — static assets are served with `Cache-Control: no-cache`.
 - Word pools: `src/client/words.pt.json`, `words.fr.json`.
 - Frequency dictionaries: `src/client/frequency-pt-br.json`, `frequency-fr.json` (up to ~5000 each).
 - TTS: mode speech langs `pt-BR` / `fr-CA`.
@@ -34,6 +34,8 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `server/fsrs.js` | `ts-fsrs` wrapper |
 | `data/ten.db` | Runtime DB (gitignored); override with `TEN_DB_PATH` |
 | `src/client/app.js` | All UI logic; `MODE_CONFIGS` for per-mode settings |
+| `src/client/ten-logic.js` | Pure helpers for startup tab + frequency filters (unit-tested) |
+| `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/import-anki-cards.js` | One-shot AnkiConnect → SQLite import |
 | `scripts/generate-words.js` | PT-BR pool generator → `words.pt.json` |
 | `scripts/generate-words-fr.js` | FR pool from frequency lists → `words.fr.json` |
@@ -61,9 +63,9 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 | GET | `/api/health` | `{ ok: true }` |
 
 ## Client behavior
-- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate). Footer shows `~N days left in <mode> pool` (amber at ≤7). `+` buttons save word/sentences as flashcards.
+- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. Tab choice persists in memory during the same page session (no refresh). `+` buttons save word/sentences as flashcards.
 - **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
-- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Tap word → live translate (learning language → English) inline.
+- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
 - **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
 
 ## Persistence (SQLite)
@@ -76,8 +78,7 @@ Languages: `PT-BR`, `FR`.
 ## Word / frequency data
 - `words.pt.json` is **generated** (`npm run generate:pt`) — do not hand-edit; change the generator and re-run. Editorial standards: `scaffold/generating-words.md`.
 - French pool: `npm run generate:fr` (frequency-dictionary-based).
-- Frequency refresh: `npm run frequency:download`, then bump SW cache.
-- After any change to SW-cached client assets (word files, frequency JSON, icons, CSS/JS shell), bump `ten-vN` in `src/client/sw.js`.
+- Frequency refresh: `npm run frequency:download`.
 
 ## Run / deploy
 ```bash

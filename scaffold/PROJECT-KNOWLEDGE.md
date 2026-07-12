@@ -2,11 +2,11 @@
 
 Hard-won lessons and traps. Product/system facts live only in `scaffold/ARCH-LLM.md` / `scaffold/ARCH-HUMAN.md` — do not restate them here. Word-pool quality standards and the abandoned scrape story live in `scaffold/generating-words.md`.
 
-## Service worker cache must be bumped by hand
-`src/client/sw.js` pins a cache name (`ten-vN`) and a fixed asset list. Changing `words.*.json`, frequency JSON, icons, CSS, or JS without bumping `ten-vN` leaves phones on stale cached files. Always bump after those edits.
+## Service worker removed
+Ten no longer ships `sw.js`. Static assets are served with `Cache-Control: no-cache`; `app.js` unregisters any leftover worker on load so phones stop intercepting requests after deploy.
 
 ## Procedural PWA icons were a dead end
-An old script generated icons at runtime. At 192/512px the results looked bad. Icons are now committed static PNGs (`icon-192.png` / `icon-512.png`, aurora design). Replacing the look means replacing those PNGs and bumping the SW cache — do not revive a procedural generator.
+An old script generated icons at runtime. At 192/512px the results looked bad. Icons are now committed static PNGs (`icon-192.png` / `icon-512.png`, aurora design). Replacing the look means replacing those PNGs — do not revive a procedural generator.
 
 ## Default port is 3001, not 3000
 Older docs said `3000`. The server defaults to `PORT` or **3001**, and scans upward if the port is taken. Use whatever URL the process prints; Tailscale phone bookmarks should match that port.

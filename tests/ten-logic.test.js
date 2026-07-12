@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  extractPrimaryWordToken,
+  extractSingleLearningWord,
+  formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
+  getFrequencyTierLabel,
   nextFrequencyFilter,
   resolveStartupTab
 } from '../src/client/ten-logic.js';
@@ -36,4 +40,44 @@ test('frequencyListTotal counts the active filter pool', () => {
   assert.equal(frequencyListTotal(5000, 120, 'all'), 5000);
   assert.equal(frequencyListTotal(5000, 120, 'unlocked'), 120);
   assert.equal(frequencyListTotal(5000, 120, 'not-learned'), 4880);
+});
+
+test('getFrequencyTierLabel maps rank bands to plain-language labels', () => {
+  assert.equal(getFrequencyTierLabel(42), 'very common');
+  assert.equal(getFrequencyTierLabel(500), 'very common');
+  assert.equal(getFrequencyTierLabel(501), 'common');
+  assert.equal(getFrequencyTierLabel(2500), 'mid-frequency');
+  assert.equal(getFrequencyTierLabel(2501), 'less common');
+});
+
+test('extractPrimaryWordToken strips trailing punctuation for single-word input', () => {
+  assert.equal(extractPrimaryWordToken('bonjour!'), 'bonjour');
+  assert.equal(extractPrimaryWordToken('  être '), 'être');
+  assert.equal(extractPrimaryWordToken('two words'), null);
+});
+
+test('extractSingleLearningWord picks the learning-language side of a single-word translate', () => {
+  assert.equal(
+    extractSingleLearningWord('bonjour!', 'hello', 'FR', 'EN', 'FR'),
+    'bonjour'
+  );
+  assert.equal(
+    extractSingleLearningWord('hello', 'Bonjour.', 'EN', 'FR', 'FR'),
+    'Bonjour'
+  );
+  assert.equal(
+    extractSingleLearningWord('good morning', 'bonjour mon ami', 'EN', 'FR', 'FR'),
+    null
+  );
+});
+
+test('formatTranslateFrequencyRank includes rank and tier when known', () => {
+  assert.equal(
+    formatTranslateFrequencyRank('Input', 12),
+    'Input frequency rank #12 (very common)'
+  );
+  assert.equal(
+    formatTranslateFrequencyRank('Result', null),
+    'Result frequency rank unavailable'
+  );
 });

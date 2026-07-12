@@ -1,6 +1,10 @@
 import {
+  canonicalizeTranslateLanguage,
+  extractSingleLearningWord,
+  formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
+  getFrequencyTierLabel,
   nextFrequencyFilter,
   resolveStartupTab
 } from './ten-logic.js';
@@ -66,6 +70,8 @@ const state = {
   reviewTotalCount: 0,
   reviewCurrentIndex: 0,
   reviewAnswerVisible: false,
+  reviewEditing: false,
+  reviewEditSubmitting: false,
   reviewSubmitting: false,
   frequencyByLanguage: {
     'PT-BR': [],
@@ -94,14 +100,6 @@ function getModeConfig(modeId = state.activeMode) {
 
 function getLearningLanguage(modeId = state.activeMode) {
   return getModeConfig(modeId).learningLang;
-}
-
-function canonicalizeTranslateLanguage(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
-  return '';
 }
 
 function displayTranslateLanguage(code) {
@@ -324,19 +322,6 @@ function getCurrentDailyWordFrequencyRank() {
   const rankMap = state.frequencyMapByLanguage[language];
   if (!(rankMap instanceof Map)) return null;
   return rankMap.get(normalizeFrequencyWord(word.word)) || null;
-}
-
-function getFrequencyTierLabel(rank) {
-  if (!rank) return '';
-  if (rank <= 500) return 'very common';
-  if (rank <= 1000) return 'common';
-  if (rank <= 2500) return 'mid-frequency';
-  return 'less common';
-}
-
-function countWordsIgnoringPunctuation(text) {
-  const matches = String(text || '').match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu);
-  return matches ? matches.length : 0;
 }
 
 function getFrequencyRank(language, word) {
@@ -630,10 +615,12 @@ function updateLanguageCopy() {
   const mode = getModeConfig();
   const backLabel = document.getElementById('card-back-label');
   const backInput = document.getElementById('card-back-input');
+  const reviewBackLabel = document.getElementById('review-edit-back-label');
   const sentenceLabel = document.getElementById('sentence-language-label');
   const fromLabel = document.getElementById('translate-from-label');
   if (backLabel) backLabel.textContent = `Back (${mode.translatorLabel})`;
   if (backInput) backInput.placeholder = `${mode.translatorLabel} translation`;
+  if (reviewBackLabel) reviewBackLabel.textContent = `Back (${mode.translatorLabel})`;
   if (sentenceLabel) sentenceLabel.textContent = `${mode.translatorLabel} in use`;
   if (fromLabel && !state.lastDetectedSourceLang) fromLabel.textContent = mode.shortLabel;
   document.documentElement.lang = mode.htmlLang;
@@ -798,6 +785,19 @@ async function removeCard(cardId) {
   }
 }
 
+async function patchCard(cardId, { front, back, context }) {
+  const response = await fetch(`/api/cards/${cardId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ front, back, context })
+  });
+  if (!response.ok) {
+    const details = await extractErrorDetails(response);
+    if (response.status === 409) throw new Error('Card already exists.');
+    throw new Error(`Update failed (${response.status})${details ? `: ${details}` : '.'}`);
+  }
+}
+
 async function addSentenceCard(sentence, statusElementId) {
   const mode = getModeConfig();
   const l2 = String(sentence ? (sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '') : '').trim();
@@ -841,6 +841,7 @@ function removeCurrentReviewCard() {
     state.reviewCurrentIndex = Math.max(0, state.reviewCards.length - 1);
   }
   state.reviewAnswerVisible = false;
+  state.reviewEditing = false;
   state.reviewDueCount = Math.max(0, state.reviewDueCount - 1);
   return card;
 }
@@ -859,6 +860,24 @@ function removeReviewCardById(cardId) {
   return removed;
 }
 
+function setReviewEditing(open) {
+  state.reviewEditing = Boolean(open);
+  if (!open) {
+    const frontInput = document.getElementById('review-edit-front');
+    const backInput = document.getElementById('review-edit-back');
+    if (frontInput) frontInput.value = '';
+    if (backInput) backInput.value = '';
+  }
+}
+
+function fillReviewEditFields(card) {
+  const frontInput = document.getElementById('review-edit-front');
+  const backInput = document.getElementById('review-edit-back');
+  if (!card || !frontInput || !backInput) return;
+  frontInput.value = card.front;
+  backInput.value = card.back;
+}
+
 function renderReview() {
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
@@ -869,35 +888,52 @@ function renderReview() {
 
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');
+  const displayWrap = document.getElementById('review-display-wrap');
+  const editWrap = document.getElementById('review-edit-wrap');
   const answerWrap = document.getElementById('review-answer-wrap');
   const gradeRow = document.getElementById('review-grade-row');
   const showAnswerBtn = document.getElementById('review-show-answer-btn');
+  const editBtn = document.getElementById('review-card-edit');
+  const deleteBtn = document.getElementById('review-card-delete');
+  const saveBtn = document.getElementById('review-edit-save');
+  const cancelBtn = document.getElementById('review-edit-cancel');
 
   const card = getCurrentReviewCard();
   if (!card) {
+    setReviewEditing(false);
     empty.classList.remove('hidden');
     cardPanel.classList.add('hidden');
-    showAnswerBtn.classList.remove('hidden');
-    answerWrap.classList.add('hidden');
-    gradeRow.classList.add('hidden');
     return;
   }
+
+  const editing = state.reviewEditing;
+  displayWrap.classList.toggle('hidden', editing);
+  editWrap.classList.toggle('hidden', !editing);
+  showAnswerBtn.classList.toggle('hidden', editing || state.reviewAnswerVisible);
+  answerWrap.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
+  gradeRow.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
 
   document.getElementById('review-front-text').textContent = card.front;
   document.getElementById('review-back-text').textContent = card.back;
 
   const contextEl = document.getElementById('review-context');
   contextEl.textContent = card.context;
-  contextEl.classList.toggle('hidden', !card.context);
-
-  showAnswerBtn.classList.toggle('hidden', state.reviewAnswerVisible);
-  answerWrap.classList.toggle('hidden', !state.reviewAnswerVisible);
-  gradeRow.classList.toggle('hidden', !state.reviewAnswerVisible);
+  contextEl.classList.toggle('hidden', editing || !card.context);
 
   const speakBtn = document.getElementById('review-speak-btn');
   if (speakBtn) {
-    speakBtn.disabled = !state.reviewAnswerVisible || !card.back;
+    speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back;
   }
+
+  const busy = state.reviewSubmitting || state.reviewEditSubmitting;
+  if (editBtn) editBtn.disabled = busy || editing;
+  if (deleteBtn) deleteBtn.disabled = busy;
+  if (showAnswerBtn) showAnswerBtn.disabled = busy || editing;
+  if (saveBtn) saveBtn.disabled = busy;
+  if (cancelBtn) cancelBtn.disabled = busy;
+  gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
+    button.disabled = busy || editing;
+  });
 
   empty.classList.add('hidden');
   cardPanel.classList.remove('hidden');
@@ -931,6 +967,7 @@ async function loadReviewQueue(options = {}) {
     }
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
 
     renderReview();
     setStatus('review-status', '');
@@ -940,6 +977,7 @@ async function loadReviewQueue(options = {}) {
     state.reviewDueCount = 0;
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
     renderReview();
   }
 }
@@ -1186,44 +1224,27 @@ async function loadFrequencyTabData() {
   }
 }
 
-function getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang) {
-  const learningLanguage = getFrequencyLanguageForMode();
-  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
-  const targetCanonical = canonicalizeTranslateLanguage(targetLang);
-  if (sourceCanonical === learningLanguage && countWordsIgnoringPunctuation(inputText) === 1) {
-    return inputText;
-  }
-  if (targetCanonical === learningLanguage && countWordsIgnoringPunctuation(translatedText) === 1) {
-    return translatedText;
-  }
-  return null;
-}
-
 function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, targetLang) {
   const outputEl = document.getElementById('translate-frequency-rank');
   if (!outputEl) return;
 
-  const learningWord = getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang);
+  const learningLanguage = getFrequencyLanguageForMode();
+  const learningWord = extractSingleLearningWord(inputText, translatedText, sourceLang, targetLang, learningLanguage);
   if (!learningWord) {
     outputEl.textContent = '';
-    outputEl.className = 'status-line';
+    outputEl.className = 'frequency-meta';
     return;
   }
 
   markLearningWordSeenInFrequency(learningWord);
 
-  const learningLanguage = getFrequencyLanguageForMode();
   const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
   const label = sourceCanonical === learningLanguage ? 'Input' : 'Result';
   const rank = getFrequencyRank(learningLanguage, learningWord);
+  const message = formatTranslateFrequencyRank(label, rank);
 
-  if (rank) {
-    outputEl.textContent = `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;
-    outputEl.className = 'status-line success';
-  } else {
-    outputEl.textContent = `${label} frequency rank unavailable`;
-    outputEl.className = 'status-line';
-  }
+  outputEl.textContent = message;
+  outputEl.className = rank ? 'frequency-meta success' : 'frequency-meta';
 }
 
 function setActiveTab(tabId) {
@@ -1364,6 +1385,13 @@ function swapTranslateDirection() {
   updateTranslateSpeakUi();
 }
 
+function clearTranslateFrequencyRank() {
+  const outputEl = document.getElementById('translate-frequency-rank');
+  if (!outputEl) return;
+  outputEl.textContent = '';
+  outputEl.className = 'frequency-meta';
+}
+
 function clearTranslateDraft() {
   const translateInput = document.getElementById('translate-input');
   translateInput.value = '';
@@ -1374,7 +1402,7 @@ function clearTranslateDraft() {
   state.lastDetectedSourceLang = '';
   state.hasTranslatedInSession = false;
   setStatus('translate-status', '');
-  setStatus('translate-frequency-rank', '');
+  clearTranslateFrequencyRank();
   setStatus('quick-add-status', '');
   setStatus('card-save-status', '');
   updateTranslateResultUi();
@@ -1578,7 +1606,7 @@ function setupTranslateEvents() {
       updateTranslateResultUi();
     } catch (error) {
       setStatus('translate-status', formatError(error), 'error');
-      setStatus('translate-frequency-rank', '');
+      clearTranslateFrequencyRank();
     } finally {
       translateBtn.disabled = false;
     }
@@ -1623,6 +1651,52 @@ function setupReviewEvents() {
 
   document.getElementById('review-refresh-btn').addEventListener('click', () => {
     loadReviewQueue({ refreshTotal: true });
+  });
+
+  document.getElementById('review-card-edit')?.addEventListener('click', () => {
+    const card = getCurrentReviewCard();
+    if (!card || state.reviewSubmitting || state.reviewEditSubmitting) return;
+    fillReviewEditFields(card);
+    state.reviewAnswerVisible = true;
+    setReviewEditing(true);
+    renderReview();
+    document.getElementById('review-edit-front')?.focus({ preventScroll: true });
+  });
+
+  document.getElementById('review-edit-cancel')?.addEventListener('click', () => {
+    if (state.reviewEditSubmitting) return;
+    setReviewEditing(false);
+    renderReview();
+  });
+
+  document.getElementById('review-edit-save')?.addEventListener('click', async () => {
+    const card = getCurrentReviewCard();
+    if (!card || state.reviewEditSubmitting || state.reviewSubmitting) return;
+
+    const front = capitalizeFirstWord(document.getElementById('review-edit-front')?.value || '');
+    const back = capitalizeFirstWord(document.getElementById('review-edit-back')?.value || '');
+    if (!front || !back) {
+      setStatus('review-status', 'Front and back are required.', 'error');
+      return;
+    }
+
+    setStatus('review-status', 'Saving changes...');
+    state.reviewEditSubmitting = true;
+    renderReview();
+
+    try {
+      await patchCard(card.id, { front, back, context: card.context });
+      card.front = front;
+      card.back = back;
+      setReviewEditing(false);
+      renderReview();
+      setStatus('review-status', 'Card updated.', 'success');
+    } catch (error) {
+      setStatus('review-status', formatError(error), 'error');
+    } finally {
+      state.reviewEditSubmitting = false;
+      renderReview();
+    }
   });
 
   document.querySelectorAll('#review-grade-row button[data-grade]').forEach(button => {

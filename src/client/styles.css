@@ -221,6 +221,8 @@ header h1 {
   color: var(--muted);
 }
 
+.frequency-meta.success { color: var(--green); }
+
 .divider {
   border: none;
   border-top: 1px solid var(--border);

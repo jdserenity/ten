@@ -32,6 +32,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `server/db.js` | SQLite schema + unlock/daily-progress helpers |
 | `data/ten.db` | Runtime DB (gitignored); override with `TEN_DB_PATH` |
 | `src/client/app.js` | All UI logic; `MODE_CONFIGS` for per-mode settings |
+| `src/client/ten-logic.js` | Pure helpers for startup tab + frequency filters (unit-tested) |
 | `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/generate-words.js` | PT-BR pool generator → `words.pt.json` |
 | `scripts/generate-words-fr.js` | FR pool from frequency lists → `words.fr.json` |
@@ -58,9 +59,9 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 | GET | `/api/health` | `{ ok: true }` |
 
 ## Client behavior
-- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` (amber at ≤7).
+- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day’s 10 are already complete (confetti gate), then **Translate**. Tab choice persists in memory during the same page session (no refresh).
 - **Translate:** Result can be saved to Anki; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
-- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Tap word → live translate (learning language → English) inline.
+- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
 - **Review:** `findCards` with `is:new` then `is:due`, `cardsInfo`; grades via `answerCards`.
 - **Anki add:** Learning language on Back; `addNote` with `allowDuplicate: false` (rejects duplicate first fields within the same note type).
 

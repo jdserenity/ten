@@ -24,10 +24,10 @@ One user only. No accounts, sharing, or multi-user design.
 
 | Tab | What you see |
 | --- | --- |
-| **10/day** | Ten fixed words for today from the active language pool, with translations and example sentences. Remembers which card you were on. Confetti once when you finish the tenth (per language per day). |
+| **10/day** | Ten fixed words for today from the active language pool, with translations and example sentences. Remembers which card you were on. Confetti once when you finish the tenth (per language per day). Opens first on refresh unless you already finished today — then Translate opens. |
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save to Anki; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. |
 | **Review** | New and due Anki cards (new first). Grades go straight back to Anki. |
-| **Frequency** | Bundled top-frequency lists. Unlocked words light up green. Tap a word for an inline translation. |
+| **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
 
 Language switch (Brazil / Quebec) is top-right. Default on open is French. Each language has its own Anki deck and note type (`Basic-BR` / `Basic-FR`) so duplicates don’t collide across languages.
 

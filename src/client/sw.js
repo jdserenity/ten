@@ -1,5 +1,5 @@
-const CACHE = 'ten-v21';
-const ASSETS = ['/', '/index.html', '/styles.css', '/confetti.browser.js', '/app.js', '/words.pt.json', '/words.fr.json', '/frequency-pt-br.json', '/frequency-fr.json', '/manifest.json', '/icon-192.png', '/icon-512.png'];
+const CACHE = 'ten-v22';
+const ASSETS = ['/', '/index.html', '/styles.css', '/confetti.browser.js', '/app.js', '/ten-logic.js', '/words.pt.json', '/words.fr.json', '/frequency-pt-br.json', '/frequency-fr.json', '/manifest.json', '/icon-192.png', '/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

@@ -35,6 +35,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `data/ten.db` | Runtime DB (gitignored); override with `TEN_DB_PATH` |
 | `src/client/app.js` | All UI logic; `MODE_CONFIGS` for per-mode settings |
 | `src/client/ten-logic.js` | Pure helpers for startup tab + frequency filters (unit-tested) |
+| `src/client/daily-pool.js` | 10/day word selection and pool-days-left math (shared with tests) |
 | `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/import-anki-cards.js` | One-shot AnkiConnect → SQLite import |
 | `scripts/generate-words.js` | PT-BR pool generator → `words.pt.json` |
@@ -47,7 +48,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `pt-br` | `/words.pt.json` | `pt` | `PT-BR` |
 | `fr` | `/words.fr.json` | `fr` | `FR` |
 
-Active language mode is stored in `sessionStorage` (defaults to `fr` when unset).
+Active language mode is stored in `localStorage` (last visited; defaults to `fr` when unset). One-time migration reads legacy `sessionStorage` value.
 
 ## APIs
 | Method | Path | Notes |
@@ -60,10 +61,11 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 | GET/POST | `/api/unlocked-words` | Frequency unlock state. POST adds one word. |
 | POST | `/api/unlocked-words/import` | One-time localStorage → SQLite migration. |
 | GET/POST | `/api/daily-progress` | Open 10/day card index (0–9) keyed by language + calendar day. |
+| GET/POST | `/api/daily-words` | Today's fixed 10-word assignment (headwords JSON) per language + calendar day. |
 | GET | `/api/health` | `{ ok: true }` |
 
 ## Client behavior
-- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. Tab choice persists in memory during the same page session (no refresh). `+` buttons save word/sentences as flashcards.
+- **10/day:** Picks up to 10 words per day from the active pool that have not been surfaced yet (viewed on a daily card or unlocked via single-word translate). Today's assignment is persisted in SQLite (`/api/daily-words`) so refresh keeps the same list; unviewed words from today are not marked surfaced and return to the pool. Card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` where N = unseen pool words ÷ 10 (one decimal when fractional; amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. `+` buttons save word/sentences as flashcards.
 - **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
 - **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
 - **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
@@ -72,6 +74,7 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 Path: `TEN_DB_PATH` or `data/ten.db`.
 - `unlocked_words(language, normalized_word, unlocked_at)` PK `(language, normalized_word)`
 - `daily_card_index(language, date_key, card_index, updated_at)` PK `(language, date_key)`
+- `daily_word_assignment(language, date_key, words_json, updated_at)` PK `(language, date_key)` — JSON array of headwords for that day's 10/day stack
 - `cards` — flashcard content + FSRS state; unique `(language, front, back)`
 Languages: `PT-BR`, `FR`.
 

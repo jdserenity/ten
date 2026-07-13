@@ -1,6 +1,8 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  buildNotLearnedFrozenPool,
+  defaultTranslateDirection,
   extractPrimaryWordToken,
   extractSingleLearningWord,
   formatTranslateFrequencyRank,
@@ -34,6 +36,32 @@ test('frequencyEntryMatchesFilter respects unlocked and not-learned views', () =
   assert.equal(frequencyEntryMatchesFilter(false, 'unlocked'), false);
   assert.equal(frequencyEntryMatchesFilter(true, 'not-learned'), false);
   assert.equal(frequencyEntryMatchesFilter(false, 'not-learned'), true);
+});
+
+test('defaultTranslateDirection targets English from the active learning language', () => {
+  assert.deepEqual(defaultTranslateDirection('FR'), { source: 'FR', target: 'EN' });
+  assert.deepEqual(defaultTranslateDirection('PT-BR'), { source: 'PT-BR', target: 'EN' });
+});
+
+test('buildNotLearnedFrozenPool snapshots only unseen normalized words', () => {
+  const entries = [
+    { normalizedWord: 'bonjour' },
+    { normalizedWord: 'merci' },
+    { normalizedWord: 'oui' }
+  ];
+  const seenSet = new Set(['merci']);
+  const frozen = buildNotLearnedFrozenPool(entries, seenSet);
+  assert.equal(frozen.size, 2);
+  assert.equal(frozen.has('bonjour'), true);
+  assert.equal(frozen.has('oui'), true);
+  assert.equal(frozen.has('merci'), false);
+});
+
+test('frequencyEntryMatchesFilter keeps frozen not-learned words visible after unlock', () => {
+  const frozen = new Set(['bonjour', 'merci']);
+  assert.equal(frequencyEntryMatchesFilter(true, 'not-learned', frozen, 'bonjour'), true);
+  assert.equal(frequencyEntryMatchesFilter(false, 'not-learned', frozen, 'merci'), true);
+  assert.equal(frequencyEntryMatchesFilter(false, 'not-learned', frozen, 'oui'), false);
 });
 
 test('frequencyListTotal counts the active filter pool', () => {

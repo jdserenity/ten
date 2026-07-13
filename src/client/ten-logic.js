@@ -7,10 +7,29 @@ export function nextFrequencyFilter(currentFilter, clickedFilter) {
   return clickedFilter;
 }
 
-export function frequencyEntryMatchesFilter(seen, filter) {
+export function defaultTranslateDirection(learningLang) {
+  return { source: learningLang, target: 'EN' };
+}
+
+export function buildNotLearnedFrozenPool(entries, seenSet) {
+  const frozen = new Set();
+  if (!Array.isArray(entries) || !(seenSet instanceof Set)) return frozen;
+  entries.forEach(entry => {
+    const normalized = entry?.normalizedWord;
+    if (normalized && !seenSet.has(normalized)) frozen.add(normalized);
+  });
+  return frozen;
+}
+
+export function frequencyEntryMatchesFilter(seen, filter, frozenNotLearnedSet = null, normalizedWord = '') {
   if (!filter || filter === 'all') return true;
   if (filter === 'unlocked') return seen;
-  if (filter === 'not-learned') return !seen;
+  if (filter === 'not-learned') {
+    if (frozenNotLearnedSet instanceof Set && frozenNotLearnedSet.size > 0 && normalizedWord) {
+      return frozenNotLearnedSet.has(normalizedWord);
+    }
+    return !seen;
+  }
   return true;
 }
 

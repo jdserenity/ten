@@ -1,5 +1,7 @@
 import {
+  buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
+  defaultTranslateDirection,
   extractSingleLearningWord,
   formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
@@ -88,6 +90,7 @@ const state = {
   },
   frequencyLoadedLanguages: new Set(),
   frequencyListFilter: 'all',
+  frequencyNotLearnedFrozen: null,
   frequencyInlineTranslations: new Map(),
   frequencyTranslatingWords: new Set()
 };
@@ -1046,10 +1049,22 @@ function getFrequencySearchQuery() {
   return input ? input.value.trim() : '';
 }
 
+function clearNotLearnedFrozenPool() {
+  state.frequencyNotLearnedFrozen = null;
+}
+
+function snapshotNotLearnedFrozenPool() {
+  const language = getFrequencyLanguageForMode();
+  const entries = Array.isArray(state.frequencyByLanguage[language]) ? state.frequencyByLanguage[language] : [];
+  const seenSet = getSeenDailyWordsSet(language);
+  state.frequencyNotLearnedFrozen = buildNotLearnedFrozenPool(entries, seenSet);
+}
+
 function clearFrequencySearch() {
   const input = document.getElementById('frequency-search-input');
   if (input) input.value = '';
   state.frequencyListFilter = 'all';
+  clearNotLearnedFrozenPool();
   updateFrequencyStatFilterUi();
   updateFrequencySearchHint(0, 0, false);
 }
@@ -1070,6 +1085,11 @@ function updateFrequencyStatFilterUi() {
 
 function setFrequencyListFilter(filter) {
   state.frequencyListFilter = filter;
+  if (filter === 'not-learned') {
+    snapshotNotLearnedFrozenPool();
+  } else {
+    clearNotLearnedFrozenPool();
+  }
   updateFrequencyStatFilterUi();
   renderFrequencyDictionary();
 }
@@ -1160,17 +1180,20 @@ function renderFrequencyDictionary() {
   const parsed = parseFrequencySearchQuery(getFrequencySearchQuery());
   const hasQuery = parsed.type !== 'none';
   const filter = state.frequencyListFilter;
+  const frozenNotLearned = state.frequencyNotLearnedFrozen;
   const totalUnlocked = entries.reduce(
     (count, entry) => count + (seenSet.has(entry.normalizedWord) ? 1 : 0),
     0
   );
   let matchCount = 0;
   const fragment = document.createDocumentFragment();
-  const listTotal = frequencyListTotal(entries.length, totalUnlocked, filter);
+  const listTotal = filter === 'not-learned' && frozenNotLearned instanceof Set
+    ? frozenNotLearned.size
+    : frequencyListTotal(entries.length, totalUnlocked, filter);
 
   entries.forEach(entry => {
     const seen = seenSet.has(entry.normalizedWord);
-    if (!frequencyEntryMatchesFilter(seen, filter)) return;
+    if (!frequencyEntryMatchesFilter(seen, filter, frozenNotLearned, entry.normalizedWord)) return;
     if (!entryMatchesFrequencySearch(entry, parsed)) return;
     matchCount++;
     const row = document.createElement('div');
@@ -1224,6 +1247,9 @@ async function loadFrequencyTabData() {
   const language = getFrequencyLanguageForMode();
   try {
     await ensureFrequencyLanguageLoaded(language);
+    if (state.frequencyListFilter === 'not-learned') {
+      snapshotNotLearnedFrozenPool();
+    }
     renderFrequencyDictionary();
     setStatus('frequency-status', '');
   } catch (error) {
@@ -1270,6 +1296,13 @@ function setActiveTab(tabId) {
     markCurrentDailyWordSeen();
     updateDailyDots();
     renderFrequencyDictionary();
+  }
+  if (tabId === 'translate') {
+    const direction = defaultTranslateDirection(getLearningLanguage());
+    state.settings.translateSource = direction.source;
+    state.settings.translateTarget = direction.target;
+    state.lastDetectedSourceLang = '';
+    fillSettingsInputs();
   }
   if (tabId === 'review') {
     loadReviewQueue();
@@ -1390,7 +1423,7 @@ function swapTranslateDirection() {
   state.settings.translateTarget = nextTarget;
   state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
-  updateTranslateSpeakUi();
+  clearTranslateDraft();
 }
 
 function clearTranslateFrequencyRank() {

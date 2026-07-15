@@ -38,7 +38,7 @@ test('localeTagForAppLang maps UI locale to BCP 47 tags for date formatting', ()
 test('t interpolates variables and falls back to English', () => {
   assert.equal(t('en', 'settings.signedInAs'), 'Signed in as');
   assert.equal(t('pt-BR', 'login.signIn'), 'Entrar');
-  assert.equal(t('pt-BR', 'feedback.title'), 'Comentários');
+  assert.equal(t('pt-BR', 'feedback.title'), 'Sugestões');
   assert.equal(t('pt-BR', 'missing.key'), 'missing.key');
   assert.equal(t('en', 'daily.frequencyRank', { rank: 12, tier: 'common' }), 'Frequency rank #12 (common)');
 });

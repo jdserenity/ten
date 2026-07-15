@@ -223,8 +223,8 @@ header {
 
 .add-lang-hint {
   position: absolute;
-  top: calc(100% + 2px);
-  right: 8px;
+  top: calc(100% - 18px);
+  right: 32px;
   z-index: 15;
   pointer-events: none;
   overflow: visible;

@@ -1,15 +1,26 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  DAILY_REVIEW_GOAL,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
+  isDailyReviewComplete,
   nextFrequencyFilter,
   resolveStartupTab
 } from '../src/client/ten-logic.js';
 
-test('resolveStartupTab opens 10/day unless daily is already complete today', () => {
-  assert.equal(resolveStartupTab(false), 'daily');
-  assert.equal(resolveStartupTab(true), 'translate');
+test('resolveStartupTab opens 10/day, then review, then translate', () => {
+  assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: false }), 'daily');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: true }), 'daily');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: false }), 'review');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: true }), 'translate');
+});
+
+test('isDailyReviewComplete requires ten graded cards', () => {
+  assert.equal(isDailyReviewComplete(9), false);
+  assert.equal(isDailyReviewComplete(10), true);
+  assert.equal(isDailyReviewComplete(10, DAILY_REVIEW_GOAL), true);
+  assert.equal(isDailyReviewComplete(11), true);
 });
 
 test('nextFrequencyFilter toggles off when the same filter is clicked again', () => {

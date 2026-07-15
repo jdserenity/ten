@@ -1,5 +1,13 @@
-export function resolveStartupTab(dailyCompleteToday) {
-  return dailyCompleteToday ? 'translate' : 'daily';
+export const DAILY_REVIEW_GOAL = 10;
+
+export function resolveStartupTab({ dailyCompleteToday, reviewCompleteToday }) {
+  if (!dailyCompleteToday) return 'daily';
+  if (!reviewCompleteToday) return 'review';
+  return 'translate';
+}
+
+export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GOAL) {
+  return reviewedCountToday >= goal;
 }
 
 export function nextFrequencyFilter(currentFilter, clickedFilter) {

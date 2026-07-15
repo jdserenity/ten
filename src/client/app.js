@@ -434,7 +434,7 @@ function displayTranslateLanguage(code) {
   const canonical = canonicalizeTranslateLanguage(code);
   if (canonical === 'EN') return 'English';
   if (canonical === 'FR') return 'French';
-  if (canonical === 'ES-AR') return 'Spanish';
+  if (canonical === 'ES-AR') return 'Argentinian Spanish';
   if (canonical === 'PT-BR') return 'Brazilian Portuguese';
   return code || '';
 }

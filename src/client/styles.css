@@ -47,22 +47,25 @@ header {
   min-width: 0;
 }
 
-.header-title-row {
+.header-tools {
   display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: flex-end;
+  gap: 6px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .settings-cog-btn {
-  border: none;
-  background: transparent;
+  border: 1px solid var(--border);
+  background: var(--surface);
   color: var(--muted);
-  width: 28px;
-  height: 28px;
+  width: 34px;
+  height: 34px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
@@ -70,35 +73,24 @@ header {
 
 .settings-cog-btn:hover {
   color: var(--text);
-  background: var(--surface);
+  background: var(--border);
 }
 
 .settings-cog-btn:active {
   transform: scale(0.95);
 }
 
-.header-center {
-  flex: 0 1 auto;
-  width: min(36%, 132px);
-  min-width: 0;
-  padding: 0 4px;
-}
-
-.header-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  flex: 0 0 auto;
-}
-
 #feedback-compact-input {
-  width: 100%;
+  width: min(36vw, 132px);
+  flex: 0 1 auto;
+  min-width: 0;
   border: 1px solid var(--border);
   border-radius: 10px;
   background: var(--surface);
   color: var(--text);
   font-size: 13px;
   padding: 8px 10px;
+  height: 34px;
 }
 
 #feedback-compact-input:focus {

@@ -29,7 +29,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. Last tab; opens on refresh when both 10/day and review are done for today. |
 | **Settings** | Cog icon in the header tools row (with feedback and flags) opens a panel: username, **app language** (English / Português), add languages (`+`), sign out. Dev account (`jd`) also sees submitted feedback. |
 
-Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show on the right and `+` moves to Settings. Header **feedback** field expands for beta notes.
+Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show on the right and `+` moves to Settings. In Settings, the same language picker shows your current languages already selected — tap to deselect and Save to remove them. Header **feedback** field expands for beta notes.
 
 Language switch (Brazil / Quebec / France / Argentina) is top-right — only languages you've added. Pool-days footer and other owner debug chrome appear only for the dev account.
 

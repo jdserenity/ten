@@ -20,6 +20,7 @@ import {
   resolveStartupTab,
   resolveTranslateNativeLang,
   buildLangPickerOptionHtml,
+  getLangPickerOptions,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -194,6 +195,7 @@ test('buildLangPickerOptionHtml renders a selectable chip with flag, name, and t
   assert.match(html, /class="lang-picker-name"/);
   assert.match(html, /Brazilian Portuguese/);
   assert.match(html, /class="lang-picker-tick"/);
+  assert.doesNotMatch(html, /\schecked/);
   assert.doesNotMatch(html, /type="checkbox"[^>]*>\s*[🇧🇷🇨🇦🇫🇷🇦🇷]/);
 });
 
@@ -205,6 +207,13 @@ test('buildLangPickerOptionHtml escapes label HTML', () => {
   });
   assert.match(html, /Quebec &lt;script&gt; French &amp; &quot;co&quot;/);
   assert.doesNotMatch(html, /<script>/);
+});
+
+test('getLangPickerOptions includes owned languages as selected', () => {
+  assert.deepEqual(getLangPickerOptions(['pt-br', 'fr'], ['fr']), [
+    { modeId: 'pt-br', selected: false },
+    { modeId: 'fr', selected: true }
+  ]);
 });
 
 test('mode and learning language ids round-trip', () => {

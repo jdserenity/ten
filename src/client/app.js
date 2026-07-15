@@ -17,6 +17,7 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierKey,
+  getLangPickerOptions,
   getReviewEmptyState,
   isDailyReviewComplete,
   isReviewGradeButtonsDisabled,
@@ -389,12 +390,6 @@ function resolveActiveModeForUser() {
   return modeIds[0];
 }
 
-function getAvailablePickerModeIds(context = 'header') {
-  const owned = new Set(getUserModeIds());
-  if (context === 'header' && !owned.size) return [...OFFERED_MODE_IDS];
-  return OFFERED_MODE_IDS.filter(modeId => !owned.has(modeId));
-}
-
 function readPickerSelections(container) {
   if (!container) return [];
   return Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
@@ -402,20 +397,18 @@ function readPickerSelections(container) {
     .filter(modeId => MODE_CONFIGS[modeId]);
 }
 
-function renderPickerOptions(container, context) {
+function renderPickerOptions(container) {
   if (!container) return;
-  const modeIds = getAvailablePickerModeIds(context);
-  container.innerHTML = modeIds.map(modeId => {
+  const options = getLangPickerOptions(OFFERED_MODE_IDS, getUserModeIds());
+  container.innerHTML = options.map(({ modeId, selected }) => {
     const mode = MODE_CONFIGS[modeId];
     return buildLangPickerOptionHtml({
       modeId,
-      flag: mode.flagEmoji || '',
-      label: getModeLabel(modeId)
+      flag: mode?.flagEmoji || '',
+      label: getModeLabel(modeId),
+      selected
     });
   }).join('');
-  if (!modeIds.length) {
-    container.innerHTML = '<p class="status-line">' + escapeHtml(tr('picker.allLanguages')) + '</p>';
-  }
 }
 
 function setLanguagePickerOpen(context, open) {
@@ -509,8 +502,8 @@ function renderSettings() {
   renderSettingsAppLangButtons();
   const feedbackSection = document.getElementById('settings-feedback-section');
   feedbackSection?.classList.toggle('hidden', !state.user?.isDev);
-  renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'), 'header');
-  renderPickerOptions(document.querySelector('.settings-lang-picker-options'), 'settings');
+  renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
+  renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
 }
 
 async function loadSettingsFeedback() {
@@ -2312,7 +2305,7 @@ function setupAuthEvents() {
   document.getElementById('header-lang-add-btn')?.addEventListener('click', () => {
     const open = state.languagePickerContext !== 'header';
     setLanguagePickerOpen('header', open);
-    renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'), 'header');
+    renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
   });
 
   document.getElementById('header-lang-confirm-btn')?.addEventListener('click', async () => {
@@ -2322,7 +2315,7 @@ function setupAuthEvents() {
       return;
     }
     try {
-      await saveUserLanguages(selected, { replace: false });
+      await saveUserLanguages(selected, { replace: true });
       setLanguagePickerOpen('header', false);
     } catch (error) {
       setStatus('daily-save-status', formatError(error), 'error');
@@ -2332,17 +2325,13 @@ function setupAuthEvents() {
   document.getElementById('settings-lang-add-btn')?.addEventListener('click', () => {
     const open = state.languagePickerContext !== 'settings';
     setLanguagePickerOpen('settings', open);
-    renderPickerOptions(document.querySelector('.settings-lang-picker-options'), 'settings');
+    renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
   });
 
   document.getElementById('settings-lang-confirm-btn')?.addEventListener('click', async () => {
     const selected = readPickerSelections(document.querySelector('.settings-lang-picker-options'));
-    if (!selected.length) {
-      setStatus('daily-save-status', tr('daily.pickLanguage'), 'error');
-      return;
-    }
     try {
-      await saveUserLanguages(selected, { replace: false });
+      await saveUserLanguages(selected, { replace: true });
       setLanguagePickerOpen('settings', false);
       renderSettings();
     } catch (error) {

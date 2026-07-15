@@ -182,11 +182,20 @@ export function escapeLangPickerText(value) {
     .replace(/"/g, '&quot;');
 }
 
-export function buildLangPickerOptionHtml({ modeId, flag = '', label = '' } = {}) {
+export function getLangPickerOptions(offeredModeIds, ownedModeIds = []) {
+  const owned = new Set(Array.isArray(ownedModeIds) ? ownedModeIds : []);
+  return (Array.isArray(offeredModeIds) ? offeredModeIds : []).map(modeId => ({
+    modeId,
+    selected: owned.has(modeId)
+  }));
+}
+
+export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selected = false } = {}) {
   const safeMode = String(modeId || '').replace(/"/g, '');
   const safeFlag = escapeLangPickerText(flag);
   const safeLabel = escapeLangPickerText(label);
-  return `<label class="lang-picker-option"><input type="checkbox" value="${safeMode}" /><span class="lang-picker-flag">${safeFlag}</span><span class="lang-picker-name">${safeLabel}</span><span class="lang-picker-tick" aria-hidden="true"></span></label>`;
+  const checked = selected ? ' checked' : '';
+  return `<label class="lang-picker-option"><input type="checkbox" value="${safeMode}"${checked} /><span class="lang-picker-flag">${safeFlag}</span><span class="lang-picker-name">${safeLabel}</span><span class="lang-picker-tick" aria-hidden="true"></span></label>`;
 }
 
 export function normalizeUsername(value) {

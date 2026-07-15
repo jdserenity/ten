@@ -27,7 +27,8 @@ import {
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
-  swapTranslateDirection as swapTranslateDirectionPair
+  swapTranslateDirection as swapTranslateDirectionPair,
+  userHasLearningLanguages
 } from './ten-logic.js';
 import {
   computePoolDaysLeft,
@@ -213,6 +214,7 @@ function applyAppLanguage() {
   updateFrequencyModeLabel();
   updateDateLabel();
   renderSettingsAppLangButtons();
+  syncNoLanguageUi();
 }
 
 function syncAppLangFromUser() {
@@ -271,6 +273,10 @@ function getUserModeIds() {
   return getUserLearningLanguages()
     .map(modeIdFromLearningLang)
     .filter(modeId => MODE_CONFIGS[modeId]);
+}
+
+function hasUserLearningLanguages() {
+  return userHasLearningLanguages(getUserLearningLanguages());
 }
 
 function saveUserToStorage(user) {
@@ -418,7 +424,7 @@ async function saveUserLanguages(modeIds, { replace = false } = {}) {
   if (nextMode) {
     await setLearningMode(nextMode, { force: true, resetTranslate: true });
   } else {
-    showDailyUnavailable(tr('daily.addLanguage'));
+    showDailyNoLanguageState();
   }
   if (state.settingsOpen) renderSettings();
 }
@@ -467,6 +473,7 @@ function renderAuthChrome() {
   });
   updateModeToggleUi();
   renderSettings();
+  syncNoLanguageUi();
 }
 
 function renderSettings() {
@@ -584,6 +591,12 @@ function displayFrequencyLanguage(code) {
 function updateFrequencyModeLabel() {
   const label = document.getElementById('frequency-mode-label');
   if (!label) return;
+  if (!hasUserLearningLanguages()) {
+    label.textContent = '';
+    label.classList.add('hidden');
+    return;
+  }
+  label.classList.remove('hidden');
   label.textContent = tr('frequency.dictionary', { language: displayFrequencyLanguage(getFrequencyLanguageForMode()) });
 }
 
@@ -984,8 +997,9 @@ async function loadDailyGlosses(word) {
 function renderDailyWord(index) {
   const word = state.todayWords[index];
   if (!word) {
-    document.getElementById('word').textContent = tr('daily.unavailable');
-    document.getElementById('translation').textContent = tr('daily.listLoadFailed');
+    const noLanguage = !hasUserLearningLanguages();
+    document.getElementById('word').textContent = noLanguage ? tr('daily.addLanguage') : tr('daily.unavailable');
+    document.getElementById('translation').textContent = '';
     document.getElementById('daily-frequency-rank').textContent = '';
     document.getElementById('s1-l2').textContent = '';
     document.getElementById('s1-en').textContent = '';
@@ -1000,8 +1014,19 @@ function renderDailyWord(index) {
     ['word-add-btn','s1-add-btn','s2-add-btn','add-all-btn'].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
+    const sentenceLabel = document.getElementById('sentence-language-label');
+    const divider = document.querySelector('#card .divider');
+    if (sentenceLabel) sentenceLabel.classList.toggle('hidden', true);
+    if (divider) divider.classList.toggle('hidden', true);
+    document.querySelectorAll('#card .sentence').forEach(el => el.classList.add('hidden'));
     return;
   }
+
+  const sentenceLabel = document.getElementById('sentence-language-label');
+  const divider = document.querySelector('#card .divider');
+  if (sentenceLabel) sentenceLabel.classList.remove('hidden');
+  if (divider) divider.classList.remove('hidden');
+  document.querySelectorAll('#card .sentence').forEach(el => el.classList.remove('hidden'));
 
   state.currentWordIndex = index;
   if (state.activeTab === 'daily') {
@@ -1236,6 +1261,17 @@ function updatePoolInfo() {
   poolInfo.classList.toggle('warning', poolDays <= 7);
 }
 
+function showDailyNoLanguageState() {
+  state.words = [];
+  state.todayWords = [];
+  state.currentWordIndex = 0;
+  state.seenWordIndexes = new Set();
+  document.getElementById('dots').innerHTML = '';
+  dailyDots = [];
+  renderDailyWord(0);
+  syncNoLanguageUi();
+}
+
 function showDailyUnavailable(reason) {
   state.words = [];
   state.todayWords = [];
@@ -1247,7 +1283,7 @@ function showDailyUnavailable(reason) {
   const poolInfo = document.getElementById('pool-info');
   poolInfo.textContent = reason;
   poolInfo.classList.add('warning');
-  setStatus('daily-save-status', tr('daily.listUnavailable'), 'error');
+  setStatus('daily-save-status', '');
 }
 
 function updateModeToggleUi() {
@@ -1277,8 +1313,48 @@ function updateLanguageCopy() {
   if (backLabel) backLabel.textContent = tr('translate.back', { language: translatorLabel });
   if (backInput) backInput.placeholder = tr('translate.backPlaceholder', { language: translatorLabel });
   if (reviewBackLabel) reviewBackLabel.textContent = tr('translate.back', { language: translatorLabel });
-  if (sentenceLabel) sentenceLabel.textContent = tr('daily.sentenceInUse', { language: translatorLabel });
-  if (fromLabel && !state.lastDetectedSourceLang) fromLabel.textContent = getModeShortLabel(mode.id);
+  if (sentenceLabel && hasUserLearningLanguages()) {
+    sentenceLabel.textContent = tr('daily.sentenceInUse', { language: translatorLabel });
+    sentenceLabel.classList.remove('hidden');
+  } else if (sentenceLabel) {
+    sentenceLabel.textContent = '';
+    sentenceLabel.classList.add('hidden');
+  }
+  if (fromLabel && !state.lastDetectedSourceLang && hasUserLearningLanguages()) {
+    fromLabel.textContent = getModeShortLabel(mode.id);
+  }
+}
+
+function updateTranslateAvailability() {
+  const ready = hasUserLearningLanguages();
+  const translateInput = document.getElementById('translate-input');
+  const translateBtn = document.getElementById('translate-btn');
+  const swapBtn = document.getElementById('swap-languages-btn');
+  const clearBtn = document.getElementById('clear-translate-btn');
+  const freqSearch = document.getElementById('frequency-search-input');
+  if (translateInput) translateInput.disabled = !ready;
+  if (translateBtn) translateBtn.disabled = !ready;
+  if (swapBtn) swapBtn.disabled = !ready;
+  if (clearBtn) clearBtn.disabled = !ready;
+  if (freqSearch) freqSearch.disabled = !ready;
+}
+
+function syncNoLanguageUi() {
+  const ready = hasUserLearningLanguages();
+  document.body.classList.toggle('no-learning-language', !ready);
+  updateTranslateAvailability();
+  updateTranslateDirectionUi();
+  updateFrequencyModeLabel();
+  if (!ready) {
+    setStatus('daily-save-status', '');
+    setStatus('review-status', '');
+    setStatus('frequency-status', '');
+    const poolInfo = document.getElementById('pool-info');
+    if (poolInfo) {
+      poolInfo.textContent = '';
+      poolInfo.classList.remove('warning');
+    }
+  }
 }
 
 async function setLearningMode(modeId, options = {}) {
@@ -1610,6 +1686,19 @@ function recordReviewSessionProgress() {
 }
 
 async function loadReviewQueue(options = {}) {
+  if (!hasUserLearningLanguages()) {
+    state.reviewCards = [];
+    state.reviewDueCount = 0;
+    state.reviewCurrentIndex = 0;
+    state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
+    setStatus('review-status', '');
+    renderReview();
+    return;
+  }
+
   const refreshTotal = Boolean(options.refreshTotal) || state.reviewTotalCount <= 0;
   const mode = getModeConfig();
   setStatus('review-status', '');
@@ -1908,6 +1997,11 @@ function renderFrequencyDictionary() {
 }
 
 async function loadFrequencyTabData() {
+  if (!hasUserLearningLanguages()) {
+    renderFrequencyDictionary();
+    setStatus('frequency-status', '');
+    return;
+  }
   const language = getFrequencyLanguageForMode();
   try {
     await ensureFrequencyLanguageLoaded(language);
@@ -2062,6 +2156,14 @@ function updateTranslateDirectionUi() {
   const fromLabel = document.getElementById('translate-from-label');
   const toLabel = document.getElementById('translate-to-label');
   if (!fromLabel || !toLabel || !fromCaption || !fromSide) return;
+
+  if (!hasUserLearningLanguages()) {
+    fromCaption.textContent = tr('translate.from');
+    fromLabel.textContent = getNativeDisplayName();
+    fromSide.classList.remove('detected-mismatch');
+    toLabel.textContent = tr('daily.addLanguage');
+    return;
+  }
 
   const selectedSourceLabel = displayTranslateLanguage(state.settings.translateSource);
   const selectedTargetLabel = displayTranslateLanguage(state.settings.translateTarget);
@@ -2631,7 +2733,7 @@ async function bootApp() {
   if (nextMode) {
     await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
   } else {
-    showDailyUnavailable(tr('daily.addLanguage'));
+    showDailyNoLanguageState();
   }
 
   setActiveTab(resolveStartupTab({

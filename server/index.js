@@ -111,6 +111,7 @@ function normalizeTargetLanguage(value) {
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return code;
 }
 
@@ -120,6 +121,7 @@ function normalizeSourceLanguage(value) {
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return '';
 }
 
@@ -128,7 +130,15 @@ function toGoogleLanguageCode(value) {
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'en';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'pt-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'fr';
+  if (code === 'ES-AR') return 'es-AR';
+  if (code === 'ES' || code === 'ES-419') return 'es';
   return code.toLowerCase();
+}
+
+function toDeepLTargetLanguage(value) {
+  const code = normalizeTargetLanguage(value);
+  if (code === 'ES-AR') return 'ES';
+  return code;
 }
 
 function normalizeDetectedSourceLanguage(value) {
@@ -137,6 +147,7 @@ function normalizeDetectedSourceLanguage(value) {
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return code;
 }
 
@@ -307,7 +318,7 @@ async function proxyTranslate(req, res) {
       return sendJson(res, 400, { error: 'Missing DeepL auth key. Set DEEPL_AUTH_KEY in your server environment.' });
     }
 
-    const result = await requestDeepLTranslation({ text, targetLang, authKey });
+    const result = await requestDeepLTranslation({ text, targetLang: toDeepLTargetLanguage(targetLang), authKey });
     if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
     return sendJson(res, 200, {
       ...result.body,

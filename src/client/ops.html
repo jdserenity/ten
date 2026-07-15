@@ -7,15 +7,21 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body class="ops-page">
-  <a href="/" class="ops-back-link">← Ten</a>
+  <header class="ops-header">
+    <a href="/" class="ops-back-link">← Ten</a>
+    <h1>Ops</h1>
+  </header>
 
   <div id="ops-loading" class="ops-status">Loading...</div>
   <div id="ops-error" class="ops-status ops-error hidden"></div>
 
   <main id="ops-main" class="ops-main hidden">
-    <ul id="ops-pool-list" class="ops-pool-list"></ul>
+    <section class="ops-section">
+      <h2 class="ops-section-label">Pool runway</h2>
+      <ul id="ops-pool-list" class="ops-pool-list"></ul>
+    </section>
 
-    <section class="ops-feedback-section">
+    <section class="ops-section">
       <h2 class="ops-section-label">Feedback</h2>
       <div id="ops-feedback-list" class="ops-feedback-list"></div>
     </section>

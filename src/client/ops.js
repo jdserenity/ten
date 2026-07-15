@@ -32,8 +32,9 @@ async function apiFetch(url, options = {}) {
   return fetch(url, { ...options, headers });
 }
 
-function formatDaysCompact(days) {
-  return Number.isInteger(days) ? `${days}d` : `${days.toFixed(1)}d`;
+function formatDaysLeft(days) {
+  const formatted = Number.isInteger(days) ? String(days) : days.toFixed(1);
+  return days === 1 ? `~${formatted} day` : `~${formatted} days`;
 }
 
 function showError(message) {
@@ -54,7 +55,7 @@ function renderPoolHealth(languages) {
   }
   list.innerHTML = languages.map(lang => {
     const rowClass = lang.warning ? 'ops-pool-row warning' : 'ops-pool-row';
-    return `<li class="${rowClass}"><span class="ops-pool-flag">${lang.flagEmoji}</span><span class="ops-pool-days">${formatDaysCompact(lang.minDaysLeft)}</span></li>`;
+    return `<li class="${rowClass}"><span class="ops-pool-name">${lang.flagEmoji} ${escapeHtml(lang.label)}</span><span class="ops-pool-days">${formatDaysLeft(lang.minDaysLeft)}</span></li>`;
   }).join('');
 }
 

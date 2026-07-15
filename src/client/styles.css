@@ -431,23 +431,29 @@ header {
   transform: scale(0.95);
 }
 
-body.ops-page {
-  padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom);
-}
-
 .ops-page {
   display: block;
-  padding-top: 8px;
-  padding-bottom: 20px;
-  font-size: 13px;
+  padding-bottom: 32px;
+}
+
+.ops-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.ops-header h1 {
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .ops-back-link {
-  display: inline-block;
   color: var(--muted);
   text-decoration: none;
-  font-size: 12px;
-  margin-bottom: 10px;
+  font-size: 14px;
 }
 
 .ops-back-link:hover {
@@ -457,12 +463,23 @@ body.ops-page {
 .ops-main {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 28px;
+}
+
+.ops-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ops-section-label {
+  font-size: 15px;
+  font-weight: 600;
 }
 
 .ops-status {
   color: var(--muted);
-  font-size: 12px;
+  padding: 12px 0;
 }
 
 .ops-error {
@@ -475,27 +492,30 @@ body.ops-page {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0;
 }
 
 .ops-pool-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
-  min-height: 20px;
-  padding: 1px 0;
-  line-height: 1.2;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
 }
 
-.ops-pool-flag {
-  font-size: 14px;
-  line-height: 1;
+.ops-pool-row:last-child {
+  border-bottom: none;
+}
+
+.ops-pool-name {
+  font-size: 15px;
+  min-width: 0;
 }
 
 .ops-pool-days {
-  font-size: 12px;
+  font-size: 15px;
   color: var(--muted);
+  flex-shrink: 0;
   font-variant-numeric: tabular-nums;
 }
 
@@ -503,23 +523,10 @@ body.ops-page {
   color: #e5a84e;
 }
 
-.ops-section-label {
-  font-size: 11px;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--muted);
-  margin-bottom: 6px;
-}
-
-.ops-feedback-section {
-  margin-top: 4px;
-}
-
 .ops-feedback-list {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
 }
 
 .ops-feedback-item {

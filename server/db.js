@@ -7,6 +7,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const DEFAULT_DB_PATH = join(ROOT, 'data', 'ten.db');
 const VALID_LANGUAGES = new Set(['PT-BR', 'FR']);
+const SEED_DEV_USERNAME = 'jd';
 
 let db;
 
@@ -24,11 +25,188 @@ function normalizeLanguage(value) {
   return VALID_LANGUAGES.has(code) ? code : '';
 }
 
+export function normalizeUsername(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function mapUserRow(row) {
+  if (!row) return null;
+  return {
+    id: row.id,
+    username: row.username,
+    isDev: Boolean(row.is_dev),
+    createdAt: row.created_at
+  };
+}
+
+function tableHasColumn(tableName, columnName) {
+  const cols = getDb().prepare(`PRAGMA table_info(${tableName})`).all();
+  return cols.some(col => col.name === columnName);
+}
+
+function ensureSeedDevUser() {
+  const existing = getDb()
+    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE username = ? COLLATE NOCASE')
+    .get(SEED_DEV_USERNAME);
+  let user;
+  if (existing) {
+    if (!existing.is_dev) {
+      getDb().prepare('UPDATE users SET is_dev = 1 WHERE id = ?').run(existing.id);
+      existing.is_dev = 1;
+    }
+    user = mapUserRow(existing);
+  } else {
+    const result = getDb()
+      .prepare('INSERT INTO users (username, is_dev) VALUES (?, 1)')
+      .run(SEED_DEV_USERNAME);
+    user = getUserById(Number(result.lastInsertRowid));
+  }
+  if (!getUserLanguages(user.id).length) setUserLanguages(user.id, ['PT-BR', 'FR']);
+  return user;
+}
+
+function migrateLegacyRowsToUser(userId) {
+  const assignUserId = (tableName, extraSql = '') => {
+    if (!tableHasColumn(tableName, 'user_id')) return;
+    getDb().prepare(`UPDATE ${tableName} SET user_id = ? WHERE user_id IS NULL ${extraSql}`).run(userId);
+  };
+  assignUserId('unlocked_words');
+  assignUserId('daily_card_index');
+  assignUserId('daily_word_assignment');
+  assignUserId('cards');
+}
+
+function migrateUnlockedWordsTable(userId) {
+  if (tableHasColumn('unlocked_words', 'user_id')) return;
+  getDb().exec(`
+    CREATE TABLE unlocked_words_new (
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      normalized_word TEXT NOT NULL,
+      unlocked_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (user_id, language, normalized_word)
+    );
+    INSERT INTO unlocked_words_new (user_id, language, normalized_word, unlocked_at)
+      SELECT ?, language, normalized_word, unlocked_at FROM unlocked_words;
+    DROP TABLE unlocked_words;
+    ALTER TABLE unlocked_words_new RENAME TO unlocked_words;
+    CREATE INDEX IF NOT EXISTS idx_unlocked_words_user_language
+      ON unlocked_words (user_id, language);
+  `);
+  migrateLegacyRowsToUser(userId);
+}
+
+function migrateDailyCardIndexTable(userId) {
+  if (tableHasColumn('daily_card_index', 'user_id')) return;
+  getDb().exec(`
+    CREATE TABLE daily_card_index_new (
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      date_key TEXT NOT NULL,
+      card_index INTEGER NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (user_id, language, date_key)
+    );
+    INSERT INTO daily_card_index_new (user_id, language, date_key, card_index, updated_at)
+      SELECT ?, language, date_key, card_index, updated_at FROM daily_card_index;
+    DROP TABLE daily_card_index;
+    ALTER TABLE daily_card_index_new RENAME TO daily_card_index;
+  `);
+  migrateLegacyRowsToUser(userId);
+}
+
+function migrateDailyWordAssignmentTable(userId) {
+  if (tableHasColumn('daily_word_assignment', 'user_id')) return;
+  getDb().exec(`
+    CREATE TABLE daily_word_assignment_new (
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      date_key TEXT NOT NULL,
+      words_json TEXT NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (user_id, language, date_key)
+    );
+    INSERT INTO daily_word_assignment_new (user_id, language, date_key, words_json, updated_at)
+      SELECT ?, language, date_key, words_json, updated_at FROM daily_word_assignment;
+    DROP TABLE daily_word_assignment;
+    ALTER TABLE daily_word_assignment_new RENAME TO daily_word_assignment;
+  `);
+  migrateLegacyRowsToUser(userId);
+}
+
+function migrateCardsTable(userId) {
+  if (tableHasColumn('cards', 'user_id')) return;
+  getDb().exec(`
+    CREATE TABLE cards_new (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      front TEXT NOT NULL,
+      back TEXT NOT NULL,
+      context TEXT NOT NULL DEFAULT '',
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      due INTEGER NOT NULL,
+      stability REAL NOT NULL DEFAULT 0,
+      difficulty REAL NOT NULL DEFAULT 0,
+      elapsed_days REAL NOT NULL DEFAULT 0,
+      scheduled_days INTEGER NOT NULL DEFAULT 0,
+      learning_steps INTEGER NOT NULL DEFAULT 0,
+      reps INTEGER NOT NULL DEFAULT 0,
+      lapses INTEGER NOT NULL DEFAULT 0,
+      fsrs_state INTEGER NOT NULL DEFAULT 0,
+      last_review INTEGER,
+      UNIQUE (user_id, language, front, back)
+    );
+    INSERT INTO cards_new (
+      id, user_id, language, front, back, context, created_at,
+      due, stability, difficulty, elapsed_days, scheduled_days,
+      learning_steps, reps, lapses, fsrs_state, last_review
+    )
+      SELECT
+        id, ?, language, front, back, context, created_at,
+        due, stability, difficulty, elapsed_days, scheduled_days,
+        learning_steps, reps, lapses, fsrs_state, last_review
+      FROM cards;
+    DROP TABLE cards;
+    ALTER TABLE cards_new RENAME TO cards;
+    CREATE INDEX IF NOT EXISTS idx_cards_user_language_due ON cards (user_id, language, due);
+    CREATE INDEX IF NOT EXISTS idx_cards_user_language_state ON cards (user_id, language, fsrs_state);
+  `);
+  migrateLegacyRowsToUser(userId);
+}
+
+function runMultiUserMigrations() {
+  const seedUser = ensureSeedDevUser();
+  migrateUnlockedWordsTable(seedUser.id);
+  migrateDailyCardIndexTable(seedUser.id);
+  migrateDailyWordAssignmentTable(seedUser.id);
+  migrateCardsTable(seedUser.id);
+}
+
 export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
   mkdirSync(dirname(dbPath), { recursive: true });
   db = new Database(dbPath);
   db.pragma('journal_mode = WAL');
   db.exec(`
+    CREATE TABLE IF NOT EXISTS users (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      username TEXT NOT NULL UNIQUE COLLATE NOCASE,
+      is_dev INTEGER NOT NULL DEFAULT 0,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch())
+    );
+    CREATE TABLE IF NOT EXISTS user_languages (
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      PRIMARY KEY (user_id, language),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
+    CREATE TABLE IF NOT EXISTS feedback (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id INTEGER NOT NULL,
+      body TEXT NOT NULL,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      FOREIGN KEY (user_id) REFERENCES users(id)
+    );
     CREATE TABLE IF NOT EXISTS unlocked_words (
       language TEXT NOT NULL,
       normalized_word TEXT NOT NULL,
@@ -73,6 +251,7 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
       PRIMARY KEY (language, date_key)
     );
   `);
+  runMultiUserMigrations();
   return db;
 }
 
@@ -83,10 +262,109 @@ export function getDb() {
   return db;
 }
 
-export function getAllUnlockedWords() {
+export function getUserById(id) {
+  const userId = Number(id);
+  if (!Number.isInteger(userId) || userId <= 0) return null;
+  const row = getDb()
+    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE id = ?')
+    .get(userId);
+  return mapUserRow(row);
+}
+
+export function findOrCreateUser(username) {
+  const normalized = normalizeUsername(username);
+  if (!normalized || normalized.length > 40 || !/^[a-z0-9_-]+$/.test(normalized)) {
+    return { ok: false, reason: 'invalid' };
+  }
+  const existing = getDb()
+    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE username = ? COLLATE NOCASE')
+    .get(normalized);
+  if (existing) return { ok: true, ...mapUserRow(existing) };
+  const result = getDb()
+    .prepare('INSERT INTO users (username, is_dev) VALUES (?, 0)')
+    .run(normalized);
+  return { ok: true, ...getUserById(Number(result.lastInsertRowid)) };
+}
+
+export function getUserLanguages(userId) {
+  const user = getUserById(userId);
+  if (!user) return [];
   const rows = getDb()
-    .prepare('SELECT language, normalized_word FROM unlocked_words ORDER BY language, normalized_word')
-    .all();
+    .prepare('SELECT language FROM user_languages WHERE user_id = ? ORDER BY language')
+    .all(user.id);
+  return rows.map(row => row.language).filter(lang => VALID_LANGUAGES.has(lang));
+}
+
+function normalizeLanguageList(languages) {
+  if (!Array.isArray(languages)) return [];
+  const seen = new Set();
+  const normalized = [];
+  for (const language of languages) {
+    const lang = normalizeLanguage(language);
+    if (!lang || seen.has(lang)) continue;
+    seen.add(lang);
+    normalized.push(lang);
+  }
+  return normalized;
+}
+
+export function setUserLanguages(userId, languages) {
+  const user = getUserById(userId);
+  if (!user) return { ok: false, reason: 'invalid_user' };
+  const normalized = normalizeLanguageList(languages);
+  const replace = getDb().transaction((uid, langs) => {
+    getDb().prepare('DELETE FROM user_languages WHERE user_id = ?').run(uid);
+    const insert = getDb().prepare('INSERT INTO user_languages (user_id, language) VALUES (?, ?)');
+    langs.forEach(lang => insert.run(uid, lang));
+  });
+  replace(user.id, normalized);
+  return { ok: true, languages: getUserLanguages(user.id) };
+}
+
+export function addUserLanguages(userId, languages) {
+  const user = getUserById(userId);
+  if (!user) return { ok: false, reason: 'invalid_user' };
+  const normalized = normalizeLanguageList(languages);
+  if (!normalized.length) return { ok: false, reason: 'invalid' };
+  const insert = getDb().prepare('INSERT OR IGNORE INTO user_languages (user_id, language) VALUES (?, ?)');
+  normalized.forEach(lang => insert.run(user.id, lang));
+  return { ok: true, languages: getUserLanguages(user.id) };
+}
+
+export function addFeedback(userId, body) {
+  const user = getUserById(userId);
+  const text = String(body || '').trim();
+  if (!user || !text) return { ok: false, reason: 'invalid' };
+  const result = getDb()
+    .prepare('INSERT INTO feedback (user_id, body) VALUES (?, ?)')
+    .run(user.id, text);
+  return { ok: true, id: Number(result.lastInsertRowid) };
+}
+
+export function getFeedbackList(limit = 100) {
+  const rows = getDb()
+    .prepare(`
+      SELECT feedback.id, feedback.body, feedback.created_at, users.username
+      FROM feedback
+      JOIN users ON users.id = feedback.user_id
+      ORDER BY feedback.created_at DESC, feedback.id DESC
+      LIMIT ?
+    `)
+    .all(limit);
+  return rows.map(row => ({
+    id: row.id,
+    body: row.body,
+    createdAt: row.created_at,
+    username: row.username
+  }));
+}
+
+export function getAllUnlockedWords(userId) {
+  const user = getUserById(userId);
+  if (!user) return { 'PT-BR': [], FR: [] };
+  const rows = getDb()
+    .prepare('SELECT language, normalized_word FROM unlocked_words WHERE user_id = ? ORDER BY language, normalized_word')
+    .all(user.id);
   const wordsByLanguage = { 'PT-BR': [], FR: [] };
   for (const row of rows) {
     if (!wordsByLanguage[row.language]) wordsByLanguage[row.language] = [];
@@ -95,66 +373,70 @@ export function getAllUnlockedWords() {
   return wordsByLanguage;
 }
 
-export function addUnlockedWord(language, word) {
+export function addUnlockedWord(userId, language, word) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const normalized = normalizeWord(word);
-  if (!lang || !normalized) return { ok: false, reason: 'invalid' };
+  if (!user || !lang || !normalized) return { ok: false, reason: 'invalid' };
   const result = getDb()
-    .prepare('INSERT OR IGNORE INTO unlocked_words (language, normalized_word) VALUES (?, ?)')
-    .run(lang, normalized);
+    .prepare('INSERT OR IGNORE INTO unlocked_words (user_id, language, normalized_word) VALUES (?, ?, ?)')
+    .run(user.id, lang, normalized);
   return { ok: true, added: result.changes > 0, language: lang, word: normalized };
 }
 
-export function importUnlockedWords(wordsByLanguage) {
-  if (!wordsByLanguage || typeof wordsByLanguage !== 'object') return { imported: 0 };
+export function importUnlockedWords(userId, wordsByLanguage) {
+  const user = getUserById(userId);
+  if (!user || !wordsByLanguage || typeof wordsByLanguage !== 'object') return { imported: 0 };
   const insert = getDb().prepare(
-    'INSERT OR IGNORE INTO unlocked_words (language, normalized_word) VALUES (?, ?)'
+    'INSERT OR IGNORE INTO unlocked_words (user_id, language, normalized_word) VALUES (?, ?, ?)'
   );
   let imported = 0;
-  const importMany = getDb().transaction(payload => {
+  const importMany = getDb().transaction((uid, payload) => {
     for (const [language, words] of Object.entries(payload)) {
       const lang = normalizeLanguage(language);
       if (!lang || !Array.isArray(words)) continue;
       for (const word of words) {
         const normalized = normalizeWord(word);
         if (!normalized) continue;
-        const result = insert.run(lang, normalized);
+        const result = insert.run(uid, lang, normalized);
         if (result.changes > 0) imported++;
       }
     }
   });
-  importMany(wordsByLanguage);
+  importMany(user.id, wordsByLanguage);
   return { imported };
 }
 
-export function getDailyCardIndex(language, dateKey) {
+export function getDailyCardIndex(userId, language, dateKey) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const key = String(dateKey || '').trim();
-  if (!lang || !key) return null;
+  if (!user || !lang || !key) return null;
   const row = getDb()
-    .prepare('SELECT card_index FROM daily_card_index WHERE language = ? AND date_key = ?')
-    .get(lang, key);
+    .prepare('SELECT card_index FROM daily_card_index WHERE user_id = ? AND language = ? AND date_key = ?')
+    .get(user.id, lang, key);
   if (!row) return null;
   const index = Number(row.card_index);
   return Number.isInteger(index) && index >= 0 ? index : null;
 }
 
-export function setDailyCardIndex(language, dateKey, cardIndex) {
+export function setDailyCardIndex(userId, language, dateKey, cardIndex) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const key = String(dateKey || '').trim();
   const index = Number(cardIndex);
-  if (!lang || !key || !Number.isInteger(index) || index < 0) {
+  if (!user || !lang || !key || !Number.isInteger(index) || index < 0) {
     return { ok: false, reason: 'invalid' };
   }
   getDb()
     .prepare(`
-      INSERT INTO daily_card_index (language, date_key, card_index, updated_at)
-      VALUES (?, ?, ?, unixepoch())
-      ON CONFLICT (language, date_key) DO UPDATE SET
+      INSERT INTO daily_card_index (user_id, language, date_key, card_index, updated_at)
+      VALUES (?, ?, ?, ?, unixepoch())
+      ON CONFLICT (user_id, language, date_key) DO UPDATE SET
         card_index = excluded.card_index,
         updated_at = excluded.updated_at
     `)
-    .run(lang, key, index);
+    .run(user.id, lang, key, index);
   return { ok: true, language: lang, dateKey: key, cardIndex: index };
 }
 
@@ -170,13 +452,14 @@ function parseDailyWordList(words) {
   return normalized;
 }
 
-export function getDailyWordAssignment(language, dateKey) {
+export function getDailyWordAssignment(userId, language, dateKey) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const key = String(dateKey || '').trim();
-  if (!lang || !key) return null;
+  if (!user || !lang || !key) return null;
   const row = getDb()
-    .prepare('SELECT words_json FROM daily_word_assignment WHERE language = ? AND date_key = ?')
-    .get(lang, key);
+    .prepare('SELECT words_json FROM daily_word_assignment WHERE user_id = ? AND language = ? AND date_key = ?')
+    .get(user.id, lang, key);
   if (!row) return null;
   try {
     const parsed = JSON.parse(row.words_json);
@@ -187,19 +470,20 @@ export function getDailyWordAssignment(language, dateKey) {
   }
 }
 
-export function setDailyWordAssignment(language, dateKey, words) {
+export function setDailyWordAssignment(userId, language, dateKey, words) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const key = String(dateKey || '').trim();
   const normalized = parseDailyWordList(words);
-  if (!lang || !key || !normalized) return { ok: false, reason: 'invalid' };
+  if (!user || !lang || !key || !normalized) return { ok: false, reason: 'invalid' };
   getDb()
     .prepare(`
-      INSERT INTO daily_word_assignment (language, date_key, words_json, updated_at)
-      VALUES (?, ?, ?, unixepoch())
-      ON CONFLICT (language, date_key) DO UPDATE SET
+      INSERT INTO daily_word_assignment (user_id, language, date_key, words_json, updated_at)
+      VALUES (?, ?, ?, ?, unixepoch())
+      ON CONFLICT (user_id, language, date_key) DO UPDATE SET
         words_json = excluded.words_json,
         updated_at = excluded.updated_at
     `)
-    .run(lang, key, JSON.stringify(normalized));
+    .run(user.id, lang, key, JSON.stringify(normalized));
   return { ok: true, language: lang, dateKey: key, words: normalized };
 }

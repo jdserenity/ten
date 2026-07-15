@@ -378,6 +378,7 @@ function applyUserPayload(payload) {
   };
   document.body.classList.toggle('dev-mode', state.user.isDev);
   document.body.classList.toggle('prod-mode', !state.user.isDev);
+  document.getElementById('ops-open-btn')?.classList.toggle('hidden', !state.user.isDev);
   saveUserToStorage(state.user);
   state.appLang = resolveAppLang(state.user.appLang, navigator.languages);
   applyAppLanguage();
@@ -516,7 +517,6 @@ function openSettingsOverlay() {
   if (state.languagePickerContext) setLanguagePickerOpen(state.languagePickerContext, false);
   state.settingsOpen = true;
   renderSettings();
-  loadSettingsFeedback();
   overlay.classList.remove('hidden');
   overlay.setAttribute('aria-hidden', 'false');
   requestAnimationFrame(() => overlay.classList.add('open'));
@@ -571,33 +571,9 @@ function renderSettings() {
     }).join('');
   }
   renderSettingsAppLangButtons();
-  const feedbackSection = document.getElementById('settings-feedback-section');
-  feedbackSection?.classList.toggle('hidden', !state.user?.isDev);
   renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
   renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
   renderPickerOptions(document.querySelector('.header-mode-lang-picker-options'));
-}
-
-async function loadSettingsFeedback() {
-  if (!state.user?.isDev) return;
-  const list = document.getElementById('settings-feedback-list');
-  if (!list) return;
-  try {
-    const response = await apiFetch('/api/feedback', { cache: 'no-store' });
-    if (!response.ok) return;
-    const body = await response.json();
-    const entries = Array.isArray(body.feedback) ? body.feedback : [];
-    if (!entries.length) {
-      list.innerHTML = '<p class="status-line">' + escapeHtml(tr('settings.noFeedback')) + '</p>';
-      return;
-    }
-    list.innerHTML = entries.map(entry => {
-      const when = entry.createdAt
-        ? new Date(entry.createdAt * 1000).toLocaleString()
-        : '';
-      return `<article class="settings-feedback-item"><div class="settings-feedback-meta">${entry.username || 'user'} · ${when}</div><p>${escapeHtml(entry.body || '')}</p></article>`;
-    }).join('');
-  } catch (_) {}
 }
 
 function escapeHtml(value) {
@@ -644,7 +620,6 @@ async function submitFeedback(body) {
     const payload = await response.json().catch(() => ({}));
     throw new Error(payload.error || tr('feedback.couldNotSend'));
   }
-  if (state.user?.isDev) await loadSettingsFeedback();
 }
 
 function getModeConfig(modeId = state.activeMode) {

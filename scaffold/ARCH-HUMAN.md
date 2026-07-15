@@ -27,11 +27,11 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 | **Review** | Review **10 flashcards** per day with progress dots, confetti on the 10th, then **∞** to keep going. Edit cards in place. Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. Opens on refresh when 10/day is done but review is not. |
 | **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. Last tab; opens on refresh when both 10/day and review are done for today. |
-| **Settings** | Cog icon in the header tools row (with feedback and flags) opens a panel: username, **app language** (English / Português), add languages (`+`), sign out. Dev account (`jd`) also sees submitted feedback. |
+| **Settings** | Cog icon in the header tools row (with feedback and flags) opens a panel: username, **app language** (English / Português), add languages (`+`), sign out. Dev account (`jd`) also sees a wrench **Ops** link (pool runway + feedback inbox). |
 
 Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show on the right and `+` moves to Settings. In Settings, the same language picker shows your current languages already selected — tap to deselect and Save to remove them. Header **feedback** field expands for beta notes.
 
-Language switch (Brazil / Quebec / France / Argentina) is top-right — only languages you've added. Pool-days footer and other owner debug chrome appear only for the dev account.
+Language switch (Brazil / Quebec / France / Argentina) is top-right — only languages you've added. The Ops page and 10/day pool-days footer appear only for the dev account.
 
 ## How the system is built
 

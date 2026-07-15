@@ -8,8 +8,8 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - Four offered learning tracks: **PT-BR** (intermediate / B1–B2 oriented), **FR** (beginner, Quebec-oriented; top-frequency vocabulary first), **FR-FR** (beginner, France-oriented; reuses the French word pool and frequency list with separate progress), and **ES-AR** (beginner, Argentina-oriented; word pool TBD). Users pick any on first open (header `+`) and can add or remove languages later in **Settings** (picker lists every track; owned ones start selected so deselecting + Save removes them). Default mode on open: last visited language among the user's languages.
 - Tabs: **10/day** (up to 10 unseen words/day from the active pool), **Review** (10 flashcards/day after 10/day, then unlimited), **Frequency** (bundled dictionaries with unlock highlighting), **Translate** (free-form translation; last tab). **Settings** opens from a cog icon in the header tools row (with feedback + flags; not a tab).
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per user + language; duplicate `(user_id, language, front, back)` rejected on add.
-- **Dev vs prod:** Dev users (`is_dev`) see owner-only UI such as `~N days left in <mode> pool` and a feedback list in Settings. Prod users do not.
-- **Feedback:** Header compact field expands to a writing panel; submits to SQLite. Dev users read entries in Settings.
+- **Dev vs prod:** Dev users (`is_dev`) see owner-only UI: wrench link to **`/ops.html`** (pool runway per language/user + feedback inbox), and `~N days left in <mode> pool` on the 10/day footer. Prod users do not.
+- **Feedback:** Header compact field expands to a writing panel; submits to SQLite. Dev users read entries on **Ops** (`/ops.html`), not in Settings.
 - **App language (UI / native):** Supported `en` and `pt-BR`. The `pt-BR` catalog is **Brazilian Portuguese** (not European). Before sign-in, UI uses `navigator.languages` detection. Signed-in users can override in **Settings**; stored on the account as `users.app_lang` (`NULL` = keep using browser detection). `<html lang>` tracks app language. Translate / Frequency inline translate use app language as the non-learning pole (falls back to `EN` when app language equals the active learning language). Strings live in `src/client/i18n.js`.
 - Mobile PWA first. Do not suggest desktop-only UX (e.g. Esc shortcuts) unless asked.
 - Lean root `README.md` — features only; architecture/deploy live here and in `ARCH-HUMAN.md`.
@@ -40,6 +40,9 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `src/client/i18n.js` | App-language catalogs (`en`, `pt-BR`), detection, `t()` |
 | `src/client/ten-logic.js` | Pure helpers for startup tab + frequency filters (unit-tested) |
 | `src/client/daily-pool.js` | 10/day word selection and pool-days-left math (shared with tests) |
+| `src/client/ops.html` | Dev-only ops dashboard (pool runway + feedback) |
+| `src/client/ops.js` | Ops page client logic |
+| `server/pool-health.js` | Pool runway report for `/api/dev/ops` |
 | `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/import-anki-cards.js` | One-shot AnkiConnect → SQLite import |
 | `scripts/check-words.js` | Quality gate for all dialect word pools (`npm run words:check`) |
@@ -66,6 +69,7 @@ Active language mode is stored in `localStorage` (last visited among the user's 
 | PUT | `/api/user-languages` | `{ languages, replace? }` — add or replace user's `PT-BR` / `FR` / `FR-FR` / `ES-AR` list. |
 | POST | `/api/feedback` | `{ body }` — save feedback for current user. |
 | GET | `/api/feedback` | Dev users only — list recent feedback with username + time. |
+| GET | `/api/dev/ops` | Dev users only — pool runway by language/user + feedback list. |
 | POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). Responses are cached in SQLite (`translation_cache`); cache hits return `provider: 'cache'`. No user header required. |
 | GET | `/api/cards/queue?language=` | New + due cards for Review (new first). Requires `X-User-Id`. |
 | POST | `/api/cards` | Add card `{ language, front, back, context? }`. |

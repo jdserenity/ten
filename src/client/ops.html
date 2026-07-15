@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ten Ops</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="ops-page">
+  <header class="ops-header">
+    <a href="/" class="ops-back-link">← Ten</a>
+    <h1>Ops</h1>
+  </header>
+
+  <div id="ops-loading" class="ops-status">Loading...</div>
+  <div id="ops-error" class="ops-status ops-error hidden"></div>
+
+  <main id="ops-main" class="ops-main hidden">
+    <section class="ops-section">
+      <div class="ops-section-heading">
+        <h2>Pool runway</h2>
+        <p class="ops-hint">Languages with active users, sorted by the tightest runway. Amber at ≤7 days.</p>
+      </div>
+      <div id="ops-pool-list" class="ops-pool-list"></div>
+    </section>
+
+    <section class="ops-section">
+      <div class="ops-section-heading">
+        <h2>Feedback</h2>
+        <p class="ops-hint">Beta notes submitted from the header field in the app.</p>
+      </div>
+      <div id="ops-feedback-list" class="ops-feedback-list"></div>
+    </section>
+  </main>
+
+  <script type="module" src="/ops.js"></script>
+</body>
+</html>

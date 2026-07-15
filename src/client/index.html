@@ -36,6 +36,11 @@
       </div>
       <div class="header-tools">
         <input id="feedback-compact-input" type="text" data-i18n-placeholder="header.feedbackPlaceholder" placeholder="feedback" data-i18n-aria-label="header.feedbackAria" aria-label="Send feedback" />
+        <a id="ops-open-btn" href="/ops.html" class="ops-open-btn hidden" aria-label="Ops" title="Ops">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path fill="currentColor" d="M22.7 19.3l-1.4-1.4c.4-.6.7-1.3.7-2.1 0-2.2-1.8-4-4-4-.8 0-1.5.3-2.1.7l-1.4-1.4c.9-.8 2.1-1.3 3.5-1.3 2.8 0 5 2.2 5 5 0 1.4-.5 2.6-1.3 3.5zM4 11c0-3.9 3.1-7 7-7 1.4 0 2.6.5 3.5 1.3l-1.4 1.4c-.6-.4-1.3-.7-2.1-.7-2.2 0-4 1.8-4 4 0 .8.3 1.5.7 2.1L4.7 13.3C4.3 12.6 4 11.8 4 11zm7 9c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm0-2c3.3 0 6-2.7 6-6s-2.7-6-6-6-6 2.7-6 6 2.7 6 6 6z"/>
+          </svg>
+        </a>
         <button id="settings-open-btn" type="button" class="settings-cog-btn" data-i18n-aria-label="header.settingsAria" data-i18n-title="header.settingsTitle" aria-label="Settings" title="Settings">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.93-3.34a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.86c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.93 3.34c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.86c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.93-3.34a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
@@ -119,10 +124,6 @@
           <button id="settings-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.save">Save</button>
         </div>
         <button id="settings-switch-user-btn" type="button" class="wide-btn" data-i18n="settings.signOut">Sign out</button>
-        <div id="settings-feedback-section" class="settings-feedback-block hidden">
-          <h2 data-i18n="settings.feedbackTitle">Feedback</h2>
-          <div id="settings-feedback-list" class="settings-feedback-list"></div>
-        </div>
       </div>
     </div>
 

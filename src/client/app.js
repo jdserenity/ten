@@ -2,6 +2,7 @@ import {
   appLangToApiCode,
   detectAppLanguage,
   formatPoolDaysLabel,
+  localeTagForAppLang,
   resolveAppLang,
   t
 } from './i18n.js';
@@ -200,6 +201,7 @@ function applyAppLanguage() {
   updateLanguageCopy();
   updateTranslateDirectionUi();
   updateFrequencyModeLabel();
+  updateDateLabel();
   renderSettingsAppLangButtons();
 }
 
@@ -820,8 +822,9 @@ function dateKey() {
 
 function updateDateLabel() {
   const now = new Date();
-  document.getElementById('date-label').textContent =
-    now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const el = document.getElementById('date-label');
+  if (!el) return;
+  el.textContent = now.toLocaleDateString(localeTagForAppLang(state.appLang), { month: 'short', day: 'numeric' });
 }
 
 function buildDailyDots() {

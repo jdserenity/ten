@@ -180,8 +180,8 @@ const ptBR = {
   'login.enterUsername': 'Digite um nome de usuário.',
   'login.signingIn': 'Entrando...',
   'login.couldNotSignIn': 'Não foi possível entrar.',
-  'header.feedbackPlaceholder': 'feedback',
-  'header.feedbackAria': 'Enviar feedback',
+  'header.feedbackPlaceholder': 'comentários',
+  'header.feedbackAria': 'Enviar comentário',
   'header.settingsAria': 'Configurações',
   'header.settingsTitle': 'Configurações',
   'header.addLanguagesAria': 'Adicionar idiomas',
@@ -207,14 +207,14 @@ const ptBR = {
   'settings.couldNotSaveAppLang': 'Não foi possível salvar o idioma do app.',
   'settings.couldNotSaveLanguages': 'Não foi possível salvar os idiomas.',
   'settings.signOut': 'Sair',
-  'settings.feedbackTitle': 'Feedback',
-  'settings.noFeedback': 'Nenhum feedback ainda.',
-  'feedback.title': 'Feedback',
-  'feedback.closeAria': 'Fechar feedback',
+  'settings.feedbackTitle': 'Comentários',
+  'settings.noFeedback': 'Nenhum comentário ainda.',
+  'feedback.title': 'Comentários',
+  'feedback.closeAria': 'Fechar comentários',
   'feedback.submit': 'Enviar',
-  'feedback.thanks': 'Obrigado — feedback enviado.',
+  'feedback.thanks': 'Obrigado — comentário enviado.',
   'feedback.writeFirst': 'Escreva algo primeiro.',
-  'feedback.couldNotSend': 'Não foi possível enviar o feedback.',
+  'feedback.couldNotSend': 'Não foi possível enviar o comentário.',
   'tab.daily': '10/dia',
   'tab.review': 'Revisar',
   'tab.frequency': 'Dicionário de frequência',
@@ -368,6 +368,10 @@ export function resolveAppLang(savedAppLang, browserLanguages) {
 
 export function appLangToApiCode(appLang) {
   return normalizeAppLang(appLang) === 'pt-BR' ? 'PT-BR' : 'EN';
+}
+
+export function localeTagForAppLang(appLang) {
+  return normalizeAppLang(appLang) === 'pt-BR' ? 'pt-BR' : 'en-US';
 }
 
 export function t(lang, key, vars = {}) {

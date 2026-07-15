@@ -114,9 +114,9 @@
             <p id="translate-result-text" class="translate-result-text"></p>
             <span id="translate-speak-slot-result" class="translate-speak-slot"></span>
           </div>
+          <p id="translate-frequency-rank" class="frequency-meta"></p>
         </div>
         <button id="translate-speak-btn" type="button" class="speak-btn" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
-        <p id="translate-frequency-rank" class="status-line"></p>
         <div class="button-row">
           <button id="quick-add-card-btn" class="primary-btn" disabled>Add card</button>
           <button id="toggle-note-config-btn" disabled>Configure note</button>
@@ -161,20 +161,37 @@
       </div>
 
       <div id="review-empty" class="surface-card">
-        <span class="caps-label">Need cards</span>
-        <p>Add flashcards from 10/day (use the ＋ buttons), then come back here to review.</p>
+        <span class="caps-label">All clear</span>
+        <p>No new or due cards for this language. Add cards from Translate or 10/day.</p>
       </div>
 
       <div id="review-card-panel" class="surface-card hidden">
-        <span class="caps-label">Front</span>
-        <p id="review-front-text" class="review-front"></p>
-        <p id="review-context" class="review-context hidden"></p>
+        <div id="review-display-wrap">
+          <span class="caps-label">Front</span>
+          <p id="review-front-text" class="review-front"></p>
+          <p id="review-context" class="review-context hidden"></p>
 
-        <div id="review-answer-wrap" class="hidden">
-          <span class="caps-label">Back</span>
-          <div class="review-back-row">
-            <p id="review-back-text" class="review-back"></p>
-            <button id="review-speak-btn" type="button" class="speak-btn" title="Hear back" aria-label="Hear back">🔊</button>
+          <div id="review-answer-wrap" class="hidden">
+            <span class="caps-label">Back</span>
+            <div class="review-back-row">
+              <p id="review-back-text" class="review-back"></p>
+              <button id="review-speak-btn" type="button" class="speak-btn" title="Hear back" aria-label="Hear back">🔊</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="review-edit-wrap" class="hidden">
+          <label class="field">
+            <span>Front (English)</span>
+            <textarea id="review-edit-front" rows="3" placeholder="Front of card"></textarea>
+          </label>
+          <label class="field">
+            <span id="review-edit-back-label">Back</span>
+            <textarea id="review-edit-back" rows="3" placeholder="Back of card"></textarea>
+          </label>
+          <div class="button-row">
+            <button id="review-edit-save" class="primary-btn" type="button">Save changes</button>
+            <button id="review-edit-cancel" type="button">Cancel</button>
           </div>
         </div>
 
@@ -190,11 +207,11 @@
         </div>
 
         <div class="button-row">
+          <button id="review-card-edit" type="button">Edit card</button>
           <button id="review-card-delete">Delete Card</button>
         </div>
       </div>
 
-      <button id="review-refresh-btn" class="wide-btn">Refresh</button>
       <p id="review-status" class="status-line"></p>
     </section>
 
@@ -222,6 +239,6 @@
   </div>
 
   <script src="/confetti.browser.js" defer></script>
-  <script type="module" src="/app.js"></script>
+  <script type="module" src="/app.js?v=3"></script>
 </body>
 </html>

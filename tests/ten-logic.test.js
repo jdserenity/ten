@@ -1,9 +1,15 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
+  buildNotLearnedFrozenPool,
   DAILY_REVIEW_GOAL,
+  defaultTranslateDirection,
+  extractPrimaryWordToken,
+  extractSingleLearningWord,
+  formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
+  getFrequencyTierLabel,
   isDailyReviewComplete,
   nextFrequencyFilter,
   resolveStartupTab
@@ -43,8 +49,74 @@ test('frequencyEntryMatchesFilter respects unlocked and not-learned views', () =
   assert.equal(frequencyEntryMatchesFilter(false, 'not-learned'), true);
 });
 
+test('defaultTranslateDirection targets English from the active learning language', () => {
+  assert.deepEqual(defaultTranslateDirection('FR'), { source: 'FR', target: 'EN' });
+  assert.deepEqual(defaultTranslateDirection('PT-BR'), { source: 'PT-BR', target: 'EN' });
+});
+
+test('buildNotLearnedFrozenPool snapshots only unseen normalized words', () => {
+  const entries = [
+    { normalizedWord: 'bonjour' },
+    { normalizedWord: 'merci' },
+    { normalizedWord: 'oui' }
+  ];
+  const seenSet = new Set(['merci']);
+  const frozen = buildNotLearnedFrozenPool(entries, seenSet);
+  assert.equal(frozen.size, 2);
+  assert.equal(frozen.has('bonjour'), true);
+  assert.equal(frozen.has('oui'), true);
+  assert.equal(frozen.has('merci'), false);
+});
+
+test('frequencyEntryMatchesFilter keeps frozen not-learned words visible after unlock', () => {
+  const frozen = new Set(['bonjour', 'merci']);
+  assert.equal(frequencyEntryMatchesFilter(true, 'not-learned', frozen, 'bonjour'), true);
+  assert.equal(frequencyEntryMatchesFilter(false, 'not-learned', frozen, 'merci'), true);
+  assert.equal(frequencyEntryMatchesFilter(false, 'not-learned', frozen, 'oui'), false);
+});
+
 test('frequencyListTotal counts the active filter pool', () => {
   assert.equal(frequencyListTotal(5000, 120, 'all'), 5000);
   assert.equal(frequencyListTotal(5000, 120, 'unlocked'), 120);
   assert.equal(frequencyListTotal(5000, 120, 'not-learned'), 4880);
+});
+
+test('getFrequencyTierLabel maps rank bands to plain-language labels', () => {
+  assert.equal(getFrequencyTierLabel(42), 'very common');
+  assert.equal(getFrequencyTierLabel(500), 'very common');
+  assert.equal(getFrequencyTierLabel(501), 'common');
+  assert.equal(getFrequencyTierLabel(2500), 'mid-frequency');
+  assert.equal(getFrequencyTierLabel(2501), 'less common');
+});
+
+test('extractPrimaryWordToken strips trailing punctuation for single-word input', () => {
+  assert.equal(extractPrimaryWordToken('bonjour!'), 'bonjour');
+  assert.equal(extractPrimaryWordToken('  être '), 'être');
+  assert.equal(extractPrimaryWordToken('two words'), null);
+});
+
+test('extractSingleLearningWord picks the learning-language side of a single-word translate', () => {
+  assert.equal(
+    extractSingleLearningWord('bonjour!', 'hello', 'FR', 'EN', 'FR'),
+    'bonjour'
+  );
+  assert.equal(
+    extractSingleLearningWord('hello', 'Bonjour.', 'EN', 'FR', 'FR'),
+    'Bonjour'
+  );
+  assert.equal(
+    extractSingleLearningWord('good morning', 'bonjour mon ami', 'EN', 'FR', 'FR'),
+    null
+  );
+});
+
+test('formatTranslateFrequencyRank includes rank and tier when known', () => {
+  assert.equal(
+    formatTranslateFrequencyRank('Input', 12),
+    'Input frequency rank #12 (very common)'
+  );
+  assert.equal(
+    formatTranslateFrequencyRank('Result', null),
+    'Result frequency rank unavailable'
+  );
 });

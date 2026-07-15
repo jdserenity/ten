@@ -25,3 +25,12 @@ Today's review progress (dots filled toward 10) lives in `localStorage` per lang
 
 ## `npm test` needs a working `better-sqlite3` native build
 Card/FSRS tests use SQLite via `better-sqlite3`. Use **better-sqlite3 ≥ 12** on Node 24+ (v11 has no prebuilt binary for Node 24). If `npm install` still fails to compile, use Node 20 LTS or install Xcode Command Line Tools.
+
+## Review async actions must re-render in `finally`
+If `renderReview()` runs while `reviewSubmitting` is still `true`, grade buttons stay disabled until something else triggers a re-render (e.g. switching tabs). Clear the busy flag and call `renderReview()` in the `finally` block — same pattern as review edit save.
+
+## Do not disable review grade buttons during submit
+Again/Hard/Good/Easy should stay tappable except while editing a card. Double-submit is blocked in `submitReviewGrade`; tying `disabled` to `reviewSubmitting` left buttons grey on the next card on some browsers even after the flag cleared.
+
+## When adding a ten-logic import, do not drop existing imports
+A missing `nextFrequencyFilter` import in `app.js` crashed startup (`ReferenceError` in `setupFrequencyEvents`) while the generic UI only showed "Failed to initialize app."

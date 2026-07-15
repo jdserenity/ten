@@ -1,18 +1,33 @@
 import {
+  buildNotLearnedFrozenPool,
+  canonicalizeTranslateLanguage,
   DAILY_REVIEW_GOAL,
+  defaultTranslateDirection,
+  extractSingleLearningWord,
+  formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
+  getFrequencyTierLabel,
   isDailyReviewComplete,
+  isReviewGradeButtonsDisabled,
   nextFrequencyFilter,
   resolveStartupTab
 } from './ten-logic.js';
+import {
+  computePoolDaysLeft,
+  countUnseenPoolWords,
+  formatPoolDaysLabel,
+  pickDailyWords,
+  resolveDailyWordsFromAssignment,
+  WORDS_PER_DAY
+} from './daily-pool.js';
 
-const WORDS_PER_DAY = 10;
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
   FR: '/frequency-fr.json'
 };
 const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
+const ACTIVE_MODE_STORAGE_KEY = 'ten-active-mode';
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -60,6 +75,8 @@ const state = {
   reviewTotalCount: 0,
   reviewCurrentIndex: 0,
   reviewAnswerVisible: false,
+  reviewEditing: false,
+  reviewEditSubmitting: false,
   reviewSubmitting: false,
   frequencyByLanguage: {
     'PT-BR': [],
@@ -75,6 +92,7 @@ const state = {
   },
   frequencyLoadedLanguages: new Set(),
   frequencyListFilter: 'all',
+  frequencyNotLearnedFrozen: null,
   frequencyInlineTranslations: new Map(),
   frequencyTranslatingWords: new Set()
 };
@@ -89,14 +107,6 @@ function getModeConfig(modeId = state.activeMode) {
 
 function getLearningLanguage(modeId = state.activeMode) {
   return getModeConfig(modeId).learningLang;
-}
-
-function canonicalizeTranslateLanguage(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
-  return '';
 }
 
 function displayTranslateLanguage(code) {
@@ -303,6 +313,7 @@ function markLearningWordSeenInFrequency(rawWord) {
   if (state.activeTab === 'frequency') {
     renderFrequencyDictionary();
   }
+  updatePoolInfo();
 }
 
 function markCurrentDailyWordSeen() {
@@ -318,19 +329,6 @@ function getCurrentDailyWordFrequencyRank() {
   const rankMap = state.frequencyMapByLanguage[language];
   if (!(rankMap instanceof Map)) return null;
   return rankMap.get(normalizeFrequencyWord(word.word)) || null;
-}
-
-function getFrequencyTierLabel(rank) {
-  if (!rank) return '';
-  if (rank <= 500) return 'very common';
-  if (rank <= 1000) return 'common';
-  if (rank <= 2500) return 'mid-frequency';
-  return 'less common';
-}
-
-function countWordsIgnoringPunctuation(text) {
-  const matches = String(text || '').match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu);
-  return matches ? matches.length : 0;
 }
 
 function getFrequencyRank(language, word) {
@@ -370,31 +368,21 @@ function speakText(text, button) {
   window.speechSynthesis.speak(utt);
 }
 
+function loadSavedActiveMode() {
+  const fromLocal = localStorage.getItem(ACTIVE_MODE_STORAGE_KEY);
+  if (fromLocal && MODE_CONFIGS[fromLocal]) return fromLocal;
+  const fromSession = sessionStorage.getItem(ACTIVE_MODE_STORAGE_KEY);
+  if (fromSession && MODE_CONFIGS[fromSession]) {
+    localStorage.setItem(ACTIVE_MODE_STORAGE_KEY, fromSession);
+    sessionStorage.removeItem(ACTIVE_MODE_STORAGE_KEY);
+    return fromSession;
+  }
+  return null;
+}
+
 function dateKey() {
   const d = new Date();
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
-}
-
-function hashDate(str) {
-  let h = 0;
-  for (let i = 0; i < str.length; i++) {
-    h = Math.imul(31, h) + str.charCodeAt(i) | 0;
-  }
-  return Math.abs(h);
-}
-
-function seededShuffle(arr, seed) {
-  const copy = [...arr];
-  let s = seed;
-  const next = () => {
-    s = (s * 1664525 + 1013904223) & 0xffffffff;
-    return (s >>> 0) / 0x100000000;
-  };
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(next() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
 }
 
 function updateDateLabel() {
@@ -496,6 +484,32 @@ function gotoDailyWord(index) {
   void persistDailyCardIndex(bounded);
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
+}
+
+async function fetchDailyWordAssignment(language, dayKey) {
+  try {
+    const params = new URLSearchParams({ language, dateKey: dayKey });
+    const response = await fetch(`/api/daily-words?${params}`, { cache: 'no-store' });
+    if (!response.ok) return null;
+    const body = await response.json();
+    const words = body?.words;
+    return Array.isArray(words) && words.length ? words : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+async function persistDailyWordAssignment(language, dayKey, headwords) {
+  if (!Array.isArray(headwords) || !headwords.length) return;
+  try {
+    await fetch('/api/daily-words', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+      keepalive: true,
+      body: JSON.stringify({ language, dateKey: dayKey, words: headwords })
+    });
+  } catch (_) {}
 }
 
 async function fetchDailyCardIndex(language, dayKey) {
@@ -646,6 +660,18 @@ function updateReviewDots() {
   }
 }
 
+function updatePoolInfo() {
+  if (!state.words.length) return;
+  const mode = getModeConfig();
+  const seenSet = getSeenDailyWordsSet();
+  const unseenCount = countUnseenPoolWords(state.words, seenSet);
+  const poolDays = computePoolDaysLeft(state.words.length, state.words.length - unseenCount, WORDS_PER_DAY);
+  const poolInfo = document.getElementById('pool-info');
+  if (!poolInfo) return;
+  poolInfo.textContent = formatPoolDaysLabel(poolDays, mode.flagLabel);
+  poolInfo.classList.toggle('warning', poolDays <= 7);
+}
+
 function showDailyUnavailable(reason) {
   state.words = [];
   state.todayWords = [];
@@ -673,10 +699,12 @@ function updateLanguageCopy() {
   const mode = getModeConfig();
   const backLabel = document.getElementById('card-back-label');
   const backInput = document.getElementById('card-back-input');
+  const reviewBackLabel = document.getElementById('review-edit-back-label');
   const sentenceLabel = document.getElementById('sentence-language-label');
   const fromLabel = document.getElementById('translate-from-label');
   if (backLabel) backLabel.textContent = `Back (${mode.translatorLabel})`;
   if (backInput) backInput.placeholder = `${mode.translatorLabel} translation`;
+  if (reviewBackLabel) reviewBackLabel.textContent = `Back (${mode.translatorLabel})`;
   if (sentenceLabel) sentenceLabel.textContent = `${mode.translatorLabel} in use`;
   if (fromLabel && !state.lastDetectedSourceLang) fromLabel.textContent = mode.shortLabel;
   document.documentElement.lang = mode.htmlLang;
@@ -692,7 +720,7 @@ async function setLearningMode(modeId, options = {}) {
     document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
     state.activeMode = mode.id;
-    sessionStorage.setItem('ten-active-mode', mode.id);
+    localStorage.setItem(ACTIVE_MODE_STORAGE_KEY, mode.id);
     state.settings.translateSource = mode.learningLang;
     state.settings.translateTarget = 'EN';
     state.lastDetectedSourceLang = '';
@@ -841,6 +869,19 @@ async function removeCard(cardId) {
   }
 }
 
+async function patchCard(cardId, { front, back, context }) {
+  const response = await fetch(`/api/cards/${cardId}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ front, back, context })
+  });
+  if (!response.ok) {
+    const details = await extractErrorDetails(response);
+    if (response.status === 409) throw new Error('Card already exists.');
+    throw new Error(`Update failed (${response.status})${details ? `: ${details}` : '.'}`);
+  }
+}
+
 async function addSentenceCard(sentence, statusElementId) {
   const mode = getModeConfig();
   const l2 = String(sentence ? (sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '') : '').trim();
@@ -884,6 +925,7 @@ function removeCurrentReviewCard() {
     state.reviewCurrentIndex = Math.max(0, state.reviewCards.length - 1);
   }
   state.reviewAnswerVisible = false;
+  state.reviewEditing = false;
   state.reviewDueCount = Math.max(0, state.reviewDueCount - 1);
   return card;
 }
@@ -902,6 +944,24 @@ function removeReviewCardById(cardId) {
   return removed;
 }
 
+function setReviewEditing(open) {
+  state.reviewEditing = Boolean(open);
+  if (!open) {
+    const frontInput = document.getElementById('review-edit-front');
+    const backInput = document.getElementById('review-edit-back');
+    if (frontInput) frontInput.value = '';
+    if (backInput) backInput.value = '';
+  }
+}
+
+function fillReviewEditFields(card) {
+  const frontInput = document.getElementById('review-edit-front');
+  const backInput = document.getElementById('review-edit-back');
+  if (!card || !frontInput || !backInput) return;
+  frontInput.value = card.front;
+  backInput.value = card.back;
+}
+
 function renderReview() {
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
@@ -912,34 +972,54 @@ function renderReview() {
 
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');
+  const displayWrap = document.getElementById('review-display-wrap');
+  const editWrap = document.getElementById('review-edit-wrap');
   const answerWrap = document.getElementById('review-answer-wrap');
   const gradeRow = document.getElementById('review-grade-row');
   const showAnswerBtn = document.getElementById('review-show-answer-btn');
+  const editBtn = document.getElementById('review-card-edit');
+  const deleteBtn = document.getElementById('review-card-delete');
+  const saveBtn = document.getElementById('review-edit-save');
+  const cancelBtn = document.getElementById('review-edit-cancel');
 
   const card = getCurrentReviewCard();
   if (!card) {
-    empty.classList.remove('hidden');
-    cardPanel.classList.add('hidden');
-    showAnswerBtn.classList.remove('hidden');
-    answerWrap.classList.add('hidden');
-    gradeRow.classList.add('hidden');
+    setReviewEditing(false);
+    empty?.classList.remove('hidden');
+    cardPanel?.classList.add('hidden');
     return;
   }
+
+  const editing = state.reviewEditing;
+  displayWrap?.classList.toggle('hidden', editing);
+  editWrap?.classList.toggle('hidden', !editing);
+  showAnswerBtn?.classList.toggle('hidden', editing || state.reviewAnswerVisible);
+  answerWrap?.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
+  gradeRow?.classList.toggle('hidden', editing || !state.reviewAnswerVisible);
 
   document.getElementById('review-front-text').textContent = card.front;
   document.getElementById('review-back-text').textContent = card.back;
 
   const contextEl = document.getElementById('review-context');
   contextEl.textContent = card.context;
-  contextEl.classList.toggle('hidden', !card.context);
-
-  showAnswerBtn.classList.toggle('hidden', state.reviewAnswerVisible);
-  answerWrap.classList.toggle('hidden', !state.reviewAnswerVisible);
-  gradeRow.classList.toggle('hidden', !state.reviewAnswerVisible);
+  contextEl.classList.toggle('hidden', editing || !card.context);
 
   const speakBtn = document.getElementById('review-speak-btn');
   if (speakBtn) {
-    speakBtn.disabled = !state.reviewAnswerVisible || !card.back;
+    speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back;
+  }
+
+  const actionBusy = state.reviewSubmitting || state.reviewEditSubmitting;
+  const gradeButtonsDisabled = isReviewGradeButtonsDisabled({ reviewEditing: editing });
+  if (editBtn) editBtn.disabled = actionBusy || editing;
+  if (deleteBtn) deleteBtn.disabled = actionBusy;
+  if (showAnswerBtn) showAnswerBtn.disabled = actionBusy || editing;
+  if (saveBtn) saveBtn.disabled = actionBusy;
+  if (cancelBtn) cancelBtn.disabled = actionBusy;
+  if (gradeRow) {
+    gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
+      button.disabled = gradeButtonsDisabled;
+    });
   }
 
   empty.classList.add('hidden');
@@ -980,6 +1060,9 @@ async function loadReviewQueue(options = {}) {
     }
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
 
     renderReview();
     setStatus('review-status', '');
@@ -989,6 +1072,9 @@ async function loadReviewQueue(options = {}) {
     state.reviewDueCount = 0;
     state.reviewCurrentIndex = 0;
     state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
     renderReview();
   }
 }
@@ -1014,12 +1100,12 @@ async function submitReviewGrade(grade) {
 
     removeCurrentReviewCard();
     recordReviewSessionProgress();
-    renderReview();
     setStatus('review-status', '');
   } catch (error) {
     setStatus('review-status', formatError(error), 'error');
   } finally {
     state.reviewSubmitting = false;
+    renderReview();
   }
 }
 
@@ -1050,10 +1136,22 @@ function getFrequencySearchQuery() {
   return input ? input.value.trim() : '';
 }
 
+function clearNotLearnedFrozenPool() {
+  state.frequencyNotLearnedFrozen = null;
+}
+
+function snapshotNotLearnedFrozenPool() {
+  const language = getFrequencyLanguageForMode();
+  const entries = Array.isArray(state.frequencyByLanguage[language]) ? state.frequencyByLanguage[language] : [];
+  const seenSet = getSeenDailyWordsSet(language);
+  state.frequencyNotLearnedFrozen = buildNotLearnedFrozenPool(entries, seenSet);
+}
+
 function clearFrequencySearch() {
   const input = document.getElementById('frequency-search-input');
   if (input) input.value = '';
   state.frequencyListFilter = 'all';
+  clearNotLearnedFrozenPool();
   updateFrequencyStatFilterUi();
   updateFrequencySearchHint(0, 0, false);
 }
@@ -1074,6 +1172,11 @@ function updateFrequencyStatFilterUi() {
 
 function setFrequencyListFilter(filter) {
   state.frequencyListFilter = filter;
+  if (filter === 'not-learned') {
+    snapshotNotLearnedFrozenPool();
+  } else {
+    clearNotLearnedFrozenPool();
+  }
   updateFrequencyStatFilterUi();
   renderFrequencyDictionary();
 }
@@ -1164,17 +1267,20 @@ function renderFrequencyDictionary() {
   const parsed = parseFrequencySearchQuery(getFrequencySearchQuery());
   const hasQuery = parsed.type !== 'none';
   const filter = state.frequencyListFilter;
+  const frozenNotLearned = state.frequencyNotLearnedFrozen;
   const totalUnlocked = entries.reduce(
     (count, entry) => count + (seenSet.has(entry.normalizedWord) ? 1 : 0),
     0
   );
   let matchCount = 0;
   const fragment = document.createDocumentFragment();
-  const listTotal = frequencyListTotal(entries.length, totalUnlocked, filter);
+  const listTotal = filter === 'not-learned' && frozenNotLearned instanceof Set
+    ? frozenNotLearned.size
+    : frequencyListTotal(entries.length, totalUnlocked, filter);
 
   entries.forEach(entry => {
     const seen = seenSet.has(entry.normalizedWord);
-    if (!frequencyEntryMatchesFilter(seen, filter)) return;
+    if (!frequencyEntryMatchesFilter(seen, filter, frozenNotLearned, entry.normalizedWord)) return;
     if (!entryMatchesFrequencySearch(entry, parsed)) return;
     matchCount++;
     const row = document.createElement('div');
@@ -1228,6 +1334,9 @@ async function loadFrequencyTabData() {
   const language = getFrequencyLanguageForMode();
   try {
     await ensureFrequencyLanguageLoaded(language);
+    if (state.frequencyListFilter === 'not-learned') {
+      snapshotNotLearnedFrozenPool();
+    }
     renderFrequencyDictionary();
     setStatus('frequency-status', '');
   } catch (error) {
@@ -1236,44 +1345,27 @@ async function loadFrequencyTabData() {
   }
 }
 
-function getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang) {
-  const learningLanguage = getFrequencyLanguageForMode();
-  const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
-  const targetCanonical = canonicalizeTranslateLanguage(targetLang);
-  if (sourceCanonical === learningLanguage && countWordsIgnoringPunctuation(inputText) === 1) {
-    return inputText;
-  }
-  if (targetCanonical === learningLanguage && countWordsIgnoringPunctuation(translatedText) === 1) {
-    return translatedText;
-  }
-  return null;
-}
-
 function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, targetLang) {
   const outputEl = document.getElementById('translate-frequency-rank');
   if (!outputEl) return;
 
-  const learningWord = getLearningWordFromSingleTranslation(inputText, translatedText, sourceLang, targetLang);
+  const learningLanguage = getFrequencyLanguageForMode();
+  const learningWord = extractSingleLearningWord(inputText, translatedText, sourceLang, targetLang, learningLanguage);
   if (!learningWord) {
     outputEl.textContent = '';
-    outputEl.className = 'status-line';
+    outputEl.className = 'frequency-meta';
     return;
   }
 
   markLearningWordSeenInFrequency(learningWord);
 
-  const learningLanguage = getFrequencyLanguageForMode();
   const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
   const label = sourceCanonical === learningLanguage ? 'Input' : 'Result';
   const rank = getFrequencyRank(learningLanguage, learningWord);
+  const message = formatTranslateFrequencyRank(label, rank);
 
-  if (rank) {
-    outputEl.textContent = `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;
-    outputEl.className = 'status-line success';
-  } else {
-    outputEl.textContent = `${label} frequency rank unavailable`;
-    outputEl.className = 'status-line';
-  }
+  outputEl.textContent = message;
+  outputEl.className = rank ? 'frequency-meta success' : 'frequency-meta';
 }
 
 function setActiveTab(tabId) {
@@ -1291,6 +1383,13 @@ function setActiveTab(tabId) {
     markCurrentDailyWordSeen();
     updateDailyDots();
     renderFrequencyDictionary();
+  }
+  if (tabId === 'translate') {
+    const direction = defaultTranslateDirection(getLearningLanguage());
+    state.settings.translateSource = direction.source;
+    state.settings.translateTarget = direction.target;
+    state.lastDetectedSourceLang = '';
+    fillSettingsInputs();
   }
   if (tabId === 'review') {
     loadReviewQueue();
@@ -1411,7 +1510,14 @@ function swapTranslateDirection() {
   state.settings.translateTarget = nextTarget;
   state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
-  updateTranslateSpeakUi();
+  clearTranslateDraft();
+}
+
+function clearTranslateFrequencyRank() {
+  const outputEl = document.getElementById('translate-frequency-rank');
+  if (!outputEl) return;
+  outputEl.textContent = '';
+  outputEl.className = 'frequency-meta';
 }
 
 function clearTranslateDraft() {
@@ -1424,7 +1530,7 @@ function clearTranslateDraft() {
   state.lastDetectedSourceLang = '';
   state.hasTranslatedInSession = false;
   setStatus('translate-status', '');
-  setStatus('translate-frequency-rank', '');
+  clearTranslateFrequencyRank();
   setStatus('quick-add-status', '');
   setStatus('card-save-status', '');
   updateTranslateResultUi();
@@ -1628,7 +1734,7 @@ function setupTranslateEvents() {
       updateTranslateResultUi();
     } catch (error) {
       setStatus('translate-status', formatError(error), 'error');
-      setStatus('translate-frequency-rank', '');
+      clearTranslateFrequencyRank();
     } finally {
       translateBtn.disabled = false;
     }
@@ -1659,7 +1765,7 @@ function setupTranslateEvents() {
 }
 
 function setupReviewEvents() {
-  document.getElementById('review-show-answer-btn').addEventListener('click', () => {
+  document.getElementById('review-show-answer-btn')?.addEventListener('click', () => {
     if (!getCurrentReviewCard()) return;
     state.reviewAnswerVisible = true;
     renderReview();
@@ -1671,8 +1777,50 @@ function setupReviewEvents() {
     speakText(card.back, document.getElementById('review-speak-btn'));
   });
 
-  document.getElementById('review-refresh-btn').addEventListener('click', () => {
-    loadReviewQueue({ refreshTotal: true });
+  document.getElementById('review-card-edit')?.addEventListener('click', () => {
+    const card = getCurrentReviewCard();
+    if (!card || state.reviewSubmitting || state.reviewEditSubmitting) return;
+    fillReviewEditFields(card);
+    state.reviewAnswerVisible = true;
+    setReviewEditing(true);
+    renderReview();
+    document.getElementById('review-edit-front')?.focus({ preventScroll: true });
+  });
+
+  document.getElementById('review-edit-cancel')?.addEventListener('click', () => {
+    if (state.reviewEditSubmitting) return;
+    setReviewEditing(false);
+    renderReview();
+  });
+
+  document.getElementById('review-edit-save')?.addEventListener('click', async () => {
+    const card = getCurrentReviewCard();
+    if (!card || state.reviewEditSubmitting || state.reviewSubmitting) return;
+
+    const front = capitalizeFirstWord(document.getElementById('review-edit-front')?.value || '');
+    const back = capitalizeFirstWord(document.getElementById('review-edit-back')?.value || '');
+    if (!front || !back) {
+      setStatus('review-status', 'Front and back are required.', 'error');
+      return;
+    }
+
+    setStatus('review-status', 'Saving changes...');
+    state.reviewEditSubmitting = true;
+    renderReview();
+
+    try {
+      await patchCard(card.id, { front, back, context: card.context });
+      card.front = front;
+      card.back = back;
+      setReviewEditing(false);
+      renderReview();
+      setStatus('review-status', 'Card updated.', 'success');
+    } catch (error) {
+      setStatus('review-status', formatError(error), 'error');
+    } finally {
+      state.reviewEditSubmitting = false;
+      renderReview();
+    }
   });
 
   document.querySelectorAll('#review-grade-row button[data-grade]').forEach(button => {
@@ -1681,7 +1829,7 @@ function setupReviewEvents() {
     });
   });
 
-  document.getElementById('review-card-delete').addEventListener('click', async () => {
+  document.getElementById('review-card-delete')?.addEventListener('click', async () => {
     const card = getCurrentReviewCard();
     if (!card || state.reviewSubmitting) return;
 
@@ -1691,8 +1839,6 @@ function setupReviewEvents() {
       await removeCard(card.id);
       removeReviewCardById(card.id);
       state.reviewTotalCount = Math.max(0, state.reviewTotalCount - 1);
-      recordReviewSessionProgress();
-      renderReview();
       if (state.reviewCards.length > 0) {
         setStatus('review-status', 'Card deleted.', 'success');
       } else {
@@ -1702,6 +1848,7 @@ function setupReviewEvents() {
       setStatus('review-status', formatError(error), 'error');
     } finally {
       state.reviewSubmitting = false;
+      renderReview();
     }
   });
 }
@@ -1715,13 +1862,25 @@ async function initDailyWords() {
 
   state.words = words;
   const dayKey = dateKey();
-  const seed = hashDate(dayKey);
-  state.todayWords = seededShuffle(words, seed).slice(0, WORDS_PER_DAY);
   const language = getFrequencyLanguageForMode();
+  const seenSet = getSeenDailyWordsSet(language);
+
+  let todayWords = [];
+  const savedAssignment = await fetchDailyWordAssignment(language, dayKey);
+  if (savedAssignment) {
+    todayWords = resolveDailyWordsFromAssignment(words, savedAssignment);
+  }
+  if (!todayWords.length) {
+    todayWords = pickDailyWords(words, seenSet, dayKey, WORDS_PER_DAY);
+    if (todayWords.length) {
+      await persistDailyWordAssignment(language, dayKey, todayWords.map(entry => entry.word));
+    }
+  }
+  state.todayWords = todayWords;
+
   const savedIndex = await fetchDailyCardIndex(language, dayKey);
   const maxIndex = Math.max(0, state.todayWords.length - 1);
   state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
-  const seenSet = getSeenDailyWordsSet(language);
   state.seenWordIndexes = new Set(
     state.todayWords
       .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
@@ -1733,17 +1892,14 @@ async function initDailyWords() {
     persistDailyCardIndex(state.currentWordIndex);
   }
 
-  const totalDays = Math.floor(words.length / WORDS_PER_DAY);
-  const poolInfo = document.getElementById('pool-info');
-  poolInfo.textContent = `~${totalDays} day${totalDays !== 1 ? 's' : ''} left in ${mode.flagLabel} pool`;
-  poolInfo.classList.toggle('warning', totalDays <= 7);
+  updatePoolInfo();
 }
 
 async function init() {
   updateDateLabel();
   state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
-  const savedMode = sessionStorage.getItem('ten-active-mode');
-  if (savedMode && MODE_CONFIGS[savedMode]) {
+  const savedMode = loadSavedActiveMode();
+  if (savedMode) {
     state.activeMode = savedMode;
   }
   setupTabEvents();
@@ -1772,8 +1928,11 @@ async function init() {
   }
 }
 
-init().catch(() => {
+init().catch(error => {
+  console.error('Ten init failed:', error);
   document.getElementById('loading').style.display = 'none';
-  document.getElementById('error').textContent = 'Failed to initialize app.';
-  document.getElementById('error').style.display = 'flex';
+  const errorEl = document.getElementById('error');
+  const detail = error instanceof Error ? error.message : String(error);
+  errorEl.textContent = detail ? `Failed to initialize app: ${detail}` : 'Failed to initialize app.';
+  errorEl.style.display = 'flex';
 });

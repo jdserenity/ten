@@ -7,11 +7,13 @@ import {
   addUnlockedWord,
   getAllUnlockedWords,
   getDailyCardIndex,
+  getDailyWordAssignment,
   importUnlockedWords,
   initDb,
-  setDailyCardIndex
+  setDailyCardIndex,
+  setDailyWordAssignment
 } from './db.js';
-import { addCard, answerCard, deleteCard, getReviewQueue } from './cards.js';
+import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -69,7 +71,7 @@ function getFilePath(pathname) {
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
 }
 
 function normalizeTargetLanguage(value) {
@@ -356,6 +358,37 @@ async function handleDailyProgressPost(req, res) {
   return sendJson(res, 200, { ok: true, cardIndex: result.cardIndex });
 }
 
+function handleDailyWordsGet(url, res) {
+  const language = String(url.searchParams.get('language') || '').trim();
+  const dateKey = String(url.searchParams.get('dateKey') || '').trim();
+  if (!language || !dateKey) {
+    return sendJson(res, 400, { error: 'Missing language or dateKey.' });
+  }
+  const words = getDailyWordAssignment(language, dateKey);
+  res.setHeader('Cache-Control', 'no-store');
+  return sendJson(res, 200, { words: words || [] });
+}
+
+async function handleDailyWordsPost(req, res) {
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const language = String(body.language || '').trim();
+  const dateKey = String(body.dateKey || '').trim();
+  const words = body.words;
+  if (!language || !dateKey || !Array.isArray(words)) {
+    return sendJson(res, 400, { error: 'Missing language, dateKey, or words.' });
+  }
+
+  const result = setDailyWordAssignment(language, dateKey, words);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily words payload.' });
+  return sendJson(res, 200, { ok: true, words: result.words });
+}
+
 async function handleCardsQueueGet(url, res) {
   const language = String(url.searchParams.get('language') || '').trim();
   if (!language) return sendJson(res, 400, { error: 'Missing language.' });
@@ -409,6 +442,29 @@ function handleCardDelete(res, cardId) {
   return sendJson(res, 200, { ok: true });
 }
 
+async function handleCardPatch(req, res, cardId) {
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const front = String(body.front || '').trim();
+  const back = String(body.back || '').trim();
+  const context = body.context === undefined ? undefined : String(body.context || '').trim();
+  if (!front || !back) {
+    return sendJson(res, 400, { error: 'Missing front or back.' });
+  }
+
+  const result = updateCard(cardId, { front, back, context });
+  if (!result.ok && result.reason === 'not_found') {
+    return sendJson(res, 404, { error: 'Card not found.' });
+  }
+  if (!result.ok && result.reason === 'duplicate') {
+    return sendJson(res, 409, { error: 'Card already exists for this language.' });
+  }
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid card payload.' });
+  return sendJson(res, 200, { ok: true, id: result.id });
+}
+
 async function serveStatic(pathname, res) {
   const filePath = getFilePath(normalizePathname(pathname));
   if (!filePath.startsWith(CLIENT_DIR)) {
@@ -458,6 +514,9 @@ const server = createServer(async (req, res) => {
   if (cardDeleteMatch && req.method === 'DELETE') {
     return handleCardDelete(res, Number(cardDeleteMatch[1]));
   }
+  if (cardDeleteMatch && req.method === 'PATCH') {
+    return handleCardPatch(req, res, Number(cardDeleteMatch[1]));
+  }
 
   if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(res);
   if (pathname === '/api/unlocked-words' && req.method === 'POST') return handleUnlockedWordsPost(req, res);
@@ -469,6 +528,12 @@ const server = createServer(async (req, res) => {
   }
   if (pathname === '/api/daily-progress' && req.method === 'POST') {
     return handleDailyProgressPost(req, res);
+  }
+  if (pathname === '/api/daily-words' && req.method === 'GET') {
+    return handleDailyWordsGet(url, res);
+  }
+  if (pathname === '/api/daily-words' && req.method === 'POST') {
+    return handleDailyWordsPost(req, res);
   }
   if (pathname === '/api/health' && req.method === 'GET') return sendJson(res, 200, { ok: true });
 

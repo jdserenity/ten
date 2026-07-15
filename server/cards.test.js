@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, beforeEach, describe, it } from 'node:test';
 import { initDb, getDb } from './db.js';
-import { addCard, answerCard, deleteCard, getReviewQueue } from './cards.js';
+import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 import { State } from './fsrs.js';
 
 let dbPath;
@@ -74,6 +74,32 @@ describe('cards', () => {
     assert.equal(removed.deleted, true);
     const queue = getReviewQueue('FR');
     assert.equal(queue.cards.some(entry => entry.id === added.id), false);
+  });
+
+  it('updates front and back without resetting scheduling', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const added = addCard('FR', { front: 'Cat', back: 'Chat', context: 'animal' });
+    answerCard(added.id, 'good');
+    const before = getDb().prepare('SELECT reps, fsrs_state, front, back FROM cards WHERE id = ?').get(added.id);
+
+    const updated = updateCard(added.id, { front: 'Kitten', back: 'Chaton' });
+    assert.equal(updated.ok, true);
+
+    const after = getDb().prepare('SELECT reps, fsrs_state, front, back, context FROM cards WHERE id = ?').get(added.id);
+    assert.equal(after.front, 'Kitten');
+    assert.equal(after.back, 'Chaton');
+    assert.equal(after.context, 'animal');
+    assert.equal(after.reps, before.reps);
+    assert.equal(after.fsrs_state, before.fsrs_state);
+  });
+
+  it('rejects duplicate front/back pairs when updating', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    addCard('FR', { front: 'One', back: 'Un' });
+    const second = addCard('FR', { front: 'Two', back: 'Deux' });
+    const updated = updateCard(second.id, { front: 'One', back: 'Un' });
+    assert.equal(updated.ok, false);
+    assert.equal(updated.reason, 'duplicate');
   });
 });
 

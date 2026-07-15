@@ -5,8 +5,8 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 ## Product
 - **Name:** Ten — personal PWA for learning Brazilian Portuguese and French (Quebec-oriented).
 - Exactly one user. No multi-user, accounts, sharing, or social features — do not propose them.
-- Two learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Default mode on open: French.
-- Tabs: **10/day** (10 deterministic words/day from the active pool), **Review** (10 flashcards/day after 10/day), **Frequency** (bundled dictionaries with unlock highlighting), **Translate** (free-form translation; last tab).
+- Two learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Default mode on open: last visited language (`localStorage`); French if never picked.
+- Tabs: **10/day** (up to 10 unseen words/day from the active pool), **Review** (10 flashcards/day after 10/day, then unlimited), **Frequency** (bundled dictionaries with unlock highlighting), **Translate** (free-form translation; last tab).
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per language (`PT-BR` / `FR`); duplicate `(language, front, back)` rejected on add.
 - Mobile PWA first. Do not suggest desktop-only UX (e.g. Esc shortcuts) unless asked.
 - Lean root `README.md` — features only; architecture/deploy live here and in `ARCH-HUMAN.md`.
@@ -35,6 +35,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `data/ten.db` | Runtime DB (gitignored); override with `TEN_DB_PATH` |
 | `src/client/app.js` | All UI logic; `MODE_CONFIGS` for per-mode settings |
 | `src/client/ten-logic.js` | Pure helpers for startup tab + frequency filters (unit-tested) |
+| `src/client/daily-pool.js` | 10/day word selection and pool-days-left math (shared with tests) |
 | `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/import-anki-cards.js` | One-shot AnkiConnect → SQLite import |
 | `scripts/generate-words.js` | PT-BR pool generator → `words.pt.json` |
@@ -47,7 +48,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `pt-br` | `/words.pt.json` | `pt` | `PT-BR` |
 | `fr` | `/words.fr.json` | `fr` | `FR` |
 
-Active language mode is stored in `sessionStorage` (defaults to `fr` when unset).
+Active language mode is stored in `localStorage` (last visited; defaults to `fr` when unset). One-time migration reads legacy `sessionStorage` value.
 
 ## APIs
 | Method | Path | Notes |
@@ -55,23 +56,26 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 | POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). |
 | GET | `/api/cards/queue?language=` | New + due cards for Review (new first). |
 | POST | `/api/cards` | Add card `{ language, front, back, context? }`. |
+| PATCH | `/api/cards/:id` | Update card `{ front, back, context? }`; FSRS state unchanged. |
 | POST | `/api/cards/:id/answer` | Grade `{ rating: again\|hard\|good\|easy }`. |
 | DELETE | `/api/cards/:id` | Delete card. |
 | GET/POST | `/api/unlocked-words` | Frequency unlock state. POST adds one word. |
 | POST | `/api/unlocked-words/import` | One-time localStorage → SQLite migration. |
 | GET/POST | `/api/daily-progress` | Open 10/day card index (0–9) keyed by language + calendar day. |
+| GET/POST | `/api/daily-words` | Today's fixed 10-word assignment (headwords JSON) per language + calendar day. |
 | GET | `/api/health` | `{ ok: true }` |
 
 ## Client behavior
-- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Review** unless today's 10 review cards are done, then **Translate**. Tab order in the UI: 10/day → Review → Frequency → Translate. Tab choice persists in memory during the same page session (no refresh). `+` buttons save word/sentences as flashcards.
-- **Review:** Daily goal of **10 flashcards** (progress dots; confetti once per language per calendar day when the tenth card is graded). After 10, an **∞** after the dots signals you can keep reviewing without limit. Loads queue from `/api/cards/queue` (new first); grades via `/api/cards/:id/answer` (FSRS). Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back. Progress count is client `localStorage`, not SQLite.
-- **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
-- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
+- **10/day:** Picks up to 10 words per day from the active pool that have not been surfaced yet (viewed on a daily card or unlocked via single-word translate). Today's assignment is persisted in SQLite (`/api/daily-words`) so refresh keeps the same list; unviewed words from today are not marked surfaced and return to the pool. Card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate). Footer shows `~N days left in <mode> pool` where N = unseen pool words ÷ 10 (one decimal when fractional; amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Review** unless today's 10 review cards are done, then **Translate**. Tab order in the UI: 10/day → Review → Frequency → Translate. `+` buttons save word/sentences as flashcards.
+- **Review:** Daily goal of **10 flashcards** (progress dots; confetti once per language per calendar day when the tenth card is graded). After 10, an **∞** after the dots signals you can keep reviewing without limit. Loads queue from `/api/cards/queue` (new first); grades via `/api/cards/:id/answer` (FSRS). **Edit card** opens front/back fields and saves via `PATCH /api/cards/:id` (scheduling unchanged). Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back. Daily progress count is client `localStorage`, not SQLite.
+- **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary. Swapping translate direction or switching learning mode clears the translate draft. Returning to the Translate tab resets direction to learning language → English.
+- **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline. While **Not learned** is active, the visible pool is frozen until the Frequency tab is left and re-entered or the filter is toggled off and on again — unlocking a word via inline translate does not remove it from the frozen list until then.
 
 ## Persistence (SQLite)
 Path: `TEN_DB_PATH` or `data/ten.db`.
 - `unlocked_words(language, normalized_word, unlocked_at)` PK `(language, normalized_word)`
 - `daily_card_index(language, date_key, card_index, updated_at)` PK `(language, date_key)`
+- `daily_word_assignment(language, date_key, words_json, updated_at)` PK `(language, date_key)` — JSON array of headwords for that day's 10/day stack
 - `cards` — flashcard content + FSRS state; unique `(language, front, back)`
 Languages: `PT-BR`, `FR`.
 

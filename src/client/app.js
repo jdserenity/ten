@@ -8,8 +8,13 @@ import {
   frequencyListTotal,
   getFrequencyTierLabel,
   isReviewGradeButtonsDisabled,
+  learningLangFromModeId,
+  modeIdFromLearningLang,
   nextFrequencyFilter,
-  resolveStartupTab
+  resolveStartupTab,
+  shouldShowHeaderAddLanguageButton,
+  shouldShowPoolDaysFooter,
+  shouldShowSettingsAddLanguageButton
 } from './ten-logic.js';
 import {
   computePoolDaysLeft,
@@ -26,6 +31,8 @@ const FREQUENCY_FILE_BY_LANGUAGE = {
 };
 const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
 const ACTIVE_MODE_STORAGE_KEY = 'ten-active-mode';
+const USER_STORAGE_KEY = 'ten-user-v1';
+const OFFERED_MODE_IDS = ['pt-br', 'fr'];
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -55,8 +62,11 @@ const MODE_CONFIGS = {
 };
 
 const state = {
+  user: null,
   activeMode: 'fr',
   activeTab: 'daily',
+  languagePickerContext: '',
+  feedbackOpen: false,
   settings: {
     translateSource: MODE_CONFIGS['fr'].learningLang,
     translateTarget: 'EN'
@@ -97,6 +107,284 @@ const state = {
 
 let dailyDots = [];
 let applyingMode = false;
+
+function authHeaders(extra = {}) {
+  const headers = { ...extra };
+  if (state.user?.id) headers['X-User-Id'] = String(state.user.id);
+  return headers;
+}
+
+async function apiFetch(url, options = {}) {
+  const headers = authHeaders(options.headers || {});
+  if (options.body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+  return fetch(url, { ...options, headers });
+}
+
+function getUserLearningLanguages() {
+  return Array.isArray(state.user?.languages) ? state.user.languages : [];
+}
+
+function getUserModeIds() {
+  return getUserLearningLanguages()
+    .map(modeIdFromLearningLang)
+    .filter(modeId => MODE_CONFIGS[modeId]);
+}
+
+function saveUserToStorage(user) {
+  if (!user?.id) return;
+  localStorage.setItem(USER_STORAGE_KEY, JSON.stringify({ id: user.id, username: user.username }));
+}
+
+function loadUserFromStorage() {
+  try {
+    const raw = localStorage.getItem(USER_STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.id) return null;
+    return parsed;
+  } catch (_) {
+    return null;
+  }
+}
+
+function clearUserStorage() {
+  localStorage.removeItem(USER_STORAGE_KEY);
+}
+
+function applyUserPayload(payload) {
+  if (!payload?.id) return null;
+  state.user = {
+    id: payload.id,
+    username: payload.username,
+    isDev: Boolean(payload.isDev),
+    languages: Array.isArray(payload.languages) ? payload.languages : []
+  };
+  document.body.classList.toggle('dev-mode', state.user.isDev);
+  document.body.classList.toggle('prod-mode', !state.user.isDev);
+  saveUserToStorage(state.user);
+  return state.user;
+}
+
+function showLoginScreen(message = '') {
+  document.getElementById('login-screen')?.classList.remove('hidden');
+  document.getElementById('app')?.classList.add('hidden');
+  setStatus('login-status', message);
+}
+
+function showAppShell() {
+  document.getElementById('login-screen')?.classList.add('hidden');
+  document.getElementById('app')?.classList.remove('hidden');
+}
+
+async function fetchCurrentUser() {
+  const stored = loadUserFromStorage();
+  if (!stored?.id) return null;
+  if (!state.user?.id) {
+    state.user = { id: stored.id, username: stored.username || '', isDev: false, languages: [] };
+  }
+  const response = await apiFetch('/api/me', { cache: 'no-store' });
+  if (!response.ok) {
+    state.user = null;
+    clearUserStorage();
+    return null;
+  }
+  const body = await response.json();
+  return applyUserPayload(body);
+}
+
+async function restoreSession() {
+  const stored = loadUserFromStorage();
+  if (!stored?.id) return null;
+  state.user = { id: stored.id, username: stored.username || '', isDev: false, languages: [] };
+  return fetchCurrentUser();
+}
+
+async function loginWithUsername(username) {
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username })
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || 'Could not sign in.');
+  }
+  const body = await response.json();
+  return applyUserPayload(body);
+}
+
+function resolveActiveModeForUser() {
+  const modeIds = getUserModeIds();
+  if (!modeIds.length) return null;
+  const saved = loadSavedActiveMode();
+  if (saved && modeIds.includes(saved)) return saved;
+  return modeIds[0];
+}
+
+function getAvailablePickerModeIds(context = 'header') {
+  const owned = new Set(getUserModeIds());
+  if (context === 'header' && !owned.size) return [...OFFERED_MODE_IDS];
+  return OFFERED_MODE_IDS.filter(modeId => !owned.has(modeId));
+}
+
+function readPickerSelections(container) {
+  if (!container) return [];
+  return Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
+    .map(input => String(input.value || '').trim())
+    .filter(modeId => MODE_CONFIGS[modeId]);
+}
+
+function renderPickerOptions(container, context) {
+  if (!container) return;
+  const modeIds = getAvailablePickerModeIds(context);
+  container.innerHTML = modeIds.map(modeId => {
+    const mode = MODE_CONFIGS[modeId];
+    const flag = modeId === 'pt-br' ? '🇧🇷' : '🇨🇦';
+    return `<label class="lang-picker-option"><input type="checkbox" value="${modeId}" /> ${flag} ${mode.label}</label>`;
+  }).join('');
+  if (!modeIds.length) {
+    container.innerHTML = '<p class="status-line">You already have every language.</p>';
+  }
+}
+
+function setLanguagePickerOpen(context, open) {
+  state.languagePickerContext = open ? context : '';
+  const headerPicker = document.getElementById('header-lang-picker');
+  const settingsPicker = document.getElementById('settings-lang-picker');
+  headerPicker?.classList.toggle('hidden', !(open && context === 'header'));
+  settingsPicker?.classList.toggle('hidden', !(open && context === 'settings'));
+}
+
+async function saveUserLanguages(modeIds, { replace = false } = {}) {
+  const languages = modeIds.map(learningLangFromModeId).filter(Boolean);
+  const response = await apiFetch('/api/user-languages', {
+    method: 'PUT',
+    body: JSON.stringify({ languages, replace })
+  });
+  if (!response.ok) {
+    const body = await response.json().catch(() => ({}));
+    throw new Error(body.error || 'Could not save languages.');
+  }
+  const body = await response.json();
+  state.user.languages = Array.isArray(body.languages) ? body.languages : languages;
+  renderAuthChrome();
+  const nextMode = resolveActiveModeForUser();
+  if (nextMode) {
+    await setLearningMode(nextMode, { force: true, resetTranslate: true });
+  } else {
+    showDailyUnavailable('Add a language to start learning.');
+  }
+  if (state.activeTab === 'settings') renderSettings();
+}
+
+function renderAuthChrome() {
+  const languages = getUserLearningLanguages();
+  const modeIds = getUserModeIds();
+  const headerAddWrap = document.getElementById('header-lang-add-wrap');
+  const headerAddBtn = document.getElementById('header-lang-add-btn');
+  const settingsAddBtn = document.getElementById('settings-lang-add-btn');
+  const modeToggle = document.getElementById('mode-toggle');
+
+  headerAddWrap?.classList.toggle('hidden', !shouldShowHeaderAddLanguageButton(languages));
+  headerAddBtn?.classList.toggle('hidden', !shouldShowHeaderAddLanguageButton(languages));
+  settingsAddBtn?.classList.toggle('hidden', !shouldShowSettingsAddLanguageButton(languages));
+  modeToggle?.classList.toggle('hidden', !modeIds.length);
+
+  document.querySelectorAll('.mode-toggle-btn').forEach(button => {
+    const modeId = button.dataset.mode;
+    const visible = modeIds.includes(modeId);
+    button.classList.toggle('hidden', !visible);
+    button.disabled = !visible;
+  });
+  updateModeToggleUi();
+  renderSettings();
+}
+
+function renderSettings() {
+  const usernameLabel = document.getElementById('settings-username-label');
+  if (usernameLabel) usernameLabel.textContent = state.user?.username || '';
+  const list = document.getElementById('settings-lang-list');
+  if (list) {
+    list.innerHTML = getUserModeIds().map(modeId => {
+      const mode = MODE_CONFIGS[modeId];
+      const flag = modeId === 'pt-br' ? '🇧🇷' : '🇨🇦';
+      return `<span class="settings-lang-chip">${flag} ${mode.label}</span>`;
+    }).join('');
+  }
+  const feedbackSection = document.getElementById('settings-feedback-section');
+  feedbackSection?.classList.toggle('hidden', !state.user?.isDev);
+  renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'), 'header');
+  renderPickerOptions(document.querySelector('.settings-lang-picker-options'), 'settings');
+}
+
+async function loadSettingsFeedback() {
+  if (!state.user?.isDev) return;
+  const list = document.getElementById('settings-feedback-list');
+  if (!list) return;
+  try {
+    const response = await apiFetch('/api/feedback', { cache: 'no-store' });
+    if (!response.ok) return;
+    const body = await response.json();
+    const entries = Array.isArray(body.feedback) ? body.feedback : [];
+    if (!entries.length) {
+      list.innerHTML = '<p class="status-line">No feedback yet.</p>';
+      return;
+    }
+    list.innerHTML = entries.map(entry => {
+      const when = entry.createdAt
+        ? new Date(entry.createdAt * 1000).toLocaleString()
+        : '';
+      return `<article class="settings-feedback-item"><div class="settings-feedback-meta">${entry.username || 'user'} · ${when}</div><p>${escapeHtml(entry.body || '')}</p></article>`;
+    }).join('');
+  } catch (_) {}
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function openFeedbackOverlay(seedText = '') {
+  const overlay = document.getElementById('feedback-overlay');
+  const expanded = document.getElementById('feedback-expanded-input');
+  if (!overlay || !expanded) return;
+  state.feedbackOpen = true;
+  overlay.classList.remove('hidden');
+  overlay.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => overlay.classList.add('open'));
+  expanded.value = seedText;
+  setStatus('feedback-status', '');
+  expanded.focus({ preventScroll: true });
+}
+
+function closeFeedbackOverlay() {
+  const overlay = document.getElementById('feedback-overlay');
+  if (!overlay) return;
+  state.feedbackOpen = false;
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  setTimeout(() => {
+    if (!state.feedbackOpen) overlay.classList.add('hidden');
+  }, 180);
+  document.getElementById('feedback-compact-input')?.blur();
+}
+
+async function submitFeedback(body) {
+  const text = String(body || '').trim();
+  if (!text) throw new Error('Write something first.');
+  const response = await apiFetch('/api/feedback', {
+    method: 'POST',
+    body: JSON.stringify({ body: text })
+  });
+  if (!response.ok) {
+    const payload = await response.json().catch(() => ({}));
+    throw new Error(payload.error || 'Could not send feedback.');
+  }
+  if (state.user?.isDev) await loadSettingsFeedback();
+}
 
 function getModeConfig(modeId = state.activeMode) {
   return MODE_CONFIGS[modeId] || MODE_CONFIGS['fr'];
@@ -230,7 +518,7 @@ function loadSeenDailyWordsFromLocalStorage() {
 async function persistUnlockedWordToServer(language, normalized) {
   if (!normalized) return;
   try {
-    await fetch('/api/unlocked-words', {
+    await apiFetch('/api/unlocked-words', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ language, word: normalized })
@@ -246,7 +534,7 @@ async function initUnlockedWordsFromServer() {
   };
 
   try {
-    const response = await fetch('/api/unlocked-words');
+    const response = await apiFetch('/api/unlocked-words');
     if (response.ok) {
       const body = await response.json();
       const wordsByLanguage = body?.wordsByLanguage;
@@ -271,7 +559,7 @@ async function initUnlockedWordsFromServer() {
 
   if (hasLocal) {
     try {
-      const response = await fetch('/api/unlocked-words/import', {
+      const response = await apiFetch('/api/unlocked-words/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ wordsByLanguage: localPayload })
@@ -486,7 +774,7 @@ function gotoDailyWord(index) {
 async function fetchDailyWordAssignment(language, dayKey) {
   try {
     const params = new URLSearchParams({ language, dateKey: dayKey });
-    const response = await fetch(`/api/daily-words?${params}`, { cache: 'no-store' });
+    const response = await apiFetch(`/api/daily-words?${params}`, { cache: 'no-store' });
     if (!response.ok) return null;
     const body = await response.json();
     const words = body?.words;
@@ -499,7 +787,7 @@ async function fetchDailyWordAssignment(language, dayKey) {
 async function persistDailyWordAssignment(language, dayKey, headwords) {
   if (!Array.isArray(headwords) || !headwords.length) return;
   try {
-    await fetch('/api/daily-words', {
+    await apiFetch('/api/daily-words', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
@@ -512,7 +800,7 @@ async function persistDailyWordAssignment(language, dayKey, headwords) {
 async function fetchDailyCardIndex(language, dayKey) {
   try {
     const params = new URLSearchParams({ language, dateKey: dayKey });
-    const response = await fetch(`/api/daily-progress?${params}`, { cache: 'no-store' });
+    const response = await apiFetch(`/api/daily-progress?${params}`, { cache: 'no-store' });
     if (!response.ok) return null;
     const body = await response.json();
     if (!body || body.cardIndex === null || body.cardIndex === undefined) return null;
@@ -529,7 +817,7 @@ async function persistDailyCardIndex(cardIndex) {
   const dayKey = dateKey();
   const bounded = Math.max(0, Math.min(cardIndex, state.todayWords.length - 1));
   try {
-    await fetch('/api/daily-progress', {
+    await apiFetch('/api/daily-progress', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       cache: 'no-store',
@@ -588,6 +876,11 @@ function updatePoolInfo() {
   const poolDays = computePoolDaysLeft(state.words.length, state.words.length - unseenCount, WORDS_PER_DAY);
   const poolInfo = document.getElementById('pool-info');
   if (!poolInfo) return;
+  if (!shouldShowPoolDaysFooter(state.user?.isDev)) {
+    poolInfo.textContent = '';
+    poolInfo.classList.remove('warning');
+    return;
+  }
   poolInfo.textContent = formatPoolDaysLabel(poolDays, mode.flagLabel);
   poolInfo.classList.toggle('warning', poolDays <= 7);
 }
@@ -633,6 +926,7 @@ function updateLanguageCopy() {
 async function setLearningMode(modeId, options = {}) {
   const mode = getModeConfig(modeId);
   const resetTranslate = options.resetTranslate !== false;
+  if (!getUserModeIds().includes(mode.id) && !options.force) return;
   if (applyingMode || (state.activeMode === mode.id && !options.force)) return;
   applyingMode = true;
   try {
@@ -753,7 +1047,7 @@ async function addCard({ front, back, context }, statusElementId) {
   setStatus(statusElementId, 'Saving card...');
 
   try {
-    const response = await fetch('/api/cards', {
+    const response = await apiFetch('/api/cards', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
@@ -782,7 +1076,7 @@ async function addCard({ front, back, context }, statusElementId) {
 }
 
 async function removeCard(cardId) {
-  const response = await fetch(`/api/cards/${cardId}`, { method: 'DELETE' });
+  const response = await apiFetch(`/api/cards/${cardId}`, { method: 'DELETE' });
   if (!response.ok) {
     const details = await extractErrorDetails(response);
     throw new Error(`Delete failed (${response.status})${details ? `: ${details}` : '.'}`);
@@ -790,7 +1084,7 @@ async function removeCard(cardId) {
 }
 
 async function patchCard(cardId, { front, back, context }) {
-  const response = await fetch(`/api/cards/${cardId}`, {
+  const response = await apiFetch(`/api/cards/${cardId}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ front, back, context })
@@ -952,7 +1246,7 @@ async function loadReviewQueue(options = {}) {
   setStatus('review-status', '');
 
   try {
-    const response = await fetch(`/api/cards/queue?language=${encodeURIComponent(mode.learningLang)}`);
+    const response = await apiFetch(`/api/cards/queue?language=${encodeURIComponent(mode.learningLang)}`);
     if (!response.ok) {
       const details = await extractErrorDetails(response);
       throw new Error(`Review request failed (${response.status})${details ? `: ${details}` : '.'}`);
@@ -1001,7 +1295,7 @@ async function submitReviewGrade(grade) {
   state.reviewSubmitting = true;
 
   try {
-    const response = await fetch(`/api/cards/${card.id}/answer`, {
+    const response = await apiFetch(`/api/cards/${card.id}/answer`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ rating: grade })
@@ -1310,6 +1604,10 @@ function setActiveTab(tabId) {
   if (tabId === 'frequency') {
     loadFrequencyTabData();
   }
+  if (tabId === 'settings') {
+    renderSettings();
+    loadSettingsFeedback();
+  }
 }
 
 function isTypingContext() {
@@ -1468,6 +1766,117 @@ function setupFrequencyEvents() {
 
   document.getElementById('frequency-not-learned-stat')?.addEventListener('click', () => {
     setFrequencyListFilter(nextFrequencyFilter(state.frequencyListFilter, 'not-learned'));
+  });
+}
+
+function setupLoginEvents() {
+  const input = document.getElementById('login-username-input');
+  const button = document.getElementById('login-continue-btn');
+  const submit = async () => {
+    const username = input?.value.trim();
+    if (!username) {
+      setStatus('login-status', 'Enter a username.', 'error');
+      return;
+    }
+    button.disabled = true;
+    setStatus('login-status', 'Signing in...');
+    try {
+      await loginWithUsername(username);
+      document.getElementById('loading').style.display = 'none';
+      await bootApp();
+    } catch (error) {
+      setStatus('login-status', formatError(error), 'error');
+    } finally {
+      button.disabled = false;
+    }
+  };
+  button?.addEventListener('click', submit);
+  input?.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      submit();
+    }
+  });
+}
+
+function setupAuthEvents() {
+  document.getElementById('header-lang-add-btn')?.addEventListener('click', () => {
+    const open = state.languagePickerContext !== 'header';
+    setLanguagePickerOpen('header', open);
+    renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'), 'header');
+  });
+
+  document.getElementById('header-lang-confirm-btn')?.addEventListener('click', async () => {
+    const selected = readPickerSelections(document.querySelector('#header-lang-picker .lang-picker-options'));
+    if (!selected.length) {
+      setStatus('daily-save-status', 'Pick at least one language.', 'error');
+      return;
+    }
+    try {
+      await saveUserLanguages(selected, { replace: false });
+      setLanguagePickerOpen('header', false);
+    } catch (error) {
+      setStatus('daily-save-status', formatError(error), 'error');
+    }
+  });
+
+  document.getElementById('settings-lang-add-btn')?.addEventListener('click', () => {
+    const open = state.languagePickerContext !== 'settings';
+    setLanguagePickerOpen('settings', open);
+    renderPickerOptions(document.querySelector('.settings-lang-picker-options'), 'settings');
+  });
+
+  document.getElementById('settings-lang-confirm-btn')?.addEventListener('click', async () => {
+    const selected = readPickerSelections(document.querySelector('.settings-lang-picker-options'));
+    if (!selected.length) {
+      setStatus('daily-save-status', 'Pick at least one language.', 'error');
+      return;
+    }
+    try {
+      await saveUserLanguages(selected, { replace: false });
+      setLanguagePickerOpen('settings', false);
+      renderSettings();
+    } catch (error) {
+      setStatus('daily-save-status', formatError(error), 'error');
+    }
+  });
+
+  document.getElementById('settings-switch-user-btn')?.addEventListener('click', () => {
+    clearUserStorage();
+    state.user = null;
+    window.location.reload();
+  });
+}
+
+function setupFeedbackEvents() {
+  const compact = document.getElementById('feedback-compact-input');
+  compact?.addEventListener('focus', () => {
+    openFeedbackOverlay(compact.value);
+    compact.value = '';
+  });
+
+  document.getElementById('feedback-close-btn')?.addEventListener('click', () => {
+    closeFeedbackOverlay();
+  });
+
+  document.getElementById('feedback-overlay')?.addEventListener('click', event => {
+    if (event.target?.id === 'feedback-overlay') closeFeedbackOverlay();
+  });
+
+  document.getElementById('feedback-submit-btn')?.addEventListener('click', async () => {
+    const expanded = document.getElementById('feedback-expanded-input');
+    const button = document.getElementById('feedback-submit-btn');
+    button.disabled = true;
+    try {
+      await submitFeedback(expanded?.value || '');
+      setStatus('feedback-status', 'Thanks — feedback sent.', 'success');
+      if (expanded) expanded.value = '';
+      setTimeout(() => closeFeedbackOverlay(), 500);
+    } catch (error) {
+      setStatus('feedback-status', formatError(error), 'error');
+    } finally {
+      button.disabled = false;
+    }
   });
 }
 
@@ -1808,13 +2217,12 @@ async function initDailyWords() {
   updatePoolInfo();
 }
 
-async function init() {
-  updateDateLabel();
+async function bootApp() {
+  showAppShell();
+  renderAuthChrome();
   state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
-  const savedMode = loadSavedActiveMode();
-  if (savedMode) {
-    state.activeMode = savedMode;
-  }
+  const nextMode = resolveActiveModeForUser();
+  if (nextMode) state.activeMode = nextMode;
   setupTabEvents();
   setupModeEvents();
   setupDailyEvents();
@@ -1822,15 +2230,36 @@ async function init() {
   setupTranslateEvents();
   setupFrequencyEvents();
   setupReviewEvents();
+  setupAuthEvents();
+  setupFeedbackEvents();
   updateFrequencyModeLabel();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
-  await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
+  if (nextMode) {
+    await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
+  } else {
+    showDailyUnavailable('Add a language to start learning.');
+  }
 
   setActiveTab(resolveStartupTab(hasCelebratedDailyCompleteToday()));
 
   renderReview();
   document.body.classList.add('ready');
+}
+
+async function init() {
+  updateDateLabel();
+  setupLoginEvents();
+
+  const user = await restoreSession();
+  if (!user) {
+    showLoginScreen();
+    document.getElementById('loading').style.display = 'none';
+    return;
+  }
+
+  document.getElementById('loading').style.display = 'none';
+  await bootApp();
 
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});

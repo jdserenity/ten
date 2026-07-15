@@ -136,7 +136,7 @@ header h1 {
   gap: 6px;
   flex-wrap: wrap;
   flex-shrink: 0;
-  min-height: 8px;
+  min-height: 20px;
   align-items: center;
 }
 
@@ -761,6 +761,12 @@ details.surface-card[open] { gap: 10px; }
 
 .frequency-item.seen .frequency-inline-translation {
   color: var(--green);
+}
+
+.daily-stats-spacer {
+  visibility: hidden;
+  pointer-events: none;
+  user-select: none;
 }
 
 .stat-box {

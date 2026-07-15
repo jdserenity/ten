@@ -7,6 +7,7 @@ import {
   t
 } from './i18n.js';
 import {
+  buildLangPickerOptionHtml,
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
   DAILY_REVIEW_GOAL,
@@ -406,8 +407,11 @@ function renderPickerOptions(container, context) {
   const modeIds = getAvailablePickerModeIds(context);
   container.innerHTML = modeIds.map(modeId => {
     const mode = MODE_CONFIGS[modeId];
-    const flag = mode.flagEmoji || '';
-    return `<label class="lang-picker-option"><input type="checkbox" value="${modeId}" /> ${flag} ${escapeHtml(getModeLabel(modeId))}</label>`;
+    return buildLangPickerOptionHtml({
+      modeId,
+      flag: mode.flagEmoji || '',
+      label: getModeLabel(modeId)
+    });
   }).join('');
   if (!modeIds.length) {
     container.innerHTML = '<p class="status-line">' + escapeHtml(tr('picker.allLanguages')) + '</p>';

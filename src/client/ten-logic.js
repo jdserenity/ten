@@ -174,6 +174,21 @@ export function shouldShowSettingsAddLanguageButton(userLanguages) {
   return Array.isArray(userLanguages) && userLanguages.length > 0;
 }
 
+export function escapeLangPickerText(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function buildLangPickerOptionHtml({ modeId, flag = '', label = '' } = {}) {
+  const safeMode = String(modeId || '').replace(/"/g, '');
+  const safeFlag = escapeLangPickerText(flag);
+  const safeLabel = escapeLangPickerText(label);
+  return `<label class="lang-picker-option"><input type="checkbox" value="${safeMode}" /><span class="lang-picker-flag">${safeFlag}</span><span class="lang-picker-name">${safeLabel}</span><span class="lang-picker-tick" aria-hidden="true"></span></label>`;
+}
+
 export function normalizeUsername(value) {
   return String(value || '').trim().toLowerCase();
 }

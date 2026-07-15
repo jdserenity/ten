@@ -19,6 +19,7 @@ import {
   normalizeTranslateDirection,
   resolveStartupTab,
   resolveTranslateNativeLang,
+  buildLangPickerOptionHtml,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -177,6 +178,33 @@ test('language add button placement follows onboarding vs settings', () => {
   assert.equal(shouldShowHeaderAddLanguageButton(['FR']), false);
   assert.equal(shouldShowSettingsAddLanguageButton([]), false);
   assert.equal(shouldShowSettingsAddLanguageButton(['FR']), true);
+});
+
+test('buildLangPickerOptionHtml renders a selectable chip with flag, name, and tick', () => {
+  const html = buildLangPickerOptionHtml({
+    modeId: 'pt-br',
+    flag: '🇧🇷',
+    label: 'Brazilian Portuguese'
+  });
+  assert.match(html, /class="lang-picker-option"/);
+  assert.match(html, /type="checkbox"/);
+  assert.match(html, /value="pt-br"/);
+  assert.match(html, /class="lang-picker-flag"/);
+  assert.match(html, /🇧🇷/);
+  assert.match(html, /class="lang-picker-name"/);
+  assert.match(html, /Brazilian Portuguese/);
+  assert.match(html, /class="lang-picker-tick"/);
+  assert.doesNotMatch(html, /type="checkbox"[^>]*>\s*[🇧🇷🇨🇦🇫🇷🇦🇷]/);
+});
+
+test('buildLangPickerOptionHtml escapes label HTML', () => {
+  const html = buildLangPickerOptionHtml({
+    modeId: 'fr',
+    flag: '🇨🇦',
+    label: 'Quebec <script> French & "co"'
+  });
+  assert.match(html, /Quebec &lt;script&gt; French &amp; &quot;co&quot;/);
+  assert.doesNotMatch(html, /<script>/);
 });
 
 test('mode and learning language ids round-trip', () => {

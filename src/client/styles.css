@@ -226,26 +226,122 @@ header {
   top: calc(100% + 6px);
   right: 0;
   z-index: 20;
-  min-width: 220px;
+  min-width: 260px;
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: 14px;
   background: var(--surface);
-  padding: 12px;
+  padding: 14px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
 .lang-picker-title {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.lang-picker-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
 }
 
 .lang-picker-option {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   font-size: 14px;
-  padding: 6px 0;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--bg);
+  cursor: pointer;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.lang-picker-option:hover {
+  background: var(--border);
+}
+
+.lang-picker-option:active {
+  transform: scale(0.98);
+}
+
+.lang-picker-option:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.lang-picker-option input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+.lang-picker-flag {
+  font-size: 20px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.lang-picker-name {
+  flex: 1;
+  min-width: 0;
+  line-height: 1.3;
+}
+
+.lang-picker-tick {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.lang-picker-tick::after {
+  content: '';
+  width: 10px;
+  height: 6px;
+  margin-top: -1px;
+  border-left: 2px solid transparent;
+  border-bottom: 2px solid transparent;
+  transform: rotate(-45deg);
+  opacity: 0;
+  transition: opacity 0.15s, border-color 0.15s;
+}
+
+.lang-picker-option:has(input:checked) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 18%, var(--bg));
+}
+
+.lang-picker-option:has(input:checked):hover {
+  background: color-mix(in srgb, var(--accent) 24%, var(--bg));
+}
+
+.lang-picker-option:has(input:checked) .lang-picker-tick {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.lang-picker-option:has(input:checked) .lang-picker-tick::after {
+  border-left-color: #0f0f0f;
+  border-bottom-color: #0f0f0f;
+  opacity: 1;
+}
+
+.lang-picker .primary-btn {
+  width: 100%;
 }
 
 .settings-lang-row {

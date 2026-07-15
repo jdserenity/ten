@@ -33,47 +33,27 @@ body {
 
 header {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
   padding: 20px 0 12px;
   border-bottom: 1px solid var(--border);
   margin-bottom: 12px;
   flex-shrink: 0;
+  gap: 8px;
 }
 
-.header-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-width: 0;
-}
-
-.header-title-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.header-title-block {
   flex: 0 0 auto;
-}
-
-.header-center {
-  flex: 1 1 auto;
-  display: flex;
-  justify-content: center;
   min-width: 0;
-  padding: 0 4px;
 }
 
-.header-actions {
+.header-tools {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 6px;
-  flex: 0 0 auto;
-}
-
-#date-label {
-  font-size: 13px;
-  color: var(--muted);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .settings-cog-btn {
@@ -329,6 +309,11 @@ header h1 {
   font-weight: 700;
   letter-spacing: -0.5px;
   line-height: 1.1;
+}
+
+#date-label {
+  font-size: 13px;
+  color: var(--muted);
 }
 
 .mode-toggle-wrap {

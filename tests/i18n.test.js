@@ -90,6 +90,6 @@ test('pt-BR catalog avoids European Portuguese markers', () => {
 
 test('pt-BR onboarding copy uses Brazilian Portuguese', () => {
   assert.equal(t('pt-BR', 'daily.addLanguage'), 'Adicione um idioma!');
-  assert.equal(t('pt-BR', 'settings.signedInAs'), 'Logado como');
+  assert.equal(t('pt-BR', 'settings.signedInAs'), 'Entrou como');
   assert.equal(t('pt-BR', 'translate.offline'), 'Sem internet: você precisa estar online para traduzir.');
 });

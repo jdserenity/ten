@@ -211,7 +211,7 @@ const ptBR = {
   'picker.allLanguages': 'Você já tem todos os idiomas.',
   'settings.title': 'Configurações',
   'settings.closeAria': 'Fechar configurações',
-  'settings.signedInAs': 'Logado como',
+  'settings.signedInAs': 'Entrou como',
   'settings.languages': 'Idiomas',
   'settings.addLanguageAria': 'Adicionar um idioma',
   'settings.addLanguageTitle': 'Adicionar um idioma',

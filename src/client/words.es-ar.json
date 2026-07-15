@@ -1,0 +1,902 @@
+[
+  {
+    "word": "casa",
+    "translation": "house, home",
+    "sentences": [
+      {
+        "es": "Mi casa está cerca de la estación de tren.",
+        "en": "My house is near the train station."
+      },
+      {
+        "es": "Volvemos a casa después del laburo.",
+        "en": "We go back home after work."
+      },
+      {
+        "es": "Ellos compraron una casa más grande el año pasado.",
+        "en": "They bought a bigger house last year."
+      }
+    ]
+  },
+  {
+    "word": "laburo",
+    "translation": "work, job (colloquial Argentina)",
+    "sentences": [
+      {
+        "es": "Tengo mucho laburo esta semana en la oficina.",
+        "en": "I have a lot of work this week at the office."
+      },
+      {
+        "es": "Ella encontró un laburo nuevo cerca de acá.",
+        "en": "She found a new job near here."
+      },
+      {
+        "es": "Después del laburo nos tomamos un café juntos.",
+        "en": "After work we grab a coffee together."
+      }
+    ]
+  },
+  {
+    "word": "amigo",
+    "translation": "friend (male); friend in general",
+    "sentences": [
+      {
+        "es": "Mi mejor amigo vive en Buenos Aires todavía.",
+        "en": "My best friend still lives in Buenos Aires."
+      },
+      {
+        "es": "Nos hicimos amigos en el colegio hace años.",
+        "en": "We became friends at school years ago."
+      },
+      {
+        "es": "Ella invita a sus amigos a cenar el viernes.",
+        "en": "She invites her friends over for dinner on Friday."
+      }
+    ]
+  },
+  {
+    "word": "familia",
+    "translation": "family",
+    "sentences": [
+      {
+        "es": "Mi familia come junta los domingos al mediodía.",
+        "en": "My family eats together on Sundays at noon."
+      },
+      {
+        "es": "Pasamos las vacaciones en familia en la costa.",
+        "en": "We spend the holidays as a family on the coast."
+      },
+      {
+        "es": "Toda la familia llegó antes de las tres.",
+        "en": "The whole family arrived before three."
+      }
+    ]
+  },
+  {
+    "word": "chico",
+    "translation": "boy; also small / little (adj.)",
+    "sentences": [
+      {
+        "es": "El chico juega fútbol en la plaza del barrio.",
+        "en": "The boy plays soccer in the neighborhood square."
+      },
+      {
+        "es": "Necesito un auto más chico para la ciudad.",
+        "en": "I need a smaller car for the city."
+      },
+      {
+        "es": "Los chicos volvieron tarde de la escuela.",
+        "en": "The kids came back late from school."
+      }
+    ]
+  },
+  {
+    "word": "chica",
+    "translation": "girl; young woman",
+    "sentences": [
+      {
+        "es": "La chica lee un libro en el colectivo.",
+        "en": "The girl is reading a book on the bus."
+      },
+      {
+        "es": "Conocí a una chica muy simpática ayer.",
+        "en": "I met a very nice girl yesterday."
+      },
+      {
+        "es": "Las chicas estudian juntas para el examen.",
+        "en": "The girls study together for the exam."
+      }
+    ]
+  },
+  {
+    "word": "colectivo",
+    "translation": "city bus (Argentina)",
+    "sentences": [
+      {
+        "es": "Tomo el colectivo todos los días al laburo.",
+        "en": "I take the bus every day to work."
+      },
+      {
+        "es": "El colectivo llegó tarde por el tráfico.",
+        "en": "The bus arrived late because of traffic."
+      },
+      {
+        "es": "¿En qué colectivo vas hasta Palermo?",
+        "en": "Which bus do you take to Palermo?"
+      }
+    ]
+  },
+  {
+    "word": "remera",
+    "translation": "T-shirt (Argentina)",
+    "sentences": [
+      {
+        "es": "Compré una remera azul en el once ayer.",
+        "en": "I bought a blue T-shirt in Once yesterday."
+      },
+      {
+        "es": "Esta remera te queda muy bien puesta.",
+        "en": "This T-shirt looks really good on you."
+      },
+      {
+        "es": "Lavé todas las remeras sucias del fin de semana.",
+        "en": "I washed all the dirty T-shirts from the weekend."
+      }
+    ]
+  },
+  {
+    "word": "plata",
+    "translation": "money (colloquial); also silver",
+    "sentences": [
+      {
+        "es": "No tengo plata suficiente para ese viaje todavía.",
+        "en": "I still don't have enough money for that trip."
+      },
+      {
+        "es": "Gastamos mucha plata en la cena de anoche.",
+        "en": "We spent a lot of money on last night's dinner."
+      },
+      {
+        "es": "El anillo es de plata, no de oro amarillo.",
+        "en": "The ring is silver, not yellow gold."
+      }
+    ]
+  },
+  {
+    "word": "comida",
+    "translation": "food; meal",
+    "sentences": [
+      {
+        "es": "La comida argentina es muy rica y abundante.",
+        "en": "Argentine food is really tasty and hearty."
+      },
+      {
+        "es": "Preparé la comida antes de que lleguen.",
+        "en": "I prepared the meal before they arrive."
+      },
+      {
+        "es": "Después de la comida caminamos un rato.",
+        "en": "After the meal we walked for a bit."
+      }
+    ]
+  },
+  {
+    "word": "agua",
+    "translation": "water",
+    "sentences": [
+      {
+        "es": "¿Me pasás un vaso de agua fría, por favor?",
+        "en": "Can you pass me a glass of cold water, please?"
+      },
+      {
+        "es": "El agua del río estaba muy clara hoy.",
+        "en": "The river water was very clear today."
+      },
+      {
+        "es": "Compramos agua mineral para el asado.",
+        "en": "We bought mineral water for the barbecue."
+      }
+    ]
+  },
+  {
+    "word": "día",
+    "translation": "day",
+    "sentences": [
+      {
+        "es": "Hoy fue un día largo pero productivo.",
+        "en": "Today was a long but productive day."
+      },
+      {
+        "es": "Los días de lluvia prefiero quedarme en casa.",
+        "en": "On rainy days I prefer to stay home."
+      },
+      {
+        "es": "¿Qué día llegás a Buenos Aires?",
+        "en": "What day do you arrive in Buenos Aires?"
+      }
+    ]
+  },
+  {
+    "word": "noche",
+    "translation": "night, evening",
+    "sentences": [
+      {
+        "es": "Anoche cenamos pizza con unos amigos.",
+        "en": "Last night we had pizza with some friends."
+      },
+      {
+        "es": "De noche la ciudad se siente más tranquila.",
+        "en": "At night the city feels quieter."
+      },
+      {
+        "es": "Esta noche vamos al cine cerca de acá.",
+        "en": "Tonight we're going to the movies near here."
+      }
+    ]
+  },
+  {
+    "word": "mañana",
+    "translation": "tomorrow; also morning",
+    "sentences": [
+      {
+        "es": "Mañana tengo que madrugar para el laburo.",
+        "en": "Tomorrow I have to get up early for work."
+      },
+      {
+        "es": "Por la mañana tomo mate antes de salir.",
+        "en": "In the morning I drink mate before going out."
+      },
+      {
+        "es": "Nos vemos mañana a la misma hora, ¿dale?",
+        "en": "See you tomorrow at the same time, okay?"
+      }
+    ]
+  },
+  {
+    "word": "tiempo",
+    "translation": "time; also weather",
+    "sentences": [
+      {
+        "es": "No tengo tiempo para ir al gimnasio hoy.",
+        "en": "I don't have time to go to the gym today."
+      },
+      {
+        "es": "Hace buen tiempo para caminar por la plaza.",
+        "en": "The weather is nice for a walk around the square."
+      },
+      {
+        "es": "Con el tiempo aprendés a hablar mejor.",
+        "en": "With time you learn to speak better."
+      }
+    ]
+  },
+  {
+    "word": "vida",
+    "translation": "life",
+    "sentences": [
+      {
+        "es": "La vida en Buenos Aires es intensa y divertida.",
+        "en": "Life in Buenos Aires is intense and fun."
+      },
+      {
+        "es": "Cambió de vida cuando se mudó al interior.",
+        "en": "His life changed when he moved inland."
+      },
+      {
+        "es": "Disfrutamos la vida sin complicarnos tanto.",
+        "en": "We enjoy life without overcomplicating things."
+      }
+    ]
+  },
+  {
+    "word": "escuela",
+    "translation": "school",
+    "sentences": [
+      {
+        "es": "Los chicos van a la escuela en colectivo.",
+        "en": "The kids go to school by bus."
+      },
+      {
+        "es": "Esta escuela enseña inglés desde primer grado.",
+        "en": "This school teaches English from first grade."
+      },
+      {
+        "es": "Salí temprano de la escuela para el dentista.",
+        "en": "I left school early for the dentist."
+      }
+    ]
+  },
+  {
+    "word": "libro",
+    "translation": "book",
+    "sentences": [
+      {
+        "es": "Estoy leyendo un libro muy interesante ahora.",
+        "en": "I'm reading a very interesting book right now."
+      },
+      {
+        "es": "Me prestó tres libros de la biblioteca.",
+        "en": "She lent me three books from the library."
+      },
+      {
+        "es": "Este libro me ayudó mucho a estudiar.",
+        "en": "This book helped me a lot with studying."
+      }
+    ]
+  },
+  {
+    "word": "hablar",
+    "translation": "to speak, to talk",
+    "sentences": [
+      {
+        "es": "Hablamos español casi todos los días en casa.",
+        "en": "We speak Spanish almost every day at home."
+      },
+      {
+        "es": "Ayer hablé con mi hermana por videollamada.",
+        "en": "Yesterday I talked to my sister on a video call."
+      },
+      {
+        "es": "¿Podés hablar un poco más despacio, por favor?",
+        "en": "Can you speak a little more slowly, please?"
+      }
+    ]
+  },
+  {
+    "word": "escuchar",
+    "translation": "to listen",
+    "sentences": [
+      {
+        "es": "Escucho música argentina cuando estudio.",
+        "en": "I listen to Argentine music when I study."
+      },
+      {
+        "es": "Los alumnos escucharon con atención al profe.",
+        "en": "The students listened carefully to the teacher."
+      },
+      {
+        "es": "¿Escuchaste el mensaje que te mandé?",
+        "en": "Did you hear the message I sent you?"
+      }
+    ]
+  },
+  {
+    "word": "mirar",
+    "translation": "to look at, to watch",
+    "sentences": [
+      {
+        "es": "Miramos una serie argentina anoche en casa.",
+        "en": "We watched an Argentine series at home last night."
+      },
+      {
+        "es": "Él miró por la ventana durante un rato.",
+        "en": "He looked out the window for a while."
+      },
+      {
+        "es": "No mires el celular mientras hablamos, dale.",
+        "en": "Don't look at your phone while we're talking, come on."
+      }
+    ]
+  },
+  {
+    "word": "esperar",
+    "translation": "to wait (for); also to hope",
+    "sentences": [
+      {
+        "es": "Espero el colectivo desde hace veinte minutos.",
+        "en": "I've been waiting for the bus for twenty minutes."
+      },
+      {
+        "es": "Ella esperó a su amigo frente al café.",
+        "en": "She waited for her friend in front of the café."
+      },
+      {
+        "es": "Espero que te vaya bien en el examen.",
+        "en": "I hope you do well on the exam."
+      }
+    ]
+  },
+  {
+    "word": "entender",
+    "translation": "to understand",
+    "sentences": [
+      {
+        "es": "Entiendo mejor cuando hablás despacio.",
+        "en": "I understand better when you speak slowly."
+      },
+      {
+        "es": "No entendieron la pregunta del principio.",
+        "en": "They didn't understand the question at the beginning."
+      },
+      {
+        "es": "¿Entendés lo que te estoy diciendo?",
+        "en": "Do you understand what I'm telling you?"
+      }
+    ]
+  },
+  {
+    "word": "aprender",
+    "translation": "to learn",
+    "sentences": [
+      {
+        "es": "Aprendo español rioplatense con series locales.",
+        "en": "I'm learning Rioplatense Spanish with local series."
+      },
+      {
+        "es": "Aprendió muchas palabras nuevas esta semana.",
+        "en": "She learned a lot of new words this week."
+      },
+      {
+        "es": "Con la práctica aprendés más rápido, creeme.",
+        "en": "With practice you learn faster, believe me."
+      }
+    ]
+  },
+  {
+    "word": "escribir",
+    "translation": "to write",
+    "sentences": [
+      {
+        "es": "Escribo un mensaje a mi hermano ahora mismo.",
+        "en": "I'm writing a message to my brother right now."
+      },
+      {
+        "es": "Ellos escribieron una carta larga anoche.",
+        "en": "They wrote a long letter last night."
+      },
+      {
+        "es": "¿Escribís claramente en el pizarrón?",
+        "en": "Do you write clearly on the board?"
+      }
+    ]
+  },
+  {
+    "word": "leer",
+    "translation": "to read",
+    "sentences": [
+      {
+        "es": "Ella lee el diario todas las mañanas.",
+        "en": "She reads the newspaper every morning."
+      },
+      {
+        "es": "Leímos esa novela durante las vacaciones.",
+        "en": "We read that novel during the holidays."
+      },
+      {
+        "es": "Si leés muy rápido, no entendés bien.",
+        "en": "If you read too fast, you don't understand well."
+      }
+    ]
+  },
+  {
+    "word": "comprar",
+    "translation": "to buy",
+    "sentences": [
+      {
+        "es": "Compro fruta en la feria los sábados.",
+        "en": "I buy fruit at the market on Saturdays."
+      },
+      {
+        "es": "Compraron una mesa nueva para el living.",
+        "en": "They bought a new table for the living room."
+      },
+      {
+        "es": "¿Podés comprar el pan cuando vuelvas?",
+        "en": "Can you buy the bread when you come back?"
+      }
+    ]
+  },
+  {
+    "word": "vender",
+    "translation": "to sell",
+    "sentences": [
+      {
+        "es": "Venden verduras frescas todas las mañanas.",
+        "en": "They sell fresh vegetables every morning."
+      },
+      {
+        "es": "Vendió su auto viejo la semana pasada.",
+        "en": "She sold her old car last week."
+      },
+      {
+        "es": "No queremos vender esta casa familiar.",
+        "en": "We don't want to sell this family house."
+      }
+    ]
+  },
+  {
+    "word": "buscar",
+    "translation": "to look for, to search for",
+    "sentences": [
+      {
+        "es": "Busco las llaves hace diez minutos ya.",
+        "en": "I've been looking for the keys for ten minutes already."
+      },
+      {
+        "es": "Buscaron un departamento más tranquilo.",
+        "en": "They looked for a quieter apartment."
+      },
+      {
+        "es": "Siempre buscás el celular a la mañana.",
+        "en": "You're always looking for your phone in the morning."
+      }
+    ]
+  },
+  {
+    "word": "encontrar",
+    "translation": "to find; also to meet",
+    "sentences": [
+      {
+        "es": "Por fin encontré mi billetera perdida.",
+        "en": "I finally found my lost wallet."
+      },
+      {
+        "es": "Nos encontramos en la plaza a las seis.",
+        "en": "We're meeting in the square at six."
+      },
+      {
+        "es": "¿Encontraste una solución al problema?",
+        "en": "Did you find a solution to the problem?"
+      }
+    ]
+  },
+  {
+    "word": "dar",
+    "translation": "to give",
+    "sentences": [
+      {
+        "es": "Siempre da buenos consejos a sus amigos.",
+        "en": "He always gives good advice to his friends."
+      },
+      {
+        "es": "Me dio un libro para mi cumpleaños.",
+        "en": "She gave me a book for my birthday."
+      },
+      {
+        "es": "¿Me das un poco de agua, por favor?",
+        "en": "Can you give me a little water, please?"
+      }
+    ]
+  },
+  {
+    "word": "tomar",
+    "translation": "to take; to drink; to have (a class)",
+    "sentences": [
+      {
+        "es": "Tomo el colectivo para ir al laburo.",
+        "en": "I take the bus to go to work."
+      },
+      {
+        "es": "Tomamos un café después del almuerzo.",
+        "en": "We had a coffee after lunch."
+      },
+      {
+        "es": "¿Tomás mate a la mañana o café?",
+        "en": "Do you drink mate in the morning or coffee?"
+      }
+    ]
+  },
+  {
+    "word": "abrir",
+    "translation": "to open",
+    "sentences": [
+      {
+        "es": "Abro la ventana para ventilar la pieza.",
+        "en": "I open the window to air out the room."
+      },
+      {
+        "es": "El local abre a las nueve en punto.",
+        "en": "The shop opens at nine on the dot."
+      },
+      {
+        "es": "Abrió la puerta con una gran sonrisa.",
+        "en": "She opened the door with a big smile."
+      }
+    ]
+  },
+  {
+    "word": "cerrar",
+    "translation": "to close, to shut",
+    "sentences": [
+      {
+        "es": "Cerrá la puerta, por favor; hace frío.",
+        "en": "Close the door, please; it's cold."
+      },
+      {
+        "es": "El café cierra bastante temprano el domingo.",
+        "en": "The café closes fairly early on Sundays."
+      },
+      {
+        "es": "Cerraron las persianas antes de dormir.",
+        "en": "They closed the blinds before sleeping."
+      }
+    ]
+  },
+  {
+    "word": "empezar",
+    "translation": "to begin, to start",
+    "sentences": [
+      {
+        "es": "La clase empieza a las ocho en punto.",
+        "en": "Class starts at eight on the dot."
+      },
+      {
+        "es": "Empezamos el proyecto la semana pasada.",
+        "en": "We started the project last week."
+      },
+      {
+        "es": "Siempre empezás las frases demasiado rápido.",
+        "en": "You always start your sentences too quickly."
+      }
+    ]
+  },
+  {
+    "word": "terminar",
+    "translation": "to finish, to end",
+    "sentences": [
+      {
+        "es": "Terminé la tarea antes de la cena.",
+        "en": "I finished the homework before dinner."
+      },
+      {
+        "es": "La película termina demasiado de golpe.",
+        "en": "The movie ends too abruptly."
+      },
+      {
+        "es": "Cuando terminés, podemos salir juntos.",
+        "en": "When you finish, we can go out together."
+      }
+    ]
+  },
+  {
+    "word": "ir",
+    "translation": "to go",
+    "sentences": [
+      {
+        "es": "Voy al supermercado después del laburo.",
+        "en": "I'm going to the supermarket after work."
+      },
+      {
+        "es": "Fuimos a la costa el fin de semana.",
+        "en": "We went to the coast on the weekend."
+      },
+      {
+        "es": "¿Adónde vas con tanto apuro ahora?",
+        "en": "Where are you going in such a hurry now?"
+      }
+    ]
+  },
+  {
+    "word": "venir",
+    "translation": "to come",
+    "sentences": [
+      {
+        "es": "Vienen a cenar a casa esta noche.",
+        "en": "They're coming over for dinner tonight."
+      },
+      {
+        "es": "Vino a visitarme al hospital ayer.",
+        "en": "She came to visit me at the hospital yesterday."
+      },
+      {
+        "es": "¿Venís con nosotros a la feria mañana?",
+        "en": "Are you coming with us to the market tomorrow?"
+      }
+    ]
+  },
+  {
+    "word": "llegar",
+    "translation": "to arrive",
+    "sentences": [
+      {
+        "es": "El tren llega en cinco minutos exactos.",
+        "en": "The train arrives in exactly five minutes."
+      },
+      {
+        "es": "Llegó tarde a la reunión del trabajo.",
+        "en": "She arrived late to the work meeting."
+      },
+      {
+        "es": "¿A qué hora llegás a casa normalmente?",
+        "en": "What time do you usually get home?"
+      }
+    ]
+  },
+  {
+    "word": "quedar",
+    "translation": "to stay; to arrange to meet; to fit / suit",
+    "sentences": [
+      {
+        "es": "Me quedo en casa este fin de semana también.",
+        "en": "I'm staying home this weekend too."
+      },
+      {
+        "es": "Quedamos en vernos a las siete en la plaza.",
+        "en": "We arranged to meet at seven in the square."
+      },
+      {
+        "es": "Esa remera te queda más linda que la otra.",
+        "en": "That T-shirt looks nicer on you than the other one."
+      }
+    ]
+  },
+  {
+    "word": "vivir",
+    "translation": "to live",
+    "sentences": [
+      {
+        "es": "Vivo en un departamento chico en Palermo.",
+        "en": "I live in a small apartment in Palermo."
+      },
+      {
+        "es": "Viven cerca de la estación desde hace años.",
+        "en": "They've lived near the station for years."
+      },
+      {
+        "es": "¿Dónde vivís ahora en Argentina?",
+        "en": "Where do you live in Argentina now?"
+      }
+    ]
+  },
+  {
+    "word": "querer",
+    "translation": "to want; to love",
+    "sentences": [
+      {
+        "es": "Quiero aprender español bien de una vez.",
+        "en": "I want to learn Spanish properly once and for all."
+      },
+      {
+        "es": "Quisieron irse más temprano de lo planeado.",
+        "en": "They wanted to leave earlier than planned."
+      },
+      {
+        "es": "¿Qué querés tomar con la comida?",
+        "en": "What do you want to drink with the meal?"
+      }
+    ]
+  },
+  {
+    "word": "poder",
+    "translation": "to be able to, can",
+    "sentences": [
+      {
+        "es": "Puedo ayudarte con la tarea esta noche.",
+        "en": "I can help you with the homework tonight."
+      },
+      {
+        "es": "No pudieron venir por la lluvia fuerte.",
+        "en": "They couldn't come because of the heavy rain."
+      },
+      {
+        "es": "¿Podés repetir la pregunta, por favor?",
+        "en": "Can you repeat the question, please?"
+      }
+    ]
+  },
+  {
+    "word": "tener",
+    "translation": "to have",
+    "sentences": [
+      {
+        "es": "Tengo dos hermanos que viven en Córdoba.",
+        "en": "I have two brothers who live in Córdoba."
+      },
+      {
+        "es": "Tuvieron un problema con el colectivo hoy.",
+        "en": "They had a problem with the bus today."
+      },
+      {
+        "es": "¿Tenés tiempo para un café después?",
+        "en": "Do you have time for a coffee afterward?"
+      }
+    ]
+  },
+  {
+    "word": "hacer",
+    "translation": "to do, to make",
+    "sentences": [
+      {
+        "es": "Hago la comida mientras escuchás música.",
+        "en": "I make the food while you listen to music."
+      },
+      {
+        "es": "Hicieron un asado enorme el domingo.",
+        "en": "They made a huge barbecue on Sunday."
+      },
+      {
+        "es": "¿Qué hacés este fin de semana?",
+        "en": "What are you doing this weekend?"
+      }
+    ]
+  },
+  {
+    "word": "decir",
+    "translation": "to say, to tell",
+    "sentences": [
+      {
+        "es": "Siempre dice la verdad a sus padres.",
+        "en": "He always tells the truth to his parents."
+      },
+      {
+        "es": "Me dijo que viniera un poco más temprano.",
+        "en": "She told me to come a little earlier."
+      },
+      {
+        "es": "¿Qué querés decir con ese comentario?",
+        "en": "What do you mean by that comment?"
+      }
+    ]
+  },
+  {
+    "word": "pedir",
+    "translation": "to ask for; to order (food)",
+    "sentences": [
+      {
+        "es": "Pido ayuda cuando la necesito de verdad.",
+        "en": "I ask for help when I really need it."
+      },
+      {
+        "es": "Pedimos milanesas en el restaurante de la esquina.",
+        "en": "We ordered milanesas at the corner restaurant."
+      },
+      {
+        "es": "Te pido un favor grande, ¿me escuchás?",
+        "en": "I'm asking you for a big favor — are you listening?"
+      }
+    ]
+  },
+  {
+    "word": "responder",
+    "translation": "to answer, to reply",
+    "sentences": [
+      {
+        "es": "Respondo los mensajes recién a la noche.",
+        "en": "I only answer messages in the evening."
+      },
+      {
+        "es": "Respondió demasiado rápido sin pensar.",
+        "en": "She answered too quickly without thinking."
+      },
+      {
+        "es": "¿Podés responder esta pregunta difícil?",
+        "en": "Can you answer this hard question?"
+      }
+    ]
+  },
+  {
+    "word": "bueno",
+    "translation": "good; okay (as interjection)",
+    "sentences": [
+      {
+        "es": "Este restaurante tiene comida muy buena.",
+        "en": "This restaurant has really good food."
+      },
+      {
+        "es": "Bueno, entonces nos vemos a las ocho.",
+        "en": "Okay, then we'll see each other at eight."
+      },
+      {
+        "es": "Fue un día bueno para caminar por la ciudad.",
+        "en": "It was a good day to walk around the city."
+      }
+    ]
+  },
+  {
+    "word": "lindo",
+    "translation": "pretty, nice, lovely (not a person's name)",
+    "sentences": [
+      {
+        "es": "Qué día lindo para ir a la plaza.",
+        "en": "What a nice day to go to the square."
+      },
+      {
+        "es": "Compró una remera linda en el Once.",
+        "en": "She bought a pretty T-shirt in Once."
+      },
+      {
+        "es": "El barrio se ve muy lindo al atardecer.",
+        "en": "The neighborhood looks really lovely at sunset."
+      }
+    ]
+  }
+]

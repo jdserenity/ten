@@ -1,11 +1,11 @@
 # Architecture (agent reference)
 
-Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT-KNOWLEDGE.md`. Word-pool editorial rules → `scaffold/generating-words.md`.
+Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT-KNOWLEDGE.md`. Word-pool editorial rules → `scaffold/skills/seed-daily-words/SKILL.md`.
 
 ## Product
 - **Name:** Ten — personal PWA for learning Brazilian Portuguese, French (Quebec-oriented), French (France-oriented), and Argentinian Spanish.
 - **Users:** Username-only accounts (no email/password). New username → create account; existing → sign in. Remembered on device via `localStorage`. Seeded owner account **`jd`** has `is_dev = 1` (dev mode); all other signups are prod (`is_dev = 0`). Each user owns their own cards, unlocks, daily progress, and language list. Until the user adds at least one learning language, tabs show **Add a language!** (i18n) with no fetch errors; Translate controls are disabled.
-- Four offered learning tracks: **PT-BR** (intermediate / B1–B2 oriented), **FR** (beginner, Quebec-oriented; top-frequency vocabulary first), **FR-FR** (beginner, France-oriented; reuses the French word pool and frequency list with separate progress), and **ES-AR** (beginner, Argentina-oriented; word pool TBD). Users pick any on first open (header `+`) and can add more later in **Settings**. Default mode on open: last visited language among the user's languages.
+- Four offered learning tracks: **PT-BR** (intermediate / B1–B2 oriented), **FR** (beginner, Quebec-oriented), **FR-FR** (beginner, France-oriented), and **ES-AR** (beginner, Argentina-oriented). Each flavour has its **own** word pool file. Users pick any on first open (header `+`) and can add more later in **Settings**. Default mode on open: last visited language among the user's languages.
 - Tabs: **10/day** (up to 10 unseen words/day from the active pool), **Review** (10 flashcards/day after 10/day, then unlimited), **Frequency** (bundled dictionaries with unlock highlighting), **Translate** (free-form translation; last tab). **Settings** opens from a cog icon in the header tools row (with feedback + flags; not a tab).
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per user + language; duplicate `(user_id, language, front, back)` rejected on add.
 - **Dev vs prod:** Dev users (`is_dev`) see owner-only UI such as `~N days left in <mode> pool` and a feedback list in Settings. Prod users do not.
@@ -24,7 +24,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - Node HTTP server: `server/index.js` (static + APIs), `server/db.js` (SQLite), `server/cards.js` + `server/fsrs.js` (card CRUD + scheduling).
 - Client: `src/client/index.html`, `styles.css`, `app.js`.
 - PWA: `src/client/manifest.json`, `icon-192.png` / `icon-512.png` (static aurora PNGs). No service worker — static assets are served with `Cache-Control: no-cache`.
-- Word pools: `src/client/words.pt.json`, `words.fr.json`, `words.es.json` (empty until curated).
+- Word pools: `src/client/words.pt-br.json`, `words.fr-ca.json`, `words.fr-fr.json`, `words.es-ar.json` (agent-curated; one file per flavour).
 - Frequency dictionaries: `src/client/frequency-pt-br.json`, `frequency-fr.json`, `frequency-es-ar.json` (up to ~5000 each). ES-AR list from ACTIV-ES Argentina subtitle corpus (`ar_orf` column).
 - TTS: mode speech langs `pt-BR` / `fr-CA` / `fr-FR` / `es-AR`. Translate: Google uses `es-AR` for short Spanish and `fr-FR` for France French; DeepL uses generic `ES` and `FR` (no regional codes).
 
@@ -42,17 +42,16 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 | `src/client/daily-pool.js` | 10/day word selection and pool-days-left math (shared with tests) |
 | `src/client/confetti.browser.js` | Vendored confetti for 10/day completion |
 | `scripts/import-anki-cards.js` | One-shot AnkiConnect → SQLite import |
-| `scripts/generate-words.js` | PT-BR pool generator → `words.pt.json` |
-| `scripts/generate-words-fr.js` | FR pool from frequency lists → `words.fr.json` |
-| `scaffold/generating-words.md` | How to curate/regenerate word pools |
+| `scripts/check-words.js` | Quality gate for all dialect word pools (`npm run words:check`) |
+| `scaffold/skills/seed-daily-words/SKILL.md` | How agents curate/refill 10/day pools |
 
 ## Modes (`MODE_CONFIGS` in `app.js`)
 | Mode id | Words | Sentence key | Learning lang |
 | --- | --- | --- | --- |
-| `pt-br` | `/words.pt.json` | `pt` | `PT-BR` |
-| `fr` | `/words.fr.json` | `fr` | `FR` |
-| `fr-fr` | `/words.fr.json` | `fr` | `FR-FR` |
-| `es-ar` | `/words.es.json` | `es` | `ES-AR` |
+| `pt-br` | `/words.pt-br.json` | `pt` | `PT-BR` |
+| `fr` | `/words.fr-ca.json` | `fr` | `FR` |
+| `fr-fr` | `/words.fr-fr.json` | `fr` | `FR-FR` |
+| `es-ar` | `/words.es-ar.json` | `es` | `ES-AR` |
 
 Active language mode is stored in `localStorage` (last visited; defaults to `fr` when unset). One-time migration reads legacy `sessionStorage` value.
 
@@ -100,9 +99,8 @@ Path: `TEN_DB_PATH` or `data/ten.db`.
 Languages: `PT-BR`, `FR`, `FR-FR`, `ES-AR`.
 
 ## Word / frequency data
-- `words.pt.json` is **generated** (`npm run generate:pt`) — do not hand-edit; change the generator and re-run. Editorial standards: `scaffold/generating-words.md`.
-- French pool: `npm run generate:fr` (frequency-dictionary-based).
-- Spanish pool: `words.es.json` is curated manually (empty placeholder until filled); start from `frequency-es-ar.json`.
+- Word pools are **agent-curated** (one JSON file per flavour). Editorial rules: `scaffold/skills/seed-daily-words/SKILL.md`. Validate with `npm run words:check`.
+- New cards: one lemma, exactly **3** example sentences, content words only (glue skip-list), regional flavour mandatory.
 - Frequency refresh: `npm run frequency:download` (PT-BR Wiktionary, FR FrequencyWords, ES-AR ACTIV-ES).
 
 ## Run / deploy

@@ -226,11 +226,6 @@ header {
   gap: 12px;
 }
 
-.login-copy {
-  color: var(--muted);
-  font-size: 14px;
-}
-
 header h1 {
   font-size: 22px;
   font-weight: 700;

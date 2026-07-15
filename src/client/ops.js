@@ -51,7 +51,7 @@ function renderPoolHealth(languages) {
   const list = document.getElementById('ops-pool-list');
   if (!list) return;
   if (!languages.length) {
-    list.innerHTML = '<p class="status-line">No users are studying any language yet.</p>';
+    list.innerHTML = '<p class="status-line">Could not load pool data.</p>';
     return;
   }
   list.innerHTML = languages.map(lang => {
@@ -59,8 +59,14 @@ function renderPoolHealth(languages) {
       const warningClass = user.warning ? ' warning' : '';
       return `<li class="ops-user-row${warningClass}"><span class="ops-user-name">${escapeHtml(user.username)}</span><span class="ops-user-runway">${formatDays(user.daysLeft)} left · ${user.unseenCount} unseen</span></li>`;
     }).join('');
+    const runwayLabel = lang.hasUsers
+      ? `min ${formatDays(lang.minDaysLeft)}`
+      : `${formatDays(lang.minDaysLeft)} in pool`;
+    const userContent = lang.users.length
+      ? `<ul class="ops-user-list">${userRows}</ul>`
+      : '<p class="ops-no-users">No users on this track yet.</p>';
     const cardClass = lang.warning ? 'ops-lang-card surface-card warning' : 'ops-lang-card surface-card';
-    return `<article class="${cardClass}"><div class="ops-lang-header"><span class="ops-lang-title">${lang.flagEmoji} ${escapeHtml(lang.label)}</span><span class="ops-lang-meta">${lang.poolSize} words · min ${formatDays(lang.minDaysLeft)}</span></div><ul class="ops-user-list">${userRows}</ul></article>`;
+    return `<article class="${cardClass}"><div class="ops-lang-header"><span class="ops-lang-title">${lang.flagEmoji} ${escapeHtml(lang.label)}</span><span class="ops-lang-meta">${lang.poolSize} words · ${runwayLabel}</span></div>${userContent}</article>`;
   }).join('');
 }
 

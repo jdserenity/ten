@@ -75,11 +75,13 @@ export function buildPoolHealthReport(users, poolsByLanguage) {
       });
     }
 
-    if (!userRows.length) continue;
-
     userRows.sort((a, b) => a.daysLeft - b.daysLeft);
-    const minDaysLeft = userRows[0].daysLeft;
-    const warning = userRows.some(row => row.warning);
+    const minDaysLeft = userRows.length
+      ? userRows[0].daysLeft
+      : computePoolDaysLeft(poolSize, 0, WORDS_PER_DAY);
+    const warning = userRows.length
+      ? userRows.some(row => row.warning)
+      : minDaysLeft <= POOL_WARN_DAYS;
     if (warning) alertCount++;
 
     languages.push({
@@ -90,6 +92,7 @@ export function buildPoolHealthReport(users, poolsByLanguage) {
       poolSize,
       minDaysLeft,
       warning,
+      hasUsers: userRows.length > 0,
       users: userRows
     });
   }

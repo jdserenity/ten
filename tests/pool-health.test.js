@@ -57,7 +57,12 @@ describe('computeUserPoolRunway', () => {
 });
 
 describe('buildPoolHealthReport', () => {
-  const pools = { 'ES-AR': tinyPool, FR: [{ word: 'bonjour' }] };
+  const pools = {
+    'PT-BR': Array.from({ length: 100 }, (_, index) => ({ word: `pt${index}` })),
+    FR: [{ word: 'bonjour' }],
+    'FR-FR': Array.from({ length: 100 }, (_, index) => ({ word: `fr${index}` })),
+    'ES-AR': tinyPool
+  };
 
   it('sorts languages by tightest user runway', () => {
     const users = [
@@ -78,13 +83,18 @@ describe('buildPoolHealthReport', () => {
     assert.equal(report.languages[1].language, 'ES-AR');
     assert.equal(report.languages[1].minDaysLeft, 0.3);
     assert.equal(report.languages[1].users[0].username, 'alice');
+    assert.equal(report.languages.length, 4);
     assert.equal(report.alertCount, 2);
   });
 
-  it('omits languages with no active users', () => {
+  it('includes all four language pools even without active users', () => {
     const report = buildPoolHealthReport([], pools);
-    assert.deepEqual(report.languages, []);
-    assert.equal(report.alertCount, 0);
+    assert.equal(report.languages.length, 4);
+    assert.equal(report.languages[0].language, 'FR');
+    assert.equal(report.languages[0].minDaysLeft, 0.1);
+    assert.equal(report.languages.find(lang => lang.language === 'PT-BR')?.hasUsers, false);
+    assert.equal(report.languages.find(lang => lang.language === 'PT-BR')?.minDaysLeft, 10);
+    assert.equal(report.alertCount, 2);
   });
 });
 

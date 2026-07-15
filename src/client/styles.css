@@ -558,6 +558,14 @@ header {
   color: var(--muted);
 }
 
+.ops-no-users {
+  font-size: 13px;
+  color: var(--muted);
+  padding: 10px 12px;
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+
 .ops-feedback-item {
   border: 1px solid var(--border);
   border-radius: 10px;

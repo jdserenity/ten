@@ -65,6 +65,34 @@ function ensureSeedDevUser() {
   return user;
 }
 
+function tableExists(tableName) {
+  const row = getDb()
+    .prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?")
+    .get(tableName);
+  return Boolean(row);
+}
+
+function dropTableIfExists(tableName) {
+  if (tableExists(tableName)) getDb().exec(`DROP TABLE ${tableName}`);
+}
+
+function migrateTableAddUserId(tableName, userId, { createNewSql, copySql, indexSqls = [] }) {
+  if (tableHasColumn(tableName, 'user_id')) {
+    dropTableIfExists(`${tableName}_new`);
+    return;
+  }
+
+  const newName = `${tableName}_new`;
+  if (!tableExists(newName)) getDb().exec(createNewSql);
+
+  const newCount = getDb().prepare(`SELECT COUNT(*) AS count FROM ${newName}`).get().count;
+  if (newCount === 0 && tableExists(tableName)) getDb().prepare(copySql).run(userId);
+
+  dropTableIfExists(tableName);
+  if (tableExists(newName)) getDb().exec(`ALTER TABLE ${newName} RENAME TO ${tableName}`);
+  indexSqls.forEach(sql => getDb().exec(sql));
+}
+
 function migrateLegacyRowsToUser(userId) {
   const assignUserId = (tableName, extraSql = '') => {
     if (!tableHasColumn(tableName, 'user_id')) return;
@@ -77,101 +105,101 @@ function migrateLegacyRowsToUser(userId) {
 }
 
 function migrateUnlockedWordsTable(userId) {
-  if (tableHasColumn('unlocked_words', 'user_id')) return;
-  getDb().exec(`
-    CREATE TABLE unlocked_words_new (
-      user_id INTEGER NOT NULL,
-      language TEXT NOT NULL,
-      normalized_word TEXT NOT NULL,
-      unlocked_at INTEGER NOT NULL DEFAULT (unixepoch()),
-      PRIMARY KEY (user_id, language, normalized_word)
-    );
-    INSERT INTO unlocked_words_new (user_id, language, normalized_word, unlocked_at)
-      SELECT ?, language, normalized_word, unlocked_at FROM unlocked_words;
-    DROP TABLE unlocked_words;
-    ALTER TABLE unlocked_words_new RENAME TO unlocked_words;
-    CREATE INDEX IF NOT EXISTS idx_unlocked_words_user_language
-      ON unlocked_words (user_id, language);
-  `);
+  migrateTableAddUserId('unlocked_words', userId, {
+    createNewSql: `
+      CREATE TABLE unlocked_words_new (
+        user_id INTEGER NOT NULL,
+        language TEXT NOT NULL,
+        normalized_word TEXT NOT NULL,
+        unlocked_at INTEGER NOT NULL DEFAULT (unixepoch()),
+        PRIMARY KEY (user_id, language, normalized_word)
+      )`,
+    copySql: `
+      INSERT INTO unlocked_words_new (user_id, language, normalized_word, unlocked_at)
+      SELECT ?, language, normalized_word, unlocked_at FROM unlocked_words`,
+    indexSqls: [
+      `CREATE INDEX IF NOT EXISTS idx_unlocked_words_user_language
+        ON unlocked_words (user_id, language)`
+    ]
+  });
   migrateLegacyRowsToUser(userId);
 }
 
 function migrateDailyCardIndexTable(userId) {
-  if (tableHasColumn('daily_card_index', 'user_id')) return;
-  getDb().exec(`
-    CREATE TABLE daily_card_index_new (
-      user_id INTEGER NOT NULL,
-      language TEXT NOT NULL,
-      date_key TEXT NOT NULL,
-      card_index INTEGER NOT NULL,
-      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
-      PRIMARY KEY (user_id, language, date_key)
-    );
-    INSERT INTO daily_card_index_new (user_id, language, date_key, card_index, updated_at)
-      SELECT ?, language, date_key, card_index, updated_at FROM daily_card_index;
-    DROP TABLE daily_card_index;
-    ALTER TABLE daily_card_index_new RENAME TO daily_card_index;
-  `);
+  migrateTableAddUserId('daily_card_index', userId, {
+    createNewSql: `
+      CREATE TABLE daily_card_index_new (
+        user_id INTEGER NOT NULL,
+        language TEXT NOT NULL,
+        date_key TEXT NOT NULL,
+        card_index INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+        PRIMARY KEY (user_id, language, date_key)
+      )`,
+    copySql: `
+      INSERT INTO daily_card_index_new (user_id, language, date_key, card_index, updated_at)
+      SELECT ?, language, date_key, card_index, updated_at FROM daily_card_index`
+  });
   migrateLegacyRowsToUser(userId);
 }
 
 function migrateDailyWordAssignmentTable(userId) {
-  if (tableHasColumn('daily_word_assignment', 'user_id')) return;
-  getDb().exec(`
-    CREATE TABLE daily_word_assignment_new (
-      user_id INTEGER NOT NULL,
-      language TEXT NOT NULL,
-      date_key TEXT NOT NULL,
-      words_json TEXT NOT NULL,
-      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
-      PRIMARY KEY (user_id, language, date_key)
-    );
-    INSERT INTO daily_word_assignment_new (user_id, language, date_key, words_json, updated_at)
-      SELECT ?, language, date_key, words_json, updated_at FROM daily_word_assignment;
-    DROP TABLE daily_word_assignment;
-    ALTER TABLE daily_word_assignment_new RENAME TO daily_word_assignment;
-  `);
+  migrateTableAddUserId('daily_word_assignment', userId, {
+    createNewSql: `
+      CREATE TABLE daily_word_assignment_new (
+        user_id INTEGER NOT NULL,
+        language TEXT NOT NULL,
+        date_key TEXT NOT NULL,
+        words_json TEXT NOT NULL,
+        updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+        PRIMARY KEY (user_id, language, date_key)
+      )`,
+    copySql: `
+      INSERT INTO daily_word_assignment_new (user_id, language, date_key, words_json, updated_at)
+      SELECT ?, language, date_key, words_json, updated_at FROM daily_word_assignment`
+  });
   migrateLegacyRowsToUser(userId);
 }
 
 function migrateCardsTable(userId) {
-  if (tableHasColumn('cards', 'user_id')) return;
-  getDb().exec(`
-    CREATE TABLE cards_new (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      language TEXT NOT NULL,
-      front TEXT NOT NULL,
-      back TEXT NOT NULL,
-      context TEXT NOT NULL DEFAULT '',
-      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
-      due INTEGER NOT NULL,
-      stability REAL NOT NULL DEFAULT 0,
-      difficulty REAL NOT NULL DEFAULT 0,
-      elapsed_days REAL NOT NULL DEFAULT 0,
-      scheduled_days INTEGER NOT NULL DEFAULT 0,
-      learning_steps INTEGER NOT NULL DEFAULT 0,
-      reps INTEGER NOT NULL DEFAULT 0,
-      lapses INTEGER NOT NULL DEFAULT 0,
-      fsrs_state INTEGER NOT NULL DEFAULT 0,
-      last_review INTEGER,
-      UNIQUE (user_id, language, front, back)
-    );
-    INSERT INTO cards_new (
-      id, user_id, language, front, back, context, created_at,
-      due, stability, difficulty, elapsed_days, scheduled_days,
-      learning_steps, reps, lapses, fsrs_state, last_review
-    )
+  migrateTableAddUserId('cards', userId, {
+    createNewSql: `
+      CREATE TABLE cards_new (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        language TEXT NOT NULL,
+        front TEXT NOT NULL,
+        back TEXT NOT NULL,
+        context TEXT NOT NULL DEFAULT '',
+        created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+        due INTEGER NOT NULL,
+        stability REAL NOT NULL DEFAULT 0,
+        difficulty REAL NOT NULL DEFAULT 0,
+        elapsed_days REAL NOT NULL DEFAULT 0,
+        scheduled_days INTEGER NOT NULL DEFAULT 0,
+        learning_steps INTEGER NOT NULL DEFAULT 0,
+        reps INTEGER NOT NULL DEFAULT 0,
+        lapses INTEGER NOT NULL DEFAULT 0,
+        fsrs_state INTEGER NOT NULL DEFAULT 0,
+        last_review INTEGER,
+        UNIQUE (user_id, language, front, back)
+      )`,
+    copySql: `
+      INSERT INTO cards_new (
+        id, user_id, language, front, back, context, created_at,
+        due, stability, difficulty, elapsed_days, scheduled_days,
+        learning_steps, reps, lapses, fsrs_state, last_review
+      )
       SELECT
         id, ?, language, front, back, context, created_at,
         due, stability, difficulty, elapsed_days, scheduled_days,
         learning_steps, reps, lapses, fsrs_state, last_review
-      FROM cards;
-    DROP TABLE cards;
-    ALTER TABLE cards_new RENAME TO cards;
-    CREATE INDEX IF NOT EXISTS idx_cards_user_language_due ON cards (user_id, language, due);
-    CREATE INDEX IF NOT EXISTS idx_cards_user_language_state ON cards (user_id, language, fsrs_state);
-  `);
+      FROM cards`,
+    indexSqls: [
+      'CREATE INDEX IF NOT EXISTS idx_cards_user_language_due ON cards (user_id, language, due)',
+      'CREATE INDEX IF NOT EXISTS idx_cards_user_language_state ON cards (user_id, language, fsrs_state)'
+    ]
+  });
   migrateLegacyRowsToUser(userId);
 }
 

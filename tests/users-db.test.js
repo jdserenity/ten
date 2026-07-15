@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import Database from 'better-sqlite3';
 import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -80,5 +81,53 @@ describeDb('users and per-user data', () => {
     assert.equal(posted.ok, true);
     const list = getFeedbackList();
     assert.ok(list.some(entry => entry.body === 'Love the app!' && entry.username === 'friend'));
+  });
+
+  it('resumes a partial unlocked_words migration', () => {
+    const resumeDir = mkdtempSync(join(tmpdir(), 'ten-users-resume-'));
+    const resumePath = join(resumeDir, 'resume.db');
+    try {
+      const legacy = new Database(resumePath);
+      legacy.exec(`
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT NOT NULL UNIQUE,
+          is_dev INTEGER NOT NULL DEFAULT 0,
+          created_at INTEGER NOT NULL DEFAULT (unixepoch())
+        );
+        CREATE TABLE user_languages (
+          user_id INTEGER NOT NULL,
+          language TEXT NOT NULL,
+          PRIMARY KEY (user_id, language)
+        );
+        CREATE TABLE feedback (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          user_id INTEGER NOT NULL,
+          body TEXT NOT NULL,
+          created_at INTEGER NOT NULL DEFAULT (unixepoch())
+        );
+        CREATE TABLE unlocked_words (
+          language TEXT NOT NULL,
+          normalized_word TEXT NOT NULL,
+          unlocked_at INTEGER NOT NULL DEFAULT (unixepoch()),
+          PRIMARY KEY (language, normalized_word)
+        );
+        INSERT INTO unlocked_words (language, normalized_word) VALUES ('FR', 'bonjour');
+        CREATE TABLE unlocked_words_new (
+          user_id INTEGER NOT NULL,
+          language TEXT NOT NULL,
+          normalized_word TEXT NOT NULL,
+          unlocked_at INTEGER NOT NULL DEFAULT (unixepoch()),
+          PRIMARY KEY (user_id, language, normalized_word)
+        );
+      `);
+      legacy.close();
+
+      initDb(resumePath);
+      const jdUser = findOrCreateUser('jd');
+      assert.deepEqual(getAllUnlockedWords(jdUser.id)['FR'], ['bonjour']);
+    } finally {
+      rmSync(resumeDir, { recursive: true, force: true });
+    }
   });
 });

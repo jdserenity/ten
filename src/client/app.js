@@ -45,7 +45,7 @@ import {
   reconcileDailyWords,
   WORDS_PER_DAY
 } from './daily-pool.js';
-import { dailyGlossPrefetchIndices, planBootDataLoads } from './client-load.js';
+import { planBootDataLoads } from './client-load.js';
 
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
@@ -170,8 +170,9 @@ let dailyWordsInitPromise = null;
 let reviewQueueLoadedModeId = null;
 let reviewQueuePromise = null;
 const dailyGlossCache = new Map();
-const dailyGlossInflight = new Map();
 let dailyGlossCacheScope = '';
+let dailyGlossesEnsurePromise = null;
+let dailyGlossesEnsureScope = '';
 
 const LANG_PICKER_CONTEXTS = {
   header: { pickerId: 'header-lang-picker', ignoreId: 'header-lang-add-btn' },
@@ -327,7 +328,12 @@ async function saveAppLanguage(appLang) {
   state.settings.translateTarget = direction.target;
   state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
-  if (state.todayWords.length) renderDailyWord(state.currentWordIndex);
+  resetDailyGlossCache();
+  if (state.todayWords.length) {
+    void ensureAllDailyGlossesLoaded().then(() => {
+      if (state.activeTab === 'daily') renderDailyWord(state.currentWordIndex);
+    }).catch(() => {});
+  }
 }
 
 function authHeaders(extra = {}) {
@@ -874,6 +880,7 @@ async function reconcileTodayWordsAfterUnlock(normalized) {
   }
   if (state.activeTab === 'daily') renderDailyWord(state.currentWordIndex);
   updatePoolInfo();
+  void ensureAllDailyGlossesLoaded().catch(() => {});
 }
 
 function markLearningWordSeenInFrequency(rawWord, options = {}) {
@@ -928,8 +935,9 @@ function resetDailyWordsInit() {
 
 function resetDailyGlossCache() {
   dailyGlossCache.clear();
-  dailyGlossInflight.clear();
   dailyGlossCacheScope = '';
+  dailyGlossesEnsurePromise = null;
+  dailyGlossesEnsureScope = '';
 }
 
 function resetReviewQueueInit() {
@@ -1100,17 +1108,6 @@ function updateDailyAddButtons(word, glosses) {
   const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !required;
 }
 
-async function resolveGlossText(sourceText, sourceLang, targetLang, englishFallback = '') {
-  const clean = String(sourceText || '').trim();
-  if (!clean) return '';
-  if (targetLang === 'EN') {
-    const fallback = String(englishFallback || '').trim();
-    if (fallback) return fallback;
-  }
-  const result = await translateText(clean, sourceLang, targetLang);
-  return result.translatedText;
-}
-
 function dailyGlossCacheKey(word) {
   return `${getNativeApiLang()}:${getModeConfig().learningLang}:${word.word}`;
 }
@@ -1123,57 +1120,60 @@ function ensureDailyGlossCacheScope() {
   }
 }
 
-function buildDailyGlossJobs(word) {
-  const mode = getModeConfig();
-  const nativeLang = getNativeApiLang();
-  const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
-  const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
-  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
-  const firstSentenceText = getSentenceText(firstSentence);
-  const secondSentenceText = getSentenceText(secondSentence);
-  const thirdSentenceText = getSentenceText(thirdSentence);
-  return [
-    { field: 'wordGloss', promise: resolveGlossText(word.word, mode.learningLang, nativeLang, word.translation), needsFallback: true },
-    firstSentenceText
-      ? { field: 's1Gloss', promise: resolveGlossText(firstSentenceText, mode.learningLang, nativeLang, firstSentence.en), needsFallback: true }
-      : null,
-    secondSentenceText
-      ? { field: 's2Gloss', promise: resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en), needsFallback: true }
-      : null,
-    thirdSentenceText
-      ? { field: 's3Gloss', promise: resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en), needsFallback: true }
-      : null
-  ].filter(Boolean);
+function dailyGlossesEnsureKey() {
+  return `${dailyGlossCacheScope}:${state.todayWords.map(entry => entry.word).join('|')}`;
 }
 
-async function fetchDailyGlossPayload(word) {
+function normalizeDailyGlossPayload(raw) {
   const unavailable = tr('daily.glossUnavailable');
-  const glossJobs = buildDailyGlossJobs(word);
-  const payload = { wordGloss: '', s1Gloss: '', s2Gloss: '', s3Gloss: '' };
-  await Promise.all(glossJobs.map(async job => {
-    const gloss = await job.promise.catch(() => '');
-    payload[job.field] = job.needsFallback ? (gloss || unavailable) : gloss;
-  }));
-  return payload;
+  return {
+    wordGloss: String(raw?.wordGloss || '').trim() || unavailable,
+    s1Gloss: String(raw?.s1Gloss || '').trim(),
+    s2Gloss: String(raw?.s2Gloss || '').trim(),
+    s3Gloss: String(raw?.s3Gloss || '').trim()
+  };
 }
 
-async function ensureDailyGlossPayload(word) {
+function applyServerGlossesToCache(glossesByWord) {
+  if (!glossesByWord || typeof glossesByWord !== 'object') return;
   ensureDailyGlossCacheScope();
-  const key = dailyGlossCacheKey(word);
-  const cached = dailyGlossCache.get(key);
-  if (cached) return cached;
-  const inflight = dailyGlossInflight.get(key);
-  if (inflight) return inflight;
-  const promise = fetchDailyGlossPayload(word).then(payload => {
-    dailyGlossCache.set(key, payload);
-    dailyGlossInflight.delete(key);
-    return payload;
+  Object.entries(glossesByWord).forEach(([word, raw]) => {
+    dailyGlossCache.set(dailyGlossCacheKey({ word }), normalizeDailyGlossPayload(raw));
+  });
+}
+
+async function ensureAllDailyGlossesLoaded() {
+  if (!state.todayWords.length || !hasUserLearningLanguages()) return;
+  ensureDailyGlossCacheScope();
+  const scopeKey = dailyGlossesEnsureKey();
+  if (dailyGlossesEnsurePromise && dailyGlossesEnsureScope === scopeKey) return dailyGlossesEnsurePromise;
+
+  dailyGlossesEnsureScope = scopeKey;
+  const mode = getModeConfig();
+  dailyGlossesEnsurePromise = apiFetch('/api/daily-glosses/ensure', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      language: mode.learningLang,
+      dateKey: dateKey(),
+      targetLang: getNativeApiLang(),
+      sentenceKey: mode.sentenceKey,
+      cards: state.todayWords
+    })
+  }).then(async response => {
+    if (!response.ok) {
+      const details = await extractErrorDetails(response);
+      throw new Error(details || `Gloss request failed (${response.status}).`);
+    }
+    const body = await response.json();
+    applyServerGlossesToCache(body?.glossesByWord);
+    return body?.glossesByWord;
   }).catch(error => {
-    dailyGlossInflight.delete(key);
+    dailyGlossesEnsurePromise = null;
+    dailyGlossesEnsureScope = '';
     throw error;
   });
-  dailyGlossInflight.set(key, promise);
-  return promise;
+  return dailyGlossesEnsurePromise;
 }
 
 function showDailyGlossLoadingPlaceholders() {
@@ -1197,26 +1197,17 @@ function applyDailyGlossPayloadToDom(word, payload, loading) {
   updateDailyAddButtons(word, state.dailyGlosses);
 }
 
-function prefetchRemainingDailyGlosses(currentIndex) {
-  if (state.activeTab !== 'daily' || !state.todayWords.length) return;
-  dailyGlossPrefetchIndices(currentIndex, state.todayWords.length).forEach(index => {
-    const word = state.todayWords[index];
-    if (!word?.word) return;
-    void ensureDailyGlossPayload(word).catch(() => {});
-  });
-}
-
 async function loadDailyGlosses(word) {
   ensureDailyGlossCacheScope();
   const wordKey = dailyGlossCacheKey(word);
   const requestId = ++state.dailyGlosses.requestId;
   state.dailyGlosses.wordKey = wordKey;
   const isCurrentRequest = () => requestId === state.dailyGlosses.requestId && state.dailyGlosses.wordKey === wordKey;
+  const unavailable = tr('daily.glossUnavailable');
 
   const cached = dailyGlossCache.get(wordKey);
   if (cached) {
     applyDailyGlossPayloadToDom(word, cached, false);
-    prefetchRemainingDailyGlosses(state.currentWordIndex);
     return;
   }
 
@@ -1228,10 +1219,15 @@ async function loadDailyGlosses(word) {
   showDailyGlossLoadingPlaceholders();
   updateDailyAddButtons(word, state.dailyGlosses);
 
-  const unavailable = tr('daily.glossUnavailable');
   try {
-    const payload = await ensureDailyGlossPayload(word);
+    await ensureAllDailyGlossesLoaded();
     if (!isCurrentRequest()) return;
+    const payload = dailyGlossCache.get(wordKey) || {
+      wordGloss: unavailable,
+      s1Gloss: unavailable,
+      s2Gloss: unavailable,
+      s3Gloss: unavailable
+    };
     applyDailyGlossPayloadToDom(word, payload, false);
   } catch (_) {
     if (!isCurrentRequest()) return;
@@ -1243,7 +1239,6 @@ async function loadDailyGlosses(word) {
     }, false);
   } finally {
     if (isCurrentRequest()) state.dailyGlosses.loading = false;
-    prefetchRemainingDailyGlosses(state.currentWordIndex);
   }
 }
 
@@ -3016,6 +3011,13 @@ async function initDailyWords() {
   }
 
   updatePoolInfo();
+  void ensureAllDailyGlossesLoaded().catch(() => {});
+}
+
+function startDailyGlossPipeline() {
+  return ensureDailyWordsLoaded()
+    .then(() => ensureAllDailyGlossesLoaded())
+    .catch(error => showDailyUnavailable(formatError(error)));
 }
 
 function prefetchBootAssets(mode) {
@@ -3079,8 +3081,13 @@ async function bootApp() {
     fillSettingsInputs();
 
     const { priority, background } = planBootDataLoads(startupTab);
-    await Promise.all(priority.map(kind => runBootDataLoad(kind)));
-    background.forEach(kind => { void runBootDataLoad(kind); });
+    const priorityLoads = priority
+      .filter(kind => kind !== 'daily')
+      .map(kind => runBootDataLoad(kind));
+    await Promise.all([...priorityLoads, startDailyGlossPipeline()]);
+    background
+      .filter(kind => kind !== 'daily')
+      .forEach(kind => { void runBootDataLoad(kind); });
   } else {
     state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
     showDailyNoLanguageState();

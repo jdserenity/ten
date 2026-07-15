@@ -94,7 +94,8 @@ export function canonicalizeTranslateLanguage(value) {
   const code = String(value || '').trim().toUpperCase();
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'FR' || code === 'FR-CA') return 'FR';
+  if (code === 'FR-FR') return 'FR-FR';
   if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return '';
 }
@@ -146,6 +147,7 @@ export function isReviewGradeButtonsDisabled({ reviewEditing }) {
 export function learningLangFromModeId(modeId) {
   if (modeId === 'pt-br') return 'PT-BR';
   if (modeId === 'fr') return 'FR';
+  if (modeId === 'fr-fr') return 'FR-FR';
   if (modeId === 'es-ar') return 'ES-AR';
   return '';
 }
@@ -154,6 +156,7 @@ export function modeIdFromLearningLang(language) {
   const code = String(language || '').trim().toUpperCase();
   if (code === 'PT-BR') return 'pt-br';
   if (code === 'FR') return 'fr';
+  if (code === 'FR-FR') return 'fr-fr';
   if (code === 'ES-AR') return 'es-ar';
   return '';
 }

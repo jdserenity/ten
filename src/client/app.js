@@ -644,10 +644,6 @@ function updateReviewDots() {
     infinityEl.classList.toggle('seen', graded >= DAILY_REVIEW_GOAL);
     infinityEl.classList.toggle('active', hasActive && graded >= DAILY_REVIEW_GOAL);
   }
-  const counter = document.getElementById('review-counter');
-  if (counter) {
-    counter.textContent = `${Math.min(graded, DAILY_REVIEW_GOAL)} / ${DAILY_REVIEW_GOAL} reviewed today`;
-  }
 }
 
 function showDailyUnavailable(reason) {

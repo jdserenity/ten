@@ -45,6 +45,7 @@ import {
   reconcileDailyWords,
   WORDS_PER_DAY
 } from './daily-pool.js';
+import { planBootDataLoads } from './client-load.js';
 
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
@@ -163,6 +164,11 @@ let dailyDots = [];
 let reviewDots = [];
 let applyingMode = false;
 let langPickerOutsideClickHandler = null;
+const wordsPoolByModeId = Object.create(null);
+let dailyWordsLoadedModeId = null;
+let dailyWordsInitPromise = null;
+let reviewQueueLoadedModeId = null;
+let reviewQueuePromise = null;
 
 const LANG_PICKER_CONTEXTS = {
   header: { pickerId: 'header-lang-picker', ignoreId: 'header-lang-add-btn' },
@@ -911,6 +917,58 @@ function getFrequencyRank(language, word) {
   return map.get(normalizeFrequencyWord(word)) || null;
 }
 
+function resetDailyWordsInit() {
+  dailyWordsLoadedModeId = null;
+  dailyWordsInitPromise = null;
+}
+
+function resetReviewQueueInit() {
+  reviewQueueLoadedModeId = null;
+  reviewQueuePromise = null;
+}
+
+async function fetchWordsPool(modeId) {
+  const cached = wordsPoolByModeId[modeId];
+  if (cached) return cached;
+  const mode = MODE_CONFIGS[modeId];
+  if (!mode) throw new Error(`Unknown mode ${modeId}.`);
+  const response = await fetch(mode.wordsPath);
+  if (!response.ok) throw new Error(`Failed to load ${mode.wordsPath} (${response.status}).`);
+  const words = await response.json();
+  if (!Array.isArray(words) || !words.length) throw new Error(`${mode.wordsPath} is empty.`);
+  wordsPoolByModeId[modeId] = words;
+  return words;
+}
+
+async function ensureDailyWordsLoaded() {
+  const modeId = getModeConfig().id;
+  if (dailyWordsLoadedModeId === modeId) return;
+  if (!dailyWordsInitPromise) {
+    dailyWordsInitPromise = initDailyWords().then(() => {
+      dailyWordsLoadedModeId = modeId;
+    }).catch(error => {
+      dailyWordsInitPromise = null;
+      throw error;
+    });
+  }
+  return dailyWordsInitPromise;
+}
+
+function refreshDailyFrequencyRank() {
+  const el = document.getElementById('daily-frequency-rank');
+  if (!el || state.activeTab !== 'daily' || !state.todayWords.length) return;
+  const rank = getCurrentDailyWordFrequencyRank();
+  el.textContent = rank
+    ? formatFrequencyRankMessage('frequency.rankInput', rank)
+    : tr('daily.frequencyRankUnavailable');
+}
+
+function onFrequencyLanguageReady(language) {
+  if (getFrequencyLanguageForMode() !== language) return;
+  refreshDailyFrequencyRank();
+  if (state.activeTab === 'frequency') renderFrequencyDictionary();
+}
+
 function setStatus(elementId, message, tone = '') {
   const el = document.getElementById(elementId);
   if (!el) return;
@@ -1067,33 +1125,37 @@ async function loadDailyGlosses(word) {
   const secondSentenceText = getSentenceText(secondSentence);
   const thirdSentenceText = getSentenceText(thirdSentence);
   const unavailable = tr('daily.glossUnavailable');
+  const isCurrentRequest = () => requestId === state.dailyGlosses.requestId && state.dailyGlosses.wordKey === wordKey;
+
+  const applyGloss = (field, elementId, gloss, needsFallback) => {
+    if (!isCurrentRequest()) return;
+    state.dailyGlosses[field] = needsFallback ? (gloss || unavailable) : gloss;
+    const el = document.getElementById(elementId);
+    if (el) el.textContent = state.dailyGlosses[field];
+    updateDailyAddButtons(word, state.dailyGlosses);
+  };
+
+  const glossJobs = [
+  { field: 'wordGloss', elementId: 'translation', promise: resolveGlossText(word.word, mode.learningLang, nativeLang, word.translation), needsFallback: true },
+  firstSentenceText
+    ? { field: 's1Gloss', elementId: 's1-en', promise: resolveGlossText(firstSentenceText, mode.learningLang, nativeLang, firstSentence.en), needsFallback: true }
+    : null,
+  secondSentenceText
+    ? { field: 's2Gloss', elementId: 's2-en', promise: resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en), needsFallback: true }
+    : null,
+  thirdSentenceText
+    ? { field: 's3Gloss', elementId: 's3-en', promise: resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en), needsFallback: true }
+    : null
+  ].filter(Boolean);
 
   try {
-    const wordGloss = await resolveGlossText(word.word, mode.learningLang, nativeLang, word.translation).catch(() => '');
-    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
-    const s1Gloss = firstSentenceText
-      ? await resolveGlossText(firstSentenceText, mode.learningLang, nativeLang, firstSentence.en).catch(() => '')
-      : '';
-    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
-    const s2Gloss = secondSentenceText
-      ? await resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en).catch(() => '')
-      : '';
-    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
-    const s3Gloss = thirdSentenceText
-      ? await resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en).catch(() => '')
-      : '';
-    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
-    state.dailyGlosses.wordGloss = wordGloss || unavailable;
-    state.dailyGlosses.s1Gloss = firstSentenceText ? (s1Gloss || unavailable) : '';
-    state.dailyGlosses.s2Gloss = secondSentenceText ? (s2Gloss || unavailable) : '';
-    state.dailyGlosses.s3Gloss = thirdSentenceText ? (s3Gloss || unavailable) : '';
+    await Promise.all(glossJobs.map(async job => {
+      const gloss = await job.promise.catch(() => '');
+      applyGloss(job.field, job.elementId, gloss, job.needsFallback);
+    }));
   } finally {
-    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
+    if (!isCurrentRequest()) return;
     state.dailyGlosses.loading = false;
-    document.getElementById('translation').textContent = state.dailyGlosses.wordGloss;
-    document.getElementById('s1-en').textContent = state.dailyGlosses.s1Gloss;
-    document.getElementById('s2-en').textContent = state.dailyGlosses.s2Gloss;
-    const s3EnDone = document.getElementById('s3-en'); if (s3EnDone) s3EnDone.textContent = state.dailyGlosses.s3Gloss;
     updateDailyAddButtons(word, state.dailyGlosses);
   }
 }
@@ -1478,6 +1540,8 @@ async function setLearningMode(modeId, options = {}) {
   if (!getUserModeIds().includes(mode.id) && !options.force) return;
   if (applyingMode || (state.activeMode === mode.id && !options.force)) return;
   applyingMode = true;
+  resetDailyWordsInit();
+  resetReviewQueueInit();
   try {
     window.speechSynthesis?.cancel();
     document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
@@ -1497,11 +1561,10 @@ async function setLearningMode(modeId, options = {}) {
     if (resetTranslate) clearTranslateDraft();
 
     try {
-      await initDailyWords();
-      try {
-        await ensureFrequencyLanguageLoaded(mode.learningLang);
-      } catch (_) {}
-      renderDailyWord(state.currentWordIndex);
+      await Promise.all([
+        ensureDailyWordsLoaded().catch(error => showDailyUnavailable(formatError(error))),
+        ensureFrequencyLanguageLoaded(mode.learningLang).catch(() => {})
+      ]);
       setStatus('daily-save-status', '');
     } catch (error) {
       showDailyUnavailable(formatError(error));
@@ -1801,6 +1864,21 @@ function recordReviewSessionProgress() {
 }
 
 async function loadReviewQueue(options = {}) {
+  const mode = getModeConfig();
+  const force = Boolean(options.force);
+  if (!force && reviewQueueLoadedModeId === mode.id && reviewQueuePromise) {
+    return reviewQueuePromise;
+  }
+  reviewQueueLoadedModeId = mode.id;
+  reviewQueuePromise = loadReviewQueueInner(options).catch(error => {
+    reviewQueuePromise = null;
+    reviewQueueLoadedModeId = null;
+    throw error;
+  });
+  return reviewQueuePromise;
+}
+
+async function loadReviewQueueInner(options = {}) {
   if (!hasUserLearningLanguages()) {
     state.reviewCards = [];
     state.reviewDueCount = 0;
@@ -1910,6 +1988,7 @@ async function ensureFrequencyLanguageLoaded(language) {
   state.frequencyByLanguage[language] = entries;
   state.frequencyMapByLanguage[language] = new Map(entries.map(entry => [entry.normalizedWord, entry.rank]));
   state.frequencyLoadedLanguages.add(language);
+  onFrequencyLanguageReady(language);
 }
 
 function getFrequencySearchQuery() {
@@ -2154,8 +2233,9 @@ function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, tar
   outputEl.className = rank ? 'frequency-meta success' : 'frequency-meta';
 }
 
-function setActiveTab(tabId) {
+function setActiveTab(tabId, options = {}) {
   if (!tabId) return;
+  const skipDataLoad = Boolean(options.skipDataLoad);
   state.activeTab = tabId;
   document.querySelectorAll('.top-tab').forEach(button => {
     const isActive = button.dataset.tab === tabId;
@@ -2166,9 +2246,13 @@ function setActiveTab(tabId) {
     panel.classList.toggle('active', panel.id === `tab-${tabId}`);
   });
   if (tabId === 'daily') {
-    markCurrentDailyWordSeen();
-    updateDailyDots();
-    renderFrequencyDictionary();
+    void ensureDailyWordsLoaded().then(() => {
+      if (state.activeTab !== 'daily') return;
+      markCurrentDailyWordSeen();
+      updateDailyDots();
+      renderFrequencyDictionary();
+      if (state.todayWords.length) renderDailyWord(state.currentWordIndex);
+    }).catch(() => {});
   }
   if (tabId === 'translate') {
     const direction = defaultTranslateDirection(getLearningLanguage(), getNativeApiLang());
@@ -2177,12 +2261,8 @@ function setActiveTab(tabId) {
     state.lastDetectedSourceLang = '';
     fillSettingsInputs();
   }
-  if (tabId === 'review') {
-    loadReviewQueue();
-  }
-  if (tabId === 'frequency') {
-    loadFrequencyTabData();
-  }
+  if (tabId === 'review' && !skipDataLoad) loadReviewQueue();
+  if (tabId === 'frequency' && !skipDataLoad) loadFrequencyTabData();
 }
 
 function isTypingContext() {
@@ -2819,17 +2899,18 @@ function setupReviewEvents() {
 
 async function initDailyWords() {
   const mode = getModeConfig();
-  const response = await fetch(mode.wordsPath);
-  if (!response.ok) throw new Error(`Failed to load ${mode.wordsPath} (${response.status}).`);
-  const words = await response.json();
-  if (!Array.isArray(words) || !words.length) throw new Error(`${mode.wordsPath} is empty.`);
-
-  state.words = words;
   const dayKey = dateKey();
   const language = getFrequencyLanguageForMode();
+
+  const [words, savedAssignment, savedIndex] = await Promise.all([
+    fetchWordsPool(mode.id),
+    fetchDailyWordAssignment(language, dayKey),
+    fetchDailyCardIndex(language, dayKey)
+  ]);
+
+  state.words = words;
   const seenSet = getSeenDailyWordsSet(language);
 
-  let savedAssignment = await fetchDailyWordAssignment(language, dayKey);
   const todayWords = reconcileDailyWords(words, savedAssignment, seenSet, dayKey, WORDS_PER_DAY);
   if (todayWords.length) {
     if (!dailyAssignmentHeadwordsEqual(savedAssignment, todayWords)) {
@@ -2838,7 +2919,6 @@ async function initDailyWords() {
   }
   state.todayWords = todayWords;
 
-  const savedIndex = await fetchDailyCardIndex(language, dayKey);
   const maxIndex = Math.max(0, state.todayWords.length - 1);
   state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
   rebuildSeenDailyWordIndexes();
@@ -2851,12 +2931,36 @@ async function initDailyWords() {
   updatePoolInfo();
 }
 
+function prefetchBootAssets(mode) {
+  const language = mode.learningLang;
+  const dayKey = dateKey();
+  return Promise.all([
+    fetchWordsPool(mode.id).catch(() => null),
+    ensureFrequencyLanguageLoaded(language).catch(() => {}),
+    fetchDailyWordAssignment(language, dayKey).catch(() => null),
+    fetchDailyCardIndex(language, dayKey).catch(() => null)
+  ]);
+}
+
+function runBootDataLoad(kind) {
+  if (kind === 'daily') {
+    return ensureDailyWordsLoaded().catch(error => showDailyUnavailable(formatError(error)));
+  }
+  if (kind === 'review') return loadReviewQueue({ refreshTotal: true });
+  if (kind === 'frequency') return loadFrequencyTabData();
+  return Promise.resolve();
+}
+
 async function bootApp() {
   showAppShell();
   renderAuthChrome();
-  state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
   const nextMode = resolveActiveModeForUser();
   if (nextMode) state.activeMode = nextMode;
+  const startupTab = resolveStartupTab({
+    dailyCompleteToday: hasCelebratedDailyCompleteToday(),
+    reviewCompleteToday: hasCompletedDailyReviewToday()
+  });
+
   setupTabEvents();
   setupModeEvents();
   setupDailyEvents();
@@ -2870,16 +2974,32 @@ async function bootApp() {
   updateFrequencyModeLabel();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
+
   if (nextMode) {
-    await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
+    const mode = getModeConfig();
+    const [seenWords] = await Promise.all([
+      initUnlockedWordsFromServer(),
+      prefetchBootAssets(mode)
+    ]);
+    state.seenDailyWordsByLanguage = seenWords;
+
+    state.settings.translateSource = mode.learningLang;
+    const direction = defaultTranslateDirection(mode.learningLang, getNativeApiLang());
+    state.settings.translateTarget = direction.target;
+    updateModeToggleUi();
+    updateLanguageCopy();
+    updateFrequencyModeLabel();
+    fillSettingsInputs();
+
+    const { priority, background } = planBootDataLoads(startupTab);
+    await Promise.all(priority.map(kind => runBootDataLoad(kind)));
+    background.forEach(kind => { void runBootDataLoad(kind); });
   } else {
+    state.seenDailyWordsByLanguage = await initUnlockedWordsFromServer();
     showDailyNoLanguageState();
   }
 
-  setActiveTab(resolveStartupTab({
-    dailyCompleteToday: hasCelebratedDailyCompleteToday(),
-    reviewCompleteToday: hasCompletedDailyReviewToday()
-  }));
+  setActiveTab(startupTab, { skipDataLoad: true });
 
   renderReview();
   document.body.classList.add('ready');
@@ -2899,11 +3019,10 @@ async function init() {
   }
 
   document.getElementById('loading').style.display = 'none';
-  await bootApp();
-
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
+    void navigator.serviceWorker.getRegistrations().then(regs => regs.forEach(reg => reg.unregister())).catch(() => {});
   }
+  await bootApp();
 }
 
 init().catch(error => {

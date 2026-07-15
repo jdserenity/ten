@@ -19,6 +19,7 @@ import {
   getFrequencyTierKey,
   getLangPickerOptions,
   getReviewEmptyState,
+  isLangPickerOutsideClick,
   isDailyReviewComplete,
   isReviewGradeButtonsDisabled,
   learningLangFromModeId,
@@ -157,6 +158,32 @@ const state = {
 let dailyDots = [];
 let reviewDots = [];
 let applyingMode = false;
+let langPickerOutsideClickHandler = null;
+
+function unbindLangPickerOutsideClick() {
+  if (!langPickerOutsideClickHandler) return;
+  document.removeEventListener('click', langPickerOutsideClickHandler, true);
+  langPickerOutsideClickHandler = null;
+}
+
+function bindLangPickerOutsideClick(context) {
+  unbindLangPickerOutsideClick();
+  const pickerId = context === 'header' ? 'header-lang-picker' : 'settings-lang-picker';
+  const toggleId = context === 'header' ? 'header-lang-add-btn' : 'settings-lang-add-btn';
+  const picker = document.getElementById(pickerId);
+  const toggle = document.getElementById(toggleId);
+  if (!picker) return;
+  langPickerOutsideClickHandler = event => {
+    if (state.languagePickerContext !== context) return;
+    if (!isLangPickerOutsideClick(event.target, picker, toggle)) return;
+    setLanguagePickerOpen(context, false);
+  };
+  setTimeout(() => {
+    if (state.languagePickerContext === context) {
+      document.addEventListener('click', langPickerOutsideClickHandler, true);
+    }
+  }, 0);
+}
 
 function tr(key, vars = {}) {
   return t(state.appLang, key, vars);
@@ -425,6 +452,8 @@ function setLanguagePickerOpen(context, open) {
   const settingsPicker = document.getElementById('settings-lang-picker');
   headerPicker?.classList.toggle('hidden', !(open && context === 'header'));
   settingsPicker?.classList.toggle('hidden', !(open && context === 'settings'));
+  if (open) bindLangPickerOutsideClick(context);
+  else unbindLangPickerOutsideClick();
 }
 
 async function saveUserLanguages(modeIds, { replace = false } = {}) {

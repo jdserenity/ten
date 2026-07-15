@@ -35,6 +35,8 @@ test('app and static HTML build picker options through the chip helper structure
   assert.match(app, /buildLangPickerOptionHtml/);
   assert.match(app, /getLangPickerOptions/);
   assert.match(app, /sortLangPickerOptionsByLabel/);
+  assert.match(app, /isLangPickerOutsideClick/);
+  assert.match(app, /bindLangPickerOutsideClick/);
   assert.match(app, /saveUserLanguages\(selected,\s*\{\s*replace:\s*true/);
   assert.match(html, /lang-picker-flag/);
   assert.match(html, /lang-picker-name/);

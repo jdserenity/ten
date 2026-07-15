@@ -196,6 +196,13 @@ export function sortLangPickerOptionsByLabel(options, locale) {
   );
 }
 
+export function isLangPickerOutsideClick(target, pickerEl, toggleEl) {
+  if (!target || !pickerEl) return false;
+  if (pickerEl.contains(target)) return false;
+  if (toggleEl?.contains(target)) return false;
+  return true;
+}
+
 export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selected = false } = {}) {
   const safeMode = String(modeId || '').replace(/"/g, '');
   const safeFlag = escapeLangPickerText(flag);

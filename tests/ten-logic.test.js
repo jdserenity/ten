@@ -21,6 +21,7 @@ import {
   resolveTranslateNativeLang,
   buildLangPickerOptionHtml,
   getLangPickerOptions,
+  isLangPickerOutsideClick,
   sortLangPickerOptionsByLabel,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
@@ -225,6 +226,15 @@ test('sortLangPickerOptionsByLabel orders by display name alphabetically', () =>
     { modeId: 'es-ar', label: 'Argentinian Spanish', selected: false }
   ]);
   assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr']);
+});
+
+test('isLangPickerOutsideClick ignores clicks inside the picker or on its toggle', () => {
+  const picker = { contains(node) { return node === 'inside-picker' || node === 'inside-toggle'; } };
+  const toggle = { contains(node) { return node === 'inside-toggle'; } };
+  assert.equal(isLangPickerOutsideClick('inside-picker', picker, toggle), false);
+  assert.equal(isLangPickerOutsideClick('inside-toggle', picker, toggle), false);
+  assert.equal(isLangPickerOutsideClick('outside', picker, toggle), true);
+  assert.equal(isLangPickerOutsideClick(null, picker, toggle), false);
 });
 
 test('mode and learning language ids round-trip', () => {

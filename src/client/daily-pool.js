@@ -39,12 +39,43 @@ export function countUnseenPoolWords(pool, seenNormalizedSet) {
 }
 
 export function pickDailyWords(pool, seenNormalizedSet, dayKey, wordsPerDay = WORDS_PER_DAY) {
+  return pickAdditionalDailyWords(pool, seenNormalizedSet, dayKey, wordsPerDay, wordsPerDay);
+}
+
+export function pickAdditionalDailyWords(pool, blockedNormalizedSet, dayKey, count, wordsPerDay = WORDS_PER_DAY) {
+  if (count <= 0) return [];
   const unseen = pool.filter(entry => {
     const normalized = normalizePoolWord(entry?.word);
-    return normalized && !seenNormalizedSet.has(normalized);
+    return normalized && !blockedNormalizedSet.has(normalized);
   });
   const shuffled = seededShuffle(unseen, hashDate(dayKey));
-  return shuffled.slice(0, wordsPerDay);
+  return shuffled.slice(0, Math.min(count, wordsPerDay));
+}
+
+export function reconcileDailyWords(pool, assignedHeadwords, seenNormalizedSet, dayKey, wordsPerDay = WORDS_PER_DAY) {
+  const blocked = new Set(seenNormalizedSet);
+  const kept = [];
+  if (Array.isArray(assignedHeadwords) && assignedHeadwords.length) {
+    const poolByNorm = new Map();
+    for (const entry of pool) {
+      const normalized = normalizePoolWord(entry?.word);
+      if (normalized) poolByNorm.set(normalized, entry);
+    }
+    for (const headword of assignedHeadwords) {
+      const normalized = normalizePoolWord(headword);
+      if (!normalized || blocked.has(normalized)) continue;
+      const entry = poolByNorm.get(normalized);
+      if (!entry) continue;
+      kept.push(entry);
+      blocked.add(normalized);
+    }
+  }
+  if (!kept.length && (!Array.isArray(assignedHeadwords) || !assignedHeadwords.length)) {
+    return pickDailyWords(pool, seenNormalizedSet, dayKey, wordsPerDay);
+  }
+  const needed = wordsPerDay - kept.length;
+  if (needed > 0) kept.push(...pickAdditionalDailyWords(pool, blocked, dayKey, needed, wordsPerDay));
+  return kept.slice(0, wordsPerDay);
 }
 
 export function resolveDailyWordsFromAssignment(pool, assignedHeadwords) {

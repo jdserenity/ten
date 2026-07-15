@@ -32,8 +32,9 @@ import {
 import {
   computePoolDaysLeft,
   countUnseenPoolWords,
-  pickDailyWords,
-  resolveDailyWordsFromAssignment,
+  normalizePoolWord,
+  pickAdditionalDailyWords,
+  reconcileDailyWords,
   WORDS_PER_DAY
 } from './daily-pool.js';
 
@@ -648,10 +649,7 @@ function capitalizeFirstWord(value) {
 }
 
 function normalizeFrequencyWord(value) {
-  return String(value || '')
-    .trim()
-    .toLocaleLowerCase()
-    .normalize('NFC');
+  return normalizePoolWord(value);
 }
 
 function getFrequencyLanguageForMode(modeId = state.activeMode) {
@@ -745,7 +743,54 @@ async function initUnlockedWordsFromServer() {
   return merged;
 }
 
-function markLearningWordSeenInFrequency(rawWord) {
+function dailyAssignmentHeadwordsEqual(savedHeadwords, nextWords) {
+  if (!Array.isArray(savedHeadwords) || savedHeadwords.length !== nextWords.length) return false;
+  return savedHeadwords.every((headword, index) => (
+    normalizePoolWord(headword) === normalizePoolWord(nextWords[index]?.word)
+  ));
+}
+
+function rebuildSeenDailyWordIndexes() {
+  const seenSet = getSeenDailyWordsSet();
+  state.seenWordIndexes = new Set(
+    state.todayWords
+      .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
+      .filter(idx => idx >= 0)
+  );
+}
+
+async function reconcileTodayWordsAfterUnlock(normalized) {
+  const idx = state.todayWords.findIndex(entry => normalizeFrequencyWord(entry?.word) === normalized);
+  if (idx < 0) return;
+
+  const language = getFrequencyLanguageForMode();
+  const dayKey = dateKey();
+  const seenSet = getSeenDailyWordsSet(language);
+  state.todayWords.splice(idx, 1);
+
+  const blocked = new Set(seenSet);
+  state.todayWords.forEach(entry => {
+    const word = normalizeFrequencyWord(entry?.word);
+    if (word) blocked.add(word);
+  });
+  const replacements = pickAdditionalDailyWords(state.words, blocked, dayKey, 1);
+  if (replacements.length) state.todayWords.splice(idx, 0, replacements[0]);
+
+  if (state.currentWordIndex > idx) state.currentWordIndex--;
+  else if (state.currentWordIndex >= state.todayWords.length) {
+    state.currentWordIndex = Math.max(0, state.todayWords.length - 1);
+  }
+
+  rebuildSeenDailyWordIndexes();
+  buildDailyDots();
+  if (state.todayWords.length) {
+    await persistDailyWordAssignment(language, dayKey, state.todayWords.map(entry => entry.word));
+  }
+  if (state.activeTab === 'daily') renderDailyWord(state.currentWordIndex);
+  updatePoolInfo();
+}
+
+function markLearningWordSeenInFrequency(rawWord, options = {}) {
   const normalized = normalizeFrequencyWord(rawWord);
   if (!normalized) return;
   const language = getFrequencyLanguageForMode();
@@ -753,12 +798,15 @@ function markLearningWordSeenInFrequency(rawWord) {
   const isNew = !seenSet.has(normalized);
   seenSet.add(normalized);
   if (isNew) persistUnlockedWordToServer(language, normalized);
-  state.todayWords.forEach((entry, idx) => {
-    if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
-      state.seenWordIndexes.add(idx);
-    }
-  });
-  updateDailyDots();
+  if (isNew && options.reconcileDaily) void reconcileTodayWordsAfterUnlock(normalized);
+  else {
+    state.todayWords.forEach((entry, idx) => {
+      if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
+        state.seenWordIndexes.add(idx);
+      }
+    });
+    updateDailyDots();
+  }
   if (state.activeTab === 'frequency') {
     renderFrequencyDictionary();
   }
@@ -1772,7 +1820,7 @@ async function translateFrequencyWord(entry) {
       text: formatFrequencyInlineTranslation(result.translatedText),
       error: false
     });
-    markLearningWordSeenInFrequency(entry.word);
+    markLearningWordSeenInFrequency(entry.word, { reconcileDaily: true });
   } catch (error) {
     state.frequencyInlineTranslations.set(mapKey, {
       text: formatError(error),
@@ -1886,7 +1934,7 @@ function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, tar
     return;
   }
 
-  markLearningWordSeenInFrequency(learningWord);
+  markLearningWordSeenInFrequency(learningWord, { reconcileDaily: true });
 
   const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
   const labelKey = sourceCanonical === learningLanguage ? 'frequency.rankInput' : 'frequency.rankResult';
@@ -2539,14 +2587,10 @@ async function initDailyWords() {
   const language = getFrequencyLanguageForMode();
   const seenSet = getSeenDailyWordsSet(language);
 
-  let todayWords = [];
-  const savedAssignment = await fetchDailyWordAssignment(language, dayKey);
-  if (savedAssignment) {
-    todayWords = resolveDailyWordsFromAssignment(words, savedAssignment);
-  }
-  if (!todayWords.length) {
-    todayWords = pickDailyWords(words, seenSet, dayKey, WORDS_PER_DAY);
-    if (todayWords.length) {
+  let savedAssignment = await fetchDailyWordAssignment(language, dayKey);
+  const todayWords = reconcileDailyWords(words, savedAssignment, seenSet, dayKey, WORDS_PER_DAY);
+  if (todayWords.length) {
+    if (!dailyAssignmentHeadwordsEqual(savedAssignment, todayWords)) {
       await persistDailyWordAssignment(language, dayKey, todayWords.map(entry => entry.word));
     }
   }
@@ -2555,11 +2599,7 @@ async function initDailyWords() {
   const savedIndex = await fetchDailyCardIndex(language, dayKey);
   const maxIndex = Math.max(0, state.todayWords.length - 1);
   state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
-  state.seenWordIndexes = new Set(
-    state.todayWords
-      .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
-      .filter(idx => idx >= 0)
-  );
+  rebuildSeenDailyWordIndexes();
   buildDailyDots();
   renderDailyWord(state.currentWordIndex);
   if (savedIndex !== null && state.currentWordIndex !== savedIndex) {

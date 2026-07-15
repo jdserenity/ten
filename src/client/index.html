@@ -32,9 +32,9 @@
 
     <div id="top-tabs" role="tablist" aria-label="Main tabs">
       <button class="top-tab active" data-tab="daily" role="tab" aria-selected="true">10/day</button>
-      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
       <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
       <button class="top-tab" data-tab="frequency" role="tab" aria-selected="false">Frequency dictionary</button>
+      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
     </div>
 
     <section id="tab-daily" class="tab-panel active" role="tabpanel">
@@ -147,9 +147,13 @@
     </section>
 
     <section id="tab-review" class="tab-panel" role="tabpanel">
+      <p id="review-flow-intro" class="review-flow-intro">Step 2 · After today's 10 words, review 10 flashcards.</p>
+      <div id="review-dots" class="review-dots" aria-hidden="true"></div>
+      <p id="review-counter" class="review-counter">0 / 10 reviewed today</p>
+
       <div class="review-stats">
         <div class="stat-box">
-          <span class="stat-label">To study</span>
+          <span class="stat-label">Left today</span>
           <span class="stat-value" id="review-due-count">0</span>
         </div>
         <div class="stat-box">
@@ -158,9 +162,14 @@
         </div>
       </div>
 
+      <div id="review-complete" class="surface-card hidden">
+        <span class="caps-label">Done for today</span>
+        <p>All 10 review cards finished. Nice work — come back tomorrow for a new set.</p>
+      </div>
+
       <div id="review-empty" class="surface-card">
-        <span class="caps-label">All clear</span>
-        <p>No new or due cards for this language. Add cards from Translate or 10/day, then refresh.</p>
+        <span class="caps-label">Need cards</span>
+        <p>Add flashcards from 10/day (use the ＋ buttons), then review 10 here.</p>
       </div>
 
       <div id="review-card-panel" class="surface-card hidden">

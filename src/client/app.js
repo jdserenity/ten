@@ -67,6 +67,7 @@ const state = {
   activeTab: 'daily',
   languagePickerContext: '',
   feedbackOpen: false,
+  settingsOpen: false,
   settings: {
     translateSource: MODE_CONFIGS['fr'].learningLang,
     translateTarget: 'EN'
@@ -274,7 +275,30 @@ async function saveUserLanguages(modeIds, { replace = false } = {}) {
   } else {
     showDailyUnavailable('Add a language to start learning.');
   }
-  if (state.activeTab === 'settings') renderSettings();
+  if (state.settingsOpen) renderSettings();
+}
+
+function openSettingsOverlay() {
+  const overlay = document.getElementById('settings-overlay');
+  if (!overlay) return;
+  state.settingsOpen = true;
+  renderSettings();
+  loadSettingsFeedback();
+  overlay.classList.remove('hidden');
+  overlay.setAttribute('aria-hidden', 'false');
+  requestAnimationFrame(() => overlay.classList.add('open'));
+}
+
+function closeSettingsOverlay() {
+  const overlay = document.getElementById('settings-overlay');
+  if (!overlay) return;
+  state.settingsOpen = false;
+  setLanguagePickerOpen('settings', false);
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+  setTimeout(() => {
+    if (!state.settingsOpen) overlay.classList.add('hidden');
+  }, 180);
 }
 
 function renderAuthChrome() {
@@ -1604,10 +1628,6 @@ function setActiveTab(tabId) {
   if (tabId === 'frequency') {
     loadFrequencyTabData();
   }
-  if (tabId === 'settings') {
-    renderSettings();
-    loadSettingsFeedback();
-  }
 }
 
 function isTypingContext() {
@@ -1800,6 +1820,18 @@ function setupLoginEvents() {
 }
 
 function setupAuthEvents() {
+  document.getElementById('settings-open-btn')?.addEventListener('click', () => {
+    openSettingsOverlay();
+  });
+
+  document.getElementById('settings-close-btn')?.addEventListener('click', () => {
+    closeSettingsOverlay();
+  });
+
+  document.getElementById('settings-overlay')?.addEventListener('click', event => {
+    if (event.target?.id === 'settings-overlay') closeSettingsOverlay();
+  });
+
   document.getElementById('header-lang-add-btn')?.addEventListener('click', () => {
     const open = state.languagePickerContext !== 'header';
     setLanguagePickerOpen('header', open);

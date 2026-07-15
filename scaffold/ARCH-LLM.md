@@ -6,7 +6,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - **Name:** Ten — personal PWA for learning Brazilian Portuguese and French (Quebec-oriented).
 - **Users:** Username-only accounts (no email/password). New username → create account; existing → sign in. Remembered on device via `localStorage`. Seeded owner account **`jd`** has `is_dev = 1` (dev mode); all other signups are prod (`is_dev = 0`). Each user owns their own cards, unlocks, daily progress, and language list.
 - Two offered learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Users pick one or both on first open (header `+`) and can add more later in **Settings**.
-- Tabs: **10/day**, **Translate**, **Review** (FSRS-backed), **Frequency**, **Settings**.
+- Tabs: **10/day**, **Translate**, **Review** (FSRS-backed), **Frequency**. **Settings** opens from a cog icon beside the title (not a tab).
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per user + language; duplicate `(user_id, language, front, back)` rejected on add.
 - **Dev vs prod:** Dev users (`is_dev`) see owner-only UI such as `~N days left in <mode> pool` and a feedback list in Settings. Prod users do not.
 - **Feedback:** Header compact field expands to a writing panel; submits to SQLite. Dev users read entries in Settings.

@@ -61,39 +61,26 @@ export function buildPoolHealthReport(users, poolsByLanguage) {
   for (const config of LANGUAGE_POOL_CONFIG) {
     const pool = poolsByLanguage[config.language] || [];
     const poolSize = pool.length;
-    const userRows = [];
+    let minDaysLeft = null;
 
     for (const user of users) {
       if (!Array.isArray(user.languages) || !user.languages.includes(config.language)) continue;
       const unlocked = user.unlockedWords?.[config.language] || [];
       const runway = computeUserPoolRunway(pool, unlocked);
-      userRows.push({
-        username: user.username,
-        unseenCount: runway.unseenCount,
-        daysLeft: runway.daysLeft,
-        warning: runway.warning
-      });
+      if (minDaysLeft === null || runway.daysLeft < minDaysLeft) minDaysLeft = runway.daysLeft;
     }
 
-    userRows.sort((a, b) => a.daysLeft - b.daysLeft);
-    const minDaysLeft = userRows.length
-      ? userRows[0].daysLeft
-      : computePoolDaysLeft(poolSize, 0, WORDS_PER_DAY);
-    const warning = userRows.length
-      ? userRows.some(row => row.warning)
-      : minDaysLeft <= POOL_WARN_DAYS;
+    if (minDaysLeft === null) minDaysLeft = computePoolDaysLeft(poolSize, 0, WORDS_PER_DAY);
+    const warning = minDaysLeft <= POOL_WARN_DAYS;
     if (warning) alertCount++;
 
     languages.push({
       language: config.language,
       label: config.label,
       flagEmoji: config.flagEmoji,
-      flagLabel: config.flagLabel,
       poolSize,
       minDaysLeft,
-      warning,
-      hasUsers: userRows.length > 0,
-      users: userRows
+      warning
     });
   }
 

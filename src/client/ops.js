@@ -55,18 +55,8 @@ function renderPoolHealth(languages) {
     return;
   }
   list.innerHTML = languages.map(lang => {
-    const userRows = lang.users.map(user => {
-      const warningClass = user.warning ? ' warning' : '';
-      return `<li class="ops-user-row${warningClass}"><span class="ops-user-name">${escapeHtml(user.username)}</span><span class="ops-user-runway">${formatDays(user.daysLeft)} left · ${user.unseenCount} unseen</span></li>`;
-    }).join('');
-    const runwayLabel = lang.hasUsers
-      ? `min ${formatDays(lang.minDaysLeft)}`
-      : `${formatDays(lang.minDaysLeft)} in pool`;
-    const userContent = lang.users.length
-      ? `<ul class="ops-user-list">${userRows}</ul>`
-      : '<p class="ops-no-users">No users on this track yet.</p>';
-    const cardClass = lang.warning ? 'ops-lang-card surface-card warning' : 'ops-lang-card surface-card';
-    return `<article class="${cardClass}"><div class="ops-lang-header"><span class="ops-lang-title">${lang.flagEmoji} ${escapeHtml(lang.label)}</span><span class="ops-lang-meta">${lang.poolSize} words · ${runwayLabel}</span></div>${userContent}</article>`;
+    const cardClass = lang.warning ? 'ops-lang-row surface-card warning' : 'ops-lang-row surface-card';
+    return `<article class="${cardClass}"><span class="ops-lang-title">${lang.flagEmoji} ${escapeHtml(lang.label)}</span><span class="ops-lang-runway">${formatDays(lang.minDaysLeft)}</span></article>`;
   }).join('');
 }
 

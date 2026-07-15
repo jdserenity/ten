@@ -497,73 +497,36 @@ header {
 .ops-feedback-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 6px;
 }
 
-.ops-lang-card {
+.ops-lang-row {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 14px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
 }
 
-.ops-lang-card.warning {
+.ops-lang-row.warning {
   border-color: #8a6428;
 }
 
-.ops-lang-header {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.ops-lang-title {
-  font-size: 15px;
-  font-weight: 600;
-}
-
-.ops-lang-meta {
-  font-size: 13px;
-  color: var(--muted);
-}
-
-.ops-user-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.ops-user-row {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  padding: 10px 12px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--bg);
-}
-
-.ops-user-row.warning .ops-user-runway {
+.ops-lang-row.warning .ops-lang-runway {
   color: #e5a84e;
 }
 
-.ops-user-name {
+.ops-lang-title {
   font-size: 14px;
   font-weight: 600;
+  min-width: 0;
 }
 
-.ops-user-runway {
-  font-size: 13px;
+.ops-lang-runway {
+  font-size: 14px;
   color: var(--muted);
-}
-
-.ops-no-users {
-  font-size: 13px;
-  color: var(--muted);
-  padding: 10px 12px;
-  border: 1px dashed var(--border);
-  border-radius: 10px;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
 }
 
 .ops-feedback-item {

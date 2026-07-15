@@ -69,7 +69,7 @@ Active language mode is stored in `localStorage` (last visited among the user's 
 | PUT | `/api/user-languages` | `{ languages, replace? }` — add or replace user's `PT-BR` / `FR` / `FR-FR` / `ES-AR` list. |
 | POST | `/api/feedback` | `{ body }` — save feedback for current user. |
 | GET | `/api/feedback` | Dev users only — list recent feedback with username + time. |
-| GET | `/api/dev/ops` | Dev users only — pool runway by language/user + feedback list. |
+| GET | `/api/dev/ops` | Dev users only — tightest pool runway per language + feedback list. |
 | POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). Responses are cached in SQLite (`translation_cache`); cache hits return `provider: 'cache'`. No user header required. |
 | GET | `/api/cards/queue?language=` | New + due cards for Review (new first). Requires `X-User-Id`. |
 | POST | `/api/cards` | Add card `{ language, front, back, context? }`. |

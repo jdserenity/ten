@@ -27,6 +27,7 @@ import {
   nextFrequencyFilter,
   normalizeTranslateDirection,
   resolveStartupTab,
+  shouldOpenLangPickerOnModeClick,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -160,6 +161,25 @@ let reviewDots = [];
 let applyingMode = false;
 let langPickerOutsideClickHandler = null;
 
+const LANG_PICKER_CONTEXTS = {
+  header: { pickerId: 'header-lang-picker', ignoreId: 'header-lang-add-btn' },
+  settings: { pickerId: 'settings-lang-picker', ignoreId: 'settings-lang-add-btn' },
+  flags: { pickerId: 'header-mode-lang-picker', ignoreId: 'mode-toggle' }
+};
+
+function getLangPickerOptionsContainer(context) {
+  if (context === 'header') return document.querySelector('#header-lang-picker .lang-picker-options');
+  if (context === 'settings') return document.querySelector('.settings-lang-picker-options');
+  if (context === 'flags') return document.querySelector('.header-mode-lang-picker-options');
+  return null;
+}
+
+function toggleLanguagePicker(context) {
+  const open = state.languagePickerContext !== context;
+  setLanguagePickerOpen(context, open);
+  if (open) renderPickerOptions(getLangPickerOptionsContainer(context));
+}
+
 function unbindLangPickerOutsideClick() {
   if (!langPickerOutsideClickHandler) return;
   document.removeEventListener('click', langPickerOutsideClickHandler, true);
@@ -168,14 +188,14 @@ function unbindLangPickerOutsideClick() {
 
 function bindLangPickerOutsideClick(context) {
   unbindLangPickerOutsideClick();
-  const pickerId = context === 'header' ? 'header-lang-picker' : 'settings-lang-picker';
-  const toggleId = context === 'header' ? 'header-lang-add-btn' : 'settings-lang-add-btn';
-  const picker = document.getElementById(pickerId);
-  const toggle = document.getElementById(toggleId);
+  const config = LANG_PICKER_CONTEXTS[context];
+  if (!config) return;
+  const picker = document.getElementById(config.pickerId);
+  const ignoreEl = document.getElementById(config.ignoreId);
   if (!picker) return;
   langPickerOutsideClickHandler = event => {
     if (state.languagePickerContext !== context) return;
-    if (!isLangPickerOutsideClick(event.target, picker, toggle)) return;
+    if (!isLangPickerOutsideClick(event.target, picker, ignoreEl)) return;
     setLanguagePickerOpen(context, false);
   };
   setTimeout(() => {
@@ -450,8 +470,10 @@ function setLanguagePickerOpen(context, open) {
   state.languagePickerContext = open ? context : '';
   const headerPicker = document.getElementById('header-lang-picker');
   const settingsPicker = document.getElementById('settings-lang-picker');
+  const flagsPicker = document.getElementById('header-mode-lang-picker');
   headerPicker?.classList.toggle('hidden', !(open && context === 'header'));
   settingsPicker?.classList.toggle('hidden', !(open && context === 'settings'));
+  flagsPicker?.classList.toggle('hidden', !(open && context === 'flags'));
   if (open) bindLangPickerOutsideClick(context);
   else unbindLangPickerOutsideClick();
 }
@@ -481,6 +503,7 @@ async function saveUserLanguages(modeIds, { replace = false } = {}) {
 function openSettingsOverlay() {
   const overlay = document.getElementById('settings-overlay');
   if (!overlay) return;
+  if (state.languagePickerContext) setLanguagePickerOpen(state.languagePickerContext, false);
   state.settingsOpen = true;
   renderSettings();
   loadSettingsFeedback();
@@ -541,6 +564,7 @@ function renderSettings() {
   feedbackSection?.classList.toggle('hidden', !state.user?.isDev);
   renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
   renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
+  renderPickerOptions(document.querySelector('.header-mode-lang-picker-options'));
 }
 
 async function loadSettingsFeedback() {
@@ -2340,9 +2364,7 @@ function setupAuthEvents() {
   });
 
   document.getElementById('header-lang-add-btn')?.addEventListener('click', () => {
-    const open = state.languagePickerContext !== 'header';
-    setLanguagePickerOpen('header', open);
-    renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
+    toggleLanguagePicker('header');
   });
 
   document.getElementById('header-lang-confirm-btn')?.addEventListener('click', async () => {
@@ -2360,9 +2382,7 @@ function setupAuthEvents() {
   });
 
   document.getElementById('settings-lang-add-btn')?.addEventListener('click', () => {
-    const open = state.languagePickerContext !== 'settings';
-    setLanguagePickerOpen('settings', open);
-    renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
+    toggleLanguagePicker('settings');
   });
 
   document.getElementById('settings-lang-confirm-btn')?.addEventListener('click', async () => {
@@ -2438,9 +2458,24 @@ function setupModeEvents() {
   document.querySelectorAll('.mode-toggle-btn').forEach(button => {
     button.addEventListener('click', async () => {
       const nextMode = button.dataset.mode;
-      if (!nextMode || nextMode === state.activeMode) return;
+      if (!nextMode || button.disabled) return;
+      if (shouldOpenLangPickerOnModeClick(nextMode, state.activeMode)) {
+        toggleLanguagePicker('flags');
+        return;
+      }
+      if (state.languagePickerContext) setLanguagePickerOpen(state.languagePickerContext, false);
       await setLearningMode(nextMode, { resetTranslate: true });
     });
+  });
+
+  document.getElementById('header-mode-lang-confirm-btn')?.addEventListener('click', async () => {
+    const selected = readPickerSelections(document.querySelector('.header-mode-lang-picker-options'));
+    try {
+      await saveUserLanguages(selected, { replace: true });
+      setLanguagePickerOpen('flags', false);
+    } catch (error) {
+      setStatus('daily-save-status', formatError(error), 'error');
+    }
   });
 }
 

@@ -36,11 +36,15 @@ test('app and static HTML build picker options through the chip helper structure
   assert.match(app, /getLangPickerOptions/);
   assert.match(app, /sortLangPickerOptionsByLabel/);
   assert.match(app, /isLangPickerOutsideClick/);
+  assert.match(app, /shouldOpenLangPickerOnModeClick/);
+  assert.match(app, /toggleLanguagePicker\('flags'\)/);
+  assert.match(app, /header-mode-lang-picker/);
   assert.match(app, /bindLangPickerOutsideClick/);
   assert.match(app, /saveUserLanguages\(selected,\s*\{\s*replace:\s*true/);
   assert.match(html, /lang-picker-flag/);
   assert.match(html, /lang-picker-name/);
   assert.match(html, /lang-picker-tick/);
+  assert.match(html, /id="header-mode-lang-picker"/);
   assert.doesNotMatch(html, /<input type="checkbox" value="pt-br" \/> 🇧🇷/);
 });
 

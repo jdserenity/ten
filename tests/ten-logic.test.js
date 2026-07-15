@@ -23,6 +23,7 @@ import {
   getLangPickerOptions,
   isLangPickerOutsideClick,
   sortLangPickerOptionsByLabel,
+  shouldOpenLangPickerOnModeClick,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -228,13 +229,21 @@ test('sortLangPickerOptionsByLabel orders by display name alphabetically', () =>
   assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr']);
 });
 
-test('isLangPickerOutsideClick ignores clicks inside the picker or on its toggle', () => {
+test('isLangPickerOutsideClick ignores clicks inside the picker or on ignored roots', () => {
   const picker = { contains(node) { return node === 'inside-picker' || node === 'inside-toggle'; } };
   const toggle = { contains(node) { return node === 'inside-toggle'; } };
+  const flags = { contains(node) { return node === 'inside-flag'; } };
   assert.equal(isLangPickerOutsideClick('inside-picker', picker, toggle), false);
   assert.equal(isLangPickerOutsideClick('inside-toggle', picker, toggle), false);
-  assert.equal(isLangPickerOutsideClick('outside', picker, toggle), true);
+  assert.equal(isLangPickerOutsideClick('inside-flag', picker, flags), false);
+  assert.equal(isLangPickerOutsideClick('outside', picker, toggle, flags), true);
   assert.equal(isLangPickerOutsideClick(null, picker, toggle), false);
+});
+
+test('shouldOpenLangPickerOnModeClick is true only for the active learning flag', () => {
+  assert.equal(shouldOpenLangPickerOnModeClick('fr', 'fr'), true);
+  assert.equal(shouldOpenLangPickerOnModeClick('fr', 'pt-br'), false);
+  assert.equal(shouldOpenLangPickerOnModeClick('', 'fr'), false);
 });
 
 test('mode and learning language ids round-trip', () => {

@@ -196,11 +196,17 @@ export function sortLangPickerOptionsByLabel(options, locale) {
   );
 }
 
-export function isLangPickerOutsideClick(target, pickerEl, toggleEl) {
+export function isLangPickerOutsideClick(target, pickerEl, ...ignoreEls) {
   if (!target || !pickerEl) return false;
   if (pickerEl.contains(target)) return false;
-  if (toggleEl?.contains(target)) return false;
+  for (const ignoreEl of ignoreEls) {
+    if (ignoreEl?.contains?.(target)) return false;
+  }
   return true;
+}
+
+export function shouldOpenLangPickerOnModeClick(clickedModeId, activeModeId) {
+  return Boolean(clickedModeId && activeModeId && clickedModeId === activeModeId);
 }
 
 export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selected = false } = {}) {

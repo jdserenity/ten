@@ -436,6 +436,7 @@ header h1 {
 .mode-toggle-wrap {
   display: flex;
   align-items: flex-end;
+  position: relative;
 }
 
 .mode-toggle {

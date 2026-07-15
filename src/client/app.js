@@ -30,12 +30,13 @@ import {
 
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
-  FR: '/frequency-fr.json'
+  FR: '/frequency-fr.json',
+  'ES-AR': '/frequency-es-ar.json'
 };
 const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
 const ACTIVE_MODE_STORAGE_KEY = 'ten-active-mode';
 const USER_STORAGE_KEY = 'ten-user-v1';
-const OFFERED_MODE_IDS = ['pt-br', 'fr'];
+const OFFERED_MODE_IDS = ['pt-br', 'fr', 'es-ar'];
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -48,7 +49,8 @@ const MODE_CONFIGS = {
     speechLang: 'pt-BR',
     learningLang: 'PT-BR',
     htmlLang: 'pt-BR',
-    flagLabel: 'Brazil'
+    flagLabel: 'Brazil',
+    flagEmoji: '🇧🇷'
   },
   fr: {
     id: 'fr',
@@ -60,9 +62,24 @@ const MODE_CONFIGS = {
     speechLang: 'fr-CA',
     learningLang: 'FR',
     htmlLang: 'fr-CA',
-    flagLabel: 'Quebec'
+    flagLabel: 'Quebec',
+    flagEmoji: '🇨🇦'
+  },
+  'es-ar': {
+    id: 'es-ar',
+    label: 'Argentinian Spanish',
+    shortLabel: 'Argentina',
+    translatorLabel: 'Spanish',
+    wordsPath: '/words.es.json',
+    sentenceKey: 'es',
+    speechLang: 'es-AR',
+    learningLang: 'ES-AR',
+    htmlLang: 'es-AR',
+    flagLabel: 'Argentina',
+    flagEmoji: '🇦🇷'
   }
 };
+const OFFERED_LEARNING_LANGS = OFFERED_MODE_IDS.map(modeId => MODE_CONFIGS[modeId].learningLang);
 
 const state = {
   user: null,
@@ -90,18 +107,9 @@ const state = {
   reviewEditing: false,
   reviewEditSubmitting: false,
   reviewSubmitting: false,
-  frequencyByLanguage: {
-    'PT-BR': [],
-    FR: []
-  },
-  frequencyMapByLanguage: {
-    'PT-BR': new Map(),
-    FR: new Map()
-  },
-  seenDailyWordsByLanguage: {
-    'PT-BR': new Set(),
-    FR: new Set()
-  },
+  frequencyByLanguage: Object.fromEntries(OFFERED_LEARNING_LANGS.map(lang => [lang, []])),
+  frequencyMapByLanguage: Object.fromEntries(OFFERED_LEARNING_LANGS.map(lang => [lang, new Map()])),
+  seenDailyWordsByLanguage: Object.fromEntries(OFFERED_LEARNING_LANGS.map(lang => [lang, new Set()])),
   frequencyLoadedLanguages: new Set(),
   frequencyListFilter: 'all',
   frequencyNotLearnedFrozen: null,
@@ -244,7 +252,7 @@ function renderPickerOptions(container, context) {
   const modeIds = getAvailablePickerModeIds(context);
   container.innerHTML = modeIds.map(modeId => {
     const mode = MODE_CONFIGS[modeId];
-    const flag = modeId === 'pt-br' ? '🇧🇷' : '🇨🇦';
+    const flag = mode.flagEmoji || '';
     return `<label class="lang-picker-option"><input type="checkbox" value="${modeId}" /> ${flag} ${mode.label}</label>`;
   }).join('');
   if (!modeIds.length) {
@@ -335,7 +343,7 @@ function renderSettings() {
   if (list) {
     list.innerHTML = getUserModeIds().map(modeId => {
       const mode = MODE_CONFIGS[modeId];
-      const flag = modeId === 'pt-br' ? '🇧🇷' : '🇨🇦';
+      const flag = mode.flagEmoji || '';
       return `<span class="settings-lang-chip">${flag} ${mode.label}</span>`;
     }).join('');
   }
@@ -426,6 +434,7 @@ function displayTranslateLanguage(code) {
   const canonical = canonicalizeTranslateLanguage(code);
   if (canonical === 'EN') return 'English';
   if (canonical === 'FR') return 'French';
+  if (canonical === 'ES-AR') return 'Spanish';
   if (canonical === 'PT-BR') return 'Brazilian Portuguese';
   return code || '';
 }
@@ -433,7 +442,9 @@ function displayTranslateLanguage(code) {
 function displayFrequencyLanguage(code) {
   const canonical = canonicalizeTranslateLanguage(code);
   if (canonical === 'FR') return 'French';
-  return 'Brazilian Portuguese';
+  if (canonical === 'ES-AR') return 'Spanish';
+  if (canonical === 'PT-BR') return 'Brazilian Portuguese';
+  return code || '';
 }
 
 function updateFrequencyModeLabel() {
@@ -448,6 +459,7 @@ function canonicalizeDetectedSourceLanguage(value) {
   if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
   if (code === 'PB' || code === 'PT-BR' || code === 'PT-PT' || code === 'PT') return 'PT-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return code;
 }
 
@@ -463,6 +475,9 @@ function displayDetectedSourceLanguage(value) {
   if (code === 'FR') return 'French';
   if (code === 'FR-CA') return 'French (Canada)';
   if (code === 'FR-FR') return 'French (France)';
+  if (code === 'ES-AR') return 'Spanish (Argentina)';
+  if (code === 'ES') return 'Spanish';
+  if (code === 'ES-419') return 'Spanish (Latin America)';
   return code;
 }
 
@@ -486,7 +501,9 @@ function normalizeTranslateDirection(source, target) {
 }
 
 function toDeepLTargetLanguage(code) {
-  return canonicalizeTranslateLanguage(code) || 'EN';
+  const canonical = canonicalizeTranslateLanguage(code) || 'EN';
+  if (canonical === 'ES-AR') return 'ES';
+  return canonical;
 }
 
 function formatError(error) {
@@ -524,10 +541,7 @@ function getSeenDailyWordsSet(language = getFrequencyLanguageForMode()) {
 }
 
 function loadSeenDailyWordsFromLocalStorage() {
-  const base = {
-    'PT-BR': new Set(),
-    FR: new Set()
-  };
+  const base = Object.fromEntries(OFFERED_LEARNING_LANGS.map(lang => [lang, new Set()]));
   try {
     const raw = localStorage.getItem(SEEN_DAILY_WORDS_STORAGE_KEY);
     if (!raw) return base;
@@ -555,11 +569,8 @@ async function persistUnlockedWordToServer(language, normalized) {
 }
 
 async function initUnlockedWordsFromServer() {
-  const languages = ['PT-BR', 'FR'];
-  const merged = {
-    'PT-BR': new Set(),
-    FR: new Set()
-  };
+  const languages = [...OFFERED_LEARNING_LANGS];
+  const merged = Object.fromEntries(languages.map(lang => [lang, new Set()]));
 
   try {
     const response = await apiFetch('/api/unlocked-words');
@@ -661,7 +672,7 @@ function setStatus(elementId, message, tone = '') {
 function getSentenceText(sentence) {
   if (!sentence || typeof sentence !== 'object') return '';
   const mode = getModeConfig();
-  return String(sentence[mode.sentenceKey] || sentence.pt || sentence.fr || '').trim();
+  return String(sentence[mode.sentenceKey] || sentence.pt || sentence.fr || sentence.es || '').trim();
 }
 
 function speakText(text, button) {

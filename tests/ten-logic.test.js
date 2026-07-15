@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildNotLearnedFrozenPool,
+  DAILY_REVIEW_GOAL,
   defaultTranslateDirection,
   extractPrimaryWordToken,
   extractSingleLearningWord,
@@ -9,13 +10,35 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierLabel,
+  getReviewEmptyState,
+  isDailyReviewComplete,
   nextFrequencyFilter,
   resolveStartupTab
 } from '../src/client/ten-logic.js';
 
-test('resolveStartupTab opens 10/day unless daily is already complete today', () => {
-  assert.equal(resolveStartupTab(false), 'daily');
-  assert.equal(resolveStartupTab(true), 'translate');
+test('resolveStartupTab opens 10/day, then review, then translate', () => {
+  assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: false }), 'daily');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: true }), 'daily');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: false }), 'review');
+  assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: true }), 'translate');
+});
+
+test('isDailyReviewComplete requires ten graded cards', () => {
+  assert.equal(isDailyReviewComplete(9), false);
+  assert.equal(isDailyReviewComplete(10), true);
+  assert.equal(isDailyReviewComplete(10, DAILY_REVIEW_GOAL), true);
+  assert.equal(isDailyReviewComplete(11), true);
+});
+
+test('getReviewEmptyState nudges new users and celebrates an empty queue', () => {
+  assert.deepEqual(getReviewEmptyState(0), {
+    label: 'Need cards',
+    message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+  });
+  assert.deepEqual(getReviewEmptyState(12), {
+    label: 'All clear',
+    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+  });
 });
 
 test('nextFrequencyFilter toggles off when the same filter is clicked again', () => {

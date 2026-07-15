@@ -1,12 +1,15 @@
 import {
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
+  DAILY_REVIEW_GOAL,
   defaultTranslateDirection,
   extractSingleLearningWord,
   formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierLabel,
+  getReviewEmptyState,
+  isDailyReviewComplete,
   isReviewGradeButtonsDisabled,
   nextFrequencyFilter,
   resolveStartupTab
@@ -96,6 +99,7 @@ const state = {
 };
 
 let dailyDots = [];
+let reviewDots = [];
 let applyingMode = false;
 
 function getModeConfig(modeId = state.activeMode) {
@@ -540,6 +544,8 @@ async function persistDailyCardIndex(cardIndex) {
 }
 
 const DAILY_CONFETTI_STORAGE_PREFIX = 'ten-daily-confetti-v1';
+const REVIEW_DAILY_PROGRESS_PREFIX = 'ten-review-daily-progress-v1';
+const REVIEW_CONFETTI_STORAGE_PREFIX = 'ten-review-confetti-v1';
 
 function getDailyConfettiStorageKey() {
   return `${DAILY_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
@@ -553,7 +559,40 @@ function markDailyCompleteCelebrated() {
   localStorage.setItem(getDailyConfettiStorageKey(), '1');
 }
 
-function fireDailyCompleteConfetti() {
+function getReviewDailyProgressStorageKey() {
+  return `${REVIEW_DAILY_PROGRESS_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
+}
+
+function getReviewGradedToday() {
+  const raw = localStorage.getItem(getReviewDailyProgressStorageKey());
+  const count = Number(raw);
+  if (!Number.isInteger(count) || count < 0) return 0;
+  return count;
+}
+
+function incrementReviewGradedToday() {
+  const next = getReviewGradedToday() + 1;
+  localStorage.setItem(getReviewDailyProgressStorageKey(), String(next));
+  return next;
+}
+
+function hasCompletedDailyReviewToday() {
+  return isDailyReviewComplete(getReviewGradedToday());
+}
+
+function getReviewConfettiStorageKey() {
+  return `${REVIEW_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
+}
+
+function hasCelebratedReviewCompleteToday() {
+  return localStorage.getItem(getReviewConfettiStorageKey()) === '1';
+}
+
+function markReviewCompleteCelebrated() {
+  localStorage.setItem(getReviewConfettiStorageKey(), '1');
+}
+
+function fireCompleteConfetti() {
   if (typeof confetti !== 'function') return;
   const burst = (options = {}) =>
     confetti({
@@ -577,7 +616,49 @@ function fireDailyCompleteConfetti() {
 function maybeCelebrateDailyComplete(index) {
   if (index !== WORDS_PER_DAY - 1 || hasCelebratedDailyCompleteToday()) return;
   markDailyCompleteCelebrated();
-  fireDailyCompleteConfetti();
+  fireCompleteConfetti();
+}
+
+function maybeCelebrateReviewComplete(gradedCount) {
+  if (gradedCount < DAILY_REVIEW_GOAL || hasCelebratedReviewCompleteToday()) return;
+  markReviewCompleteCelebrated();
+  fireCompleteConfetti();
+}
+
+function buildReviewDots() {
+  const dotsEl = document.getElementById('review-dots');
+  if (!dotsEl) return;
+  dotsEl.innerHTML = '';
+  reviewDots = Array.from({ length: DAILY_REVIEW_GOAL }, () => {
+    const dot = document.createElement('span');
+    dot.className = 'dot review-dot';
+    dotsEl.appendChild(dot);
+    return dot;
+  });
+  const infinity = document.createElement('span');
+  infinity.id = 'review-infinity';
+  infinity.className = 'review-infinity';
+  infinity.textContent = '∞';
+  infinity.setAttribute('aria-hidden', 'true');
+  dotsEl.appendChild(infinity);
+  updateReviewDots();
+}
+
+function updateReviewDots() {
+  const graded = getReviewGradedToday();
+  const dotsFilled = Math.min(graded, DAILY_REVIEW_GOAL);
+  const hasActive = Boolean(getCurrentReviewCard());
+  reviewDots.forEach((dot, index) => {
+    let className = 'dot review-dot';
+    if (index < dotsFilled) className += ' seen';
+    else if (hasActive && graded < DAILY_REVIEW_GOAL && index === graded) className += ' active';
+    dot.className = className;
+  });
+  const infinityEl = document.getElementById('review-infinity');
+  if (infinityEl) {
+    infinityEl.classList.toggle('seen', graded >= DAILY_REVIEW_GOAL);
+    infinityEl.classList.toggle('active', hasActive && graded >= DAILY_REVIEW_GOAL);
+  }
 }
 
 function updatePoolInfo() {
@@ -886,9 +967,9 @@ function renderReview() {
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
-  const dueCount = state.reviewDueCount;
-  document.getElementById('review-due-count').textContent = String(dueCount);
+  document.getElementById('review-due-count').textContent = String(state.reviewCards.length);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
+  updateReviewDots();
 
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');
@@ -905,6 +986,11 @@ function renderReview() {
   const card = getCurrentReviewCard();
   if (!card) {
     setReviewEditing(false);
+    const emptyState = getReviewEmptyState(state.reviewTotalCount);
+    const emptyLabel = document.getElementById('review-empty-label');
+    const emptyMessage = document.getElementById('review-empty-message');
+    if (emptyLabel) emptyLabel.textContent = emptyState.label;
+    if (emptyMessage) emptyMessage.textContent = emptyState.message;
     empty?.classList.remove('hidden');
     cardPanel?.classList.add('hidden');
     return;
@@ -944,6 +1030,12 @@ function renderReview() {
 
   empty.classList.add('hidden');
   cardPanel.classList.remove('hidden');
+}
+
+function recordReviewSessionProgress() {
+  const gradedCount = incrementReviewGradedToday();
+  maybeCelebrateReviewComplete(gradedCount);
+  return gradedCount;
 }
 
 async function loadReviewQueue(options = {}) {
@@ -1013,6 +1105,7 @@ async function submitReviewGrade(grade) {
     }
 
     removeCurrentReviewCard();
+    recordReviewSessionProgress();
     setStatus('review-status', '');
   } catch (error) {
     setStatus('review-status', formatError(error), 'error');
@@ -1752,10 +1845,10 @@ function setupReviewEvents() {
       await removeCard(card.id);
       removeReviewCardById(card.id);
       state.reviewTotalCount = Math.max(0, state.reviewTotalCount - 1);
-      if (state.reviewDueCount > 0) {
+      if (state.reviewCards.length > 0) {
         setStatus('review-status', 'Card deleted.', 'success');
       } else {
-        setStatus('review-status', 'Card deleted. Queue complete.', 'success');
+        setStatus('review-status', 'Card deleted. Add more cards from 10/day to keep reviewing.', 'success');
       }
     } catch (error) {
       setStatus('review-status', formatError(error), 'error');
@@ -1822,12 +1915,16 @@ async function init() {
   setupTranslateEvents();
   setupFrequencyEvents();
   setupReviewEvents();
+  buildReviewDots();
   updateFrequencyModeLabel();
   updateTranslateResultUi();
   setNoteConfigOpen(false);
   await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
 
-  setActiveTab(resolveStartupTab(hasCelebratedDailyCompleteToday()));
+  setActiveTab(resolveStartupTab({
+    dailyCompleteToday: hasCelebratedDailyCompleteToday(),
+    reviewCompleteToday: hasCompletedDailyReviewToday()
+  }));
 
   renderReview();
   document.body.classList.add('ready');

@@ -170,6 +170,11 @@ export function shouldShowHeaderAddLanguageButton(userLanguages, inSettings = fa
   return !Array.isArray(userLanguages) || userLanguages.length === 0;
 }
 
+export function shouldShowAddLanguageHint(userLanguages, { pickerOpen = false } = {}) {
+  if (pickerOpen) return false;
+  return shouldShowHeaderAddLanguageButton(userLanguages);
+}
+
 export function shouldShowSettingsAddLanguageButton(userLanguages) {
   return Array.isArray(userLanguages) && userLanguages.length > 0;
 }

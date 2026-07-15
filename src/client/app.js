@@ -28,6 +28,7 @@ import {
   normalizeTranslateDirection,
   resolveStartupTab,
   shouldOpenLangPickerOnModeClick,
+  shouldShowAddLanguageHint,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -476,6 +477,14 @@ function setLanguagePickerOpen(context, open) {
   flagsPicker?.classList.toggle('hidden', !(open && context === 'flags'));
   if (open) bindLangPickerOutsideClick(context);
   else unbindLangPickerOutsideClick();
+  updateAddLanguageHint();
+}
+
+function updateAddLanguageHint() {
+  const hint = document.getElementById('add-lang-hint');
+  if (!hint) return;
+  const pickerOpen = state.languagePickerContext === 'header';
+  hint.classList.toggle('hidden', !shouldShowAddLanguageHint(getUserLearningLanguages(), { pickerOpen }));
 }
 
 async function saveUserLanguages(modeIds, { replace = false } = {}) {
@@ -535,6 +544,7 @@ function renderAuthChrome() {
   headerAddWrap?.classList.toggle('hidden', !shouldShowHeaderAddLanguageButton(languages));
   headerAddBtn?.classList.toggle('hidden', !shouldShowHeaderAddLanguageButton(languages));
   settingsAddBtn?.classList.toggle('hidden', !shouldShowSettingsAddLanguageButton(languages));
+  updateAddLanguageHint();
   modeToggle?.classList.toggle('hidden', !modeIds.length);
 
   document.querySelectorAll('.mode-toggle-btn').forEach(button => {

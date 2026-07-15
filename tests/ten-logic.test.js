@@ -24,6 +24,7 @@ import {
   isLangPickerOutsideClick,
   sortLangPickerOptionsByLabel,
   shouldOpenLangPickerOnModeClick,
+  shouldShowAddLanguageHint,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -182,6 +183,14 @@ test('language add button placement follows onboarding vs settings', () => {
   assert.equal(shouldShowHeaderAddLanguageButton(['FR']), false);
   assert.equal(shouldShowSettingsAddLanguageButton([]), false);
   assert.equal(shouldShowSettingsAddLanguageButton(['FR']), true);
+});
+
+test('add-language hint shows for fresh users until they open the picker or add a language', () => {
+  assert.equal(shouldShowAddLanguageHint([]), true);
+  assert.equal(shouldShowAddLanguageHint(null), true);
+  assert.equal(shouldShowAddLanguageHint([], { pickerOpen: true }), false);
+  assert.equal(shouldShowAddLanguageHint(['FR']), false);
+  assert.equal(shouldShowAddLanguageHint(['FR'], { pickerOpen: true }), false);
 });
 
 test('buildLangPickerOptionHtml renders a selectable chip with flag, name, and tick', () => {

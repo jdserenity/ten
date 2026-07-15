@@ -43,6 +43,18 @@
         </button>
         <div id="header-lang-add-wrap" class="lang-add-wrap hidden">
           <button id="header-lang-add-btn" class="lang-add-btn" type="button" data-i18n-aria-label="header.addLanguagesAria" data-i18n-title="header.addLanguagesTitle" aria-label="Add languages" title="Add languages">＋</button>
+          <svg id="add-lang-hint" class="add-lang-hint hidden" viewBox="0 0 72 88" width="56" height="68" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="add-lang-hint-chalk" x="-30%" y="-30%" width="160%" height="160%">
+                <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+              </filter>
+            </defs>
+            <g filter="url(#add-lang-hint-chalk)">
+              <path d="M 18 78 C 16 62, 20 48, 28 36 C 34 26, 42 18, 50 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 38 8 C 42 10, 48 12, 54 10 C 50 16, 48 22, 50 28" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
           <div id="header-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.chooseLanguages" aria-label="Choose languages">
             <p class="lang-picker-title" data-i18n="picker.chooseLanguages">Choose languages</p>
             <div class="lang-picker-options">

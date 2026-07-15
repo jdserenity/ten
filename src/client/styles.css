@@ -221,6 +221,30 @@ header {
   cursor: pointer;
 }
 
+.add-lang-hint {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 18px;
+  z-index: 15;
+  pointer-events: none;
+  overflow: visible;
+  animation: add-lang-hint-bob 2.4s ease-in-out infinite;
+}
+
+.add-lang-hint path {
+  stroke: #fff;
+  stroke-opacity: 0.92;
+}
+
+@keyframes add-lang-hint-bob {
+  0%, 100% { transform: translate(2px, 4px) rotate(-4deg); }
+  50% { transform: translate(-3px, -5px) rotate(-2deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .add-lang-hint { animation: none; }
+}
+
 .lang-picker {
   position: absolute;
   top: calc(100% + 6px);

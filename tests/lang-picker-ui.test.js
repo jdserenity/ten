@@ -84,3 +84,14 @@ test('buildLangPickerOptionHtml can render an already-selected language', () => 
   assert.match(htmlOption, /type="checkbox"[^>]*checked/);
   assert.match(htmlOption, /value="fr"/);
 });
+
+test('fresh-user add-language hint is a chalk-style arrow near the header +', () => {
+  assert.match(html, /id="add-lang-hint"/);
+  assert.match(html, /add-lang-hint-chalk/);
+  assert.match(html, /feTurbulence/);
+  assert.match(styles, /\.add-lang-hint\s*\{[^}]*pointer-events:\s*none/s);
+  assert.match(styles, /@keyframes\s+add-lang-hint-bob/);
+  assert.match(styles, /prefers-reduced-motion:\s*reduce[^{]*\{\s*\.add-lang-hint\s*\{\s*animation:\s*none/s);
+  assert.match(app, /shouldShowAddLanguageHint/);
+  assert.match(app, /updateAddLanguageHint/);
+});

@@ -65,9 +65,9 @@ describeDb('users and per-user data', () => {
   });
 
   it('stores and returns user languages', () => {
-    const saved = setUserLanguages(friend.id, ['FR', 'PT-BR']);
+    const saved = setUserLanguages(friend.id, ['FR', 'FR-FR', 'PT-BR']);
     assert.equal(saved.ok, true);
-    assert.deepEqual(getUserLanguages(friend.id), ['FR', 'PT-BR']);
+    assert.deepEqual(getUserLanguages(friend.id), ['FR', 'FR-FR', 'PT-BR']);
   });
 
   it('stores and returns app language on the user account', () => {

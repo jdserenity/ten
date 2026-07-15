@@ -174,9 +174,18 @@ test('language add button placement follows onboarding vs settings', () => {
 
 test('mode and learning language ids round-trip', () => {
   assert.equal(learningLangFromModeId('fr'), 'FR');
+  assert.equal(learningLangFromModeId('fr-fr'), 'FR-FR');
   assert.equal(learningLangFromModeId('es-ar'), 'ES-AR');
   assert.equal(modeIdFromLearningLang('PT-BR'), 'pt-br');
+  assert.equal(modeIdFromLearningLang('FR-FR'), 'fr-fr');
   assert.equal(modeIdFromLearningLang('ES-AR'), 'es-ar');
+});
+
+test('canonicalizeTranslateLanguage maps French variants separately', () => {
+  assert.equal(canonicalizeTranslateLanguage('fr-ca'), 'FR');
+  assert.equal(canonicalizeTranslateLanguage('FR'), 'FR');
+  assert.equal(canonicalizeTranslateLanguage('fr-fr'), 'FR-FR');
+  assert.equal(canonicalizeTranslateLanguage('FR-FR'), 'FR-FR');
 });
 
 test('canonicalizeTranslateLanguage maps Spanish variants to ES-AR', () => {

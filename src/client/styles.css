@@ -224,11 +224,11 @@ header {
 .add-lang-hint {
   position: absolute;
   top: calc(100% + 4px);
-  right: 18px;
+  right: 4px;
   z-index: 15;
   pointer-events: none;
   overflow: visible;
-  animation: add-lang-hint-bob 2.4s ease-in-out infinite;
+  animation: add-lang-hint-bob 2s ease-in-out infinite;
 }
 
 .add-lang-hint path {
@@ -237,8 +237,8 @@ header {
 }
 
 @keyframes add-lang-hint-bob {
-  0%, 100% { transform: translate(2px, 4px) rotate(-4deg); }
-  50% { transform: translate(-3px, -5px) rotate(-2deg); }
+  0%, 100% { transform: translate(-2px, 5px) rotate(-2deg); }
+  50% { transform: translate(5px, -6px) rotate(2deg); }
 }
 
 @media (prefers-reduced-motion: reduce) {

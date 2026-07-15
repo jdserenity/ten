@@ -15,6 +15,7 @@ import {
   getFeedbackList,
   getUserById,
   getUserLanguages,
+  getUsersWithLanguagesForOps,
   importUnlockedWords,
   initDb,
   setCachedTranslation,
@@ -24,6 +25,7 @@ import {
   setUserLanguages
 } from './db.js';
 import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
+import { buildDevOpsPayload, loadWordPools } from './pool-health.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -628,6 +630,15 @@ function handleFeedbackGet(req, res) {
   return sendJson(res, 200, { feedback: getFeedbackList() });
 }
 
+function handleDevOpsGet(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  if (!user.isDev) return sendJson(res, 403, { error: 'Ops is only available in dev mode.' });
+  const users = getUsersWithLanguagesForOps();
+  const pools = loadWordPools();
+  return sendJson(res, 200, buildDevOpsPayload(users, pools, getFeedbackList()));
+}
+
 async function serveStatic(pathname, res) {
   const filePath = getFilePath(normalizePathname(pathname));
   if (!filePath.startsWith(CLIENT_DIR)) {
@@ -671,6 +682,7 @@ const server = createServer(async (req, res) => {
   if (pathname === '/api/user-languages' && req.method === 'PUT') return handleUserLanguagesPut(req, res);
   if (pathname === '/api/feedback' && req.method === 'POST') return handleFeedbackPost(req, res);
   if (pathname === '/api/feedback' && req.method === 'GET') return handleFeedbackGet(req, res);
+  if (pathname === '/api/dev/ops' && req.method === 'GET') return handleDevOpsGet(req, res);
 
   if (pathname === '/api/cards/queue' && req.method === 'GET') return handleCardsQueueGet(req, url, res);
   if (pathname === '/api/cards' && req.method === 'POST') return handleCardsPost(req, res);

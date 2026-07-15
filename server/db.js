@@ -452,6 +452,18 @@ export function addFeedback(userId, body) {
   return { ok: true, id: Number(result.lastInsertRowid) };
 }
 
+export function getUsersWithLanguagesForOps() {
+  const rows = getDb()
+    .prepare('SELECT id, username FROM users ORDER BY username COLLATE NOCASE')
+    .all();
+  return rows.map(row => ({
+    id: row.id,
+    username: row.username,
+    languages: getUserLanguages(row.id),
+    unlockedWords: getAllUnlockedWords(row.id)
+  }));
+}
+
 export function getFeedbackList(limit = 100) {
   const rows = getDb()
     .prepare(`

@@ -45,7 +45,7 @@ import {
   reconcileDailyWords,
   WORDS_PER_DAY
 } from './daily-pool.js';
-import { planBootDataLoads } from './client-load.js';
+import { dailyGlossPrefetchIndices, planBootDataLoads } from './client-load.js';
 
 const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
@@ -169,6 +169,9 @@ let dailyWordsLoadedModeId = null;
 let dailyWordsInitPromise = null;
 let reviewQueueLoadedModeId = null;
 let reviewQueuePromise = null;
+const dailyGlossCache = new Map();
+const dailyGlossInflight = new Map();
+let dailyGlossCacheScope = '';
 
 const LANG_PICKER_CONTEXTS = {
   header: { pickerId: 'header-lang-picker', ignoreId: 'header-lang-add-btn' },
@@ -920,6 +923,13 @@ function getFrequencyRank(language, word) {
 function resetDailyWordsInit() {
   dailyWordsLoadedModeId = null;
   dailyWordsInitPromise = null;
+  resetDailyGlossCache();
+}
+
+function resetDailyGlossCache() {
+  dailyGlossCache.clear();
+  dailyGlossInflight.clear();
+  dailyGlossCacheScope = '';
 }
 
 function resetReviewQueueInit() {
@@ -1101,62 +1111,139 @@ async function resolveGlossText(sourceText, sourceLang, targetLang, englishFallb
   return result.translatedText;
 }
 
-async function loadDailyGlosses(word) {
+function dailyGlossCacheKey(word) {
+  return `${getNativeApiLang()}:${getModeConfig().learningLang}:${word.word}`;
+}
+
+function ensureDailyGlossCacheScope() {
+  const scope = `${getNativeApiLang()}:${getModeConfig().id}:${dateKey()}`;
+  if (scope !== dailyGlossCacheScope) {
+    resetDailyGlossCache();
+    dailyGlossCacheScope = scope;
+  }
+}
+
+function buildDailyGlossJobs(word) {
   const mode = getModeConfig();
   const nativeLang = getNativeApiLang();
-  const wordKey = `${nativeLang}:${word.word}`;
-  const requestId = ++state.dailyGlosses.requestId;
-  state.dailyGlosses.wordKey = wordKey;
-  state.dailyGlosses.loading = true;
-  state.dailyGlosses.wordGloss = '';
-  state.dailyGlosses.s1Gloss = '';
-  state.dailyGlosses.s2Gloss = '';
-  state.dailyGlosses.s3Gloss = '';
-  document.getElementById('translation').textContent = tr('daily.glossLoading');
-  document.getElementById('s1-en').textContent = tr('daily.glossLoading');
-  document.getElementById('s2-en').textContent = tr('daily.glossLoading');
-  const s3En = document.getElementById('s3-en'); if (s3En) s3En.textContent = tr('daily.glossLoading');
-  updateDailyAddButtons(word, state.dailyGlosses);
-
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
   const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
   const firstSentenceText = getSentenceText(firstSentence);
   const secondSentenceText = getSentenceText(secondSentence);
   const thirdSentenceText = getSentenceText(thirdSentence);
+  return [
+    { field: 'wordGloss', promise: resolveGlossText(word.word, mode.learningLang, nativeLang, word.translation), needsFallback: true },
+    firstSentenceText
+      ? { field: 's1Gloss', promise: resolveGlossText(firstSentenceText, mode.learningLang, nativeLang, firstSentence.en), needsFallback: true }
+      : null,
+    secondSentenceText
+      ? { field: 's2Gloss', promise: resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en), needsFallback: true }
+      : null,
+    thirdSentenceText
+      ? { field: 's3Gloss', promise: resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en), needsFallback: true }
+      : null
+  ].filter(Boolean);
+}
+
+async function fetchDailyGlossPayload(word) {
   const unavailable = tr('daily.glossUnavailable');
+  const glossJobs = buildDailyGlossJobs(word);
+  const payload = { wordGloss: '', s1Gloss: '', s2Gloss: '', s3Gloss: '' };
+  await Promise.all(glossJobs.map(async job => {
+    const gloss = await job.promise.catch(() => '');
+    payload[job.field] = job.needsFallback ? (gloss || unavailable) : gloss;
+  }));
+  return payload;
+}
+
+async function ensureDailyGlossPayload(word) {
+  ensureDailyGlossCacheScope();
+  const key = dailyGlossCacheKey(word);
+  const cached = dailyGlossCache.get(key);
+  if (cached) return cached;
+  const inflight = dailyGlossInflight.get(key);
+  if (inflight) return inflight;
+  const promise = fetchDailyGlossPayload(word).then(payload => {
+    dailyGlossCache.set(key, payload);
+    dailyGlossInflight.delete(key);
+    return payload;
+  }).catch(error => {
+    dailyGlossInflight.delete(key);
+    throw error;
+  });
+  dailyGlossInflight.set(key, promise);
+  return promise;
+}
+
+function showDailyGlossLoadingPlaceholders() {
+  document.getElementById('translation').textContent = tr('daily.glossLoading');
+  document.getElementById('s1-en').textContent = tr('daily.glossLoading');
+  document.getElementById('s2-en').textContent = tr('daily.glossLoading');
+  const s3En = document.getElementById('s3-en'); if (s3En) s3En.textContent = tr('daily.glossLoading');
+}
+
+function applyDailyGlossPayloadToDom(word, payload, loading) {
+  state.dailyGlosses.wordGloss = payload.wordGloss;
+  state.dailyGlosses.s1Gloss = payload.s1Gloss;
+  state.dailyGlosses.s2Gloss = payload.s2Gloss;
+  state.dailyGlosses.s3Gloss = payload.s3Gloss;
+  state.dailyGlosses.loading = loading;
+  document.getElementById('translation').textContent = loading ? tr('daily.glossLoading') : payload.wordGloss;
+  document.getElementById('s1-en').textContent = loading ? tr('daily.glossLoading') : payload.s1Gloss;
+  document.getElementById('s2-en').textContent = loading ? tr('daily.glossLoading') : payload.s2Gloss;
+  const s3En = document.getElementById('s3-en');
+  if (s3En) s3En.textContent = loading ? tr('daily.glossLoading') : payload.s3Gloss;
+  updateDailyAddButtons(word, state.dailyGlosses);
+}
+
+function prefetchRemainingDailyGlosses(currentIndex) {
+  if (state.activeTab !== 'daily' || !state.todayWords.length) return;
+  dailyGlossPrefetchIndices(currentIndex, state.todayWords.length).forEach(index => {
+    const word = state.todayWords[index];
+    if (!word?.word) return;
+    void ensureDailyGlossPayload(word).catch(() => {});
+  });
+}
+
+async function loadDailyGlosses(word) {
+  ensureDailyGlossCacheScope();
+  const wordKey = dailyGlossCacheKey(word);
+  const requestId = ++state.dailyGlosses.requestId;
+  state.dailyGlosses.wordKey = wordKey;
   const isCurrentRequest = () => requestId === state.dailyGlosses.requestId && state.dailyGlosses.wordKey === wordKey;
 
-  const applyGloss = (field, elementId, gloss, needsFallback) => {
-    if (!isCurrentRequest()) return;
-    state.dailyGlosses[field] = needsFallback ? (gloss || unavailable) : gloss;
-    const el = document.getElementById(elementId);
-    if (el) el.textContent = state.dailyGlosses[field];
-    updateDailyAddButtons(word, state.dailyGlosses);
-  };
+  const cached = dailyGlossCache.get(wordKey);
+  if (cached) {
+    applyDailyGlossPayloadToDom(word, cached, false);
+    prefetchRemainingDailyGlosses(state.currentWordIndex);
+    return;
+  }
 
-  const glossJobs = [
-  { field: 'wordGloss', elementId: 'translation', promise: resolveGlossText(word.word, mode.learningLang, nativeLang, word.translation), needsFallback: true },
-  firstSentenceText
-    ? { field: 's1Gloss', elementId: 's1-en', promise: resolveGlossText(firstSentenceText, mode.learningLang, nativeLang, firstSentence.en), needsFallback: true }
-    : null,
-  secondSentenceText
-    ? { field: 's2Gloss', elementId: 's2-en', promise: resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en), needsFallback: true }
-    : null,
-  thirdSentenceText
-    ? { field: 's3Gloss', elementId: 's3-en', promise: resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en), needsFallback: true }
-    : null
-  ].filter(Boolean);
+  state.dailyGlosses.loading = true;
+  state.dailyGlosses.wordGloss = '';
+  state.dailyGlosses.s1Gloss = '';
+  state.dailyGlosses.s2Gloss = '';
+  state.dailyGlosses.s3Gloss = '';
+  showDailyGlossLoadingPlaceholders();
+  updateDailyAddButtons(word, state.dailyGlosses);
 
+  const unavailable = tr('daily.glossUnavailable');
   try {
-    await Promise.all(glossJobs.map(async job => {
-      const gloss = await job.promise.catch(() => '');
-      applyGloss(job.field, job.elementId, gloss, job.needsFallback);
-    }));
-  } finally {
+    const payload = await ensureDailyGlossPayload(word);
     if (!isCurrentRequest()) return;
-    state.dailyGlosses.loading = false;
-    updateDailyAddButtons(word, state.dailyGlosses);
+    applyDailyGlossPayloadToDom(word, payload, false);
+  } catch (_) {
+    if (!isCurrentRequest()) return;
+    applyDailyGlossPayloadToDom(word, {
+      wordGloss: unavailable,
+      s1Gloss: unavailable,
+      s2Gloss: unavailable,
+      s3Gloss: unavailable
+    }, false);
+  } finally {
+    if (isCurrentRequest()) state.dailyGlosses.loading = false;
+    prefetchRemainingDailyGlosses(state.currentWordIndex);
   }
 }
 

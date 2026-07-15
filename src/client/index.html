@@ -13,17 +13,17 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-  <div id="loading">Loading...</div>
+  <div id="loading" data-i18n="app.loading">Loading...</div>
   <div id="error" style="display:none"></div>
 
   <div id="login-screen" class="login-screen hidden">
     <div class="login-card surface-card">
       <h1>Ten</h1>
       <label class="field">
-        <span>Username</span>
+        <span data-i18n="login.username">Username</span>
         <input id="login-username-input" type="text" autocomplete="username" autocapitalize="none" enterkeyhint="go" />
       </label>
-      <button id="login-continue-btn" class="primary-btn" type="button">Sign in</button>
+      <button id="login-continue-btn" class="primary-btn" type="button" data-i18n="login.signIn">Sign in</button>
       <p id="login-status" class="status-line"></p>
     </div>
   </div>
@@ -35,29 +35,29 @@
         <span id="date-label"></span>
       </div>
       <div class="header-tools">
-        <input id="feedback-compact-input" type="text" placeholder="feedback" aria-label="Send feedback" />
-        <button id="settings-open-btn" type="button" class="settings-cog-btn" aria-label="Settings" title="Settings">
+        <input id="feedback-compact-input" type="text" data-i18n-placeholder="header.feedbackPlaceholder" placeholder="feedback" data-i18n-aria-label="header.feedbackAria" aria-label="Send feedback" />
+        <button id="settings-open-btn" type="button" class="settings-cog-btn" data-i18n-aria-label="header.settingsAria" data-i18n-title="header.settingsTitle" aria-label="Settings" title="Settings">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
             <path fill="currentColor" d="M19.14 12.94c.04-.31.06-.63.06-.94s-.02-.63-.06-.94l2.03-1.58a.49.49 0 0 0 .12-.61l-1.93-3.34a.488.488 0 0 0-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54a.484.484 0 0 0-.48-.41h-3.86c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58a.49.49 0 0 0-.12.61l1.93 3.34c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.86c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.93-3.34a.49.49 0 0 0-.12-.61l-2.03-1.58zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2z"/>
           </svg>
         </button>
         <div id="header-lang-add-wrap" class="lang-add-wrap hidden">
-          <button id="header-lang-add-btn" class="lang-add-btn" type="button" aria-label="Add languages" title="Add languages">＋</button>
-          <div id="header-lang-picker" class="lang-picker hidden" role="dialog" aria-label="Choose languages">
-            <p class="lang-picker-title">Choose languages</p>
+          <button id="header-lang-add-btn" class="lang-add-btn" type="button" data-i18n-aria-label="header.addLanguagesAria" data-i18n-title="header.addLanguagesTitle" aria-label="Add languages" title="Add languages">＋</button>
+          <div id="header-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.chooseLanguages" aria-label="Choose languages">
+            <p class="lang-picker-title" data-i18n="picker.chooseLanguages">Choose languages</p>
             <div class="lang-picker-options">
-              <label class="lang-picker-option"><input type="checkbox" value="pt-br" /> 🇧🇷 Brazilian Portuguese</label>
-              <label class="lang-picker-option"><input type="checkbox" value="fr" /> 🇨🇦 Quebec French</label>
-              <label class="lang-picker-option"><input type="checkbox" value="es-ar" /> 🇦🇷 Argentinian Spanish</label>
+              <label class="lang-picker-option"><input type="checkbox" value="pt-br" /> 🇧🇷 <span data-i18n="picker.ptBr">Brazilian Portuguese</span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="fr" /> 🇨🇦 <span data-i18n="picker.fr">Quebec French</span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="es-ar" /> 🇦🇷 <span data-i18n="picker.esAr">Argentinian Spanish</span></label>
             </div>
-            <button id="header-lang-confirm-btn" class="primary-btn" type="button">Add</button>
+            <button id="header-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.add">Add</button>
           </div>
         </div>
         <div class="mode-toggle-wrap">
-          <div id="mode-toggle" class="mode-toggle hidden" role="group" aria-label="Learning mode">
-            <button class="mode-toggle-btn" type="button" data-mode="pt-br" aria-pressed="false" aria-label="Switch to Brazilian Portuguese">🇧🇷</button>
-            <button class="mode-toggle-btn active" type="button" data-mode="fr" aria-pressed="true" aria-label="Switch to Quebec French">🇨🇦</button>
-            <button class="mode-toggle-btn" type="button" data-mode="es-ar" aria-pressed="false" aria-label="Switch to Argentinian Spanish">🇦🇷</button>
+          <div id="mode-toggle" class="mode-toggle hidden" role="group" data-i18n-aria-label="header.learningModeAria" aria-label="Learning mode">
+            <button class="mode-toggle-btn" type="button" data-mode="pt-br" aria-pressed="false" data-i18n-aria-label="header.switchPtBr" aria-label="Switch to Brazilian Portuguese">🇧🇷</button>
+            <button class="mode-toggle-btn active" type="button" data-mode="fr" aria-pressed="true" data-i18n-aria-label="header.switchFr" aria-label="Switch to Quebec French">🇨🇦</button>
+            <button class="mode-toggle-btn" type="button" data-mode="es-ar" aria-pressed="false" data-i18n-aria-label="header.switchEsAr" aria-label="Switch to Argentinian Spanish">🇦🇷</button>
           </div>
         </div>
       </div>
@@ -66,11 +66,11 @@
     <div id="feedback-overlay" class="feedback-overlay hidden" aria-hidden="true">
       <div class="feedback-panel surface-card">
         <div class="feedback-panel-header">
-          <span>Feedback</span>
-          <button id="feedback-close-btn" type="button" class="clear-translate-btn" aria-label="Close feedback">✕</button>
+          <span data-i18n="feedback.title">Feedback</span>
+          <button id="feedback-close-btn" type="button" class="clear-translate-btn" data-i18n-aria-label="feedback.closeAria" aria-label="Close feedback">✕</button>
         </div>
         <textarea id="feedback-expanded-input" rows="8"></textarea>
-        <button id="feedback-submit-btn" class="primary-btn" type="button">Submit</button>
+        <button id="feedback-submit-btn" class="primary-btn" type="button" data-i18n="feedback.submit">Submit</button>
         <p id="feedback-status" class="status-line"></p>
       </div>
     </div>
@@ -78,33 +78,40 @@
     <div id="settings-overlay" class="settings-overlay hidden" aria-hidden="true">
       <div class="settings-panel surface-card">
         <div class="settings-panel-header">
-          <h2>Settings</h2>
-          <button id="settings-close-btn" type="button" class="clear-translate-btn" aria-label="Close settings">✕</button>
+          <h2 data-i18n="settings.title">Settings</h2>
+          <button id="settings-close-btn" type="button" class="clear-translate-btn" data-i18n-aria-label="settings.closeAria" aria-label="Close settings">✕</button>
         </div>
-        <p class="settings-username">Signed in as <strong id="settings-username-label"></strong></p>
+        <p class="settings-username"><span data-i18n="settings.signedInAs">Signed in as</span> <strong id="settings-username-label"></strong></p>
+        <div class="settings-app-lang-row">
+          <span class="caps-label" data-i18n="settings.appLanguage">App language</span>
+          <div id="settings-app-lang-options" class="settings-app-lang-options" role="group" aria-label="App language">
+            <button type="button" class="settings-app-lang-btn" data-app-lang="en" data-i18n="settings.appLang.en">English</button>
+            <button type="button" class="settings-app-lang-btn" data-app-lang="pt-BR" data-i18n="settings.appLang.ptBr">Português (Brasil)</button>
+          </div>
+        </div>
         <div class="settings-lang-row">
-          <span class="caps-label">Languages</span>
-          <button id="settings-lang-add-btn" class="lang-add-btn hidden" type="button" aria-label="Add a language" title="Add a language">＋</button>
+          <span class="caps-label" data-i18n="settings.languages">Languages</span>
+          <button id="settings-lang-add-btn" class="lang-add-btn hidden" type="button" data-i18n-aria-label="settings.addLanguageAria" data-i18n-title="settings.addLanguageTitle" aria-label="Add a language" title="Add a language">＋</button>
         </div>
         <div id="settings-lang-list" class="settings-lang-list"></div>
-        <div id="settings-lang-picker" class="lang-picker hidden" role="dialog" aria-label="Add languages">
-          <p class="lang-picker-title">Add languages</p>
+        <div id="settings-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.addLanguages" aria-label="Add languages">
+          <p class="lang-picker-title" data-i18n="picker.addLanguages">Add languages</p>
           <div class="lang-picker-options settings-lang-picker-options"></div>
-          <button id="settings-lang-confirm-btn" class="primary-btn" type="button">Add</button>
+          <button id="settings-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.add">Add</button>
         </div>
-        <button id="settings-switch-user-btn" type="button" class="wide-btn">Sign out</button>
+        <button id="settings-switch-user-btn" type="button" class="wide-btn" data-i18n="settings.signOut">Sign out</button>
         <div id="settings-feedback-section" class="settings-feedback-block hidden">
-          <h2>Feedback</h2>
+          <h2 data-i18n="settings.feedbackTitle">Feedback</h2>
           <div id="settings-feedback-list" class="settings-feedback-list"></div>
         </div>
       </div>
     </div>
 
-    <div id="top-tabs" role="tablist" aria-label="Main tabs">
-      <button class="top-tab active" data-tab="daily" role="tab" aria-selected="true">10/day</button>
-      <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
-      <button class="top-tab" data-tab="frequency" role="tab" aria-selected="false">Frequency dictionary</button>
-      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
+    <div id="top-tabs" role="tablist" data-i18n-aria-label="tab.mainAria" aria-label="Main tabs">
+      <button class="top-tab active" data-tab="daily" role="tab" aria-selected="true" data-i18n="tab.daily">10/day</button>
+      <button class="top-tab" data-tab="review" role="tab" aria-selected="false" data-i18n="tab.review">Review</button>
+      <button class="top-tab" data-tab="frequency" role="tab" aria-selected="false" data-i18n="tab.frequency">Frequency dictionary</button>
+      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false" data-i18n="tab.translate">Translate</button>
     </div>
 
     <section id="tab-daily" class="tab-panel active" role="tabpanel">
@@ -113,8 +120,8 @@
       <div id="card">
         <div class="word-row">
           <span id="word"></span>
-          <button id="speak-btn" class="speak-btn" type="button" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
-          <button id="word-add-btn" class="add-btn-small" type="button" title="Add this word as a card" aria-label="Add word as card">＋</button>
+          <button id="speak-btn" class="speak-btn" type="button" data-i18n-title="daily.hearWord" data-i18n-aria-label="daily.hearWord" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
+          <button id="word-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addWord" data-i18n-aria-label="daily.addWord" title="Add this word as a card" aria-label="Add word as card">＋</button>
         </div>
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
@@ -126,8 +133,8 @@
             <span class="sentence-en" id="s1-en"></span>
           </div>
           <div class="sentence-actions">
-            <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s1-add-btn" class="add-btn-small" type="button" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+            <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+            <button id="s1-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
           </div>
         </div>
         <div class="sentence">
@@ -136,68 +143,68 @@
             <span class="sentence-en" id="s2-en"></span>
           </div>
           <div class="sentence-actions">
-            <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s2-add-btn" class="add-btn-small" type="button" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+            <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+            <button id="s2-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
           </div>
         </div>
       </div>
 
       <nav id="daily-nav">
-        <button id="prev-btn">← Prev</button>
-        <button id="next-btn">Next →</button>
+        <button id="prev-btn" data-i18n="daily.prev">← Prev</button>
+        <button id="next-btn" data-i18n="daily.next">Next →</button>
       </nav>
       <p id="counter"></p>
       <p id="pool-info"></p>
-      <button id="add-all-btn" class="wide-btn">+Add all as cards</button>
+      <button id="add-all-btn" class="wide-btn" data-i18n="daily.addAll">+Add all as cards</button>
       <p id="daily-save-status" class="status-line"></p>
     </section>
 
     <section id="tab-translate" class="tab-panel" role="tabpanel">
       <div class="surface-card">
-        <h2>Translate</h2>
-        <div class="translate-direction-row" aria-label="Translation direction">
+        <h2 data-i18n="translate.title">Translate</h2>
+        <div class="translate-direction-row" data-i18n-aria-label="translate.directionAria" aria-label="Translation direction">
           <div id="translate-from-side" class="translate-direction-side">
-            <span id="translate-from-caption" class="translate-direction-caption">From</span>
+            <span id="translate-from-caption" class="translate-direction-caption" data-i18n="translate.from">From</span>
             <span id="translate-from-label" class="translate-direction-lang">Quebec</span>
           </div>
-          <button id="swap-languages-btn" type="button" class="swap-languages-btn" aria-label="Swap languages" title="Swap languages">⇄</button>
+          <button id="swap-languages-btn" type="button" class="swap-languages-btn" data-i18n-aria-label="translate.swapAria" data-i18n-title="translate.swapTitle" aria-label="Swap languages" title="Swap languages">⇄</button>
           <div class="translate-direction-side">
-            <span class="translate-direction-caption">To</span>
+            <span class="translate-direction-caption" data-i18n="translate.to">To</span>
             <span id="translate-to-label" class="translate-direction-lang">English</span>
           </div>
         </div>
         <label class="field">
-          <span>Text</span>
+          <span data-i18n="translate.text">Text</span>
           <div class="translate-input-row">
-            <textarea id="translate-input" rows="4" placeholder="Type or paste text to translate..."></textarea>
+            <textarea id="translate-input" rows="4" data-i18n-placeholder="translate.placeholder" placeholder="Type or paste text to translate..."></textarea>
             <span id="translate-speak-slot-input" class="translate-speak-slot"></span>
           </div>
         </label>
         <div class="translate-action-row">
-          <button id="translate-btn" class="primary-btn">Translate</button>
-          <button id="clear-translate-btn" type="button" class="clear-translate-btn" aria-label="Clear translation input and result" title="Clear">✕</button>
+          <button id="translate-btn" class="primary-btn" data-i18n="translate.button">Translate</button>
+          <button id="clear-translate-btn" type="button" class="clear-translate-btn" data-i18n-aria-label="translate.clearAria" data-i18n-title="translate.clearTitle" aria-label="Clear translation input and result" title="Clear">✕</button>
         </div>
         <p id="translate-status" class="status-line"></p>
         <div id="translate-result-wrap" class="hidden">
-          <span class="caps-label">Result</span>
+          <span class="caps-label" data-i18n="translate.result">Result</span>
           <div class="translate-result-row">
             <p id="translate-result-text" class="translate-result-text"></p>
             <span id="translate-speak-slot-result" class="translate-speak-slot"></span>
           </div>
           <p id="translate-frequency-rank" class="frequency-meta"></p>
         </div>
-        <button id="translate-speak-btn" type="button" class="speak-btn" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
+        <button id="translate-speak-btn" type="button" class="speak-btn" data-i18n-title="daily.hearWord" data-i18n-aria-label="daily.hearWord" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
         <div class="button-row">
-          <button id="quick-add-card-btn" class="primary-btn" disabled>Add card</button>
-          <button id="toggle-note-config-btn" disabled>Configure note</button>
+          <button id="quick-add-card-btn" class="primary-btn" disabled data-i18n="translate.addCard">Add card</button>
+          <button id="toggle-note-config-btn" disabled data-i18n="translate.configureNote">Configure note</button>
         </div>
         <p id="quick-add-status" class="status-line"></p>
       </div>
 
       <div id="flashcard-draft-card" class="surface-card hidden">
-        <h2>Flashcard note config</h2>
+        <h2 data-i18n="translate.noteConfig">Flashcard note config</h2>
         <label class="field">
-          <span>Front (English)</span>
+          <span id="card-front-label">Front (English)</span>
           <input id="card-front-input" placeholder="English word, phrase, or sentence" />
         </label>
         <label class="field">
@@ -205,12 +212,12 @@
           <input id="card-back-input" placeholder="French translation" />
         </label>
         <label class="field">
-          <span>Context (optional)</span>
-          <textarea id="card-context-input" rows="3" placeholder="Sentence, nuance, or reminder"></textarea>
+          <span data-i18n="translate.context">Context (optional)</span>
+          <textarea id="card-context-input" rows="3" data-i18n-placeholder="translate.contextPlaceholder" placeholder="Sentence, nuance, or reminder"></textarea>
         </label>
         <div class="button-row">
-          <button id="save-card-btn" class="primary-btn">Add card</button>
-          <button id="add-review-btn">Add + Open Review</button>
+          <button id="save-card-btn" class="primary-btn" data-i18n="translate.addCardBtn">Add card</button>
+          <button id="add-review-btn" data-i18n="translate.addOpenReview">Add + Open Review</button>
         </div>
         <p id="card-save-status" class="status-line"></p>
       </div>
@@ -221,11 +228,11 @@
 
       <div class="review-stats">
         <div class="stat-box">
-          <span class="stat-label">To study</span>
+          <span class="stat-label" data-i18n="review.toStudy">To study</span>
           <span class="stat-value" id="review-due-count">0</span>
         </div>
         <div class="stat-box">
-          <span class="stat-label">Total cards</span>
+          <span class="stat-label" data-i18n="review.totalCards">Total cards</span>
           <span class="stat-value" id="review-total-count">0</span>
         </div>
       </div>
@@ -237,48 +244,48 @@
 
       <div id="review-card-panel" class="surface-card hidden">
         <div id="review-display-wrap">
-          <span class="caps-label">Front</span>
+          <span class="caps-label" data-i18n="review.front">Front</span>
           <p id="review-front-text" class="review-front"></p>
           <p id="review-context" class="review-context hidden"></p>
 
           <div id="review-answer-wrap" class="hidden">
-            <span class="caps-label">Back</span>
+            <span class="caps-label" data-i18n="review.back">Back</span>
             <div class="review-back-row">
               <p id="review-back-text" class="review-back"></p>
-              <button id="review-speak-btn" type="button" class="speak-btn" title="Hear back" aria-label="Hear back">🔊</button>
+              <button id="review-speak-btn" type="button" class="speak-btn" data-i18n-title="review.hearBack" data-i18n-aria-label="review.hearBack" title="Hear back" aria-label="Hear back">🔊</button>
             </div>
           </div>
         </div>
 
         <div id="review-edit-wrap" class="hidden">
           <label class="field">
-            <span>Front (English)</span>
-            <textarea id="review-edit-front" rows="3" placeholder="Front of card"></textarea>
+            <span id="review-edit-front-label">Front (English)</span>
+            <textarea id="review-edit-front" rows="3" data-i18n-placeholder="review.frontPlaceholder" placeholder="Front of card"></textarea>
           </label>
           <label class="field">
             <span id="review-edit-back-label">Back</span>
-            <textarea id="review-edit-back" rows="3" placeholder="Back of card"></textarea>
+            <textarea id="review-edit-back" rows="3" data-i18n-placeholder="review.backPlaceholder" placeholder="Back of card"></textarea>
           </label>
           <div class="button-row">
-            <button id="review-edit-save" class="primary-btn" type="button">Save changes</button>
-            <button id="review-edit-cancel" type="button">Cancel</button>
+            <button id="review-edit-save" class="primary-btn" type="button" data-i18n="review.saveChanges">Save changes</button>
+            <button id="review-edit-cancel" type="button" data-i18n="review.cancel">Cancel</button>
           </div>
         </div>
 
         <div class="button-row">
-          <button id="review-show-answer-btn" class="primary-btn">Show answer</button>
+          <button id="review-show-answer-btn" class="primary-btn" data-i18n="review.showAnswer">Show answer</button>
         </div>
 
         <div id="review-grade-row" class="grade-row hidden">
-          <button data-grade="again">Again</button>
-          <button data-grade="hard">Hard</button>
-          <button data-grade="good">Good</button>
-          <button data-grade="easy">Easy</button>
+          <button data-grade="again" data-i18n="review.grade.again">Again</button>
+          <button data-grade="hard" data-i18n="review.grade.hard">Hard</button>
+          <button data-grade="good" data-i18n="review.grade.good">Good</button>
+          <button data-grade="easy" data-i18n="review.grade.easy">Easy</button>
         </div>
 
         <div class="button-row">
-          <button id="review-card-edit" type="button">Edit card</button>
-          <button id="review-card-delete">Delete Card</button>
+          <button id="review-card-edit" type="button" data-i18n="review.editCard">Edit card</button>
+          <button id="review-card-delete" data-i18n="review.deleteCard">Delete Card</button>
         </div>
       </div>
 
@@ -289,17 +296,17 @@
       <span id="frequency-mode-label" class="caps-label">French dictionary</span>
       <div class="frequency-summary">
         <button type="button" class="stat-box frequency-stat-box" id="frequency-unlocked-stat" aria-pressed="false">
-          <span class="stat-label">Unlocked</span>
+          <span class="stat-label" data-i18n="frequency.unlocked">Unlocked</span>
           <span class="stat-value frequency-seen-value" id="frequency-seen-count">0</span>
         </button>
         <button type="button" class="stat-box frequency-stat-box" id="frequency-not-learned-stat" aria-pressed="false">
-          <span class="stat-label">Not learned</span>
+          <span class="stat-label" data-i18n="frequency.notLearned">Not learned</span>
           <span class="stat-value" id="frequency-not-learned-count">0</span>
         </button>
       </div>
       <label class="field frequency-search-field">
-        <span>Search</span>
-        <input id="frequency-search-input" type="search" inputmode="search" autocomplete="off" enterkeyhint="search" placeholder="Rank (#42) or word…" />
+        <span data-i18n="frequency.search">Search</span>
+        <input id="frequency-search-input" type="search" inputmode="search" autocomplete="off" enterkeyhint="search" data-i18n-placeholder="frequency.searchPlaceholder" placeholder="Rank (#42) or word…" />
       </label>
       <p id="frequency-search-hint" class="status-line frequency-search-hint hidden" aria-live="polite"></p>
       <p id="frequency-status" class="status-line"></p>
@@ -309,6 +316,6 @@
   </div>
 
   <script src="/confetti.browser.js" defer></script>
-  <script type="module" src="/app.js?v=8"></script>
+  <script type="module" src="/app.js?v=9"></script>
 </body>
 </html>

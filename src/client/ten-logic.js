@@ -13,13 +13,13 @@ export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GO
 export function getReviewEmptyState(totalCardCount) {
   if (!totalCardCount) {
     return {
-      label: 'Need cards',
-      message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+      labelKey: 'review.empty.needCardsLabel',
+      messageKey: 'review.empty.needCardsMessage'
     };
   }
   return {
-    label: 'All clear',
-    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+    labelKey: 'review.empty.allClearLabel',
+    messageKey: 'review.empty.allClearMessage'
   };
 }
 
@@ -28,8 +28,34 @@ export function nextFrequencyFilter(currentFilter, clickedFilter) {
   return clickedFilter;
 }
 
-export function defaultTranslateDirection(learningLang) {
-  return { source: learningLang, target: 'EN' };
+export function defaultTranslateDirection(learningLang, nativeLang = 'EN') {
+  const target = resolveTranslateNativeLang(learningLang, nativeLang);
+  return { source: learningLang, target };
+}
+
+export function resolveTranslateNativeLang(learningLang, nativeLang) {
+  const canonical = canonicalizeTranslateLanguage(nativeLang) || 'EN';
+  if (canonical === learningLang) return 'EN';
+  return canonical;
+}
+
+export function normalizeTranslateDirection(source, target, learningLang, nativeLang = 'EN') {
+  const pole = resolveTranslateNativeLang(learningLang, nativeLang);
+  const sourceLang = canonicalizeTranslateLanguage(source) || learningLang;
+  let targetLang = canonicalizeTranslateLanguage(target) || pole;
+  if (sourceLang !== pole && sourceLang !== learningLang) {
+    return { source: learningLang, target: pole };
+  }
+  if (targetLang !== pole && targetLang !== learningLang) targetLang = pole;
+  if (sourceLang === targetLang) targetLang = sourceLang === pole ? learningLang : pole;
+  return { source: sourceLang, target: targetLang };
+}
+
+export function swapTranslateDirection(source, target, learningLang, nativeLang = 'EN') {
+  const pole = resolveTranslateNativeLang(learningLang, nativeLang);
+  const nextSource = canonicalizeTranslateLanguage(target) === pole ? pole : learningLang;
+  const nextTarget = nextSource === pole ? learningLang : pole;
+  return { source: nextSource, target: nextTarget };
 }
 
 export function buildNotLearnedFrozenPool(entries, seenSet) {
@@ -80,12 +106,16 @@ export function extractPrimaryWordToken(text) {
   return matches[0];
 }
 
-export function getFrequencyTierLabel(rank) {
+export function getFrequencyTierKey(rank) {
   if (!rank) return '';
-  if (rank <= 500) return 'very common';
-  if (rank <= 1000) return 'common';
-  if (rank <= 2500) return 'mid-frequency';
-  return 'less common';
+  if (rank <= 500) return 'frequency.tier.veryCommon';
+  if (rank <= 1000) return 'frequency.tier.common';
+  if (rank <= 2500) return 'frequency.tier.midFrequency';
+  return 'frequency.tier.lessCommon';
+}
+
+export function getFrequencyTierLabel(rank) {
+  return getFrequencyTierKey(rank);
 }
 
 export function extractSingleLearningWord(inputText, translatedText, sourceLang, targetLang, learningLanguage) {
@@ -100,9 +130,9 @@ export function extractSingleLearningWord(inputText, translatedText, sourceLang,
   return null;
 }
 
-export function formatTranslateFrequencyRank(label, rank) {
-  if (rank) return `${label} frequency rank #${rank} (${getFrequencyTierLabel(rank)})`;
-  return `${label} frequency rank unavailable`;
+export function formatTranslateFrequencyRank(labelKey, rank) {
+  if (rank) return { labelKey, rank, tierKey: getFrequencyTierKey(rank) };
+  return { labelKey, rank: null, tierKey: '' };
 }
 
 export function isReviewGradeButtonsDisabled({ reviewEditing }) {

@@ -1,4 +1,5 @@
 import Database from 'better-sqlite3';
+import { createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -7,6 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const DEFAULT_DB_PATH = join(ROOT, 'data', 'ten.db');
 const VALID_LANGUAGES = new Set(['PT-BR', 'FR', 'ES-AR']);
+const VALID_APP_LANGS = new Set(['en', 'pt-BR']);
 const SEED_DEV_USERNAME = 'jd';
 
 let db;
@@ -36,8 +38,44 @@ function mapUserRow(row) {
     id: row.id,
     username: row.username,
     isDev: Boolean(row.is_dev),
-    createdAt: row.created_at
+    createdAt: row.created_at,
+    appLang: normalizeAppLang(row.app_lang) || null
   };
+}
+
+export function normalizeAppLang(value) {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const lower = raw.toLowerCase();
+  if (lower === 'en' || lower.startsWith('en-')) return 'en';
+  if (lower === 'pt' || lower === 'pt-br' || lower === 'pt_br') return 'pt-BR';
+  return VALID_APP_LANGS.has(raw) ? raw : '';
+}
+
+function hashSourceText(text) {
+  return createHash('sha256')
+    .update(String(text || '').trim().normalize('NFC').toLocaleLowerCase())
+    .digest('hex');
+}
+
+function migrateAppLangColumn() {
+  if (!tableHasColumn('users', 'app_lang')) {
+    getDb().exec('ALTER TABLE users ADD COLUMN app_lang TEXT');
+  }
+}
+
+function migrateTranslationCacheTable() {
+  getDb().exec(`
+    CREATE TABLE IF NOT EXISTS translation_cache (
+      source_lang TEXT NOT NULL,
+      target_lang TEXT NOT NULL,
+      source_hash TEXT NOT NULL,
+      source_text TEXT NOT NULL,
+      translated_text TEXT NOT NULL,
+      created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (source_lang, target_lang, source_hash)
+    )
+  `);
 }
 
 function tableHasColumn(tableName, columnName) {
@@ -47,7 +85,7 @@ function tableHasColumn(tableName, columnName) {
 
 function ensureSeedDevUser() {
   const existing = getDb()
-    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE username = ? COLLATE NOCASE')
+    .prepare('SELECT id, username, is_dev, created_at, app_lang FROM users WHERE username = ? COLLATE NOCASE')
     .get(SEED_DEV_USERNAME);
   let user;
   if (existing) {
@@ -280,6 +318,8 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
       PRIMARY KEY (language, date_key)
     );
   `);
+  migrateAppLangColumn();
+  migrateTranslationCacheTable();
   runMultiUserMigrations();
   return db;
 }
@@ -295,7 +335,7 @@ export function getUserById(id) {
   const userId = Number(id);
   if (!Number.isInteger(userId) || userId <= 0) return null;
   const row = getDb()
-    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE id = ?')
+    .prepare('SELECT id, username, is_dev, created_at, app_lang FROM users WHERE id = ?')
     .get(userId);
   return mapUserRow(row);
 }
@@ -306,7 +346,7 @@ export function findOrCreateUser(username) {
     return { ok: false, reason: 'invalid' };
   }
   const existing = getDb()
-    .prepare('SELECT id, username, is_dev, created_at FROM users WHERE username = ? COLLATE NOCASE')
+    .prepare('SELECT id, username, is_dev, created_at, app_lang FROM users WHERE username = ? COLLATE NOCASE')
     .get(normalized);
   if (existing) return { ok: true, ...mapUserRow(existing) };
   const result = getDb()
@@ -358,6 +398,47 @@ export function addUserLanguages(userId, languages) {
   const insert = getDb().prepare('INSERT OR IGNORE INTO user_languages (user_id, language) VALUES (?, ?)');
   normalized.forEach(lang => insert.run(user.id, lang));
   return { ok: true, languages: getUserLanguages(user.id) };
+}
+
+export function setUserAppLang(userId, appLang) {
+  const user = getUserById(userId);
+  const normalized = normalizeAppLang(appLang);
+  if (!user || !normalized) return { ok: false, reason: 'invalid' };
+  getDb().prepare('UPDATE users SET app_lang = ? WHERE id = ?').run(normalized, user.id);
+  return { ok: true, appLang: normalized };
+}
+
+export function getCachedTranslation(sourceLang, targetLang, sourceText) {
+  const source = String(sourceLang || '').trim().toUpperCase();
+  const target = String(targetLang || '').trim().toUpperCase();
+  const text = String(sourceText || '').trim();
+  if (!source || !target || !text) return null;
+  const row = getDb()
+    .prepare(`
+      SELECT translated_text FROM translation_cache
+      WHERE source_lang = ? AND target_lang = ? AND source_hash = ?
+    `)
+    .get(source, target, hashSourceText(text));
+  const translated = String(row?.translated_text || '').trim();
+  return translated || null;
+}
+
+export function setCachedTranslation(sourceLang, targetLang, sourceText, translatedText) {
+  const source = String(sourceLang || '').trim().toUpperCase();
+  const target = String(targetLang || '').trim().toUpperCase();
+  const text = String(sourceText || '').trim();
+  const translated = String(translatedText || '').trim();
+  if (!source || !target || !text || !translated) return { ok: false, reason: 'invalid' };
+  getDb()
+    .prepare(`
+      INSERT INTO translation_cache (source_lang, target_lang, source_hash, source_text, translated_text, created_at)
+      VALUES (?, ?, ?, ?, ?, unixepoch())
+      ON CONFLICT (source_lang, target_lang, source_hash) DO UPDATE SET
+        translated_text = excluded.translated_text,
+        created_at = excluded.created_at
+    `)
+    .run(source, target, hashSourceText(text), text, translated);
+  return { ok: true };
 }
 
 export function addFeedback(userId, body) {

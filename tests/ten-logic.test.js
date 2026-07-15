@@ -10,16 +10,19 @@ import {
   formatTranslateFrequencyRank,
   frequencyEntryMatchesFilter,
   frequencyListTotal,
-  getFrequencyTierLabel,
+  getFrequencyTierKey,
   getReviewEmptyState,
   isDailyReviewComplete,
   learningLangFromModeId,
   modeIdFromLearningLang,
   nextFrequencyFilter,
+  normalizeTranslateDirection,
   resolveStartupTab,
+  resolveTranslateNativeLang,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
-  shouldShowSettingsAddLanguageButton
+  shouldShowSettingsAddLanguageButton,
+  swapTranslateDirection
 } from '../src/client/ten-logic.js';
 
 test('resolveStartupTab opens 10/day, then review, then translate', () => {
@@ -36,14 +39,14 @@ test('isDailyReviewComplete requires ten graded cards', () => {
   assert.equal(isDailyReviewComplete(11), true);
 });
 
-test('getReviewEmptyState nudges new users and celebrates an empty queue', () => {
+test('getReviewEmptyState returns i18n keys for empty and clear queues', () => {
   assert.deepEqual(getReviewEmptyState(0), {
-    label: 'Need cards',
-    message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+    labelKey: 'review.empty.needCardsLabel',
+    messageKey: 'review.empty.needCardsMessage'
   });
   assert.deepEqual(getReviewEmptyState(12), {
-    label: 'All clear',
-    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+    labelKey: 'review.empty.allClearLabel',
+    messageKey: 'review.empty.allClearMessage'
   });
 });
 
@@ -67,10 +70,38 @@ test('frequencyEntryMatchesFilter respects unlocked and not-learned views', () =
   assert.equal(frequencyEntryMatchesFilter(false, 'not-learned'), true);
 });
 
-test('defaultTranslateDirection targets English from the active learning language', () => {
-  assert.deepEqual(defaultTranslateDirection('FR'), { source: 'FR', target: 'EN' });
-  assert.deepEqual(defaultTranslateDirection('PT-BR'), { source: 'PT-BR', target: 'EN' });
+test('defaultTranslateDirection targets the native language from the active learning language', () => {
+  assert.deepEqual(defaultTranslateDirection('FR', 'EN'), { source: 'FR', target: 'EN' });
+  assert.deepEqual(defaultTranslateDirection('PT-BR', 'PT-BR'), { source: 'PT-BR', target: 'EN' });
+  assert.deepEqual(defaultTranslateDirection('FR', 'PT-BR'), { source: 'FR', target: 'PT-BR' });
   assert.deepEqual(defaultTranslateDirection('ES-AR'), { source: 'ES-AR', target: 'EN' });
+});
+
+test('resolveTranslateNativeLang falls back to English when native matches learning', () => {
+  assert.equal(resolveTranslateNativeLang('PT-BR', 'PT-BR'), 'EN');
+  assert.equal(resolveTranslateNativeLang('FR', 'EN'), 'EN');
+});
+
+test('normalizeTranslateDirection clamps to learning language and native pole', () => {
+  assert.deepEqual(
+    normalizeTranslateDirection('FR', 'PT-BR', 'FR', 'PT-BR'),
+    { source: 'FR', target: 'PT-BR' }
+  );
+  assert.deepEqual(
+    normalizeTranslateDirection('DE', 'FR', 'PT-BR', 'EN'),
+    { source: 'PT-BR', target: 'EN' }
+  );
+});
+
+test('swapTranslateDirection toggles between learning language and native pole', () => {
+  assert.deepEqual(
+    swapTranslateDirection('FR', 'EN', 'FR', 'EN'),
+    { source: 'EN', target: 'FR' }
+  );
+  assert.deepEqual(
+    swapTranslateDirection('PT-BR', 'EN', 'PT-BR', 'PT-BR'),
+    { source: 'EN', target: 'PT-BR' }
+  );
 });
 
 test('buildNotLearnedFrozenPool snapshots only unseen normalized words', () => {
@@ -100,12 +131,12 @@ test('frequencyListTotal counts the active filter pool', () => {
   assert.equal(frequencyListTotal(5000, 120, 'not-learned'), 4880);
 });
 
-test('getFrequencyTierLabel maps rank bands to plain-language labels', () => {
-  assert.equal(getFrequencyTierLabel(42), 'very common');
-  assert.equal(getFrequencyTierLabel(500), 'very common');
-  assert.equal(getFrequencyTierLabel(501), 'common');
-  assert.equal(getFrequencyTierLabel(2500), 'mid-frequency');
-  assert.equal(getFrequencyTierLabel(2501), 'less common');
+test('getFrequencyTierKey maps rank bands to i18n keys', () => {
+  assert.equal(getFrequencyTierKey(42), 'frequency.tier.veryCommon');
+  assert.equal(getFrequencyTierKey(500), 'frequency.tier.veryCommon');
+  assert.equal(getFrequencyTierKey(501), 'frequency.tier.common');
+  assert.equal(getFrequencyTierKey(2500), 'frequency.tier.midFrequency');
+  assert.equal(getFrequencyTierKey(2501), 'frequency.tier.lessCommon');
 });
 
 test('extractPrimaryWordToken strips trailing punctuation for single-word input', () => {
@@ -154,13 +185,15 @@ test('canonicalizeTranslateLanguage maps Spanish variants to ES-AR', () => {
   assert.equal(canonicalizeTranslateLanguage('ES-419'), 'ES-AR');
 });
 
-test('formatTranslateFrequencyRank includes rank and tier when known', () => {
-  assert.equal(
-    formatTranslateFrequencyRank('Input', 12),
-    'Input frequency rank #12 (very common)'
-  );
-  assert.equal(
-    formatTranslateFrequencyRank('Result', null),
-    'Result frequency rank unavailable'
-  );
+test('formatTranslateFrequencyRank returns structured rank metadata', () => {
+  assert.deepEqual(formatTranslateFrequencyRank('frequency.rankInput', 12), {
+    labelKey: 'frequency.rankInput',
+    rank: 12,
+    tierKey: 'frequency.tier.veryCommon'
+  });
+  assert.deepEqual(formatTranslateFrequencyRank('frequency.rankResult', null), {
+    labelKey: 'frequency.rankResult',
+    rank: null,
+    tierKey: ''
+  });
 });

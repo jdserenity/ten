@@ -10,6 +10,19 @@ export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GO
   return reviewedCountToday >= goal;
 }
 
+export function getReviewEmptyState(totalCardCount) {
+  if (!totalCardCount) {
+    return {
+      label: 'Need cards',
+      message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+    };
+  }
+  return {
+    label: 'All clear',
+    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+  };
+}
+
 export function nextFrequencyFilter(currentFilter, clickedFilter) {
   if (currentFilter === clickedFilter) return 'all';
   return clickedFilter;

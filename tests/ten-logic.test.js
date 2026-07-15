@@ -10,6 +10,7 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierLabel,
+  getReviewEmptyState,
   isDailyReviewComplete,
   nextFrequencyFilter,
   resolveStartupTab
@@ -27,6 +28,17 @@ test('isDailyReviewComplete requires ten graded cards', () => {
   assert.equal(isDailyReviewComplete(10), true);
   assert.equal(isDailyReviewComplete(10, DAILY_REVIEW_GOAL), true);
   assert.equal(isDailyReviewComplete(11), true);
+});
+
+test('getReviewEmptyState nudges new users and celebrates an empty queue', () => {
+  assert.deepEqual(getReviewEmptyState(0), {
+    label: 'Need cards',
+    message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+  });
+  assert.deepEqual(getReviewEmptyState(12), {
+    label: 'All clear',
+    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+  });
 });
 
 test('nextFrequencyFilter toggles off when the same filter is clicked again', () => {

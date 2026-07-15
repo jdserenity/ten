@@ -22,6 +22,8 @@ test('review setup uses existing review DOM ids and no refresh button', () => {
     'review-card-delete',
     'review-grade-row',
     'review-empty',
+    'review-empty-label',
+    'review-empty-message',
     'review-card-panel',
     'review-due-count',
     'review-total-count'

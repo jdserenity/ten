@@ -8,6 +8,7 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierLabel,
+  getReviewEmptyState,
   isDailyReviewComplete,
   isReviewGradeButtonsDisabled,
   nextFrequencyFilter,
@@ -985,6 +986,11 @@ function renderReview() {
   const card = getCurrentReviewCard();
   if (!card) {
     setReviewEditing(false);
+    const emptyState = getReviewEmptyState(state.reviewTotalCount);
+    const emptyLabel = document.getElementById('review-empty-label');
+    const emptyMessage = document.getElementById('review-empty-message');
+    if (emptyLabel) emptyLabel.textContent = emptyState.label;
+    if (emptyMessage) emptyMessage.textContent = emptyState.message;
     empty?.classList.remove('hidden');
     cardPanel?.classList.add('hidden');
     return;

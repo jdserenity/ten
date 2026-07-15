@@ -6,7 +6,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - **Name:** Ten — personal PWA for learning Brazilian Portuguese and French (Quebec-oriented).
 - Exactly one user. No multi-user, accounts, sharing, or social features — do not propose them.
 - Two learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Default mode on open: French.
-- Tabs: **10/day** (10 deterministic words/day from the active pool), **Translate**, **Review** (FSRS-backed), **Frequency** (bundled dictionaries with unlock highlighting).
+- Tabs: **10/day** (10 deterministic words/day from the active pool), **Review** (10 flashcards/day after 10/day), **Frequency** (bundled dictionaries with unlock highlighting), **Translate** (free-form translation; last tab).
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per language (`PT-BR` / `FR`); duplicate `(language, front, back)` rejected on add.
 - Mobile PWA first. Do not suggest desktop-only UX (e.g. Esc shortcuts) unless asked.
 - Lean root `README.md` — features only; architecture/deploy live here and in `ARCH-HUMAN.md`.
@@ -63,10 +63,10 @@ Active language mode is stored in `sessionStorage` (defaults to `fr` when unset)
 | GET | `/api/health` | `{ ok: true }` |
 
 ## Client behavior
-- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. Tab choice persists in memory during the same page session (no refresh). `+` buttons save word/sentences as flashcards.
+- **10/day:** Deterministic 10-word slice from active pool; card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate). Footer shows `~N days left in <mode> pool` (amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Review** unless today's 10 review cards are done, then **Translate**. Tab order in the UI: 10/day → Review → Frequency → Translate. Tab choice persists in memory during the same page session (no refresh). `+` buttons save word/sentences as flashcards.
+- **Review:** Daily ritual of **10 flashcards** after 10/day (progress dots + `X / 10 reviewed today`; confetti once per language per calendar day when the tenth card is graded). Loads queue from `/api/cards/queue` (new first); grades via `/api/cards/:id/answer` (FSRS). Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back. Progress count is client `localStorage`, not SQLite.
 - **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary.
 - **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline.
-- **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
 
 ## Persistence (SQLite)
 Path: `TEN_DB_PATH` or `data/ten.db`.

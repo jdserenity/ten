@@ -107,3 +107,33 @@ export function formatTranslateFrequencyRank(label, rank) {
 export function isReviewGradeButtonsDisabled({ reviewEditing }) {
   return Boolean(reviewEditing);
 }
+
+export function learningLangFromModeId(modeId) {
+  if (modeId === 'pt-br') return 'PT-BR';
+  if (modeId === 'fr') return 'FR';
+  return '';
+}
+
+export function modeIdFromLearningLang(language) {
+  const code = String(language || '').trim().toUpperCase();
+  if (code === 'PT-BR') return 'pt-br';
+  if (code === 'FR') return 'fr';
+  return '';
+}
+
+export function shouldShowPoolDaysFooter(isDev) {
+  return Boolean(isDev);
+}
+
+export function shouldShowHeaderAddLanguageButton(userLanguages, inSettings = false) {
+  if (inSettings) return false;
+  return !Array.isArray(userLanguages) || userLanguages.length === 0;
+}
+
+export function shouldShowSettingsAddLanguageButton(userLanguages) {
+  return Array.isArray(userLanguages) && userLanguages.length > 0;
+}
+
+export function normalizeUsername(value) {
+  return String(value || '').trim().toLowerCase();
+}

@@ -12,8 +12,13 @@ import {
   getFrequencyTierLabel,
   getReviewEmptyState,
   isDailyReviewComplete,
+  learningLangFromModeId,
+  modeIdFromLearningLang,
   nextFrequencyFilter,
-  resolveStartupTab
+  resolveStartupTab,
+  shouldShowHeaderAddLanguageButton,
+  shouldShowPoolDaysFooter,
+  shouldShowSettingsAddLanguageButton
 } from '../src/client/ten-logic.js';
 
 test('resolveStartupTab opens 10/day, then review, then translate', () => {
@@ -120,6 +125,23 @@ test('extractSingleLearningWord picks the learning-language side of a single-wor
     extractSingleLearningWord('good morning', 'bonjour mon ami', 'EN', 'FR', 'FR'),
     null
   );
+});
+
+test('shouldShowPoolDaysFooter is only true for dev users', () => {
+  assert.equal(shouldShowPoolDaysFooter(true), true);
+  assert.equal(shouldShowPoolDaysFooter(false), false);
+});
+
+test('language add button placement follows onboarding vs settings', () => {
+  assert.equal(shouldShowHeaderAddLanguageButton([]), true);
+  assert.equal(shouldShowHeaderAddLanguageButton(['FR']), false);
+  assert.equal(shouldShowSettingsAddLanguageButton([]), false);
+  assert.equal(shouldShowSettingsAddLanguageButton(['FR']), true);
+});
+
+test('mode and learning language ids round-trip', () => {
+  assert.equal(learningLangFromModeId('fr'), 'FR');
+  assert.equal(modeIdFromLearningLang('PT-BR'), 'pt-br');
 });
 
 test('formatTranslateFrequencyRank includes rank and tier when known', () => {

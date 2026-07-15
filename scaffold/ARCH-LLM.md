@@ -10,7 +10,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per user + language; duplicate `(user_id, language, front, back)` rejected on add.
 - **Dev vs prod:** Dev users (`is_dev`) see owner-only UI such as `~N days left in <mode> pool` and a feedback list in Settings. Prod users do not.
 - **Feedback:** Header compact field expands to a writing panel; submits to SQLite. Dev users read entries in Settings.
-- **App language (UI / native):** Supported `en` and `pt-BR`. Before sign-in, UI uses `navigator.languages` detection. Signed-in users can override in **Settings**; stored on the account as `users.app_lang` (`NULL` = keep using browser detection). `<html lang>` tracks app language. Translate / Frequency inline translate use app language as the non-learning pole (falls back to `EN` when app language equals the active learning language). Strings live in `src/client/i18n.js`.
+- **App language (UI / native):** Supported `en` and `pt-BR`. The `pt-BR` catalog is **Brazilian Portuguese** (not European). Before sign-in, UI uses `navigator.languages` detection. Signed-in users can override in **Settings**; stored on the account as `users.app_lang` (`NULL` = keep using browser detection). `<html lang>` tracks app language. Translate / Frequency inline translate use app language as the non-learning pole (falls back to `EN` when app language equals the active learning language). Strings live in `src/client/i18n.js`.
 - Mobile PWA first. Do not suggest desktop-only UX (e.g. Esc shortcuts) unless asked.
 - Lean root `README.md` — features only; architecture/deploy live here and in `ARCH-HUMAN.md`.
 

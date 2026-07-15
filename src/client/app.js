@@ -909,7 +909,7 @@ function buildDailyDots() {
     const dot = document.createElement('button');
     dot.className = 'dot';
     dot.type = 'button';
-    dot.title = `Go to card ${index + 1}`;
+    dot.title = tr('daily.goToCard', { n: index + 1 });
     dot.addEventListener('click', () => gotoDailyWord(index));
     dotsEl.appendChild(dot);
     return dot;
@@ -1882,8 +1882,8 @@ function updateFrequencySearchHint(matchCount, totalCount, hasQuery) {
     return;
   }
   hintEl.textContent = matchCount === totalCount
-    ? `${matchCount} entries`
-    : `${matchCount} of ${totalCount} entries`;
+    ? tr('frequency.matchCount', { count: matchCount })
+    : tr('frequency.matchCountOf', { match: matchCount, total: totalCount });
 }
 
 function formatFrequencyInlineTranslation(translation) {
@@ -2095,7 +2095,7 @@ function setNoteConfigOpen(open) {
   }
   if (configureBtn) {
     configureBtn.disabled = !canConfigure;
-    configureBtn.textContent = state.noteConfigOpen ? 'Hide note config' : 'Configure note';
+    configureBtn.textContent = state.noteConfigOpen ? tr('translate.hideNoteConfig') : tr('translate.configureNote');
   }
 }
 

@@ -4,14 +4,21 @@ import { readFile } from 'node:fs/promises';
 import { dirname, extname, join, normalize } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import {
+  addFeedback,
   addUnlockedWord,
+  addUserLanguages,
+  findOrCreateUser,
   getAllUnlockedWords,
   getDailyCardIndex,
   getDailyWordAssignment,
+  getFeedbackList,
+  getUserById,
+  getUserLanguages,
   importUnlockedWords,
   initDb,
   setDailyCardIndex,
-  setDailyWordAssignment
+  setDailyWordAssignment,
+  setUserLanguages
 } from './db.js';
 import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 
@@ -70,8 +77,33 @@ function getFilePath(pathname) {
 
 function setCorsHeaders(res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, X-User-Id');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+}
+
+function resolveRequestUser(req) {
+  const raw = String(req.headers['x-user-id'] || '').trim();
+  const userId = Number(raw);
+  if (!Number.isInteger(userId) || userId <= 0) return null;
+  return getUserById(userId);
+}
+
+function requireUser(req, res) {
+  const user = resolveRequestUser(req);
+  if (!user) {
+    sendJson(res, 401, { error: 'Missing or invalid user. Log in first.' });
+    return null;
+  }
+  return user;
+}
+
+function serializeUser(user) {
+  return {
+    id: user.id,
+    username: user.username,
+    isDev: user.isDev,
+    languages: getUserLanguages(user.id)
+  };
 }
 
 function normalizeTargetLanguage(value) {
@@ -287,11 +319,15 @@ async function proxyTranslate(req, res) {
   }
 }
 
-function handleUnlockedWordsGet(res) {
-  return sendJson(res, 200, { wordsByLanguage: getAllUnlockedWords() });
+function handleUnlockedWordsGet(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  return sendJson(res, 200, { wordsByLanguage: getAllUnlockedWords(user.id) });
 }
 
 async function handleUnlockedWordsPost(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try {
     body = await readJsonBody(req);
@@ -305,12 +341,14 @@ async function handleUnlockedWordsPost(req, res) {
     return sendJson(res, 400, { error: 'Missing language or word.' });
   }
 
-  const result = addUnlockedWord(language, word);
+  const result = addUnlockedWord(user.id, language, word);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid language or word.' });
   return sendJson(res, 200, { ok: true, added: result.added });
 }
 
 async function handleUnlockedWordsImport(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try {
     body = await readJsonBody(req);
@@ -323,22 +361,26 @@ async function handleUnlockedWordsImport(req, res) {
     return sendJson(res, 400, { error: 'Missing wordsByLanguage object.' });
   }
 
-  const { imported } = importUnlockedWords(wordsByLanguage);
-  return sendJson(res, 200, { ok: true, imported, wordsByLanguage: getAllUnlockedWords() });
+  const { imported } = importUnlockedWords(user.id, wordsByLanguage);
+  return sendJson(res, 200, { ok: true, imported, wordsByLanguage: getAllUnlockedWords(user.id) });
 }
 
-function handleDailyProgressGet(url, res) {
+function handleDailyProgressGet(req, url, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   const language = String(url.searchParams.get('language') || '').trim();
   const dateKey = String(url.searchParams.get('dateKey') || '').trim();
   if (!language || !dateKey) {
     return sendJson(res, 400, { error: 'Missing language or dateKey.' });
   }
-  const cardIndex = getDailyCardIndex(language, dateKey);
+  const cardIndex = getDailyCardIndex(user.id, language, dateKey);
   res.setHeader('Cache-Control', 'no-store');
   return sendJson(res, 200, { cardIndex });
 }
 
 async function handleDailyProgressPost(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try {
     body = await readJsonBody(req);
@@ -353,23 +395,27 @@ async function handleDailyProgressPost(req, res) {
     return sendJson(res, 400, { error: 'Missing language, dateKey, or cardIndex.' });
   }
 
-  const result = setDailyCardIndex(language, dateKey, cardIndex);
+  const result = setDailyCardIndex(user.id, language, dateKey, cardIndex);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily progress payload.' });
   return sendJson(res, 200, { ok: true, cardIndex: result.cardIndex });
 }
 
-function handleDailyWordsGet(url, res) {
+function handleDailyWordsGet(req, url, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   const language = String(url.searchParams.get('language') || '').trim();
   const dateKey = String(url.searchParams.get('dateKey') || '').trim();
   if (!language || !dateKey) {
     return sendJson(res, 400, { error: 'Missing language or dateKey.' });
   }
-  const words = getDailyWordAssignment(language, dateKey);
+  const words = getDailyWordAssignment(user.id, language, dateKey);
   res.setHeader('Cache-Control', 'no-store');
   return sendJson(res, 200, { words: words || [] });
 }
 
 async function handleDailyWordsPost(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try {
     body = await readJsonBody(req);
@@ -384,21 +430,25 @@ async function handleDailyWordsPost(req, res) {
     return sendJson(res, 400, { error: 'Missing language, dateKey, or words.' });
   }
 
-  const result = setDailyWordAssignment(language, dateKey, words);
+  const result = setDailyWordAssignment(user.id, language, dateKey, words);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily words payload.' });
   return sendJson(res, 200, { ok: true, words: result.words });
 }
 
-async function handleCardsQueueGet(url, res) {
+async function handleCardsQueueGet(req, url, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   const language = String(url.searchParams.get('language') || '').trim();
   if (!language) return sendJson(res, 400, { error: 'Missing language.' });
-  const result = getReviewQueue(language);
+  const result = getReviewQueue(user.id, language);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid language.' });
   res.setHeader('Cache-Control', 'no-store');
   return sendJson(res, 200, { cards: result.cards, totalCount: result.totalCount });
 }
 
 async function handleCardsPost(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
@@ -411,7 +461,7 @@ async function handleCardsPost(req, res) {
     return sendJson(res, 400, { error: 'Missing language, front, or back.' });
   }
 
-  const result = addCard(language, { front, back, context });
+  const result = addCard(user.id, language, { front, back, context });
   if (!result.ok && result.reason === 'duplicate') {
     return sendJson(res, 409, { error: 'Card already exists for this language.' });
   }
@@ -420,6 +470,8 @@ async function handleCardsPost(req, res) {
 }
 
 async function handleCardAnswerPost(req, res, cardId) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
@@ -427,7 +479,7 @@ async function handleCardAnswerPost(req, res, cardId) {
   const rating = String(body.rating || '').trim().toLowerCase();
   if (!rating) return sendJson(res, 400, { error: 'Missing rating.' });
 
-  const result = answerCard(cardId, rating);
+  const result = answerCard(user.id, cardId, rating);
   if (!result.ok && result.reason === 'not_found') {
     return sendJson(res, 404, { error: 'Card not found.' });
   }
@@ -435,14 +487,18 @@ async function handleCardAnswerPost(req, res, cardId) {
   return sendJson(res, 200, { ok: true, id: result.id });
 }
 
-function handleCardDelete(res, cardId) {
-  const result = deleteCard(cardId);
+function handleCardDelete(req, res, cardId) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  const result = deleteCard(user.id, cardId);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid card id.' });
   if (!result.deleted) return sendJson(res, 404, { error: 'Card not found.' });
   return sendJson(res, 200, { ok: true });
 }
 
 async function handleCardPatch(req, res, cardId) {
+  const user = requireUser(req, res);
+  if (!user) return;
   let body;
   try { body = await readJsonBody(req); }
   catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
@@ -454,7 +510,7 @@ async function handleCardPatch(req, res, cardId) {
     return sendJson(res, 400, { error: 'Missing front or back.' });
   }
 
-  const result = updateCard(cardId, { front, back, context });
+  const result = updateCard(user.id, cardId, { front, back, context });
   if (!result.ok && result.reason === 'not_found') {
     return sendJson(res, 404, { error: 'Card not found.' });
   }
@@ -463,6 +519,65 @@ async function handleCardPatch(req, res, cardId) {
   }
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid card payload.' });
   return sendJson(res, 200, { ok: true, id: result.id });
+}
+
+async function handleAuthLogin(req, res) {
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const username = String(body.username || '').trim();
+  if (!username) return sendJson(res, 400, { error: 'Missing username.' });
+
+  const result = findOrCreateUser(username);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid username. Use letters, numbers, _ or -.' });
+  return sendJson(res, 200, serializeUser(result));
+}
+
+function handleMeGet(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  return sendJson(res, 200, serializeUser(user));
+}
+
+async function handleUserLanguagesPut(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const languages = body.languages;
+  if (!Array.isArray(languages)) return sendJson(res, 400, { error: 'Missing languages array.' });
+
+  const replace = body.replace === true;
+  const result = replace
+    ? setUserLanguages(user.id, languages)
+    : addUserLanguages(user.id, languages);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid languages payload.' });
+  return sendJson(res, 200, { ok: true, languages: result.languages });
+}
+
+async function handleFeedbackPost(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const text = String(body.body || '').trim();
+  if (!text) return sendJson(res, 400, { error: 'Missing feedback text.' });
+
+  const result = addFeedback(user.id, text);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid feedback.' });
+  return sendJson(res, 200, { ok: true, id: result.id });
+}
+
+function handleFeedbackGet(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  if (!user.isDev) return sendJson(res, 403, { error: 'Feedback list is only available in dev mode.' });
+  return sendJson(res, 200, { feedback: getFeedbackList() });
 }
 
 async function serveStatic(pathname, res) {
@@ -502,7 +617,13 @@ const server = createServer(async (req, res) => {
   }
 
   if (pathname === '/api/translate' && req.method === 'POST') return proxyTranslate(req, res);
-  if (pathname === '/api/cards/queue' && req.method === 'GET') return handleCardsQueueGet(url, res);
+  if (pathname === '/api/auth/login' && req.method === 'POST') return handleAuthLogin(req, res);
+  if (pathname === '/api/me' && req.method === 'GET') return handleMeGet(req, res);
+  if (pathname === '/api/user-languages' && req.method === 'PUT') return handleUserLanguagesPut(req, res);
+  if (pathname === '/api/feedback' && req.method === 'POST') return handleFeedbackPost(req, res);
+  if (pathname === '/api/feedback' && req.method === 'GET') return handleFeedbackGet(req, res);
+
+  if (pathname === '/api/cards/queue' && req.method === 'GET') return handleCardsQueueGet(req, url, res);
   if (pathname === '/api/cards' && req.method === 'POST') return handleCardsPost(req, res);
 
   const cardAnswerMatch = pathname.match(/^\/api\/cards\/(\d+)\/answer$/);
@@ -512,25 +633,25 @@ const server = createServer(async (req, res) => {
 
   const cardDeleteMatch = pathname.match(/^\/api\/cards\/(\d+)$/);
   if (cardDeleteMatch && req.method === 'DELETE') {
-    return handleCardDelete(res, Number(cardDeleteMatch[1]));
+    return handleCardDelete(req, res, Number(cardDeleteMatch[1]));
   }
   if (cardDeleteMatch && req.method === 'PATCH') {
     return handleCardPatch(req, res, Number(cardDeleteMatch[1]));
   }
 
-  if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(res);
+  if (pathname === '/api/unlocked-words' && req.method === 'GET') return handleUnlockedWordsGet(req, res);
   if (pathname === '/api/unlocked-words' && req.method === 'POST') return handleUnlockedWordsPost(req, res);
   if (pathname === '/api/unlocked-words/import' && req.method === 'POST') {
     return handleUnlockedWordsImport(req, res);
   }
   if (pathname === '/api/daily-progress' && req.method === 'GET') {
-    return handleDailyProgressGet(url, res);
+    return handleDailyProgressGet(req, url, res);
   }
   if (pathname === '/api/daily-progress' && req.method === 'POST') {
     return handleDailyProgressPost(req, res);
   }
   if (pathname === '/api/daily-words' && req.method === 'GET') {
-    return handleDailyWordsGet(url, res);
+    return handleDailyWordsGet(req, url, res);
   }
   if (pathname === '/api/daily-words' && req.method === 'POST') {
     return handleDailyWordsPost(req, res);

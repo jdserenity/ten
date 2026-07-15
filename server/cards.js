@@ -1,5 +1,5 @@
 import { createEmptyCard, State, applyRating, rowToFsrsCard, fsrsCardToRowFields } from './fsrs.js';
-import { getDb, normalizeLanguage } from './db.js';
+import { getDb, getUserById, normalizeLanguage } from './db.js';
 
 function trimField(value) {
   return String(value || '').trim();
@@ -15,12 +15,13 @@ function mapRowToReviewCard(row) {
   };
 }
 
-export function addCard(language, { front, back, context = '' }) {
+export function addCard(userId, language, { front, back, context = '' }) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const cleanFront = trimField(front);
   const cleanBack = trimField(back);
   const cleanContext = trimField(context);
-  if (!lang || !cleanFront || !cleanBack) return { ok: false, reason: 'invalid' };
+  if (!user || !lang || !cleanFront || !cleanBack) return { ok: false, reason: 'invalid' };
 
   const empty = createEmptyCard();
   const fsrsFields = fsrsCardToRowFields(empty);
@@ -28,13 +29,13 @@ export function addCard(language, { front, back, context = '' }) {
     const result = getDb()
       .prepare(`
         INSERT INTO cards (
-          language, front, back, context,
+          user_id, language, front, back, context,
           due, stability, difficulty, elapsed_days, scheduled_days,
           learning_steps, reps, lapses, fsrs_state, last_review
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `)
       .run(
-        lang, cleanFront, cleanBack, cleanContext,
+        user.id, lang, cleanFront, cleanBack, cleanContext,
         fsrsFields.due, fsrsFields.stability, fsrsFields.difficulty,
         fsrsFields.elapsed_days, fsrsFields.scheduled_days,
         fsrsFields.learning_steps, fsrsFields.reps, fsrsFields.lapses,
@@ -49,24 +50,27 @@ export function addCard(language, { front, back, context = '' }) {
   }
 }
 
-export function getCardById(id) {
+export function getCardById(userId, id) {
+  const user = getUserById(userId);
   const cardId = Number(id);
-  if (!Number.isInteger(cardId) || cardId <= 0) return null;
-  return getDb().prepare('SELECT * FROM cards WHERE id = ?').get(cardId) || null;
+  if (!user || !Number.isInteger(cardId) || cardId <= 0) return null;
+  return getDb().prepare('SELECT * FROM cards WHERE id = ? AND user_id = ?').get(cardId, user.id) || null;
 }
 
-export function deleteCard(id) {
+export function deleteCard(userId, id) {
+  const user = getUserById(userId);
   const cardId = Number(id);
-  if (!Number.isInteger(cardId) || cardId <= 0) return { ok: false, reason: 'invalid' };
-  const result = getDb().prepare('DELETE FROM cards WHERE id = ?').run(cardId);
+  if (!user || !Number.isInteger(cardId) || cardId <= 0) return { ok: false, reason: 'invalid' };
+  const result = getDb().prepare('DELETE FROM cards WHERE id = ? AND user_id = ?').run(cardId, user.id);
   return { ok: true, deleted: result.changes > 0 };
 }
 
-export function updateCard(id, { front, back, context }) {
+export function updateCard(userId, id, { front, back, context }) {
+  const user = getUserById(userId);
   const cardId = Number(id);
-  if (!Number.isInteger(cardId) || cardId <= 0) return { ok: false, reason: 'invalid' };
+  if (!user || !Number.isInteger(cardId) || cardId <= 0) return { ok: false, reason: 'invalid' };
 
-  const row = getCardById(cardId);
+  const row = getCardById(user.id, cardId);
   if (!row) return { ok: false, reason: 'not_found' };
 
   const cleanFront = trimField(front);
@@ -76,8 +80,8 @@ export function updateCard(id, { front, back, context }) {
 
   try {
     const result = getDb()
-      .prepare('UPDATE cards SET front = ?, back = ?, context = ? WHERE id = ?')
-      .run(cleanFront, cleanBack, cleanContext, cardId);
+      .prepare('UPDATE cards SET front = ?, back = ?, context = ? WHERE id = ? AND user_id = ?')
+      .run(cleanFront, cleanBack, cleanContext, cardId, user.id);
     if (!result.changes) return { ok: false, reason: 'not_found' };
     return { ok: true, id: cardId };
   } catch (error) {
@@ -88,36 +92,37 @@ export function updateCard(id, { front, back, context }) {
   }
 }
 
-export function getReviewQueue(language, nowMs = Date.now()) {
+export function getReviewQueue(userId, language, nowMs = Date.now()) {
+  const user = getUserById(userId);
   const lang = normalizeLanguage(language);
-  if (!lang) return { ok: false, reason: 'invalid' };
+  if (!user || !lang) return { ok: false, reason: 'invalid' };
 
   const newRows = getDb()
     .prepare(`
       SELECT * FROM cards
-      WHERE language = ? AND fsrs_state = ?
+      WHERE user_id = ? AND language = ? AND fsrs_state = ?
       ORDER BY created_at ASC, id ASC
     `)
-    .all(lang, State.New);
+    .all(user.id, lang, State.New);
 
   const dueRows = getDb()
     .prepare(`
       SELECT * FROM cards
-      WHERE language = ? AND fsrs_state != ? AND due <= ?
+      WHERE user_id = ? AND language = ? AND fsrs_state != ? AND due <= ?
       ORDER BY due ASC, id ASC
     `)
-    .all(lang, State.New, nowMs);
+    .all(user.id, lang, State.New, nowMs);
 
   const totalCount = getDb()
-    .prepare('SELECT COUNT(*) AS count FROM cards WHERE language = ?')
-    .get(lang).count;
+    .prepare('SELECT COUNT(*) AS count FROM cards WHERE user_id = ? AND language = ?')
+    .get(user.id, lang).count;
 
   const cards = [...newRows, ...dueRows].map(mapRowToReviewCard);
   return { ok: true, cards, totalCount };
 }
 
-export function answerCard(id, rating, now = new Date()) {
-  const row = getCardById(id);
+export function answerCard(userId, id, rating, now = new Date()) {
+  const row = getCardById(userId, id);
   if (!row) return { ok: false, reason: 'not_found' };
 
   const fsrsCard = rowToFsrsCard(row);
@@ -130,12 +135,12 @@ export function answerCard(id, rating, now = new Date()) {
         due = ?, stability = ?, difficulty = ?, elapsed_days = ?,
         scheduled_days = ?, learning_steps = ?, reps = ?, lapses = ?,
         fsrs_state = ?, last_review = ?
-      WHERE id = ?
+      WHERE id = ? AND user_id = ?
     `)
     .run(
       fields.due, fields.stability, fields.difficulty, fields.elapsed_days,
       fields.scheduled_days, fields.learning_steps, fields.reps, fields.lapses,
-      fields.fsrs_state, fields.last_review, row.id
+      fields.fsrs_state, fields.last_review, row.id, row.user_id
     );
 
   return { ok: true, id: row.id };

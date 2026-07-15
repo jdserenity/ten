@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
 const DEFAULT_DB_PATH = join(ROOT, 'data', 'ten.db');
-const VALID_LANGUAGES = new Set(['PT-BR', 'FR']);
+const VALID_LANGUAGES = new Set(['PT-BR', 'FR', 'ES-AR']);
 const VALID_APP_LANGS = new Set(['en', 'pt-BR']);
 const SEED_DEV_USERNAME = 'jd';
 
@@ -24,6 +24,7 @@ function normalizeLanguage(value) {
   const code = String(value || '').trim().toUpperCase();
   if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
   if (code === 'FR' || code === 'FR-FR' || code === 'FR-CA') return 'FR';
+  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return VALID_LANGUAGES.has(code) ? code : '';
 }
 
@@ -470,11 +471,11 @@ export function getFeedbackList(limit = 100) {
 
 export function getAllUnlockedWords(userId) {
   const user = getUserById(userId);
-  if (!user) return { 'PT-BR': [], FR: [] };
+  if (!user) return { 'PT-BR': [], FR: [], 'ES-AR': [] };
   const rows = getDb()
     .prepare('SELECT language, normalized_word FROM unlocked_words WHERE user_id = ? ORDER BY language, normalized_word')
     .all(user.id);
-  const wordsByLanguage = { 'PT-BR': [], FR: [] };
+  const wordsByLanguage = { 'PT-BR': [], FR: [], 'ES-AR': [] };
   for (const row of rows) {
     if (!wordsByLanguage[row.language]) wordsByLanguage[row.language] = [];
     wordsByLanguage[row.language].push(row.normalized_word);

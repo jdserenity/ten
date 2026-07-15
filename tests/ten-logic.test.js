@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   buildNotLearnedFrozenPool,
+  canonicalizeTranslateLanguage,
   DAILY_REVIEW_GOAL,
   defaultTranslateDirection,
   extractPrimaryWordToken,
@@ -73,6 +74,7 @@ test('defaultTranslateDirection targets the native language from the active lear
   assert.deepEqual(defaultTranslateDirection('FR', 'EN'), { source: 'FR', target: 'EN' });
   assert.deepEqual(defaultTranslateDirection('PT-BR', 'PT-BR'), { source: 'PT-BR', target: 'EN' });
   assert.deepEqual(defaultTranslateDirection('FR', 'PT-BR'), { source: 'FR', target: 'PT-BR' });
+  assert.deepEqual(defaultTranslateDirection('ES-AR'), { source: 'ES-AR', target: 'EN' });
 });
 
 test('resolveTranslateNativeLang falls back to English when native matches learning', () => {
@@ -172,7 +174,15 @@ test('language add button placement follows onboarding vs settings', () => {
 
 test('mode and learning language ids round-trip', () => {
   assert.equal(learningLangFromModeId('fr'), 'FR');
+  assert.equal(learningLangFromModeId('es-ar'), 'ES-AR');
   assert.equal(modeIdFromLearningLang('PT-BR'), 'pt-br');
+  assert.equal(modeIdFromLearningLang('ES-AR'), 'es-ar');
+});
+
+test('canonicalizeTranslateLanguage maps Spanish variants to ES-AR', () => {
+  assert.equal(canonicalizeTranslateLanguage('es-ar'), 'ES-AR');
+  assert.equal(canonicalizeTranslateLanguage('ES'), 'ES-AR');
+  assert.equal(canonicalizeTranslateLanguage('ES-419'), 'ES-AR');
 });
 
 test('formatTranslateFrequencyRank returns structured rank metadata', () => {

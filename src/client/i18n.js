@@ -19,11 +19,13 @@ const en = {
   'header.learningModeAria': 'Learning mode',
   'header.switchPtBr': 'Switch to Brazilian Portuguese',
   'header.switchFr': 'Switch to Quebec French',
+  'header.switchEsAr': 'Switch to Argentinian Spanish',
   'picker.chooseLanguages': 'Choose languages',
   'picker.addLanguages': 'Add languages',
   'picker.add': 'Add',
   'picker.ptBr': 'Brazilian Portuguese',
   'picker.fr': 'Quebec French',
+  'picker.esAr': 'Argentinian Spanish',
   'picker.allLanguages': 'You already have every language.',
   'settings.title': 'Settings',
   'settings.closeAria': 'Close settings',
@@ -110,6 +112,10 @@ const en = {
   'translate.lang.ptPt': 'European Portuguese',
   'translate.lang.frCa': 'French (Canada)',
   'translate.lang.frFr': 'French (France)',
+  'translate.lang.esAr': 'Argentinian Spanish',
+  'translate.lang.spanish': 'Spanish',
+  'translate.lang.esArRegion': 'Spanish (Argentina)',
+  'translate.lang.es419': 'Spanish (Latin America)',
   'frequency.dictionary': '{language} dictionary',
   'frequency.unlocked': 'Unlocked',
   'frequency.notLearned': 'Not learned',
@@ -167,7 +173,11 @@ const en = {
   'mode.ptBrTranslator': 'Portuguese',
   'mode.frTranslator': 'French',
   'mode.brazilFlag': 'Brazil',
-  'mode.quebecFlag': 'Quebec'
+  'mode.quebecFlag': 'Quebec',
+  'mode.esAr': 'Argentinian Spanish',
+  'mode.esArShort': 'Argentina',
+  'mode.esArTranslator': 'Spanish',
+  'mode.argentinaFlag': 'Argentina'
 };
 
 const ptBR = {
@@ -189,11 +199,13 @@ const ptBR = {
   'header.learningModeAria': 'Modo de estudo',
   'header.switchPtBr': 'Mudar para português brasileiro',
   'header.switchFr': 'Mudar para francês do Quebec',
+  'header.switchEsAr': 'Mudar para espanhol argentino',
   'picker.chooseLanguages': 'Escolha os idiomas',
   'picker.addLanguages': 'Adicionar idiomas',
   'picker.add': 'Adicionar',
   'picker.ptBr': 'Português brasileiro',
   'picker.fr': 'Francês do Quebec',
+  'picker.esAr': 'Espanhol argentino',
   'picker.allLanguages': 'Você já tem todos os idiomas.',
   'settings.title': 'Configurações',
   'settings.closeAria': 'Fechar configurações',
@@ -280,6 +292,10 @@ const ptBR = {
   'translate.lang.ptPt': 'Português europeu',
   'translate.lang.frCa': 'Francês (Canadá)',
   'translate.lang.frFr': 'Francês (França)',
+  'translate.lang.esAr': 'Espanhol argentino',
+  'translate.lang.spanish': 'Espanhol',
+  'translate.lang.esArRegion': 'Espanhol (Argentina)',
+  'translate.lang.es419': 'Espanhol (América Latina)',
   'frequency.dictionary': 'Dicionário de {language}',
   'frequency.unlocked': 'Desbloqueadas',
   'frequency.notLearned': 'Não aprendidas',
@@ -337,7 +353,11 @@ const ptBR = {
   'mode.ptBrTranslator': 'Português',
   'mode.frTranslator': 'Francês',
   'mode.brazilFlag': 'Brasil',
-  'mode.quebecFlag': 'Quebec'
+  'mode.quebecFlag': 'Quebec',
+  'mode.esAr': 'Espanhol argentino',
+  'mode.esArShort': 'Argentina',
+  'mode.esArTranslator': 'Espanhol',
+  'mode.argentinaFlag': 'Argentina'
 };
 
 export const CATALOGS = { en, 'pt-BR': ptBR };

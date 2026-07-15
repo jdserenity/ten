@@ -4,7 +4,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 
 ## What it is
 
-**Ten** — a phone-first web app (PWA) for learning **Brazilian Portuguese** and **Quebec French**. Each person signs in with a username (no password). You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you've unlocked.
+**Ten** — a phone-first web app (PWA) for learning **Brazilian Portuguese**, **Quebec French**, and **Argentinian Spanish**. Each person signs in with a username (no password). You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you've unlocked.
 
 ```
   Phone                         VPS or always-on host
@@ -31,7 +31,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 
 Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show on the right and `+` moves to Settings. Header **feedback** field expands for beta notes.
 
-Language switch (Brazil / Quebec) is top-right — only languages you've added. Pool-days footer and other owner debug chrome appear only for the dev account.
+Language switch (Brazil / Quebec / Argentina) is top-right — only languages you've added. Pool-days footer and other owner debug chrome appear only for the dev account.
 
 ## How the system is built
 

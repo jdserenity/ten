@@ -18,10 +18,55 @@ const SOURCES = [
     url: 'https://raw.githubusercontent.com/hermitdave/FrequencyWords/master/content/2018/fr/fr_50k.txt',
     outFile: join(CLIENT_DIR, 'frequency-fr.json'),
     format: 'counted-lines'
+  },
+  {
+    language: 'ES-AR',
+    url: 'https://raw.githubusercontent.com/francojc/activ-es/master/activ-es-v.02/wordlists/plain/aes1grams.csv',
+    outFile: join(CLIENT_DIR, 'frequency-es-ar.json'),
+    format: 'activ-es-csv'
   }
 ];
 
 const LIMIT = 5000;
+const WORD_RE = /^[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*$/u;
+const JUNK_RE = /(.)\1{3,}/u;
+
+export function isActivEsWordCandidate(word) {
+  if (!word || word.length < 2) return false;
+  if (!WORD_RE.test(word)) return false;
+  if (JUNK_RE.test(word)) return false;
+  return true;
+}
+
+export function parseActivEsArgentinaCsv(text, limit = LIMIT) {
+  const lines = String(text || '').split('\n');
+  const rows = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const match = line.match(/^"?\d+"?,"([^"]+)",([0-9.]+),/);
+    if (!match) continue;
+    const word = match[1].trim().toLocaleLowerCase();
+    const arOrf = Number(match[2]);
+    if (!Number.isFinite(arOrf) || arOrf <= 0) continue;
+    if (!isActivEsWordCandidate(word)) continue;
+    rows.push({ word, arOrf });
+  }
+
+  rows.sort((a, b) => b.arOrf - a.arOrf);
+
+  const words = [];
+  const seen = new Set();
+  for (const row of rows) {
+    if (words.length >= limit) break;
+    if (seen.has(row.word)) continue;
+    seen.add(row.word);
+    words.push(row.word);
+  }
+
+  return words;
+}
 
 function parseWords(html) {
   const root = parse(html);
@@ -33,7 +78,7 @@ function parseWords(html) {
     if (words.length >= LIMIT) break;
     const raw = (item.querySelector('a')?.text || item.text || '').trim().toLocaleLowerCase();
     if (!raw) continue;
-    if (!/^[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*$/u.test(raw)) continue;
+    if (!WORD_RE.test(raw)) continue;
     if (seen.has(raw)) continue;
     seen.add(raw);
     words.push(raw);
@@ -51,7 +96,7 @@ function parseCountedLines(text) {
     if (words.length >= LIMIT) break;
     const [raw] = line.trim().split(/\s+/);
     if (!raw) continue;
-    if (!/^[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*$/u.test(raw)) continue;
+    if (!WORD_RE.test(raw)) continue;
     const word = raw.toLocaleLowerCase();
     if (seen.has(word)) continue;
     seen.add(word);
@@ -71,7 +116,9 @@ async function downloadOne(source) {
   const payload = await response.text();
   const words = source.format === 'counted-lines'
     ? parseCountedLines(payload)
-    : parseWords(payload);
+    : source.format === 'activ-es-csv'
+      ? parseActivEsArgentinaCsv(payload)
+      : parseWords(payload);
   if (!words.length) {
     throw new Error(`No words parsed for ${source.language}`);
   }
@@ -87,7 +134,10 @@ async function main() {
   console.log('Done.');
 }
 
-main().catch(error => {
-  console.error(error.message || error);
-  process.exit(1);
-});
+const isMain = process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1];
+if (isMain) {
+  main().catch(error => {
+    console.error(error.message || error);
+    process.exit(1);
+  });
+}

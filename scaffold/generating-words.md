@@ -16,8 +16,9 @@ Word pools are generated from language-specific workflows and committed as JSON 
 
 - `src/client/words.pt.json` -> Brazilian Portuguese pool
 - `src/client/words.fr.json` -> French pool
+- `src/client/words.es.json` -> Argentinian Spanish pool (curated; empty until filled)
 
-French generation is frequency-dictionary-based (`scripts/generate-words-fr.js`), while Portuguese generation currently uses the legacy script (`scripts/generate-words.js`).
+French generation is frequency-dictionary-based (`scripts/generate-words-fr.js`), while Portuguese generation currently uses the legacy script (`scripts/generate-words.js`). Spanish has no generator yet — edit `words.es.json` directly.
 
 ## Quality standards
 
@@ -28,6 +29,9 @@ French generation is frequency-dictionary-based (`scripts/generate-words-fr.js`)
 - **French pool (`words.fr.json`)**:
   - Natural modern French suitable for Quebec learners
   - **Beginner level (A1-ish)** — start from top/high-frequency dictionary words first
+- **Argentinian Spanish pool (`words.es.json`)**:
+  - Natural modern Spanish suitable for Argentina learners (voseo, local vocabulary where natural)
+  - **Beginner level (A1-ish)** — start from top of `frequency-es-ar.json`
 - **Clean stems preferred** — avoid heavily inflected verb forms as the headword; use the infinitive or the base noun/adjective
 - **Good variety** — aim for a mix of nouns, verbs, and adjectives across a session
 
@@ -58,7 +62,7 @@ Word files are JSON arrays. Each entry:
 }
 ```
 
-For French entries, use `fr` instead of `pt` in sentence objects.
+For French entries, use `fr` instead of `pt` in sentence objects. For Spanish, use `es`.
 
 ## How to generate
 
@@ -77,11 +81,12 @@ The app shows 10 words per day from a randomly shuffled pool. With a pool of N w
 1. Pick words for the correct pool:
    - PT-BR: intermediate vocabulary
    - FR: beginner high-frequency vocabulary (starting from the top of the frequency dictionary)
+   - ES-AR: beginner high-frequency vocabulary (starting from the top of `frequency-es-ar.json`)
 2. **For each word**, write:
    - A concise translation that captures real usage
    - 2 natural sentences in the pool language (20–140 chars each) that clearly demonstrate the primary meaning
    - Accurate, natural English translations of those sentences
-3. **Write the full array to the target file** (`src/client/words.pt.json` or `src/client/words.fr.json`) — replace the file entirely unless explicitly asked to append.
+3. **Write the full array to the target file** (`src/client/words.pt.json`, `words.fr.json`, or `words.es.json`) — replace the file entirely unless explicitly asked to append.
 
 ### Commands
 

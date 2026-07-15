@@ -27,7 +27,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. |
 | **Review** | New and due cards for the active language (new first). Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. |
 | **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
-| **Settings** | Cog icon in the header row (with feedback and flags) opens a panel: username, add languages (`+`), switch user. Dev account (`jd`) also sees submitted feedback. |
+| **Settings** | Cog icon in the header row (with feedback and flags) opens a panel: username, add languages (`+`), sign out. Dev account (`jd`) also sees submitted feedback. |
 
 Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show for their languages and `+` moves to Settings. Header **feedback** field expands for beta notes.
 

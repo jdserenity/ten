@@ -48,7 +48,8 @@ header {
 }
 
 .header-center {
-  flex: 1 1 auto;
+  flex: 0 1 auto;
+  width: min(36%, 132px);
   min-width: 0;
   padding: 0 4px;
 }

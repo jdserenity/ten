@@ -23,6 +23,8 @@ import {
   getLangPickerOptions,
   isLangPickerOutsideClick,
   pickSpeechVoice,
+  canSpeakWithInstalledVoice,
+  voiceMatchesSpeechLang,
   sortLangPickerOptionsByLabel,
   shouldOpenLangPickerOnModeClick,
   shouldShowAddLanguageHint,
@@ -321,4 +323,18 @@ test('pickSpeechVoice matches Portuguese and French regional tags', () => {
   assert.equal(pickSpeechVoice([ptPt, ptBr], 'pt-BR'), ptBr);
   assert.equal(pickSpeechVoice([frFr, frCa], 'fr-CA'), frCa);
   assert.equal(pickSpeechVoice([frCa, frFr], 'fr-FR'), frFr);
+});
+
+test('voiceMatchesSpeechLang rejects English voices for non-English speech langs', () => {
+  const english = { lang: 'en-US', name: 'Samantha', localService: true };
+  const spanish = { lang: 'es-MX', name: 'Paulina', localService: true };
+  assert.equal(voiceMatchesSpeechLang(english, 'es-AR'), false);
+  assert.equal(voiceMatchesSpeechLang(spanish, 'es-AR'), true);
+  assert.equal(voiceMatchesSpeechLang(english, 'en-US'), true);
+});
+
+test('canSpeakWithInstalledVoice is false when only English voices are installed', () => {
+  const english = { lang: 'en-US', name: 'Samantha', localService: true };
+  assert.equal(canSpeakWithInstalledVoice([english], 'fr-CA'), false);
+  assert.equal(canSpeakWithInstalledVoice([english], 'es-AR'), false);
 });

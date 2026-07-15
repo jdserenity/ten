@@ -281,3 +281,21 @@ export function pickSpeechVoice(voices, speechLang) {
 
   return best;
 }
+
+export function isEnglishSpeechLang(speechLang) {
+  return speechLangBase(speechLang) === 'en';
+}
+
+export function voiceMatchesSpeechLang(voice, speechLang) {
+  if (!voice) return false;
+  const targetBase = speechLangBase(speechLang);
+  const voiceBase = speechLangBase(voice?.lang);
+  if (!targetBase || !voiceBase) return false;
+  if (targetBase === 'en') return voiceBase === 'en';
+  return voiceBase === targetBase;
+}
+
+export function canSpeakWithInstalledVoice(voices, speechLang) {
+  const voice = pickSpeechVoice(voices, speechLang);
+  return voiceMatchesSpeechLang(voice, speechLang);
+}

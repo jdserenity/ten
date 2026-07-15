@@ -27,6 +27,8 @@ import {
   nextFrequencyFilter,
   normalizeTranslateDirection,
   pickSpeechVoice,
+  canSpeakWithInstalledVoice,
+  voiceMatchesSpeechLang,
   resolveStartupTab,
   shouldOpenLangPickerOnModeClick,
   shouldShowAddLanguageHint,
@@ -1011,30 +1013,40 @@ function warmSpeechVoices() {
   if (!window.speechSynthesis) return;
   // Chrome often returns [] until voiceschanged; kick a load so speak clicks have voices ready.
   getSpeechVoices();
+  const onVoicesReady = () => {
+    getSpeechVoices();
+    if (state.activeTab === 'daily' && state.todayWords.length) {
+      renderDailyWord(state.currentWordIndex);
+    } else if (state.activeTab === 'review') {
+      renderReview();
+    }
+    updateTranslateSpeakUi();
+  };
   if (typeof window.speechSynthesis.addEventListener === 'function') {
-    window.speechSynthesis.addEventListener('voiceschanged', () => getSpeechVoices(), { once: true });
+    window.speechSynthesis.addEventListener('voiceschanged', onVoicesReady, { once: true });
   } else {
-    window.speechSynthesis.onvoiceschanged = () => getSpeechVoices();
+    window.speechSynthesis.onvoiceschanged = onVoicesReady;
   }
+}
+
+function speakPhraseAllowed(speechLang = getModeConfig().speechLang) {
+  return canSpeakWithInstalledVoice(getSpeechVoices(), speechLang);
 }
 
 function speakText(text, button) {
   const phrase = String(text || '').trim();
   if (!phrase || !window.speechSynthesis) return;
 
+  const speechLang = getModeConfig().speechLang;
+  const voice = pickSpeechVoice(getSpeechVoices(), speechLang);
+  if (!voice || !voiceMatchesSpeechLang(voice, speechLang)) return;
+
   window.speechSynthesis.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
-  const speechLang = getModeConfig().speechLang;
-  const voice = pickSpeechVoice(getSpeechVoices(), speechLang);
   const utt = new SpeechSynthesisUtterance(phrase);
-  // Prefer an explicit voice: many browsers ignore lang alone and keep English TTS.
-  if (voice) {
-    utt.voice = voice;
-    utt.lang = voice.lang || speechLang;
-  } else {
-    utt.lang = speechLang;
-  }
+  utt.voice = voice;
+  utt.lang = voice.lang || speechLang;
   utt.rate = 0.85;
   if (button) {
     utt.onstart = () => button.classList.add('speaking');
@@ -1301,10 +1313,10 @@ function renderDailyWord(index) {
   document.getElementById('counter').textContent = `${index + 1} / ${state.todayWords.length}`;
   document.getElementById('prev-btn').disabled = index === 0;
   document.getElementById('next-btn').disabled = index === state.todayWords.length - 1;
-  document.getElementById('speak-btn').disabled = !word.word;
-  document.getElementById('s1-speak-btn').disabled = !firstSentenceText;
-  document.getElementById('s2-speak-btn').disabled = !secondSentenceText;
-  const s3Speak = document.getElementById('s3-speak-btn'); if (s3Speak) s3Speak.disabled = !thirdSentenceText;
+  document.getElementById('speak-btn').disabled = !word.word || !speakPhraseAllowed();
+  document.getElementById('s1-speak-btn').disabled = !firstSentenceText || !speakPhraseAllowed();
+  document.getElementById('s2-speak-btn').disabled = !secondSentenceText || !speakPhraseAllowed();
+  const s3Speak = document.getElementById('s3-speak-btn'); if (s3Speak) s3Speak.disabled = !thirdSentenceText || !speakPhraseAllowed();
 
   const sentenceEls = document.querySelectorAll('#card .sentence');
   if (sentenceEls[0]) sentenceEls[0].classList.toggle('hidden', !firstSentenceText);
@@ -1919,7 +1931,7 @@ function renderReview() {
 
   const speakBtn = document.getElementById('review-speak-btn');
   if (speakBtn) {
-    speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back;
+    speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back || !speakPhraseAllowed();
   }
 
   const actionBusy = state.reviewSubmitting || state.reviewEditSubmitting;
@@ -2403,7 +2415,7 @@ function updateTranslateSpeakUi() {
   if (!speakBtn) return;
 
   const hasSpeakText = Boolean(getTranslateSpeakText());
-  const show = state.hasTranslatedInSession && hasSpeakText;
+  const show = state.hasTranslatedInSession && hasSpeakText && speakPhraseAllowed();
   const slot = getTranslateSpeakSlot();
 
   speakBtn.disabled = !show;

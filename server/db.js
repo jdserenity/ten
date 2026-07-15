@@ -79,6 +79,20 @@ function migrateTranslationCacheTable() {
   `);
 }
 
+function migrateDailyWordGlossesTable() {
+  getDb().exec(`
+    CREATE TABLE IF NOT EXISTS daily_word_glosses (
+      user_id INTEGER NOT NULL,
+      language TEXT NOT NULL,
+      date_key TEXT NOT NULL,
+      target_lang TEXT NOT NULL,
+      glosses_json TEXT NOT NULL,
+      updated_at INTEGER NOT NULL DEFAULT (unixepoch()),
+      PRIMARY KEY (user_id, language, date_key, target_lang)
+    )
+  `);
+}
+
 function tableHasColumn(tableName, columnName) {
   const cols = getDb().prepare(`PRAGMA table_info(${tableName})`).all();
   return cols.some(col => col.name === columnName);
@@ -321,6 +335,7 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
   `);
   migrateAppLangColumn();
   migrateTranslationCacheTable();
+  migrateDailyWordGlossesTable();
   runMultiUserMigrations();
   return db;
 }
@@ -609,4 +624,49 @@ export function setDailyWordAssignment(userId, language, dateKey, words) {
     `)
     .run(user.id, lang, key, JSON.stringify(normalized));
   return { ok: true, language: lang, dateKey: key, words: normalized };
+}
+
+function normalizeGlossTargetLang(value) {
+  const code = String(value || '').trim().toUpperCase();
+  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
+  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
+  return code;
+}
+
+export function getDailyWordGlosses(userId, language, dateKey, targetLang) {
+  const user = getUserById(userId);
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  const target = normalizeGlossTargetLang(targetLang);
+  if (!user || !lang || !key || !target) return null;
+  const row = getDb()
+    .prepare('SELECT glosses_json FROM daily_word_glosses WHERE user_id = ? AND language = ? AND date_key = ? AND target_lang = ?')
+    .get(user.id, lang, key, target);
+  if (!row) return null;
+  try {
+    const parsed = JSON.parse(row.glosses_json);
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch (_) {
+    return null;
+  }
+}
+
+export function setDailyWordGlosses(userId, language, dateKey, targetLang, glossesByWord) {
+  const user = getUserById(userId);
+  const lang = normalizeLanguage(language);
+  const key = String(dateKey || '').trim();
+  const target = normalizeGlossTargetLang(targetLang);
+  if (!user || !lang || !key || !target || !glossesByWord || typeof glossesByWord !== 'object') {
+    return { ok: false, reason: 'invalid' };
+  }
+  getDb()
+    .prepare(`
+      INSERT INTO daily_word_glosses (user_id, language, date_key, target_lang, glosses_json, updated_at)
+      VALUES (?, ?, ?, ?, ?, unixepoch())
+      ON CONFLICT (user_id, language, date_key, target_lang) DO UPDATE SET
+        glosses_json = excluded.glosses_json,
+        updated_at = excluded.updated_at
+    `)
+    .run(user.id, lang, key, target, JSON.stringify(glossesByWord));
+  return { ok: true, language: lang, dateKey: key, targetLang: target };
 }

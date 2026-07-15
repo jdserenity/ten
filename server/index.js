@@ -12,6 +12,7 @@ import {
   getCachedTranslation,
   getDailyCardIndex,
   getDailyWordAssignment,
+  getDailyWordGlosses,
   getFeedbackList,
   getUserById,
   getUserLanguages,
@@ -21,9 +22,11 @@ import {
   setCachedTranslation,
   setDailyCardIndex,
   setDailyWordAssignment,
+  setDailyWordGlosses,
   setUserAppLang,
   setUserLanguages
 } from './db.js';
+import { ensureDailyGlosses } from './daily-glosses.js';
 import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 import { buildDevOpsPayload, loadWordPools } from './pool-health.js';
 
@@ -294,6 +297,50 @@ async function requestGoogleTranslation({ text, sourceLang, targetLang, apiKey }
   };
 }
 
+async function translateWithCache(text, sourceLang, targetLang) {
+  const cleanText = String(text || '').trim();
+  const target = normalizeTargetLanguage(targetLang);
+  const source = normalizeSourceLanguage(sourceLang);
+  if (!cleanText || !target) {
+    return { ok: false, statusCode: 400, error: 'Missing text or target language.' };
+  }
+
+  const cached = getCachedTranslation(source || '', target, cleanText);
+  if (cached) {
+    return {
+      ok: true,
+      statusCode: 200,
+      body: {
+        translatedText: cached,
+        detectedSourceLang: source || undefined,
+        provider: 'cache'
+      }
+    };
+  }
+
+  const { provider } = chooseTranslateProvider(cleanText);
+
+  if (provider === 'google') {
+    const apiKey = String(process.env.GOOGLE_TRANSLATE_API_KEY ?? '').trim();
+    if (!apiKey) {
+      return { ok: false, statusCode: 400, error: 'Missing Google Translate API key. Set GOOGLE_TRANSLATE_API_KEY in your server environment.' };
+    }
+    const result = await requestGoogleTranslation({ text: cleanText, sourceLang: source, targetLang: target, apiKey });
+    if (!result.ok) return result;
+    setCachedTranslation(source || '', target, cleanText, result.body.translatedText);
+    return { ok: true, statusCode: 200, body: { ...result.body, provider } };
+  }
+
+  const authKey = String(process.env.DEEPL_AUTH_KEY ?? '').trim();
+  if (!authKey) {
+    return { ok: false, statusCode: 400, error: 'Missing DeepL auth key. Set DEEPL_AUTH_KEY in your server environment.' };
+  }
+  const result = await requestDeepLTranslation({ text: cleanText, targetLang: toDeepLTargetLanguage(target), authKey });
+  if (!result.ok) return result;
+  setCachedTranslation(source || '', target, cleanText, result.body.translatedText);
+  return { ok: true, statusCode: 200, body: { ...result.body, provider } };
+}
+
 async function proxyTranslate(req, res) {
   let body;
   try { body = await readJsonBody(req); }
@@ -306,46 +353,13 @@ async function proxyTranslate(req, res) {
   if (!targetLang) return sendJson(res, 400, { error: 'Missing target language.' });
   const sourceLang = normalizeSourceLanguage(body.sourceLang ?? body.source ?? '');
 
-  const cached = getCachedTranslation(sourceLang || '', targetLang, text);
-  if (cached) {
-    return sendJson(res, 200, {
-      translatedText: cached,
-      detectedSourceLang: sourceLang || undefined,
-      provider: 'cache',
-      strategyWordCount: countWordsIgnoringPunctuation(text)
-    });
-  }
-
   const { provider, wordCount } = chooseTranslateProvider(text);
 
   try {
-    if (provider === 'google') {
-      const apiKey = String(body.googleApiKey ?? body.googleKey ?? process.env.GOOGLE_TRANSLATE_API_KEY ?? '').trim();
-      if (!apiKey) {
-        return sendJson(res, 400, { error: 'Missing Google Translate API key. Set GOOGLE_TRANSLATE_API_KEY in your server environment.' });
-      }
-
-      const result = await requestGoogleTranslation({ text, sourceLang, targetLang, apiKey });
-      if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
-      setCachedTranslation(sourceLang || '', targetLang, text, result.body.translatedText);
-      return sendJson(res, 200, {
-        ...result.body,
-        provider,
-        strategyWordCount: wordCount
-      });
-    }
-
-    const authKey = String(body.authKey ?? body.apiKey ?? process.env.DEEPL_AUTH_KEY ?? '').trim();
-    if (!authKey) {
-      return sendJson(res, 400, { error: 'Missing DeepL auth key. Set DEEPL_AUTH_KEY in your server environment.' });
-    }
-
-    const result = await requestDeepLTranslation({ text, targetLang: toDeepLTargetLanguage(targetLang), authKey });
+    const result = await translateWithCache(text, sourceLang, targetLang);
     if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
-    setCachedTranslation(sourceLang || '', targetLang, text, result.body.translatedText);
     return sendJson(res, 200, {
       ...result.body,
-      provider,
       strategyWordCount: wordCount
     });
   } catch (error) {
@@ -467,6 +481,49 @@ async function handleDailyWordsPost(req, res) {
   const result = setDailyWordAssignment(user.id, language, dateKey, words);
   if (!result.ok) return sendJson(res, 400, { error: 'Invalid daily words payload.' });
   return sendJson(res, 200, { ok: true, words: result.words });
+}
+
+async function handleDailyGlossesEnsure(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  let body;
+  try {
+    body = await readJsonBody(req);
+  } catch {
+    return sendJson(res, 400, { error: 'Invalid JSON body.' });
+  }
+
+  const language = normalizeSourceLanguage(body.language);
+  const dateKey = String(body.dateKey || '').trim();
+  const targetLang = normalizeTargetLanguage(body.targetLang || 'EN');
+  const sentenceKey = String(body.sentenceKey || '').trim();
+  const cards = body.cards;
+  if (!language || !dateKey || !sentenceKey || !Array.isArray(cards) || !cards.length) {
+    return sendJson(res, 400, { error: 'Missing language, dateKey, sentenceKey, or cards.' });
+  }
+
+  const stored = getDailyWordGlosses(user.id, language, dateKey, targetLang) || {};
+  try {
+    const glossesByWord = await ensureDailyGlosses({
+      storedGlossesByWord: stored,
+      cards,
+      sentenceKey,
+      sourceLang: language,
+      targetLang,
+      getCachedTranslation,
+      setCachedTranslation,
+      translateProvider: async text => {
+        const result = await translateWithCache(text, language, targetLang);
+        if (!result.ok) throw new Error(result.error || 'Translation failed.');
+        return result.body.translatedText;
+      }
+    });
+    setDailyWordGlosses(user.id, language, dateKey, targetLang, glossesByWord);
+    res.setHeader('Cache-Control', 'no-store');
+    return sendJson(res, 200, { glossesByWord, complete: true });
+  } catch (error) {
+    return sendJson(res, 502, { error: error instanceof Error ? error.message : 'Failed to resolve daily glosses.' });
+  }
 }
 
 async function handleCardsQueueGet(req, url, res) {
@@ -716,6 +773,9 @@ const server = createServer(async (req, res) => {
   }
   if (pathname === '/api/daily-words' && req.method === 'POST') {
     return handleDailyWordsPost(req, res);
+  }
+  if (pathname === '/api/daily-glosses/ensure' && req.method === 'POST') {
+    return handleDailyGlossesEnsure(req, res);
   }
   if (pathname === '/api/health' && req.method === 'GET') return sendJson(res, 200, { ok: true });
 

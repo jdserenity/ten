@@ -55,3 +55,6 @@ A missing `nextFrequencyFilter` import in `app.js` crashed startup (`ReferenceEr
 
 ## reconcileDailyWords must keep today's assigned words after they are surfaced in 10/day
 `reconcileDailyWords` uses the surfaced/unlocked set to block **new** picks and refills, not to drop headwords already in today's saved assignment. Viewing a word on the 10/day tab adds it to the unlocked set immediately; if reconcile also removed assigned headwords present in that set, a refresh would swap today's list and reset progress dots. Words unlocked outside 10/day while still on today's list are removed live via `reconcileTodayWordsAfterUnlock`, which persists the updated assignment before the next load.
+
+## Boot should not block on every tab's data
+Startup used to run the full 10/day + frequency pipeline before opening the tab the user actually needs (e.g. Review after finishing 10/day). `planBootDataLoads` in `client-load.js` picks priority vs background loads; unlocks, word pool JSON, frequency JSON, and daily assignment/index prefetch in parallel. Daily glosses should use `Promise.all` — four sequential translate calls made card flips feel stuck.

@@ -12,6 +12,6 @@ A personal PWA for learning Brazilian Portuguese, Quebec French, France French, 
 - **Frequency rank hints**: Daily cards and single-word Translate results show frequency rank when available.
 - **Text-to-speech**: Mode-specific speech synthesis (`pt-BR`, `fr-CA`, `fr-FR`, `es-AR`).
 - **Daily completion**: Confetti when you reach the 10th card (once per day per language).
-- **Word generation**: `npm run generate:pt` (Portuguese), `npm run generate:fr` (French frequency dictionary based). Spanish pool (`words.es.json`) is curated manually.
+- **Word pools**: Agent-curated per flavour (`words.pt-br.json`, `words.fr-ca.json`, `words.fr-fr.json`, `words.es-ar.json`). Follow `scaffold/skills/seed-daily-words/SKILL.md`, then `npm run words:check`.
 - **Dictionary refresh**: `npm run frequency:download` refreshes bundled frequency files (ES-AR from ACTIV-ES Argentina corpus).
 - **Anki import (one-time)**: `npm run import:anki` while AnkiConnect is still running copies existing deck notes into Ten (scheduling starts fresh).

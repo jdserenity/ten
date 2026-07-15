@@ -1,5 +1,26 @@
-export function resolveStartupTab(dailyCompleteToday) {
-  return dailyCompleteToday ? 'translate' : 'daily';
+export const DAILY_REVIEW_GOAL = 10;
+
+export function resolveStartupTab({ dailyCompleteToday, reviewCompleteToday }) {
+  if (!dailyCompleteToday) return 'daily';
+  if (!reviewCompleteToday) return 'review';
+  return 'translate';
+}
+
+export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GOAL) {
+  return reviewedCountToday >= goal;
+}
+
+export function getReviewEmptyState(totalCardCount) {
+  if (!totalCardCount) {
+    return {
+      label: 'Need cards',
+      message: 'Add flashcards from 10/day (use the ＋ buttons), then come back here to review.'
+    };
+  }
+  return {
+    label: 'All clear',
+    message: 'No new or due cards for this language. Add cards from Translate or 10/day.'
+  };
 }
 
 export function nextFrequencyFilter(currentFilter, clickedFilter) {

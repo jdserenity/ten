@@ -100,9 +100,9 @@
 
     <div id="top-tabs" role="tablist" aria-label="Main tabs">
       <button class="top-tab active" data-tab="daily" role="tab" aria-selected="true">10/day</button>
-      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
       <button class="top-tab" data-tab="review" role="tab" aria-selected="false">Review</button>
       <button class="top-tab" data-tab="frequency" role="tab" aria-selected="false">Frequency dictionary</button>
+      <button class="top-tab" data-tab="translate" role="tab" aria-selected="false">Translate</button>
     </div>
 
     <section id="tab-daily" class="tab-panel active" role="tabpanel">
@@ -215,6 +215,8 @@
     </section>
 
     <section id="tab-review" class="tab-panel" role="tabpanel">
+      <div id="review-dots" class="review-dots" aria-hidden="true"></div>
+
       <div class="review-stats">
         <div class="stat-box">
           <span class="stat-label">To study</span>
@@ -227,8 +229,8 @@
       </div>
 
       <div id="review-empty" class="surface-card">
-        <span class="caps-label">All clear</span>
-        <p>No new or due cards for this language. Add cards from Translate or 10/day.</p>
+        <span id="review-empty-label" class="caps-label">Need cards</span>
+        <p id="review-empty-message">Add flashcards from 10/day (use the ＋ buttons), then come back here to review.</p>
       </div>
 
       <div id="review-card-panel" class="surface-card hidden">

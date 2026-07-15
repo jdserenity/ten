@@ -23,10 +23,10 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 
 | Tab | What you see |
 | --- | --- |
-| **10/day** | Up to ten words per day from words you have not surfaced yet, with translations and example sentences. Remembers which card you were on. Words you skip stay in the pool. Footer counts down remaining pool days (can show fractions like 26.4). Confetti once when you finish the tenth (per language per day). Opens first on refresh unless you already finished today — then Translate opens. `+` saves word or sentences as flashcards. |
-| **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. |
-| **Review** | New and due cards for the active language (new first). Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. |
+| **10/day** | Up to ten words per day from words you have not surfaced yet, with translations and example sentences. Remembers which card you were on. Words you skip stay in the pool. Footer counts down remaining pool days (can show fractions like 26.4). Confetti once when you finish the tenth (per language per day). Opens first on refresh unless you already finished today. `+` saves word or sentences as flashcards. |
+| **Review** | Review **10 flashcards** per day with progress dots, confetti on the 10th, then **∞** to keep going. Edit cards in place. Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. Opens on refresh when 10/day is done but review is not. |
 | **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
+| **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. Last tab; opens on refresh when both 10/day and review are done for today. |
 | **Settings** | Cog icon in the header tools row (with feedback and flags) opens a panel: username, add languages (`+`), sign out. Dev account (`jd`) also sees submitted feedback. |
 
 Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show on the right and `+` moves to Settings. Header **feedback** field expands for beta notes.

@@ -109,19 +109,31 @@ describe('pickAdditionalDailyWords', () => {
 });
 
 describe('reconcileDailyWords', () => {
-  it('drops unlocked words from a saved assignment and refills to 10', () => {
+  it('keeps assigned words that were already surfaced via 10/day today', () => {
+    const dayKey = '2026-6-12';
+    const seen = new Set();
+    const assigned = pickDailyWords(pool, seen, dayKey).map(entry => entry.word);
+    seen.add(normalizePoolWord(assigned[0]));
+    seen.add(normalizePoolWord(assigned[1]));
+    const reconciled = reconcileDailyWords(pool, assigned, seen, dayKey);
+    assert.deepEqual(reconciled.map(entry => entry.word), assigned);
+  });
+
+  it('refills when assigned words are missing from the pool but keeps surfaced assignment words', () => {
     const dayKey = '2026-6-12';
     const seen = new Set(['word1', 'word2']);
-    const assigned = pickDailyWords(pool, new Set(), dayKey).map(entry => entry.word);
-    seen.add('word1');
-    seen.add('word2');
+    const assigned = ['word1', 'word2', 'missing-word', 'word4', 'word5', 'word6', 'word7', 'word8'];
     const reconciled = reconcileDailyWords(pool, assigned, seen, dayKey);
     assert.equal(reconciled.length, WORDS_PER_DAY);
+    assert.equal(normalizePoolWord(reconciled[0].word), 'word1');
+    assert.equal(normalizePoolWord(reconciled[1].word), 'word2');
+    assert.equal(reconciled.some(entry => normalizePoolWord(entry.word) === 'missing-word'), false);
+    const surfacedInAssignment = new Set(assigned.slice(0, 2).map(normalizePoolWord));
     for (const entry of reconciled) {
-      assert.equal(seen.has(normalizePoolWord(entry.word)), false);
+      const norm = normalizePoolWord(entry.word);
+      if (surfacedInAssignment.has(norm)) assert.equal(seen.has(norm), true);
+      else assert.equal(seen.has(norm), false);
     }
-    const assignedNorm = new Set(assigned.map(normalizePoolWord));
-    assert.equal(reconciled.some(entry => assignedNorm.has(normalizePoolWord(entry.word)) && seen.has(normalizePoolWord(entry.word))), false);
   });
 
   it('matches a fresh pick when nothing was unlocked after assignment', () => {

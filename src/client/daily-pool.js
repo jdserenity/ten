@@ -63,7 +63,7 @@ export function reconcileDailyWords(pool, assignedHeadwords, seenNormalizedSet, 
     }
     for (const headword of assignedHeadwords) {
       const normalized = normalizePoolWord(headword);
-      if (!normalized || blocked.has(normalized)) continue;
+      if (!normalized) continue;
       const entry = poolByNorm.get(normalized);
       if (!entry) continue;
       kept.push(entry);

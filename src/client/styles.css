@@ -763,12 +763,6 @@ details.surface-card[open] { gap: 10px; }
   color: var(--green);
 }
 
-.daily-stats-spacer {
-  visibility: hidden;
-  pointer-events: none;
-  user-select: none;
-}
-
 .stat-box {
   background: var(--surface);
   border: 1px solid var(--border);

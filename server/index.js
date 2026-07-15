@@ -9,6 +9,7 @@ import {
   addUserLanguages,
   findOrCreateUser,
   getAllUnlockedWords,
+  getCachedTranslation,
   getDailyCardIndex,
   getDailyWordAssignment,
   getFeedbackList,
@@ -16,8 +17,10 @@ import {
   getUserLanguages,
   importUnlockedWords,
   initDb,
+  setCachedTranslation,
   setDailyCardIndex,
   setDailyWordAssignment,
+  setUserAppLang,
   setUserLanguages
 } from './db.js';
 import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
@@ -102,7 +105,8 @@ function serializeUser(user) {
     id: user.id,
     username: user.username,
     isDev: user.isDev,
-    languages: getUserLanguages(user.id)
+    languages: getUserLanguages(user.id),
+    appLang: user.appLang || null
   };
 }
 
@@ -284,6 +288,16 @@ async function proxyTranslate(req, res) {
   if (!targetLang) return sendJson(res, 400, { error: 'Missing target language.' });
   const sourceLang = normalizeSourceLanguage(body.sourceLang ?? body.source ?? '');
 
+  const cached = getCachedTranslation(sourceLang || '', targetLang, text);
+  if (cached) {
+    return sendJson(res, 200, {
+      translatedText: cached,
+      detectedSourceLang: sourceLang || undefined,
+      provider: 'cache',
+      strategyWordCount: countWordsIgnoringPunctuation(text)
+    });
+  }
+
   const { provider, wordCount } = chooseTranslateProvider(text);
 
   try {
@@ -295,6 +309,7 @@ async function proxyTranslate(req, res) {
 
       const result = await requestGoogleTranslation({ text, sourceLang, targetLang, apiKey });
       if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
+      setCachedTranslation(sourceLang || '', targetLang, text, result.body.translatedText);
       return sendJson(res, 200, {
         ...result.body,
         provider,
@@ -309,6 +324,7 @@ async function proxyTranslate(req, res) {
 
     const result = await requestDeepLTranslation({ text, targetLang, authKey });
     if (!result.ok) return sendJson(res, result.statusCode, { error: result.error });
+    setCachedTranslation(sourceLang || '', targetLang, text, result.body.translatedText);
     return sendJson(res, 200, {
       ...result.body,
       provider,
@@ -540,6 +556,22 @@ function handleMeGet(req, res) {
   return sendJson(res, 200, serializeUser(user));
 }
 
+async function handleAppLanguagePut(req, res) {
+  const user = requireUser(req, res);
+  if (!user) return;
+  let body;
+  try { body = await readJsonBody(req); }
+  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
+
+  const appLang = String(body.appLang || '').trim();
+  if (!appLang) return sendJson(res, 400, { error: 'Missing app language.' });
+
+  const result = setUserAppLang(user.id, appLang);
+  if (!result.ok) return sendJson(res, 400, { error: 'Invalid app language.' });
+  const updated = getUserById(user.id);
+  return sendJson(res, 200, { ok: true, appLang: updated.appLang });
+}
+
 async function handleUserLanguagesPut(req, res) {
   const user = requireUser(req, res);
   if (!user) return;
@@ -619,6 +651,7 @@ const server = createServer(async (req, res) => {
   if (pathname === '/api/translate' && req.method === 'POST') return proxyTranslate(req, res);
   if (pathname === '/api/auth/login' && req.method === 'POST') return handleAuthLogin(req, res);
   if (pathname === '/api/me' && req.method === 'GET') return handleMeGet(req, res);
+  if (pathname === '/api/app-language' && req.method === 'PUT') return handleAppLanguagePut(req, res);
   if (pathname === '/api/user-languages' && req.method === 'PUT') return handleUserLanguagesPut(req, res);
   if (pathname === '/api/feedback' && req.method === 'POST') return handleFeedbackPost(req, res);
   if (pathname === '/api/feedback' && req.method === 'GET') return handleFeedbackGet(req, res);

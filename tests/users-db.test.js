@@ -27,6 +27,7 @@ describeDb('users and per-user data', () => {
     getUserById,
     getUserLanguages,
     initDb,
+    setUserAppLang,
     setUserLanguages
   } = dbModule;
 
@@ -67,6 +68,16 @@ describeDb('users and per-user data', () => {
     const saved = setUserLanguages(friend.id, ['FR', 'PT-BR']);
     assert.equal(saved.ok, true);
     assert.deepEqual(getUserLanguages(friend.id), ['FR', 'PT-BR']);
+  });
+
+  it('stores and returns app language on the user account', () => {
+    assert.equal(getUserById(friend.id).appLang, null);
+    const saved = setUserAppLang(friend.id, 'pt-BR');
+    assert.equal(saved.ok, true);
+    assert.equal(saved.appLang, 'pt-BR');
+    assert.equal(getUserById(friend.id).appLang, 'pt-BR');
+    const invalid = setUserAppLang(friend.id, 'fr');
+    assert.equal(invalid.ok, false);
   });
 
   it('scopes unlocked words per user', () => {

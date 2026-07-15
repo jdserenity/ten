@@ -7,28 +7,16 @@
   <link rel="stylesheet" href="/styles.css" />
 </head>
 <body class="ops-page">
-  <header class="ops-header">
-    <a href="/" class="ops-back-link">← Ten</a>
-    <h1>Ops</h1>
-  </header>
+  <a href="/" class="ops-back-link">← Ten</a>
 
   <div id="ops-loading" class="ops-status">Loading...</div>
   <div id="ops-error" class="ops-status ops-error hidden"></div>
 
   <main id="ops-main" class="ops-main hidden">
-    <section class="ops-section">
-      <div class="ops-section-heading">
-        <h2>Pool runway</h2>
-        <p class="ops-hint">Tightest runway per track (closest user to running out). Amber at ≤7 days.</p>
-      </div>
-      <div id="ops-pool-list" class="ops-pool-list"></div>
-    </section>
+    <ul id="ops-pool-list" class="ops-pool-list"></ul>
 
-    <section class="ops-section">
-      <div class="ops-section-heading">
-        <h2>Feedback</h2>
-        <p class="ops-hint">Beta notes submitted from the header field in the app.</p>
-      </div>
+    <section class="ops-feedback-section">
+      <h2 class="ops-section-label">Feedback</h2>
       <div id="ops-feedback-list" class="ops-feedback-list"></div>
     </section>
   </main>

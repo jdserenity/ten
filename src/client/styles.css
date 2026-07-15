@@ -158,12 +158,10 @@ header h1 {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 8px;
-  font-size: 11px;
-  line-height: 8px;
+  font-size: 16px;
+  line-height: 1;
   color: var(--border);
   flex-shrink: 0;
-  transform: translateY(-1px);
 }
 
 .review-infinity.seen { color: var(--green); }

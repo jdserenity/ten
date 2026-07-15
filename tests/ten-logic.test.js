@@ -22,6 +22,7 @@ import {
   buildLangPickerOptionHtml,
   getLangPickerOptions,
   isLangPickerOutsideClick,
+  pickSpeechVoice,
   sortLangPickerOptionsByLabel,
   shouldOpenLangPickerOnModeClick,
   shouldShowAddLanguageHint,
@@ -288,4 +289,36 @@ test('formatTranslateFrequencyRank returns structured rank metadata', () => {
     rank: null,
     tierKey: ''
   });
+});
+
+test('pickSpeechVoice prefers a Spanish voice over English for es-AR', () => {
+  const english = { lang: 'en-US', name: 'Samantha', localService: true };
+  const spanishMx = { lang: 'es-MX', name: 'Paulina', localService: true };
+  assert.equal(pickSpeechVoice([english, spanishMx], 'es-AR'), spanishMx);
+});
+
+test('pickSpeechVoice prefers exact es-AR, then Latin American, then Spain', () => {
+  const spain = { lang: 'es-ES', name: 'Monica', localService: true };
+  const mexico = { lang: 'es-MX', name: 'Paulina', localService: true };
+  const argentina = { lang: 'es-AR', name: 'Diego', localService: true };
+  assert.equal(pickSpeechVoice([spain, mexico, argentina], 'es-AR'), argentina);
+  assert.equal(pickSpeechVoice([spain, mexico], 'es-AR'), mexico);
+  assert.equal(pickSpeechVoice([spain], 'es-AR'), spain);
+});
+
+test('pickSpeechVoice returns null when no voice matches the language family', () => {
+  const english = { lang: 'en-US', name: 'Samantha', localService: true };
+  assert.equal(pickSpeechVoice([english], 'es-AR'), null);
+  assert.equal(pickSpeechVoice([], 'es-AR'), null);
+  assert.equal(pickSpeechVoice(null, 'es-AR'), null);
+});
+
+test('pickSpeechVoice matches Portuguese and French regional tags', () => {
+  const ptPt = { lang: 'pt-PT', name: 'Joana', localService: true };
+  const ptBr = { lang: 'pt-BR', name: 'Luciana', localService: true };
+  const frFr = { lang: 'fr-FR', name: 'Thomas', localService: true };
+  const frCa = { lang: 'fr-CA', name: 'Amelie', localService: true };
+  assert.equal(pickSpeechVoice([ptPt, ptBr], 'pt-BR'), ptBr);
+  assert.equal(pickSpeechVoice([frFr, frCa], 'fr-CA'), frCa);
+  assert.equal(pickSpeechVoice([frCa, frFr], 'fr-FR'), frFr);
 });

@@ -2,6 +2,9 @@
 
 Hard-won lessons and traps. Product/system facts live only in `scaffold/ARCH-LLM.md` / `scaffold/ARCH-HUMAN.md` — do not restate them here. Word-pool quality standards live in `scaffold/skills/seed-daily-words/SKILL.md`.
 
+## TTS must assign a voice, not only lang
+Setting `SpeechSynthesisUtterance.lang` alone (e.g. `es-AR`) is not enough. Many browsers keep the default English voice and mangle Spanish/Portuguese/French. Always pick a matching voice via `speechSynthesis.getVoices()` and set `utt.voice`. Exact `es-AR` voices are rare — prefer Latin American Spanish (`es-MX`, `es-US`, `es-419`, …) before Spain (`es-ES`). Chrome may return an empty voice list until the `voiceschanged` event.
+
 ## Service worker removed
 Ten no longer ships `sw.js`. Static assets are served with `Cache-Control: no-cache`; `app.js` unregisters any leftover worker on load so phones stop intercepting requests after deploy.
 

@@ -26,7 +26,7 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 - PWA: `src/client/manifest.json`, `icon-192.png` / `icon-512.png` (static aurora PNGs). No service worker — static assets are served with `Cache-Control: no-cache`.
 - Word pools: `src/client/words.pt-br.json`, `words.fr-ca.json`, `words.fr-fr.json`, `words.es-ar.json` (agent-curated; one file per flavour).
 - Frequency dictionaries: `src/client/frequency-pt-br.json`, `frequency-fr.json`, `frequency-es-ar.json` (up to ~5000 each). ES-AR list from ACTIV-ES Argentina subtitle corpus (`ar_orf` column).
-- TTS: mode speech langs `pt-BR` / `fr-CA` / `fr-FR` / `es-AR`. Translate: Google uses `es-AR` for short Spanish and `fr-FR` for France French; DeepL uses generic `ES` and `FR` (no regional codes).
+- TTS: Web Speech API; `speakText` picks the best installed voice for mode speech langs `pt-BR` / `fr-CA` / `fr-FR` / `es-AR` (`es-AR` falls back to Latin American Spanish, then Spain). Translate: Google uses `es-AR` for short Spanish and `fr-FR` for France French; DeepL uses generic `ES` and `FR` (no regional codes).
 
 ## Layout
 | Path | Role |

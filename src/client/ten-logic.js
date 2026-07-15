@@ -225,3 +225,59 @@ export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selec
 export function normalizeUsername(value) {
   return String(value || '').trim().toLowerCase();
 }
+
+/** Preferred BCP-47 fallbacks when an exact regional TTS voice is missing. */
+const SPEECH_LANG_FALLBACKS = {
+  'es-ar': ['es-419', 'es-mx', 'es-us', 'es-uy', 'es-cl', 'es-co', 'es-pe', 'es-ve', 'es-es', 'es'],
+  'pt-br': ['pt-br', 'pt', 'pt-pt'],
+  'fr-ca': ['fr-ca', 'fr', 'fr-fr'],
+  'fr-fr': ['fr-fr', 'fr', 'fr-ca']
+};
+
+function normalizeSpeechLangTag(value) {
+  return String(value || '').trim().toLowerCase().replace(/_/g, '-');
+}
+
+function speechLangBase(tag) {
+  const normalized = normalizeSpeechLangTag(tag);
+  return normalized.split('-')[0] || '';
+}
+
+/**
+ * Pick the best installed Web Speech voice for a target BCP-47 tag.
+ * Browsers often ignore utt.lang alone and keep the default English voice —
+ * especially for rare tags like es-AR — so callers must assign utt.voice.
+ */
+export function pickSpeechVoice(voices, speechLang) {
+  const target = normalizeSpeechLangTag(speechLang);
+  if (!target || !Array.isArray(voices) || voices.length === 0) return null;
+
+  const base = speechLangBase(target);
+  if (!base) return null;
+
+  const fallbacks = SPEECH_LANG_FALLBACKS[target] || [target, base];
+  const preference = [target, ...fallbacks.filter(tag => tag !== target)];
+
+  let best = null;
+  let bestScore = -1;
+
+  for (const voice of voices) {
+    const voiceLang = normalizeSpeechLangTag(voice?.lang);
+    if (!voiceLang || speechLangBase(voiceLang) !== base) continue;
+
+    let rank = preference.findIndex(tag => voiceLang === tag || voiceLang.startsWith(`${tag}-`));
+    if (rank < 0) {
+      // Same language family but not in the preferred list (still better than English).
+      rank = preference.length;
+    }
+
+    // Lower rank is better; prefer local voices as a tie-breaker.
+    const score = (preference.length - rank) * 10 + (voice.localService ? 1 : 0);
+    if (score > bestScore) {
+      bestScore = score;
+      best = voice;
+    }
+  }
+
+  return best;
+}

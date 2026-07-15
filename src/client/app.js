@@ -26,6 +26,7 @@ import {
   modeIdFromLearningLang,
   nextFrequencyFilter,
   normalizeTranslateDirection,
+  pickSpeechVoice,
   resolveStartupTab,
   shouldOpenLangPickerOnModeClick,
   shouldShowAddLanguageHint,
@@ -924,6 +925,23 @@ function getSentenceText(sentence) {
   return String(sentence[mode.sentenceKey] || sentence.pt || sentence.fr || sentence.es || '').trim();
 }
 
+function getSpeechVoices() {
+  if (!window.speechSynthesis) return [];
+  const voices = window.speechSynthesis.getVoices();
+  return Array.isArray(voices) ? voices : [];
+}
+
+function warmSpeechVoices() {
+  if (!window.speechSynthesis) return;
+  // Chrome often returns [] until voiceschanged; kick a load so speak clicks have voices ready.
+  getSpeechVoices();
+  if (typeof window.speechSynthesis.addEventListener === 'function') {
+    window.speechSynthesis.addEventListener('voiceschanged', () => getSpeechVoices(), { once: true });
+  } else {
+    window.speechSynthesis.onvoiceschanged = () => getSpeechVoices();
+  }
+}
+
 function speakText(text, button) {
   const phrase = String(text || '').trim();
   if (!phrase || !window.speechSynthesis) return;
@@ -931,8 +949,16 @@ function speakText(text, button) {
   window.speechSynthesis.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
+  const speechLang = getModeConfig().speechLang;
+  const voice = pickSpeechVoice(getSpeechVoices(), speechLang);
   const utt = new SpeechSynthesisUtterance(phrase);
-  utt.lang = getModeConfig().speechLang;
+  // Prefer an explicit voice: many browsers ignore lang alone and keep English TTS.
+  if (voice) {
+    utt.voice = voice;
+    utt.lang = voice.lang || speechLang;
+  } else {
+    utt.lang = speechLang;
+  }
   utt.rate = 0.85;
   if (button) {
     utt.onstart = () => button.classList.add('speaking');
@@ -2862,6 +2888,7 @@ async function bootApp() {
 async function init() {
   applyAppLanguage();
   updateDateLabel();
+  warmSpeechVoices();
   setupLoginEvents();
 
   const user = await restoreSession();

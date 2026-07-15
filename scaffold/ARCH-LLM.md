@@ -4,10 +4,12 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 
 ## Product
 - **Name:** Ten — personal PWA for learning Brazilian Portuguese and French (Quebec-oriented).
-- Exactly one user. No multi-user, accounts, sharing, or social features — do not propose them.
-- Two learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Default mode on open: French.
-- Tabs: **10/day** (10 deterministic words/day from the active pool), **Translate**, **Review** (FSRS-backed), **Frequency** (bundled dictionaries with unlock highlighting).
-- **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per language (`PT-BR` / `FR`); duplicate `(language, front, back)` rejected on add.
+- **Users:** Username-only accounts (no email/password). New username → create account; existing → sign in. Remembered on device via `localStorage`. Seeded owner account **`jd`** has `is_dev = 1` (dev mode); all other signups are prod (`is_dev = 0`). Each user owns their own cards, unlocks, daily progress, and language list.
+- Two offered learning tracks: **PT-BR** (intermediate / B1–B2 oriented) and **FR** (beginner, top-frequency vocabulary first). Users pick one or both on first open (header `+`) and can add more later in **Settings**.
+- Tabs: **10/day**, **Translate**, **Review** (FSRS-backed), **Frequency**, **Settings**.
+- **FSRS** (`ts-fsrs`) on the Node server is the sole SRS source of truth. Flashcards live in SQLite per user + language; duplicate `(user_id, language, front, back)` rejected on add.
+- **Dev vs prod:** Dev users (`is_dev`) see owner-only UI such as `~N days left in <mode> pool` and a feedback list in Settings. Prod users do not.
+- **Feedback:** Header compact field expands to a writing panel; submits to SQLite. Dev users read entries in Settings.
 - Mobile PWA first. Do not suggest desktop-only UX (e.g. Esc shortcuts) unless asked.
 - Lean root `README.md` — features only; architecture/deploy live here and in `ARCH-HUMAN.md`.
 
@@ -50,11 +52,18 @@ Dense system map for agents. Confirmed facts only. Lessons → `scaffold/PROJECT
 
 Active language mode is stored in `localStorage` (last visited; defaults to `fr` when unset). One-time migration reads legacy `sessionStorage` value.
 
+Active language mode is stored in `localStorage` (last visited among the user's languages). Legacy single-user rows migrate to `jd` on first multi-user schema upgrade.
+
 ## APIs
 | Method | Path | Notes |
 | --- | --- | --- |
-| POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). |
-| GET | `/api/cards/queue?language=` | New + due cards for Review (new first). |
+| POST | `/api/auth/login` | `{ username }` → create or find user `{ id, username, isDev, languages }`. No auth header. |
+| GET | `/api/me` | Current user (requires `X-User-Id`). |
+| PUT | `/api/user-languages` | `{ languages, replace? }` — add or replace user's `PT-BR` / `FR` list. |
+| POST | `/api/feedback` | `{ body }` — save feedback for current user. |
+| GET | `/api/feedback` | Dev users only — list recent feedback with username + time. |
+| POST | `/api/translate` | Provider split by word count (punctuation ignored): **1–5 words → Google** (`GOOGLE_TRANSLATE_API_KEY`); **6+ → DeepL** (`DEEPL_AUTH_KEY`). No user header required. |
+| GET | `/api/cards/queue?language=` | New + due cards for Review (new first). Requires `X-User-Id`. |
 | POST | `/api/cards` | Add card `{ language, front, back, context? }`. |
 | PATCH | `/api/cards/:id` | Update card `{ front, back, context? }`; FSRS state unchanged. |
 | POST | `/api/cards/:id/answer` | Grade `{ rating: again\|hard\|good\|easy }`. |
@@ -65,18 +74,23 @@ Active language mode is stored in `localStorage` (last visited; defaults to `fr`
 | GET/POST | `/api/daily-words` | Today's fixed 10-word assignment (headwords JSON) per language + calendar day. |
 | GET | `/api/health` | `{ ok: true }` |
 
+Authenticated data routes require header **`X-User-Id`** (numeric user id from login).
+
 ## Client behavior
-- **10/day:** Picks up to 10 words per day from the active pool that have not been surfaced yet (viewed on a daily card or unlocked via single-word translate). Today's assignment is persisted in SQLite (`/api/daily-words`) so refresh keeps the same list; unviewed words from today are not marked surfaced and return to the pool. Card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` where N = unseen pool words ÷ 10 (one decimal when fractional; amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. `+` buttons save word/sentences as flashcards.
+- **10/day:** Picks up to 10 words per day from the active pool that have not been surfaced yet (viewed on a daily card or unlocked via single-word translate). Today's assignment is persisted in SQLite (`/api/daily-words`) so refresh keeps the same list; unviewed words from today are not marked surfaced and return to the pool. Card index restored via `/api/daily-progress`. Reaching card 10 fires a one-time `canvas-confetti` burst per language + calendar day (`localStorage` gate so it does not re-fire on later loads that day). Footer shows `~N days left in <mode> pool` for **dev users only** (one decimal when fractional; amber at ≤7). On page refresh, default tab is **10/day** unless that day's 10 are already complete (confetti gate), then **Translate**. `+` buttons save word/sentences as flashcards.
 - **Translate:** Result can be saved as a card; TTS on result. Single learning-language word unlocks that word in the frequency dictionary. Daily cards and single-word translate results show frequency rank + tier when the word is in the dictionary. Swapping translate direction or switching learning mode clears the translate draft. Returning to the Translate tab resets direction to learning language → English.
 - **Frequency:** Bundled list; unlocked words highlighted (seen in 10/day or unlocked via single-word translate). Summary cards: **Unlocked** (left) and **Not learned** (right); tap either to filter that pool, tap again to show all. Default list on refresh is the full pool. Tap word → live translate (learning language → English) inline. While **Not learned** is active, the visible pool is frozen until the Frequency tab is left and re-entered or the filter is toggled off and on again — unlocking a word via inline translate does not remove it from the frozen list until then.
 - **Review:** Loads queue from `/api/cards/queue`; grades via `/api/cards/:id/answer`. **Edit card** opens front/back fields and saves via `PATCH /api/cards/:id` (scheduling unchanged). Learning language on Back; English on Front for word cards; sentence cards use EN front / L2 back.
 
 ## Persistence (SQLite)
 Path: `TEN_DB_PATH` or `data/ten.db`.
-- `unlocked_words(language, normalized_word, unlocked_at)` PK `(language, normalized_word)`
-- `daily_card_index(language, date_key, card_index, updated_at)` PK `(language, date_key)`
-- `daily_word_assignment(language, date_key, words_json, updated_at)` PK `(language, date_key)` — JSON array of headwords for that day's 10/day stack
-- `cards` — flashcard content + FSRS state; unique `(language, front, back)`
+- `users(id, username UNIQUE, is_dev, created_at)` — seed `jd` with `is_dev = 1` and both languages if empty
+- `user_languages(user_id, language)` PK `(user_id, language)`
+- `feedback(id, user_id, body, created_at)`
+- `unlocked_words(user_id, language, normalized_word, unlocked_at)` PK `(user_id, language, normalized_word)`
+- `daily_card_index(user_id, language, date_key, card_index, updated_at)` PK `(user_id, language, date_key)`
+- `daily_word_assignment(user_id, language, date_key, words_json, updated_at)` PK `(user_id, language, date_key)`
+- `cards` — per-user flashcard content + FSRS state; unique `(user_id, language, front, back)`
 Languages: `PT-BR`, `FR`.
 
 ## Word / frequency data

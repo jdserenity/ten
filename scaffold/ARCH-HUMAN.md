@@ -4,9 +4,7 @@ What Ten is, how the pieces fit, and how to run it. Confirmed facts only. Dense 
 
 ## What it is
 
-**Ten** — a personal phone-first web app (PWA) for learning **Brazilian Portuguese** and **Quebec French**. You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you've unlocked.
-
-One user only. No accounts, sharing, or multi-user design.
+**Ten** — a phone-first web app (PWA) for learning **Brazilian Portuguese** and **Quebec French**. Each person signs in with a username (no password). You study 10 words a day, translate anything, review flashcards with built-in spaced repetition, and track which frequency-list words you've unlocked.
 
 ```
   Phone                         VPS or always-on host
@@ -15,9 +13,10 @@ One user only. No accounts, sharing, or multi-user design.
  Ten in browser  ──────HTTP──────►  Node server
  (vanilla JS PWA)                      │
                                        ├── static files (src/client)
+                                       ├── /api/auth/login ──► users (SQLite)
                                        ├── /api/translate ──► Google (1–5 words) or DeepL (6+)
-                                       ├── /api/cards ──────► FSRS + SQLite flashcards
-                                       └── SQLite (unlocks, daily progress, cards)
+                                       ├── /api/cards ──────► FSRS + per-user SQLite flashcards
+                                       └── SQLite (users, unlocks, daily progress, cards, feedback)
 ```
 
 ## Main tabs
@@ -28,8 +27,11 @@ One user only. No accounts, sharing, or multi-user design.
 | **Translate** | Type text; short inputs use Google Translate, longer ones use DeepL. Save as a flashcard; hear TTS. Single-word lookups also unlock that word on the Frequency tab and show rank when known. |
 | **Review** | New and due cards for the active language (new first). Again / Hard / Good / Easy grades update FSRS scheduling in SQLite. |
 | **Frequency** | Bundled top-frequency lists. Unlocked words light up green. **Unlocked** and **Not learned** summary cards filter the list (tap again to show all). Tap a word for an inline translation. |
+| **Settings** | Username, add languages (`+`), switch user. Dev account (`jd`) also sees submitted feedback. |
 
-Language switch (Brazil / Quebec) is top-right. Default on open is the last language you used (`localStorage`); French if you have never picked one. Each language has its own card pool in SQLite so duplicates don't collide across languages.
+Sign in with a username on first open. New users pick languages via header `+` (multi-select); after that, flags show for their languages and `+` moves to Settings. Header **feedback** field expands for beta notes.
+
+Language switch (Brazil / Quebec) is top-right — only languages you've added. Pool-days footer and other owner debug chrome appear only for the dev account.
 
 ## How the system is built
 

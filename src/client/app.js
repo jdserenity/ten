@@ -62,7 +62,7 @@ const MODE_CONFIGS = {
     label: 'Brazilian Portuguese',
     shortLabel: 'Brazilian',
     translatorLabel: 'Portuguese',
-    wordsPath: '/words.pt.json',
+    wordsPath: '/words.pt-br.json',
     sentenceKey: 'pt',
     speechLang: 'pt-BR',
     learningLang: 'PT-BR',
@@ -75,7 +75,7 @@ const MODE_CONFIGS = {
     label: 'Quebec French',
     shortLabel: 'Quebec',
     translatorLabel: 'French',
-    wordsPath: '/words.fr.json',
+    wordsPath: '/words.fr-ca.json',
     sentenceKey: 'fr',
     speechLang: 'fr-CA',
     learningLang: 'FR',
@@ -88,7 +88,7 @@ const MODE_CONFIGS = {
     label: 'France French',
     shortLabel: 'France',
     translatorLabel: 'French',
-    wordsPath: '/words.fr.json',
+    wordsPath: '/words.fr-fr.json',
     sentenceKey: 'fr',
     speechLang: 'fr-FR',
     learningLang: 'FR-FR',
@@ -101,7 +101,7 @@ const MODE_CONFIGS = {
     label: 'Argentinian Spanish',
     shortLabel: 'Argentina',
     translatorLabel: 'Spanish',
-    wordsPath: '/words.es.json',
+    wordsPath: '/words.es-ar.json',
     sentenceKey: 'es',
     speechLang: 'es-AR',
     learningLang: 'ES-AR',
@@ -129,6 +129,7 @@ const state = {
     wordGloss: '',
     s1Gloss: '',
     s2Gloss: '',
+    s3Gloss: '',
     loading: false,
     requestId: 0
   },
@@ -1013,16 +1014,21 @@ function updateDailyDots() {
 function updateDailyAddButtons(word, glosses) {
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
+  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
   const firstSentenceText = getSentenceText(firstSentence);
   const secondSentenceText = getSentenceText(secondSentence);
+  const thirdSentenceText = getSentenceText(thirdSentence);
   const loading = glosses.loading;
   const hasWord = !!word.word && !!glosses.wordGloss && !loading;
   const hasS1 = !!(firstSentenceText && glosses.s1Gloss && !loading);
   const hasS2 = !!(secondSentenceText && glosses.s2Gloss && !loading);
+  const hasS3 = !!(thirdSentenceText && glosses.s3Gloss && !loading);
   const btnWord = document.getElementById('word-add-btn'); if (btnWord) btnWord.disabled = !hasWord;
   const btnS1 = document.getElementById('s1-add-btn'); if (btnS1) btnS1.disabled = !hasS1;
   const btnS2 = document.getElementById('s2-add-btn'); if (btnS2) btnS2.disabled = !hasS2;
-  const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !(hasWord && hasS1 && hasS2);
+  const btnS3 = document.getElementById('s3-add-btn'); if (btnS3) btnS3.disabled = !hasS3;
+  const required = hasWord && hasS1 && hasS2 && (!thirdSentenceText || hasS3);
+  const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !required;
 }
 
 async function resolveGlossText(sourceText, sourceLang, targetLang, englishFallback = '') {
@@ -1046,15 +1052,19 @@ async function loadDailyGlosses(word) {
   state.dailyGlosses.wordGloss = '';
   state.dailyGlosses.s1Gloss = '';
   state.dailyGlosses.s2Gloss = '';
+  state.dailyGlosses.s3Gloss = '';
   document.getElementById('translation').textContent = tr('daily.glossLoading');
   document.getElementById('s1-en').textContent = tr('daily.glossLoading');
   document.getElementById('s2-en').textContent = tr('daily.glossLoading');
+  const s3En = document.getElementById('s3-en'); if (s3En) s3En.textContent = tr('daily.glossLoading');
   updateDailyAddButtons(word, state.dailyGlosses);
 
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
+  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
   const firstSentenceText = getSentenceText(firstSentence);
   const secondSentenceText = getSentenceText(secondSentence);
+  const thirdSentenceText = getSentenceText(thirdSentence);
   const unavailable = tr('daily.glossUnavailable');
 
   try {
@@ -1068,15 +1078,21 @@ async function loadDailyGlosses(word) {
       ? await resolveGlossText(secondSentenceText, mode.learningLang, nativeLang, secondSentence.en).catch(() => '')
       : '';
     if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
+    const s3Gloss = thirdSentenceText
+      ? await resolveGlossText(thirdSentenceText, mode.learningLang, nativeLang, thirdSentence.en).catch(() => '')
+      : '';
+    if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
     state.dailyGlosses.wordGloss = wordGloss || unavailable;
     state.dailyGlosses.s1Gloss = firstSentenceText ? (s1Gloss || unavailable) : '';
     state.dailyGlosses.s2Gloss = secondSentenceText ? (s2Gloss || unavailable) : '';
+    state.dailyGlosses.s3Gloss = thirdSentenceText ? (s3Gloss || unavailable) : '';
   } finally {
     if (requestId !== state.dailyGlosses.requestId || state.dailyGlosses.wordKey !== wordKey) return;
     state.dailyGlosses.loading = false;
     document.getElementById('translation').textContent = state.dailyGlosses.wordGloss;
     document.getElementById('s1-en').textContent = state.dailyGlosses.s1Gloss;
     document.getElementById('s2-en').textContent = state.dailyGlosses.s2Gloss;
+    const s3EnDone = document.getElementById('s3-en'); if (s3EnDone) s3EnDone.textContent = state.dailyGlosses.s3Gloss;
     updateDailyAddButtons(word, state.dailyGlosses);
   }
 }
@@ -1092,13 +1108,16 @@ function renderDailyWord(index) {
     document.getElementById('s1-en').textContent = '';
     document.getElementById('s2-l2').textContent = '';
     document.getElementById('s2-en').textContent = '';
+    const s3L2Empty = document.getElementById('s3-l2'); if (s3L2Empty) s3L2Empty.textContent = '';
+    const s3EnEmpty = document.getElementById('s3-en'); if (s3EnEmpty) s3EnEmpty.textContent = '';
     document.getElementById('counter').textContent = '0 / 0';
     document.getElementById('prev-btn').disabled = true;
     document.getElementById('next-btn').disabled = true;
     document.getElementById('speak-btn').disabled = true;
     document.getElementById('s1-speak-btn').disabled = true;
     document.getElementById('s2-speak-btn').disabled = true;
-    ['word-add-btn','s1-add-btn','s2-add-btn','add-all-btn'].forEach(id => {
+    const s3SpeakEmpty = document.getElementById('s3-speak-btn'); if (s3SpeakEmpty) s3SpeakEmpty.disabled = true;
+    ['word-add-btn','s1-add-btn','s2-add-btn','s3-add-btn','add-all-btn'].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
     const sentenceLabel = document.getElementById('sentence-language-label');
@@ -1113,7 +1132,6 @@ function renderDailyWord(index) {
   const divider = document.querySelector('#card .divider');
   if (sentenceLabel) sentenceLabel.classList.remove('hidden');
   if (divider) divider.classList.remove('hidden');
-  document.querySelectorAll('#card .sentence').forEach(el => el.classList.remove('hidden'));
 
   state.currentWordIndex = index;
   if (state.activeTab === 'daily') {
@@ -1122,8 +1140,10 @@ function renderDailyWord(index) {
 
   const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
   const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
+  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
   const firstSentenceText = getSentenceText(firstSentence);
   const secondSentenceText = getSentenceText(secondSentence);
+  const thirdSentenceText = getSentenceText(thirdSentence);
 
   document.getElementById('word').textContent = word.word;
   const rank = getCurrentDailyWordFrequencyRank();
@@ -1132,12 +1152,19 @@ function renderDailyWord(index) {
     : tr('daily.frequencyRankUnavailable');
   document.getElementById('s1-l2').textContent = firstSentenceText;
   document.getElementById('s2-l2').textContent = secondSentenceText;
+  const s3L2 = document.getElementById('s3-l2'); if (s3L2) s3L2.textContent = thirdSentenceText;
   document.getElementById('counter').textContent = `${index + 1} / ${state.todayWords.length}`;
   document.getElementById('prev-btn').disabled = index === 0;
   document.getElementById('next-btn').disabled = index === state.todayWords.length - 1;
   document.getElementById('speak-btn').disabled = !word.word;
   document.getElementById('s1-speak-btn').disabled = !firstSentenceText;
   document.getElementById('s2-speak-btn').disabled = !secondSentenceText;
+  const s3Speak = document.getElementById('s3-speak-btn'); if (s3Speak) s3Speak.disabled = !thirdSentenceText;
+
+  const sentenceEls = document.querySelectorAll('#card .sentence');
+  if (sentenceEls[0]) sentenceEls[0].classList.toggle('hidden', !firstSentenceText);
+  if (sentenceEls[1]) sentenceEls[1].classList.toggle('hidden', !secondSentenceText);
+  if (sentenceEls[2]) sentenceEls[2].classList.toggle('hidden', !thirdSentenceText);
 
   void loadDailyGlosses(word);
 
@@ -2510,6 +2537,11 @@ function setupDailyEvents() {
     const text = word && word.sentences && word.sentences[1] ? getSentenceText(word.sentences[1]) : '';
     speakText(text, document.getElementById('s2-speak-btn'));
   });
+  document.getElementById('s3-speak-btn').addEventListener('click', () => {
+    const word = state.todayWords[state.currentWordIndex];
+    const text = word && word.sentences && word.sentences[2] ? getSentenceText(word.sentences[2]) : '';
+    speakText(text, document.getElementById('s3-speak-btn'));
+  });
 
   // Small + buttons (beside word and each sentence)
   document.getElementById('word-add-btn').addEventListener('click', async () => {
@@ -2549,7 +2581,18 @@ function setupDailyEvents() {
     await addSentenceCardWithGloss(l2, state.dailyGlosses.s2Gloss, 'daily-save-status');
   });
 
-  // Bottom "+Add all" — adds word + both sentences (3 cards)
+  document.getElementById('s3-add-btn').addEventListener('click', async () => {
+    const word = state.todayWords[state.currentWordIndex];
+    const sent = word && word.sentences && word.sentences[2] ? word.sentences[2] : null;
+    if (!sent) {
+      setStatus('daily-save-status', tr('daily.noSentence'), 'error');
+      return;
+    }
+    const l2 = getSentenceText(sent);
+    await addSentenceCardWithGloss(l2, state.dailyGlosses.s3Gloss, 'daily-save-status');
+  });
+
+  // Bottom "+Add all" — adds word + each example sentence as cards
   document.getElementById('add-all-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
@@ -2558,14 +2601,16 @@ function setupDailyEvents() {
     }
     const s1 = word.sentences && word.sentences[0] ? word.sentences[0] : null;
     const s2 = word.sentences && word.sentences[1] ? word.sentences[1] : null;
+    const s3 = word.sentences && word.sentences[2] ? word.sentences[2] : null;
 
     setStatus('daily-save-status', tr('daily.savingCards'));
 
     const wOk = await addCard({ front: state.dailyGlosses.wordGloss, back: word.word }, 'daily-save-status');
     const s1Ok = s1 ? await addSentenceCardWithGloss(getSentenceText(s1), state.dailyGlosses.s1Gloss, 'daily-save-status') : false;
     const s2Ok = s2 ? await addSentenceCardWithGloss(getSentenceText(s2), state.dailyGlosses.s2Gloss, 'daily-save-status') : false;
+    const s3Ok = s3 ? await addSentenceCardWithGloss(getSentenceText(s3), state.dailyGlosses.s3Gloss, 'daily-save-status') : false;
 
-    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0);
+    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0) + (s3Ok ? 1 : 0);
     if (total > 0) {
       setStatus('daily-save-status', total > 1 ? tr('daily.addedCardsPlural', { count: total }) : tr('daily.addedCards', { count: total }), 'success');
     }

@@ -1,6 +1,6 @@
 # Project knowledge
 
-Hard-won lessons and traps. Product/system facts live only in `scaffold/ARCH-LLM.md` / `scaffold/ARCH-HUMAN.md` — do not restate them here. Word-pool quality standards and the abandoned scrape story live in `scaffold/generating-words.md`.
+Hard-won lessons and traps. Product/system facts live only in `scaffold/ARCH-LLM.md` / `scaffold/ARCH-HUMAN.md` — do not restate them here. Word-pool quality standards live in `scaffold/skills/seed-daily-words/SKILL.md`.
 
 ## Service worker removed
 Ten no longer ships `sw.js`. Static assets are served with `Cache-Control: no-cache`; `app.js` unregisters any leftover worker on load so phones stop intercepting requests after deploy.
@@ -11,8 +11,20 @@ An old script generated icons at runtime. At 192/512px the results looked bad. I
 ## Default port is 3001, not 3000
 Older docs said `3000`. The server defaults to `PORT` or **3001**, and scans upward if the port is taken. Use whatever URL the process prints; Tailscale phone bookmarks should match that port.
 
-## Do not hand-edit `words.pt.json`
-Portuguese pool content comes from `npm run generate:pt`. Hand edits get overwritten on the next generate. Change the generator (or follow `scaffold/generating-words.md`) and regenerate.
+## Shared French pool was wrong
+Quebec (`fr`) and France (`fr-fr`) must not share one `words.fr.json`. Separate files (`words.fr-ca.json`, `words.fr-fr.json`) keep progress and regional sentences honest. Same idea for Spanish: use `words.es-ar.json`, not a generic `words.es.json`.
+
+## Tatoeba / scrape generators are retired
+Auto-fetched example sentences (Tatoeba, naive Wiktionary scrapes) produced wrong senses, weak usage, and English contamination. Pools are agent/LLM curated via `scaffold/skills/seed-daily-words/SKILL.md` and gated by `npm run words:check`.
+
+## Accents are non-negotiable
+A previous French pool shipped with **zero diacritics** (`tres`, `ecole`, `francais`). The checker fails entries with no accents in languages that use them. Always write real orthography.
+
+## Sense and POS traps
+LLMs sometimes use the wrong reading of a word (e.g. Portuguese *linda* as the name “Linda” instead of “beautiful”). Sentences must match the taught sense and part of speech. Prefer showcasing real multi-sense lemmas on purpose — never accidental name/POS mixups.
+
+## One lemma per card
+Do not add separate 10/day cards for conjugations/inflections of a lemma already in the pool. Show real forms inside the three example sentences instead.
 
 ## Confetti is gated in localStorage on purpose
 The 10/day completion burst is once per language per calendar day. That gate is client `localStorage`, not SQLite, so a refresh after finishing does not fire confetti again. Daily card *position* is server-side; celebration “already fired” is not. The same pattern applies to the daily **Review** tab (10 cards graded today).

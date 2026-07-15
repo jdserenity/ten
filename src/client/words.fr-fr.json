@@ -1,0 +1,902 @@
+[
+  {
+    "word": "bonjour",
+    "translation": "hello, good morning",
+    "sentences": [
+      {
+        "fr": "Bonjour, je suis très heureux de vous rencontrer.",
+        "en": "Hello, I am very happy to meet you."
+      },
+      {
+        "fr": "Elle dit toujours bonjour en arrivant au bureau.",
+        "en": "She always says hello when she arrives at the office."
+      },
+      {
+        "fr": "On s'est croisés et on s'est dit bonjour rapidement.",
+        "en": "We ran into each other and quickly said hello."
+      }
+    ]
+  },
+  {
+    "word": "merci",
+    "translation": "thank you",
+    "sentences": [
+      {
+        "fr": "Merci beaucoup pour ton aide précieuse hier.",
+        "en": "Thank you very much for your valuable help yesterday."
+      },
+      {
+        "fr": "Il a dit merci avant de quitter la pièce.",
+        "en": "He said thank you before leaving the room."
+      },
+      {
+        "fr": "Nous voulons te remercier sincèrement pour tout.",
+        "en": "We want to thank you sincerely for everything."
+      }
+    ]
+  },
+  {
+    "word": "maison",
+    "translation": "house, home",
+    "sentences": [
+      {
+        "fr": "Ma maison est près de l'école primaire.",
+        "en": "My house is near the elementary school."
+      },
+      {
+        "fr": "Ils sont rentrés à la maison très tard.",
+        "en": "They got back home very late."
+      },
+      {
+        "fr": "Nous cherchons une maison plus grande à Paris.",
+        "en": "We are looking for a bigger house in Paris."
+      }
+    ]
+  },
+  {
+    "word": "école",
+    "translation": "school",
+    "sentences": [
+      {
+        "fr": "Les enfants vont à l'école tous les matins.",
+        "en": "The children go to school every morning."
+      },
+      {
+        "fr": "Cette école propose des cours de français.",
+        "en": "This school offers French classes."
+      },
+      {
+        "fr": "J'ai quitté l'école un peu plus tôt aujourd'hui.",
+        "en": "I left school a little earlier today."
+      }
+    ]
+  },
+  {
+    "word": "travail",
+    "translation": "work, job",
+    "sentences": [
+      {
+        "fr": "Mon travail commence à neuf heures précises.",
+        "en": "My work starts at exactly nine o'clock."
+      },
+      {
+        "fr": "Elle a trouvé un nouveau travail à Lyon.",
+        "en": "She found a new job in Lyon."
+      },
+      {
+        "fr": "Après le travail, on boit un café ensemble.",
+        "en": "After work, we have a coffee together."
+      }
+    ]
+  },
+  {
+    "word": "travailler",
+    "translation": "to work",
+    "sentences": [
+      {
+        "fr": "Je travaille dans un bureau près du métro.",
+        "en": "I work in an office near the metro."
+      },
+      {
+        "fr": "Ils ont travaillé toute la nuit sur le projet.",
+        "en": "They worked all night on the project."
+      },
+      {
+        "fr": "Tu travailles trop; prends une vraie pause.",
+        "en": "You work too much; take a real break."
+      }
+    ]
+  },
+  {
+    "word": "ami",
+    "translation": "friend (male); friend in general",
+    "sentences": [
+      {
+        "fr": "Mon meilleur ami habite encore à Marseille.",
+        "en": "My best friend still lives in Marseille."
+      },
+      {
+        "fr": "Nous sommes devenus amis pendant les études.",
+        "en": "We became friends during our studies."
+      },
+      {
+        "fr": "Elle invite ses amis à dîner ce soir.",
+        "en": "She is inviting her friends to dinner tonight."
+      }
+    ]
+  },
+  {
+    "word": "famille",
+    "translation": "family",
+    "sentences": [
+      {
+        "fr": "Ma famille mange ensemble le dimanche.",
+        "en": "My family eats together on Sundays."
+      },
+      {
+        "fr": "Ils passent les vacances en famille à la mer.",
+        "en": "They spend the holidays as a family by the sea."
+      },
+      {
+        "fr": "Toute la famille est arrivée avant midi.",
+        "en": "The whole family arrived before noon."
+      }
+    ]
+  },
+  {
+    "word": "enfant",
+    "translation": "child",
+    "sentences": [
+      {
+        "fr": "L'enfant lit un livre sur le canapé.",
+        "en": "The child is reading a book on the sofa."
+      },
+      {
+        "fr": "Les enfants jouent dehors après l'école.",
+        "en": "The children play outside after school."
+      },
+      {
+        "fr": "Chaque enfant a reçu un petit cadeau.",
+        "en": "Each child received a small gift."
+      }
+    ]
+  },
+  {
+    "word": "manger",
+    "translation": "to eat",
+    "sentences": [
+      {
+        "fr": "Nous mangeons du pain frais tous les matins.",
+        "en": "We eat fresh bread every morning."
+      },
+      {
+        "fr": "Hier soir, ils ont mangé trop rapidement.",
+        "en": "Last night they ate too quickly."
+      },
+      {
+        "fr": "Tu veux manger quelque chose avant de partir?",
+        "en": "Do you want to eat something before leaving?"
+      }
+    ]
+  },
+  {
+    "word": "boire",
+    "translation": "to drink",
+    "sentences": [
+      {
+        "fr": "Je bois un café très fort le matin.",
+        "en": "I drink a very strong coffee in the morning."
+      },
+      {
+        "fr": "Ils ont bu toute l'eau de la bouteille.",
+        "en": "They drank all the water in the bottle."
+      },
+      {
+        "fr": "On ne doit pas boire trop de soda.",
+        "en": "You shouldn't drink too much soda."
+      }
+    ]
+  },
+  {
+    "word": "eau",
+    "translation": "water",
+    "sentences": [
+      {
+        "fr": "Peux-tu m'apporter un verre d'eau froide?",
+        "en": "Can you bring me a glass of cold water?"
+      },
+      {
+        "fr": "L'eau de cette rivière est très claire.",
+        "en": "The water in this river is very clear."
+      },
+      {
+        "fr": "Nous achetons de l'eau en bouteille parfois.",
+        "en": "We sometimes buy bottled water."
+      }
+    ]
+  },
+  {
+    "word": "pain",
+    "translation": "bread",
+    "sentences": [
+      {
+        "fr": "J'achète du pain à la boulangerie du coin.",
+        "en": "I buy bread at the corner bakery."
+      },
+      {
+        "fr": "Ce pain est encore chaud et croustillant.",
+        "en": "This bread is still warm and crusty."
+      },
+      {
+        "fr": "Ils mangent du pain avec du fromage.",
+        "en": "They eat bread with cheese."
+      }
+    ]
+  },
+  {
+    "word": "ville",
+    "translation": "city, town",
+    "sentences": [
+      {
+        "fr": "Paris est une très grande ville touristique.",
+        "en": "Paris is a very large tourist city."
+      },
+      {
+        "fr": "Nous habitons en ville depuis cinq ans.",
+        "en": "We have lived in the city for five years."
+      },
+      {
+        "fr": "Cette petite ville a un joli marché.",
+        "en": "This small town has a nice market."
+      }
+    ]
+  },
+  {
+    "word": "livre",
+    "translation": "book",
+    "sentences": [
+      {
+        "fr": "Je lis un livre intéressant sur l'histoire.",
+        "en": "I am reading an interesting book about history."
+      },
+      {
+        "fr": "Elle a emprunté trois livres à la bibliothèque.",
+        "en": "She borrowed three books from the library."
+      },
+      {
+        "fr": "Ce livre m'a beaucoup aidé à apprendre.",
+        "en": "This book helped me a lot with learning."
+      }
+    ]
+  },
+  {
+    "word": "parler",
+    "translation": "to speak, to talk",
+    "sentences": [
+      {
+        "fr": "Ils parlent français très couramment maintenant.",
+        "en": "They speak French very fluently now."
+      },
+      {
+        "fr": "On a parlé de vacances pendant une heure.",
+        "en": "We talked about holidays for an hour."
+      },
+      {
+        "fr": "Tu peux parler un peu plus lentement, s'il te plaît?",
+        "en": "Can you speak a little more slowly, please?"
+      }
+    ]
+  },
+  {
+    "word": "écouter",
+    "translation": "to listen",
+    "sentences": [
+      {
+        "fr": "J'écoute de la musique française chaque soir.",
+        "en": "I listen to French music every evening."
+      },
+      {
+        "fr": "Les élèves écoutent attentivement le professeur.",
+        "en": "The students listen carefully to the teacher."
+      },
+      {
+        "fr": "Elle a écouté le message deux fois.",
+        "en": "She listened to the message twice."
+      }
+    ]
+  },
+  {
+    "word": "regarder",
+    "translation": "to look at, to watch",
+    "sentences": [
+      {
+        "fr": "Nous regardons un film français ce soir.",
+        "en": "We are watching a French movie tonight."
+      },
+      {
+        "fr": "Il a regardé par la fenêtre longtemps.",
+        "en": "He looked out the window for a long time."
+      },
+      {
+        "fr": "Tu regardes trop la télévision le week-end.",
+        "en": "You watch too much TV on the weekend."
+      }
+    ]
+  },
+  {
+    "word": "attendre",
+    "translation": "to wait (for)",
+    "sentences": [
+      {
+        "fr": "J'attends le bus depuis vingt minutes.",
+        "en": "I have been waiting for the bus for twenty minutes."
+      },
+      {
+        "fr": "Elle a attendu son ami devant le café.",
+        "en": "She waited for her friend in front of the café."
+      },
+      {
+        "fr": "Nous attendons une réponse importante demain.",
+        "en": "We are waiting for an important answer tomorrow."
+      }
+    ]
+  },
+  {
+    "word": "comprendre",
+    "translation": "to understand",
+    "sentences": [
+      {
+        "fr": "Je comprends mieux quand tu parles très lentement.",
+        "en": "I understand better when you speak very slowly."
+      },
+      {
+        "fr": "Ils n'ont pas compris la question déjà posée.",
+        "en": "They did not understand the question already asked."
+      },
+      {
+        "fr": "Tu comprends déjà ce que je veux dire?",
+        "en": "Do you already understand what I mean?"
+      }
+    ]
+  },
+  {
+    "word": "apprendre",
+    "translation": "to learn; also to teach (someone something)",
+    "sentences": [
+      {
+        "fr": "J'apprends le français depuis six mois.",
+        "en": "I have been learning French for six months."
+      },
+      {
+        "fr": "Elle a appris beaucoup de mots nouveaux.",
+        "en": "She learned a lot of new words."
+      },
+      {
+        "fr": "Ce livre m'apprend des choses utiles chaque jour.",
+        "en": "This book teaches me useful things every day."
+      }
+    ]
+  },
+  {
+    "word": "écrire",
+    "translation": "to write",
+    "sentences": [
+      {
+        "fr": "J'écris un message à mon frère maintenant.",
+        "en": "I am writing a message to my brother now."
+      },
+      {
+        "fr": "Ils ont écrit une longue lettre hier soir.",
+        "en": "They wrote a long letter last night."
+      },
+      {
+        "fr": "Tu écris très clairement au tableau.",
+        "en": "You write very clearly on the board."
+      }
+    ]
+  },
+  {
+    "word": "lire",
+    "translation": "to read",
+    "sentences": [
+      {
+        "fr": "Elle lit le journal tous les matins au café.",
+        "en": "She reads the newspaper every morning at the café."
+      },
+      {
+        "fr": "Nous avons lu ce roman pendant les vacances.",
+        "en": "We read this novel during the holidays."
+      },
+      {
+        "fr": "Tu lis trop vite pour bien comprendre le texte.",
+        "en": "You read too quickly to understand the text well."
+      }
+    ]
+  },
+  {
+    "word": "acheter",
+    "translation": "to buy",
+    "sentences": [
+      {
+        "fr": "J'achète des fruits au marché le samedi.",
+        "en": "I buy fruit at the market on Saturdays."
+      },
+      {
+        "fr": "Ils ont acheté une nouvelle table ronde.",
+        "en": "They bought a new round table."
+      },
+      {
+        "fr": "Tu peux acheter le pain en rentrant?",
+        "en": "Can you buy the bread on your way home?"
+      }
+    ]
+  },
+  {
+    "word": "vendre",
+    "translation": "to sell",
+    "sentences": [
+      {
+        "fr": "Ils vendent des légumes frais chaque matin.",
+        "en": "They sell fresh vegetables every morning."
+      },
+      {
+        "fr": "Elle a vendu sa vieille voiture hier soir.",
+        "en": "She sold her old car last night."
+      },
+      {
+        "fr": "On ne veut pas vendre cette maison familiale.",
+        "en": "We do not want to sell this family house."
+      }
+    ]
+  },
+  {
+    "word": "chercher",
+    "translation": "to look for, to search for",
+    "sentences": [
+      {
+        "fr": "Je cherche mes clés depuis dix minutes déjà.",
+        "en": "I have already been looking for my keys for ten minutes."
+      },
+      {
+        "fr": "Ils ont cherché un appartement plus calme.",
+        "en": "They looked for a quieter apartment."
+      },
+      {
+        "fr": "Tu cherches toujours ton téléphone le matin.",
+        "en": "You are always looking for your phone in the morning."
+      }
+    ]
+  },
+  {
+    "word": "trouver",
+    "translation": "to find; also to think / find (that)",
+    "sentences": [
+      {
+        "fr": "J'ai enfin trouvé mon portefeuille perdu.",
+        "en": "I finally found my lost wallet."
+      },
+      {
+        "fr": "Elle trouve ce film vraiment intéressant.",
+        "en": "She finds this movie really interesting."
+      },
+      {
+        "fr": "Nous trouvons toujours une solution ensemble.",
+        "en": "We always find a solution together."
+      }
+    ]
+  },
+  {
+    "word": "donner",
+    "translation": "to give",
+    "sentences": [
+      {
+        "fr": "Il donne toujours de bons conseils à ses amis.",
+        "en": "He always gives good advice to his friends."
+      },
+      {
+        "fr": "Elle m'a donné un livre pour mon anniversaire.",
+        "en": "She gave me a book for my birthday."
+      },
+      {
+        "fr": "Peux-tu me donner un peu d'eau, s'il te plaît?",
+        "en": "Can you give me a little water, please?"
+      }
+    ]
+  },
+  {
+    "word": "prendre",
+    "translation": "to take; also to have (food/drink)",
+    "sentences": [
+      {
+        "fr": "Je prends le train pour aller au travail.",
+        "en": "I take the train to go to work."
+      },
+      {
+        "fr": "Ils ont pris un café après le déjeuner.",
+        "en": "They had a coffee after lunch."
+      },
+      {
+        "fr": "Tu peux prendre cette chaise libre là-bas.",
+        "en": "You can take that free chair over there."
+      }
+    ]
+  },
+  {
+    "word": "ouvrir",
+    "translation": "to open",
+    "sentences": [
+      {
+        "fr": "J'ouvre la fenêtre pour aérer la pièce.",
+        "en": "I open the window to air out the room."
+      },
+      {
+        "fr": "Le magasin ouvre à neuf heures pile.",
+        "en": "The shop opens at exactly nine."
+      },
+      {
+        "fr": "Elle a ouvert la porte avec un grand sourire.",
+        "en": "She opened the door with a big smile."
+      }
+    ]
+  },
+  {
+    "word": "fermer",
+    "translation": "to close, to shut",
+    "sentences": [
+      {
+        "fr": "Ferme la porte, s'il te plaît; il fait froid.",
+        "en": "Close the door, please; it is cold."
+      },
+      {
+        "fr": "Le café ferme assez tôt le dimanche.",
+        "en": "The café closes fairly early on Sundays."
+      },
+      {
+        "fr": "Ils ont fermé les volets avant de dormir.",
+        "en": "They closed the shutters before sleeping."
+      }
+    ]
+  },
+  {
+    "word": "commencer",
+    "translation": "to begin, to start",
+    "sentences": [
+      {
+        "fr": "Le cours commence à huit heures précises.",
+        "en": "The class starts at exactly eight o'clock."
+      },
+      {
+        "fr": "Nous avons commencé le projet la semaine dernière.",
+        "en": "We started the project last week."
+      },
+      {
+        "fr": "Tu commences toujours tes phrases trop vite.",
+        "en": "You always start your sentences too quickly."
+      }
+    ]
+  },
+  {
+    "word": "finir",
+    "translation": "to finish, to end",
+    "sentences": [
+      {
+        "fr": "J'ai fini mes devoirs avant le dîner.",
+        "en": "I finished my homework before dinner."
+      },
+      {
+        "fr": "Le film finit trop brusquement à mon avis.",
+        "en": "The movie ends too abruptly in my opinion."
+      },
+      {
+        "fr": "Quand tu finis, on peut sortir ensemble.",
+        "en": "When you finish, we can go out together."
+      }
+    ]
+  },
+  {
+    "word": "partir",
+    "translation": "to leave, to go away",
+    "sentences": [
+      {
+        "fr": "Nous partons demain matin très tôt.",
+        "en": "We are leaving very early tomorrow morning."
+      },
+      {
+        "fr": "Il est parti sans dire au revoir.",
+        "en": "He left without saying goodbye."
+      },
+      {
+        "fr": "Tu pars déjà? On vient juste d'arriver.",
+        "en": "You're leaving already? We just got here."
+      }
+    ]
+  },
+  {
+    "word": "arriver",
+    "translation": "to arrive; also to happen",
+    "sentences": [
+      {
+        "fr": "Le train arrive dans cinq minutes exactement.",
+        "en": "The train arrives in exactly five minutes."
+      },
+      {
+        "fr": "Elle est arrivée en retard à la réunion.",
+        "en": "She arrived late to the meeting."
+      },
+      {
+        "fr": "Qu'est-ce qui t'est arrivé hier soir?",
+        "en": "What happened to you last night?"
+      }
+    ]
+  },
+  {
+    "word": "rester",
+    "translation": "to stay, to remain",
+    "sentences": [
+      {
+        "fr": "Je reste à la maison ce week-end.",
+        "en": "I am staying home this weekend."
+      },
+      {
+        "fr": "Ils sont restés jusqu'à minuit chez des amis.",
+        "en": "They stayed until midnight at friends' place."
+      },
+      {
+        "fr": "Il reste encore un peu de gâteau.",
+        "en": "There is still a little cake left."
+      }
+    ]
+  },
+  {
+    "word": "habiter",
+    "translation": "to live (in a place)",
+    "sentences": [
+      {
+        "fr": "J'habite dans un petit appartement à Lyon.",
+        "en": "I live in a small apartment in Lyon."
+      },
+      {
+        "fr": "Ils habitent près de la gare depuis longtemps.",
+        "en": "They have lived near the station for a long time."
+      },
+      {
+        "fr": "Où habites-tu maintenant en France?",
+        "en": "Where do you live in France now?"
+      }
+    ]
+  },
+  {
+    "word": "aimer",
+    "translation": "to like, to love",
+    "sentences": [
+      {
+        "fr": "J'aime beaucoup la cuisine française.",
+        "en": "I really like French food."
+      },
+      {
+        "fr": "Ils aiment se promener le dimanche après-midi.",
+        "en": "They like to go for walks on Sunday afternoons."
+      },
+      {
+        "fr": "Elle a aimé ce livre dès la première page.",
+        "en": "She loved this book from the first page."
+      }
+    ]
+  },
+  {
+    "word": "vouloir",
+    "translation": "to want",
+    "sentences": [
+      {
+        "fr": "Je veux apprendre le français correctement.",
+        "en": "I want to learn French properly."
+      },
+      {
+        "fr": "Ils ont voulu partir plus tôt que prévu.",
+        "en": "They wanted to leave earlier than planned."
+      },
+      {
+        "fr": "Que veux-tu boire avec ton repas?",
+        "en": "What do you want to drink with your meal?"
+      }
+    ]
+  },
+  {
+    "word": "pouvoir",
+    "translation": "to be able to, can",
+    "sentences": [
+      {
+        "fr": "Je peux t'aider avec tes devoirs ce soir.",
+        "en": "I can help you with your homework tonight."
+      },
+      {
+        "fr": "Ils n'ont pas pu venir à cause de la pluie.",
+        "en": "They could not come because of the rain."
+      },
+      {
+        "fr": "Tu peux répéter la question, s'il te plaît?",
+        "en": "Can you repeat the question, please?"
+      }
+    ]
+  },
+  {
+    "word": "devoir",
+    "translation": "must, to have to",
+    "sentences": [
+      {
+        "fr": "Je dois partir avant seize heures aujourd'hui.",
+        "en": "I have to leave before four o'clock today."
+      },
+      {
+        "fr": "Nous avons dû changer nos plans rapidement.",
+        "en": "We had to change our plans quickly."
+      },
+      {
+        "fr": "Tu dois écouter plus attentivement en classe.",
+        "en": "You must listen more carefully in class."
+      }
+    ]
+  },
+  {
+    "word": "savoir",
+    "translation": "to know (a fact / how to)",
+    "sentences": [
+      {
+        "fr": "Je sais où se trouve la bibliothèque.",
+        "en": "I know where the library is."
+      },
+      {
+        "fr": "Elle a su répondre à toutes les questions.",
+        "en": "She knew how to answer all the questions."
+      },
+      {
+        "fr": "Tu sais cuisiner un vrai repas français?",
+        "en": "Do you know how to cook a real French meal?"
+      }
+    ]
+  },
+  {
+    "word": "voir",
+    "translation": "to see",
+    "sentences": [
+      {
+        "fr": "Je vois mes amis tous les week-ends.",
+        "en": "I see my friends every weekend."
+      },
+      {
+        "fr": "Nous avons vu un très beau film hier.",
+        "en": "We saw a very good movie yesterday."
+      },
+      {
+        "fr": "Tu vois le problème comme moi, n'est-ce pas?",
+        "en": "You see the problem the way I do, right?"
+      }
+    ]
+  },
+  {
+    "word": "venir",
+    "translation": "to come",
+    "sentences": [
+      {
+        "fr": "Ils viennent dîner chez nous ce soir.",
+        "en": "They are coming to dinner at our place tonight."
+      },
+      {
+        "fr": "Elle est venue me voir à l'hôpital.",
+        "en": "She came to see me at the hospital."
+      },
+      {
+        "fr": "Tu viens avec nous au marché demain?",
+        "en": "Are you coming with us to the market tomorrow?"
+      }
+    ]
+  },
+  {
+    "word": "dire",
+    "translation": "to say, to tell",
+    "sentences": [
+      {
+        "fr": "Il dit toujours la vérité à ses parents.",
+        "en": "He always tells the truth to his parents."
+      },
+      {
+        "fr": "Elle m'a dit de venir un peu plus tôt.",
+        "en": "She told me to come a little earlier."
+      },
+      {
+        "fr": "Que veux-tu dire par cette remarque?",
+        "en": "What do you mean by that remark?"
+      }
+    ]
+  },
+  {
+    "word": "demander",
+    "translation": "to ask (for); to request",
+    "sentences": [
+      {
+        "fr": "Je demande toujours de l'aide quand j'en ai besoin.",
+        "en": "I always ask for help when I need it."
+      },
+      {
+        "fr": "Ils ont demandé le chemin à un passant pressé.",
+        "en": "They asked a hurried passerby for directions."
+      },
+      {
+        "fr": "Tu peux me demander si tu as une question.",
+        "en": "You can ask me if you have a question."
+      }
+    ]
+  },
+  {
+    "word": "répondre",
+    "translation": "to answer, to reply",
+    "sentences": [
+      {
+        "fr": "Je réponds aux messages le soir seulement.",
+        "en": "I answer messages only in the evening."
+      },
+      {
+        "fr": "Elle a répondu trop vite sans réfléchir.",
+        "en": "She answered too quickly without thinking."
+      },
+      {
+        "fr": "Peux-tu répondre à cette question difficile?",
+        "en": "Can you answer this difficult question?"
+      }
+    ]
+  },
+  {
+    "word": "petit",
+    "translation": "small, little",
+    "sentences": [
+      {
+        "fr": "J'habite dans un petit appartement calme.",
+        "en": "I live in a small quiet apartment."
+      },
+      {
+        "fr": "Les petits enfants dorment déjà profondément.",
+        "en": "The little children are already sleeping deeply."
+      },
+      {
+        "fr": "Ce café est un peu trop petit pour nous.",
+        "en": "This café is a bit too small for us."
+      }
+    ]
+  },
+  {
+    "word": "grand",
+    "translation": "big, tall; also grown-up",
+    "sentences": [
+      {
+        "fr": "Ils vivent dans une grande maison à la campagne.",
+        "en": "They live in a big house in the countryside."
+      },
+      {
+        "fr": "Mon frère est plus grand que moi maintenant.",
+        "en": "My brother is taller than me now."
+      },
+      {
+        "fr": "C'est un grand jour pour toute la famille.",
+        "en": "It is a big day for the whole family."
+      }
+    ]
+  },
+  {
+    "word": "nouveau",
+    "translation": "new",
+    "sentences": [
+      {
+        "fr": "J'ai acheté un nouveau téléphone hier.",
+        "en": "I bought a new phone yesterday."
+      },
+      {
+        "fr": "Elle commence un nouveau travail lundi prochain.",
+        "en": "She starts a new job next Monday."
+      },
+      {
+        "fr": "Nous cherchons de nouvelles idées pour le projet.",
+        "en": "We are looking for new ideas for the project."
+      }
+    ]
+  }
+]

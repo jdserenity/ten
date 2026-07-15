@@ -43,13 +43,25 @@
         </button>
         <div id="header-lang-add-wrap" class="lang-add-wrap hidden">
           <button id="header-lang-add-btn" class="lang-add-btn" type="button" data-i18n-aria-label="header.addLanguagesAria" data-i18n-title="header.addLanguagesTitle" aria-label="Add languages" title="Add languages">＋</button>
+          <svg id="add-lang-hint" class="add-lang-hint hidden" viewBox="0 0 72 88" width="56" height="68" aria-hidden="true" focusable="false">
+            <defs>
+              <filter id="add-lang-hint-chalk" x="-30%" y="-30%" width="160%" height="160%">
+                <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="7" result="noise"/>
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+              </filter>
+            </defs>
+            <g transform="translate(36 44) rotate(90) translate(-36 -44) translate(72 0) scale(-1 1)" filter="url(#add-lang-hint-chalk)">
+              <path d="M 18 78 C 16 62, 20 48, 28 36 C 34 26, 42 18, 50 12" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M 38 8 C 42 10, 48 12, 54 10 C 50 16, 48 22, 50 28" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </g>
+          </svg>
           <div id="header-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.chooseLanguages" aria-label="Choose languages">
             <p class="lang-picker-title" data-i18n="picker.chooseLanguages">Choose languages</p>
             <div class="lang-picker-options">
-              <label class="lang-picker-option"><input type="checkbox" value="pt-br" /> 🇧🇷 <span data-i18n="picker.ptBr">Brazilian Portuguese</span></label>
-              <label class="lang-picker-option"><input type="checkbox" value="fr" /> 🇨🇦 <span data-i18n="picker.fr">Quebec French</span></label>
-              <label class="lang-picker-option"><input type="checkbox" value="fr-fr" /> 🇫🇷 <span data-i18n="picker.frFr">France French</span></label>
-              <label class="lang-picker-option"><input type="checkbox" value="es-ar" /> 🇦🇷 <span data-i18n="picker.esAr">Argentinian Spanish</span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="es-ar" /><span class="lang-picker-flag">🇦🇷</span><span class="lang-picker-name" data-i18n="picker.esAr">Argentinian Spanish</span><span class="lang-picker-tick" aria-hidden="true"></span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="pt-br" /><span class="lang-picker-flag">🇧🇷</span><span class="lang-picker-name" data-i18n="picker.ptBr">Brazilian Portuguese</span><span class="lang-picker-tick" aria-hidden="true"></span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="fr-fr" /><span class="lang-picker-flag">🇫🇷</span><span class="lang-picker-name" data-i18n="picker.frFr">France French</span><span class="lang-picker-tick" aria-hidden="true"></span></label>
+              <label class="lang-picker-option"><input type="checkbox" value="fr" /><span class="lang-picker-flag">🇨🇦</span><span class="lang-picker-name" data-i18n="picker.fr">Quebec French</span><span class="lang-picker-tick" aria-hidden="true"></span></label>
             </div>
             <button id="header-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.add">Add</button>
           </div>
@@ -60,6 +72,11 @@
             <button class="mode-toggle-btn active" type="button" data-mode="fr" aria-pressed="true" data-i18n-aria-label="header.switchFr" aria-label="Switch to Quebec French">🇨🇦</button>
             <button class="mode-toggle-btn" type="button" data-mode="fr-fr" aria-pressed="false" data-i18n-aria-label="header.switchFrFr" aria-label="Switch to France French">🇫🇷</button>
             <button class="mode-toggle-btn" type="button" data-mode="es-ar" aria-pressed="false" data-i18n-aria-label="header.switchEsAr" aria-label="Switch to Argentinian Spanish">🇦🇷</button>
+          </div>
+          <div id="header-mode-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.chooseLanguages" aria-label="Choose languages">
+            <p class="lang-picker-title" data-i18n="picker.chooseLanguages">Choose languages</p>
+            <div class="lang-picker-options header-mode-lang-picker-options"></div>
+            <button id="header-mode-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.save">Save</button>
           </div>
         </div>
       </div>
@@ -96,10 +113,10 @@
           <button id="settings-lang-add-btn" class="lang-add-btn hidden" type="button" data-i18n-aria-label="settings.addLanguageAria" data-i18n-title="settings.addLanguageTitle" aria-label="Add a language" title="Add a language">＋</button>
         </div>
         <div id="settings-lang-list" class="settings-lang-list"></div>
-        <div id="settings-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.addLanguages" aria-label="Add languages">
-          <p class="lang-picker-title" data-i18n="picker.addLanguages">Add languages</p>
+        <div id="settings-lang-picker" class="lang-picker hidden" role="dialog" data-i18n-aria-label="picker.chooseLanguages" aria-label="Choose languages">
+          <p class="lang-picker-title" data-i18n="picker.chooseLanguages">Choose languages</p>
           <div class="lang-picker-options settings-lang-picker-options"></div>
-          <button id="settings-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.add">Add</button>
+          <button id="settings-lang-confirm-btn" class="primary-btn" type="button" data-i18n="picker.save">Save</button>
         </div>
         <button id="settings-switch-user-btn" type="button" class="wide-btn" data-i18n="settings.signOut">Sign out</button>
         <div id="settings-feedback-section" class="settings-feedback-block hidden">

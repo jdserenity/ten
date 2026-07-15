@@ -19,6 +19,12 @@ import {
   normalizeTranslateDirection,
   resolveStartupTab,
   resolveTranslateNativeLang,
+  buildLangPickerOptionHtml,
+  getLangPickerOptions,
+  isLangPickerOutsideClick,
+  sortLangPickerOptionsByLabel,
+  shouldOpenLangPickerOnModeClick,
+  shouldShowAddLanguageHint,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -177,6 +183,76 @@ test('language add button placement follows onboarding vs settings', () => {
   assert.equal(shouldShowHeaderAddLanguageButton(['FR']), false);
   assert.equal(shouldShowSettingsAddLanguageButton([]), false);
   assert.equal(shouldShowSettingsAddLanguageButton(['FR']), true);
+});
+
+test('add-language hint shows for fresh users until they open the picker or add a language', () => {
+  assert.equal(shouldShowAddLanguageHint([]), true);
+  assert.equal(shouldShowAddLanguageHint(null), true);
+  assert.equal(shouldShowAddLanguageHint([], { pickerOpen: true }), false);
+  assert.equal(shouldShowAddLanguageHint(['FR']), false);
+  assert.equal(shouldShowAddLanguageHint(['FR'], { pickerOpen: true }), false);
+});
+
+test('buildLangPickerOptionHtml renders a selectable chip with flag, name, and tick', () => {
+  const html = buildLangPickerOptionHtml({
+    modeId: 'pt-br',
+    flag: '🇧🇷',
+    label: 'Brazilian Portuguese'
+  });
+  assert.match(html, /class="lang-picker-option"/);
+  assert.match(html, /type="checkbox"/);
+  assert.match(html, /value="pt-br"/);
+  assert.match(html, /class="lang-picker-flag"/);
+  assert.match(html, /🇧🇷/);
+  assert.match(html, /class="lang-picker-name"/);
+  assert.match(html, /Brazilian Portuguese/);
+  assert.match(html, /class="lang-picker-tick"/);
+  assert.doesNotMatch(html, /\schecked/);
+  assert.doesNotMatch(html, /type="checkbox"[^>]*>\s*[🇧🇷🇨🇦🇫🇷🇦🇷]/);
+});
+
+test('buildLangPickerOptionHtml escapes label HTML', () => {
+  const html = buildLangPickerOptionHtml({
+    modeId: 'fr',
+    flag: '🇨🇦',
+    label: 'Quebec <script> French & "co"'
+  });
+  assert.match(html, /Quebec &lt;script&gt; French &amp; &quot;co&quot;/);
+  assert.doesNotMatch(html, /<script>/);
+});
+
+test('getLangPickerOptions includes owned languages as selected', () => {
+  assert.deepEqual(getLangPickerOptions(['pt-br', 'fr'], ['fr']), [
+    { modeId: 'pt-br', selected: false },
+    { modeId: 'fr', selected: true }
+  ]);
+});
+
+test('sortLangPickerOptionsByLabel orders by display name alphabetically', () => {
+  const sorted = sortLangPickerOptionsByLabel([
+    { modeId: 'pt-br', label: 'Brazilian Portuguese', selected: false },
+    { modeId: 'fr', label: 'Quebec French', selected: true },
+    { modeId: 'fr-fr', label: 'France French', selected: false },
+    { modeId: 'es-ar', label: 'Argentinian Spanish', selected: false }
+  ]);
+  assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr']);
+});
+
+test('isLangPickerOutsideClick ignores clicks inside the picker or on ignored roots', () => {
+  const picker = { contains(node) { return node === 'inside-picker' || node === 'inside-toggle'; } };
+  const toggle = { contains(node) { return node === 'inside-toggle'; } };
+  const flags = { contains(node) { return node === 'inside-flag'; } };
+  assert.equal(isLangPickerOutsideClick('inside-picker', picker, toggle), false);
+  assert.equal(isLangPickerOutsideClick('inside-toggle', picker, toggle), false);
+  assert.equal(isLangPickerOutsideClick('inside-flag', picker, flags), false);
+  assert.equal(isLangPickerOutsideClick('outside', picker, toggle, flags), true);
+  assert.equal(isLangPickerOutsideClick(null, picker, toggle), false);
+});
+
+test('shouldOpenLangPickerOnModeClick is true only for the active learning flag', () => {
+  assert.equal(shouldOpenLangPickerOnModeClick('fr', 'fr'), true);
+  assert.equal(shouldOpenLangPickerOnModeClick('fr', 'pt-br'), false);
+  assert.equal(shouldOpenLangPickerOnModeClick('', 'fr'), false);
 });
 
 test('mode and learning language ids round-trip', () => {

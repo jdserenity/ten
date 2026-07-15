@@ -170,8 +170,56 @@ export function shouldShowHeaderAddLanguageButton(userLanguages, inSettings = fa
   return !Array.isArray(userLanguages) || userLanguages.length === 0;
 }
 
+export function shouldShowAddLanguageHint(userLanguages, { pickerOpen = false } = {}) {
+  if (pickerOpen) return false;
+  return shouldShowHeaderAddLanguageButton(userLanguages);
+}
+
 export function shouldShowSettingsAddLanguageButton(userLanguages) {
   return Array.isArray(userLanguages) && userLanguages.length > 0;
+}
+
+export function escapeLangPickerText(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+export function getLangPickerOptions(offeredModeIds, ownedModeIds = []) {
+  const owned = new Set(Array.isArray(ownedModeIds) ? ownedModeIds : []);
+  return (Array.isArray(offeredModeIds) ? offeredModeIds : []).map(modeId => ({
+    modeId,
+    selected: owned.has(modeId)
+  }));
+}
+
+export function sortLangPickerOptionsByLabel(options, locale) {
+  return [...(Array.isArray(options) ? options : [])].sort((a, b) =>
+    String(a?.label || '').localeCompare(String(b?.label || ''), locale || undefined, { sensitivity: 'base' })
+  );
+}
+
+export function isLangPickerOutsideClick(target, pickerEl, ...ignoreEls) {
+  if (!target || !pickerEl) return false;
+  if (pickerEl.contains(target)) return false;
+  for (const ignoreEl of ignoreEls) {
+    if (ignoreEl?.contains?.(target)) return false;
+  }
+  return true;
+}
+
+export function shouldOpenLangPickerOnModeClick(clickedModeId, activeModeId) {
+  return Boolean(clickedModeId && activeModeId && clickedModeId === activeModeId);
+}
+
+export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selected = false } = {}) {
+  const safeMode = String(modeId || '').replace(/"/g, '');
+  const safeFlag = escapeLangPickerText(flag);
+  const safeLabel = escapeLangPickerText(label);
+  const checked = selected ? ' checked' : '';
+  return `<label class="lang-picker-option"><input type="checkbox" value="${safeMode}"${checked} /><span class="lang-picker-flag">${safeFlag}</span><span class="lang-picker-name">${safeLabel}</span><span class="lang-picker-tick" aria-hidden="true"></span></label>`;
 }
 
 export function normalizeUsername(value) {

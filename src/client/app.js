@@ -552,11 +552,11 @@ function getReviewGradedToday() {
   const raw = localStorage.getItem(getReviewDailyProgressStorageKey());
   const count = Number(raw);
   if (!Number.isInteger(count) || count < 0) return 0;
-  return Math.min(count, DAILY_REVIEW_GOAL);
+  return count;
 }
 
 function incrementReviewGradedToday() {
-  const next = Math.min(DAILY_REVIEW_GOAL, getReviewGradedToday() + 1);
+  const next = getReviewGradedToday() + 1;
   localStorage.setItem(getReviewDailyProgressStorageKey(), String(next));
   return next;
 }
@@ -620,20 +620,34 @@ function buildReviewDots() {
     dotsEl.appendChild(dot);
     return dot;
   });
+  const infinity = document.createElement('span');
+  infinity.id = 'review-infinity';
+  infinity.className = 'review-infinity';
+  infinity.textContent = '∞';
+  infinity.setAttribute('aria-hidden', 'true');
+  dotsEl.appendChild(infinity);
   updateReviewDots();
 }
 
 function updateReviewDots() {
   const graded = getReviewGradedToday();
-  const hasActive = graded < DAILY_REVIEW_GOAL && Boolean(getCurrentReviewCard());
+  const dotsFilled = Math.min(graded, DAILY_REVIEW_GOAL);
+  const hasActive = Boolean(getCurrentReviewCard());
   reviewDots.forEach((dot, index) => {
     let className = 'dot review-dot';
-    if (index < graded) className += ' seen';
-    else if (hasActive && index === graded) className += ' active';
+    if (index < dotsFilled) className += ' seen';
+    else if (hasActive && graded < DAILY_REVIEW_GOAL && index === graded) className += ' active';
     dot.className = className;
   });
+  const infinityEl = document.getElementById('review-infinity');
+  if (infinityEl) {
+    infinityEl.classList.toggle('seen', graded >= DAILY_REVIEW_GOAL);
+    infinityEl.classList.toggle('active', hasActive && graded >= DAILY_REVIEW_GOAL);
+  }
   const counter = document.getElementById('review-counter');
-  if (counter) counter.textContent = `${graded} / ${DAILY_REVIEW_GOAL} reviewed today`;
+  if (counter) {
+    counter.textContent = `${Math.min(graded, DAILY_REVIEW_GOAL)} / ${DAILY_REVIEW_GOAL} reviewed today`;
+  }
 }
 
 function showDailyUnavailable(reason) {
@@ -892,41 +906,19 @@ function removeReviewCardById(cardId) {
   return removed;
 }
 
-function getReviewSessionRemaining() {
-  return Math.max(0, DAILY_REVIEW_GOAL - getReviewGradedToday());
-}
-
 function renderReview() {
   window.speechSynthesis?.cancel();
   document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking'));
 
-  const sessionRemaining = getReviewSessionRemaining();
-  const queueCount = state.reviewCards.length;
-  const leftToday = Math.min(sessionRemaining, queueCount);
-  document.getElementById('review-due-count').textContent = String(leftToday);
+  document.getElementById('review-due-count').textContent = String(state.reviewCards.length);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
   updateReviewDots();
 
-  const completePanel = document.getElementById('review-complete');
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');
   const answerWrap = document.getElementById('review-answer-wrap');
   const gradeRow = document.getElementById('review-grade-row');
   const showAnswerBtn = document.getElementById('review-show-answer-btn');
-  const refreshBtn = document.getElementById('review-refresh-btn');
-  const reviewDoneToday = sessionRemaining <= 0;
-
-  if (completePanel) completePanel.classList.toggle('hidden', !reviewDoneToday);
-  if (refreshBtn) refreshBtn.classList.toggle('hidden', reviewDoneToday);
-
-  if (reviewDoneToday) {
-    empty.classList.add('hidden');
-    cardPanel.classList.add('hidden');
-    showAnswerBtn.classList.add('hidden');
-    answerWrap.classList.add('hidden');
-    gradeRow.classList.add('hidden');
-    return;
-  }
 
   const card = getCurrentReviewCard();
   if (!card) {
@@ -1007,7 +999,7 @@ async function loadReviewQueue(options = {}) {
 
 async function submitReviewGrade(grade) {
   const card = getCurrentReviewCard();
-  if (!card || !grade || state.reviewSubmitting || getReviewSessionRemaining() <= 0) return;
+  if (!card || !grade || state.reviewSubmitting) return;
 
   setStatus('review-status', '');
   state.reviewSubmitting = true;
@@ -1703,11 +1695,9 @@ function setupReviewEvents() {
       await removeCard(card.id);
       removeReviewCardById(card.id);
       state.reviewTotalCount = Math.max(0, state.reviewTotalCount - 1);
-      if (getReviewSessionRemaining() > 0) recordReviewSessionProgress();
+      recordReviewSessionProgress();
       renderReview();
-      if (hasCompletedDailyReviewToday()) {
-        setStatus('review-status', 'Card deleted. Daily review complete.', 'success');
-      } else if (state.reviewCards.length > 0) {
+      if (state.reviewCards.length > 0) {
         setStatus('review-status', 'Card deleted.', 'success');
       } else {
         setStatus('review-status', 'Card deleted. Add more cards from 10/day to keep reviewing.', 'success');

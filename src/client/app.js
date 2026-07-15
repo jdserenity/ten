@@ -27,13 +27,15 @@ import {
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
-  swapTranslateDirection as swapTranslateDirectionPair
+  swapTranslateDirection as swapTranslateDirectionPair,
+  userHasLearningLanguages
 } from './ten-logic.js';
 import {
   computePoolDaysLeft,
   countUnseenPoolWords,
-  pickDailyWords,
-  resolveDailyWordsFromAssignment,
+  normalizePoolWord,
+  pickAdditionalDailyWords,
+  reconcileDailyWords,
   WORDS_PER_DAY
 } from './daily-pool.js';
 
@@ -227,6 +229,7 @@ function applyAppLanguage() {
   updateFrequencyModeLabel();
   updateDateLabel();
   renderSettingsAppLangButtons();
+  syncNoLanguageUi();
 }
 
 function syncAppLangFromUser() {
@@ -285,6 +288,10 @@ function getUserModeIds() {
   return getUserLearningLanguages()
     .map(modeIdFromLearningLang)
     .filter(modeId => MODE_CONFIGS[modeId]);
+}
+
+function hasUserLearningLanguages() {
+  return userHasLearningLanguages(getUserLearningLanguages());
 }
 
 function saveUserToStorage(user) {
@@ -432,7 +439,7 @@ async function saveUserLanguages(modeIds, { replace = false } = {}) {
   if (nextMode) {
     await setLearningMode(nextMode, { force: true, resetTranslate: true });
   } else {
-    showDailyUnavailable(tr('daily.addLanguage'));
+    showDailyNoLanguageState();
   }
   if (state.settingsOpen) renderSettings();
 }
@@ -481,6 +488,7 @@ function renderAuthChrome() {
   });
   updateModeToggleUi();
   renderSettings();
+  syncNoLanguageUi();
 }
 
 function renderSettings() {
@@ -600,6 +608,12 @@ function displayFrequencyLanguage(code) {
 function updateFrequencyModeLabel() {
   const label = document.getElementById('frequency-mode-label');
   if (!label) return;
+  if (!hasUserLearningLanguages()) {
+    label.textContent = '';
+    label.classList.add('hidden');
+    return;
+  }
+  label.classList.remove('hidden');
   label.textContent = tr('frequency.dictionary', { language: displayFrequencyLanguage(getFrequencyLanguageForMode()) });
 }
 
@@ -667,10 +681,7 @@ function capitalizeFirstWord(value) {
 }
 
 function normalizeFrequencyWord(value) {
-  return String(value || '')
-    .trim()
-    .toLocaleLowerCase()
-    .normalize('NFC');
+  return normalizePoolWord(value);
 }
 
 function getFrequencyLanguageForMode(modeId = state.activeMode) {
@@ -764,7 +775,54 @@ async function initUnlockedWordsFromServer() {
   return merged;
 }
 
-function markLearningWordSeenInFrequency(rawWord) {
+function dailyAssignmentHeadwordsEqual(savedHeadwords, nextWords) {
+  if (!Array.isArray(savedHeadwords) || savedHeadwords.length !== nextWords.length) return false;
+  return savedHeadwords.every((headword, index) => (
+    normalizePoolWord(headword) === normalizePoolWord(nextWords[index]?.word)
+  ));
+}
+
+function rebuildSeenDailyWordIndexes() {
+  const seenSet = getSeenDailyWordsSet();
+  state.seenWordIndexes = new Set(
+    state.todayWords
+      .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
+      .filter(idx => idx >= 0)
+  );
+}
+
+async function reconcileTodayWordsAfterUnlock(normalized) {
+  const idx = state.todayWords.findIndex(entry => normalizeFrequencyWord(entry?.word) === normalized);
+  if (idx < 0) return;
+
+  const language = getFrequencyLanguageForMode();
+  const dayKey = dateKey();
+  const seenSet = getSeenDailyWordsSet(language);
+  state.todayWords.splice(idx, 1);
+
+  const blocked = new Set(seenSet);
+  state.todayWords.forEach(entry => {
+    const word = normalizeFrequencyWord(entry?.word);
+    if (word) blocked.add(word);
+  });
+  const replacements = pickAdditionalDailyWords(state.words, blocked, dayKey, 1);
+  if (replacements.length) state.todayWords.splice(idx, 0, replacements[0]);
+
+  if (state.currentWordIndex > idx) state.currentWordIndex--;
+  else if (state.currentWordIndex >= state.todayWords.length) {
+    state.currentWordIndex = Math.max(0, state.todayWords.length - 1);
+  }
+
+  rebuildSeenDailyWordIndexes();
+  buildDailyDots();
+  if (state.todayWords.length) {
+    await persistDailyWordAssignment(language, dayKey, state.todayWords.map(entry => entry.word));
+  }
+  if (state.activeTab === 'daily') renderDailyWord(state.currentWordIndex);
+  updatePoolInfo();
+}
+
+function markLearningWordSeenInFrequency(rawWord, options = {}) {
   const normalized = normalizeFrequencyWord(rawWord);
   if (!normalized) return;
   const language = getFrequencyLanguageForMode();
@@ -772,12 +830,15 @@ function markLearningWordSeenInFrequency(rawWord) {
   const isNew = !seenSet.has(normalized);
   seenSet.add(normalized);
   if (isNew) persistUnlockedWordToServer(language, normalized);
-  state.todayWords.forEach((entry, idx) => {
-    if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
-      state.seenWordIndexes.add(idx);
-    }
-  });
-  updateDailyDots();
+  if (isNew && options.reconcileDaily) void reconcileTodayWordsAfterUnlock(normalized);
+  else {
+    state.todayWords.forEach((entry, idx) => {
+      if (entry?.word && normalizeFrequencyWord(entry.word) === normalized) {
+        state.seenWordIndexes.add(idx);
+      }
+    });
+    updateDailyDots();
+  }
   if (state.activeTab === 'frequency') {
     renderFrequencyDictionary();
   }
@@ -867,7 +928,7 @@ function buildDailyDots() {
     const dot = document.createElement('button');
     dot.className = 'dot';
     dot.type = 'button';
-    dot.title = `Go to card ${index + 1}`;
+    dot.title = tr('daily.goToCard', { n: index + 1 });
     dot.addEventListener('click', () => gotoDailyWord(index));
     dotsEl.appendChild(dot);
     return dot;
@@ -955,8 +1016,9 @@ async function loadDailyGlosses(word) {
 function renderDailyWord(index) {
   const word = state.todayWords[index];
   if (!word) {
-    document.getElementById('word').textContent = tr('daily.unavailable');
-    document.getElementById('translation').textContent = tr('daily.listLoadFailed');
+    const noLanguage = !hasUserLearningLanguages();
+    document.getElementById('word').textContent = noLanguage ? tr('daily.addLanguage') : tr('daily.unavailable');
+    document.getElementById('translation').textContent = '';
     document.getElementById('daily-frequency-rank').textContent = '';
     document.getElementById('s1-l2').textContent = '';
     document.getElementById('s1-en').textContent = '';
@@ -971,8 +1033,19 @@ function renderDailyWord(index) {
     ['word-add-btn','s1-add-btn','s2-add-btn','add-all-btn'].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
+    const sentenceLabel = document.getElementById('sentence-language-label');
+    const divider = document.querySelector('#card .divider');
+    if (sentenceLabel) sentenceLabel.classList.toggle('hidden', true);
+    if (divider) divider.classList.toggle('hidden', true);
+    document.querySelectorAll('#card .sentence').forEach(el => el.classList.add('hidden'));
     return;
   }
+
+  const sentenceLabel = document.getElementById('sentence-language-label');
+  const divider = document.querySelector('#card .divider');
+  if (sentenceLabel) sentenceLabel.classList.remove('hidden');
+  if (divider) divider.classList.remove('hidden');
+  document.querySelectorAll('#card .sentence').forEach(el => el.classList.remove('hidden'));
 
   state.currentWordIndex = index;
   if (state.activeTab === 'daily') {
@@ -1207,6 +1280,17 @@ function updatePoolInfo() {
   poolInfo.classList.toggle('warning', poolDays <= 7);
 }
 
+function showDailyNoLanguageState() {
+  state.words = [];
+  state.todayWords = [];
+  state.currentWordIndex = 0;
+  state.seenWordIndexes = new Set();
+  document.getElementById('dots').innerHTML = '';
+  dailyDots = [];
+  renderDailyWord(0);
+  syncNoLanguageUi();
+}
+
 function showDailyUnavailable(reason) {
   state.words = [];
   state.todayWords = [];
@@ -1218,7 +1302,7 @@ function showDailyUnavailable(reason) {
   const poolInfo = document.getElementById('pool-info');
   poolInfo.textContent = reason;
   poolInfo.classList.add('warning');
-  setStatus('daily-save-status', tr('daily.listUnavailable'), 'error');
+  setStatus('daily-save-status', '');
 }
 
 function updateModeToggleUi() {
@@ -1248,8 +1332,48 @@ function updateLanguageCopy() {
   if (backLabel) backLabel.textContent = tr('translate.back', { language: translatorLabel });
   if (backInput) backInput.placeholder = tr('translate.backPlaceholder', { language: translatorLabel });
   if (reviewBackLabel) reviewBackLabel.textContent = tr('translate.back', { language: translatorLabel });
-  if (sentenceLabel) sentenceLabel.textContent = tr('daily.sentenceInUse', { language: translatorLabel });
-  if (fromLabel && !state.lastDetectedSourceLang) fromLabel.textContent = getModeShortLabel(mode.id);
+  if (sentenceLabel && hasUserLearningLanguages()) {
+    sentenceLabel.textContent = tr('daily.sentenceInUse', { language: translatorLabel });
+    sentenceLabel.classList.remove('hidden');
+  } else if (sentenceLabel) {
+    sentenceLabel.textContent = '';
+    sentenceLabel.classList.add('hidden');
+  }
+  if (fromLabel && !state.lastDetectedSourceLang && hasUserLearningLanguages()) {
+    fromLabel.textContent = getModeShortLabel(mode.id);
+  }
+}
+
+function updateTranslateAvailability() {
+  const ready = hasUserLearningLanguages();
+  const translateInput = document.getElementById('translate-input');
+  const translateBtn = document.getElementById('translate-btn');
+  const swapBtn = document.getElementById('swap-languages-btn');
+  const clearBtn = document.getElementById('clear-translate-btn');
+  const freqSearch = document.getElementById('frequency-search-input');
+  if (translateInput) translateInput.disabled = !ready;
+  if (translateBtn) translateBtn.disabled = !ready;
+  if (swapBtn) swapBtn.disabled = !ready;
+  if (clearBtn) clearBtn.disabled = !ready;
+  if (freqSearch) freqSearch.disabled = !ready;
+}
+
+function syncNoLanguageUi() {
+  const ready = hasUserLearningLanguages();
+  document.body.classList.toggle('no-learning-language', !ready);
+  updateTranslateAvailability();
+  updateTranslateDirectionUi();
+  updateFrequencyModeLabel();
+  if (!ready) {
+    setStatus('daily-save-status', '');
+    setStatus('review-status', '');
+    setStatus('frequency-status', '');
+    const poolInfo = document.getElementById('pool-info');
+    if (poolInfo) {
+      poolInfo.textContent = '';
+      poolInfo.classList.remove('warning');
+    }
+  }
 }
 
 async function setLearningMode(modeId, options = {}) {
@@ -1581,6 +1705,19 @@ function recordReviewSessionProgress() {
 }
 
 async function loadReviewQueue(options = {}) {
+  if (!hasUserLearningLanguages()) {
+    state.reviewCards = [];
+    state.reviewDueCount = 0;
+    state.reviewCurrentIndex = 0;
+    state.reviewAnswerVisible = false;
+    state.reviewEditing = false;
+    state.reviewSubmitting = false;
+    state.reviewEditSubmitting = false;
+    setStatus('review-status', '');
+    renderReview();
+    return;
+  }
+
   const refreshTotal = Boolean(options.refreshTotal) || state.reviewTotalCount <= 0;
   const mode = getModeConfig();
   setStatus('review-status', '');
@@ -1764,8 +1901,8 @@ function updateFrequencySearchHint(matchCount, totalCount, hasQuery) {
     return;
   }
   hintEl.textContent = matchCount === totalCount
-    ? `${matchCount} entries`
-    : `${matchCount} of ${totalCount} entries`;
+    ? tr('frequency.matchCount', { count: matchCount })
+    : tr('frequency.matchCountOf', { match: matchCount, total: totalCount });
 }
 
 function formatFrequencyInlineTranslation(translation) {
@@ -1791,7 +1928,7 @@ async function translateFrequencyWord(entry) {
       text: formatFrequencyInlineTranslation(result.translatedText),
       error: false
     });
-    markLearningWordSeenInFrequency(entry.word);
+    markLearningWordSeenInFrequency(entry.word, { reconcileDaily: true });
   } catch (error) {
     state.frequencyInlineTranslations.set(mapKey, {
       text: formatError(error),
@@ -1879,6 +2016,11 @@ function renderFrequencyDictionary() {
 }
 
 async function loadFrequencyTabData() {
+  if (!hasUserLearningLanguages()) {
+    renderFrequencyDictionary();
+    setStatus('frequency-status', '');
+    return;
+  }
   const language = getFrequencyLanguageForMode();
   try {
     await ensureFrequencyLanguageLoaded(language);
@@ -1905,7 +2047,7 @@ function updateTranslateFrequencyRank(inputText, translatedText, sourceLang, tar
     return;
   }
 
-  markLearningWordSeenInFrequency(learningWord);
+  markLearningWordSeenInFrequency(learningWord, { reconcileDaily: true });
 
   const sourceCanonical = canonicalizeTranslateLanguage(sourceLang);
   const labelKey = sourceCanonical === learningLanguage ? 'frequency.rankInput' : 'frequency.rankResult';
@@ -1972,7 +2114,7 @@ function setNoteConfigOpen(open) {
   }
   if (configureBtn) {
     configureBtn.disabled = !canConfigure;
-    configureBtn.textContent = state.noteConfigOpen ? 'Hide note config' : 'Configure note';
+    configureBtn.textContent = state.noteConfigOpen ? tr('translate.hideNoteConfig') : tr('translate.configureNote');
   }
 }
 
@@ -2033,6 +2175,14 @@ function updateTranslateDirectionUi() {
   const fromLabel = document.getElementById('translate-from-label');
   const toLabel = document.getElementById('translate-to-label');
   if (!fromLabel || !toLabel || !fromCaption || !fromSide) return;
+
+  if (!hasUserLearningLanguages()) {
+    fromCaption.textContent = tr('translate.from');
+    fromLabel.textContent = getNativeDisplayName();
+    fromSide.classList.remove('detected-mismatch');
+    toLabel.textContent = tr('daily.addLanguage');
+    return;
+  }
 
   const selectedSourceLabel = displayTranslateLanguage(state.settings.translateSource);
   const selectedTargetLabel = displayTranslateLanguage(state.settings.translateTarget);
@@ -2558,14 +2708,10 @@ async function initDailyWords() {
   const language = getFrequencyLanguageForMode();
   const seenSet = getSeenDailyWordsSet(language);
 
-  let todayWords = [];
-  const savedAssignment = await fetchDailyWordAssignment(language, dayKey);
-  if (savedAssignment) {
-    todayWords = resolveDailyWordsFromAssignment(words, savedAssignment);
-  }
-  if (!todayWords.length) {
-    todayWords = pickDailyWords(words, seenSet, dayKey, WORDS_PER_DAY);
-    if (todayWords.length) {
+  let savedAssignment = await fetchDailyWordAssignment(language, dayKey);
+  const todayWords = reconcileDailyWords(words, savedAssignment, seenSet, dayKey, WORDS_PER_DAY);
+  if (todayWords.length) {
+    if (!dailyAssignmentHeadwordsEqual(savedAssignment, todayWords)) {
       await persistDailyWordAssignment(language, dayKey, todayWords.map(entry => entry.word));
     }
   }
@@ -2574,11 +2720,7 @@ async function initDailyWords() {
   const savedIndex = await fetchDailyCardIndex(language, dayKey);
   const maxIndex = Math.max(0, state.todayWords.length - 1);
   state.currentWordIndex = savedIndex === null ? 0 : Math.min(savedIndex, maxIndex);
-  state.seenWordIndexes = new Set(
-    state.todayWords
-      .map((entry, idx) => seenSet.has(normalizeFrequencyWord(entry.word)) ? idx : -1)
-      .filter(idx => idx >= 0)
-  );
+  rebuildSeenDailyWordIndexes();
   buildDailyDots();
   renderDailyWord(state.currentWordIndex);
   if (savedIndex !== null && state.currentWordIndex !== savedIndex) {
@@ -2610,7 +2752,7 @@ async function bootApp() {
   if (nextMode) {
     await setLearningMode(state.activeMode, { force: true, resetTranslate: false });
   } else {
-    showDailyUnavailable(tr('daily.addLanguage'));
+    showDailyNoLanguageState();
   }
 
   setActiveTab(resolveStartupTab({

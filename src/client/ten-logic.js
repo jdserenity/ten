@@ -1,5 +1,9 @@
 export const DAILY_REVIEW_GOAL = 10;
 
+export function userHasLearningLanguages(languages) {
+  return Array.isArray(languages) && languages.length > 0;
+}
+
 export function resolveStartupTab({ dailyCompleteToday, reviewCompleteToday }) {
   if (!dailyCompleteToday) return 'daily';
   if (!reviewCompleteToday) return 'review';

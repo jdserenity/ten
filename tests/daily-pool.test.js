@@ -7,7 +7,9 @@ import {
   formatPoolDaysLabel,
   hashDate,
   normalizePoolWord,
+  pickAdditionalDailyWords,
   pickDailyWords,
+  reconcileDailyWords,
   resolveDailyWordsFromAssignment,
   seededShuffle
 } from '../src/client/daily-pool.js';
@@ -86,6 +88,57 @@ describe('countUnseenPoolWords', () => {
   it('counts only words not yet surfaced', () => {
     const seen = new Set(['word1', 'word2']);
     assert.equal(countUnseenPoolWords(pool, seen), 28);
+  });
+
+  it('treats unlocked words as no longer available in the pool', () => {
+    const seen = new Set(['word1', 'word2', 'word3', 'word4', 'word5']);
+    assert.equal(countUnseenPoolWords(pool, seen), 25);
+    assert.equal(computePoolDaysLeft(pool.length, seen.size), 2.5);
+  });
+});
+
+describe('pickAdditionalDailyWords', () => {
+  it('never returns blocked or already-seen words', () => {
+    const blocked = new Set(['word1', 'word2', 'word3']);
+    const extra = pickAdditionalDailyWords(pool, blocked, '2026-6-12', 3);
+    assert.equal(extra.length, 3);
+    for (const entry of extra) {
+      assert.equal(blocked.has(normalizePoolWord(entry.word)), false);
+    }
+  });
+});
+
+describe('reconcileDailyWords', () => {
+  it('drops unlocked words from a saved assignment and refills to 10', () => {
+    const dayKey = '2026-6-12';
+    const seen = new Set(['word1', 'word2']);
+    const assigned = pickDailyWords(pool, new Set(), dayKey).map(entry => entry.word);
+    seen.add('word1');
+    seen.add('word2');
+    const reconciled = reconcileDailyWords(pool, assigned, seen, dayKey);
+    assert.equal(reconciled.length, WORDS_PER_DAY);
+    for (const entry of reconciled) {
+      assert.equal(seen.has(normalizePoolWord(entry.word)), false);
+    }
+    const assignedNorm = new Set(assigned.map(normalizePoolWord));
+    assert.equal(reconciled.some(entry => assignedNorm.has(normalizePoolWord(entry.word)) && seen.has(normalizePoolWord(entry.word))), false);
+  });
+
+  it('matches a fresh pick when nothing was unlocked after assignment', () => {
+    const dayKey = '2026-6-12';
+    const seen = new Set();
+    const fresh = pickDailyWords(pool, seen, dayKey);
+    const assigned = fresh.map(entry => entry.word);
+    const reconciled = reconcileDailyWords(pool, assigned, seen, dayKey);
+    assert.deepEqual(reconciled.map(entry => entry.word), assigned);
+  });
+
+  it('picks from scratch when there is no saved assignment', () => {
+    const dayKey = '2026-6-12';
+    const seen = new Set(['word1']);
+    const reconciled = reconcileDailyWords(pool, null, seen, dayKey);
+    const fresh = pickDailyWords(pool, seen, dayKey);
+    assert.deepEqual(reconciled.map(entry => entry.word), fresh.map(entry => entry.word));
   });
 });
 

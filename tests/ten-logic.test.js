@@ -22,8 +22,15 @@ import {
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
-  swapTranslateDirection
+  swapTranslateDirection,
+  userHasLearningLanguages
 } from '../src/client/ten-logic.js';
+
+test('userHasLearningLanguages is false until the user adds a track', () => {
+  assert.equal(userHasLearningLanguages([]), false);
+  assert.equal(userHasLearningLanguages(null), false);
+  assert.equal(userHasLearningLanguages(['FR']), true);
+});
 
 test('resolveStartupTab opens 10/day, then review, then translate', () => {
   assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: false }), 'daily');

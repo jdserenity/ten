@@ -664,7 +664,9 @@ header h1 {
 .wide-btn:disabled,
 .button-row button:disabled,
 .grade-row button:disabled,
-.danger-btn:disabled {
+.danger-btn:disabled,
+textarea:disabled,
+input:disabled {
   opacity: 0.4;
   cursor: default;
 }

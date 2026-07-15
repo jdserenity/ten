@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   appLangToApiCode,
+  CATALOGS,
   detectAppLanguage,
   formatPoolDaysLabel,
   localeTagForAppLang,
@@ -50,5 +51,45 @@ test('appLangToApiCode maps UI locale to translate API codes', () => {
 
 test('formatPoolDaysLabel pluralizes in Portuguese', () => {
   assert.equal(formatPoolDaysLabel('en', 1, 'Brazil'), '~1 day left in Brazil pool');
-  assert.equal(formatPoolDaysLabel('pt-BR', 2.5, 'Brasil'), '~2.5 dias restantes no pool Brasil');
+  assert.equal(formatPoolDaysLabel('pt-BR', 2.5, 'Brasil'), '~2.5 dias restantes na lista Brasil');
+});
+
+const PT_PT_MARKERS = [
+  'utilizador',
+  'guardar',
+  'ficheiro',
+  'telemóvel',
+  'ecrã',
+  'autocarro',
+  'facto',
+  'introduza',
+  'descarregar',
+  'seleccion',
+  'palavra-passe',
+  'flashcard',
+  'sentença',
+  'nuance'
+];
+
+const PT_BR_SKIP_KEYS = new Set(['translate.lang.ptPt']);
+
+test('pt-BR catalog avoids European Portuguese markers', () => {
+  const catalog = CATALOGS['pt-BR'];
+  for (const [key, value] of Object.entries(catalog)) {
+    if (PT_BR_SKIP_KEYS.has(key)) continue;
+    const lower = String(value).toLowerCase();
+    for (const marker of PT_PT_MARKERS) {
+      assert.equal(
+        lower.includes(marker),
+        false,
+        `pt-BR key "${key}" contains European marker "${marker}": ${value}`
+      );
+    }
+  }
+});
+
+test('pt-BR onboarding copy uses Brazilian Portuguese', () => {
+  assert.equal(t('pt-BR', 'daily.addLanguage'), 'Adicione um idioma!');
+  assert.equal(t('pt-BR', 'settings.signedInAs'), 'Entrou como');
+  assert.equal(t('pt-BR', 'translate.offline'), 'Sem internet: você precisa estar online para traduzir.');
 });

@@ -29,6 +29,7 @@ import {
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
+  sortLangPickerOptionsByLabel,
   swapTranslateDirection as swapTranslateDirectionPair,
   userHasLearningLanguages
 } from './ten-logic.js';
@@ -399,13 +400,20 @@ function readPickerSelections(container) {
 
 function renderPickerOptions(container) {
   if (!container) return;
-  const options = getLangPickerOptions(OFFERED_MODE_IDS, getUserModeIds());
-  container.innerHTML = options.map(({ modeId, selected }) => {
+  const options = sortLangPickerOptionsByLabel(
+    getLangPickerOptions(OFFERED_MODE_IDS, getUserModeIds()).map(({ modeId, selected }) => ({
+      modeId,
+      selected,
+      label: getModeLabel(modeId)
+    })),
+    localeTagForAppLang(state.appLang)
+  );
+  container.innerHTML = options.map(({ modeId, selected, label }) => {
     const mode = MODE_CONFIGS[modeId];
     return buildLangPickerOptionHtml({
       modeId,
       flag: mode?.flagEmoji || '',
-      label: getModeLabel(modeId),
+      label,
       selected
     });
   }).join('');

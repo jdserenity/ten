@@ -21,6 +21,7 @@ import {
   resolveTranslateNativeLang,
   buildLangPickerOptionHtml,
   getLangPickerOptions,
+  sortLangPickerOptionsByLabel,
   shouldShowHeaderAddLanguageButton,
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
@@ -214,6 +215,16 @@ test('getLangPickerOptions includes owned languages as selected', () => {
     { modeId: 'pt-br', selected: false },
     { modeId: 'fr', selected: true }
   ]);
+});
+
+test('sortLangPickerOptionsByLabel orders by display name alphabetically', () => {
+  const sorted = sortLangPickerOptionsByLabel([
+    { modeId: 'pt-br', label: 'Brazilian Portuguese', selected: false },
+    { modeId: 'fr', label: 'Quebec French', selected: true },
+    { modeId: 'fr-fr', label: 'France French', selected: false },
+    { modeId: 'es-ar', label: 'Argentinian Spanish', selected: false }
+  ]);
+  assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr']);
 });
 
 test('mode and learning language ids round-trip', () => {

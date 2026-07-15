@@ -190,6 +190,12 @@ export function getLangPickerOptions(offeredModeIds, ownedModeIds = []) {
   }));
 }
 
+export function sortLangPickerOptionsByLabel(options, locale) {
+  return [...(Array.isArray(options) ? options : [])].sort((a, b) =>
+    String(a?.label || '').localeCompare(String(b?.label || ''), locale || undefined, { sensitivity: 'base' })
+  );
+}
+
 export function buildLangPickerOptionHtml({ modeId, flag = '', label = '', selected = false } = {}) {
   const safeMode = String(modeId || '').replace(/"/g, '');
   const safeFlag = escapeLangPickerText(flag);

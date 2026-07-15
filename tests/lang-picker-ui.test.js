@@ -34,11 +34,19 @@ test('settings and header share the same lang-picker chip classes', () => {
 test('app and static HTML build picker options through the chip helper structure', () => {
   assert.match(app, /buildLangPickerOptionHtml/);
   assert.match(app, /getLangPickerOptions/);
+  assert.match(app, /sortLangPickerOptionsByLabel/);
   assert.match(app, /saveUserLanguages\(selected,\s*\{\s*replace:\s*true/);
   assert.match(html, /lang-picker-flag/);
   assert.match(html, /lang-picker-name/);
   assert.match(html, /lang-picker-tick/);
   assert.doesNotMatch(html, /<input type="checkbox" value="pt-br" \/> 🇧🇷/);
+});
+
+test('static header picker lists languages alphabetically by English name', () => {
+  const block = html.match(/id="header-lang-picker"[\s\S]*?lang-picker-options">([\s\S]*?)<\/div>/);
+  assert.ok(block, 'header picker options exist');
+  const values = [...block[1].matchAll(/value="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(values, ['es-ar', 'pt-br', 'fr-fr', 'fr']);
 });
 
 test('getLangPickerOptions marks owned languages as selected so they can be deselected', () => {

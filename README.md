@@ -1,17 +1,21 @@
 # Ten
 
-A personal PWA for learning Brazilian Portuguese, Quebec French, France French, and Argentinian Spanish.
+Phone PWA: Brazilian Portuguese, Quebec French, France French, Argentinian Spanish.
 
-## Features
+```bash
+cp .env.example .env    # GOOGLE_TRANSLATE_API_KEY, DEEPL_AUTH_KEY
+npm install
+npm run start           # http://localhost:3001 (scans up if busy)
+npm test
+```
 
-- **10/day tab**: Shows 10 deterministic words per day from the active language pool, with translations and real example sentences. Remembers which card you were on after refresh.
-- **Language toggle**: Top-right flag switch between Brazil (PT-BR), Quebec French, France French, and Argentina (ES-AR).
-- **Translate tab**: Uses Google Translate for very short inputs (1-5 words, punctuation ignored) and DeepL for 6+ words, then lets you save results as a flashcard. TTS on the result.
-- **Review tab**: Built-in FSRS scheduling (new + due cards, new first). Grades stay in SQLite on the server.
-- **Frequency dictionary tab**: Full PT-BR, French, and Argentinian Spanish frequency dictionaries (up to 5000 each), with bright green unlocked words (stored in SQLite on the server). Tap a word for an instant inline translation.
-- **Frequency rank hints**: Daily cards and single-word Translate results show frequency rank when available.
-- **Text-to-speech**: Mode-specific speech synthesis (`pt-BR`, `fr-CA`, `fr-FR`, `es-AR`).
-- **Daily completion**: Confetti when you reach the 10th card (once per day per language).
-- **Word pools**: Agent-curated per flavour (`words.pt-br.json`, `words.fr-ca.json`, `words.fr-fr.json`, `words.es-ar.json`). Follow `scaffold/skills/seed-daily-words/SKILL.md`, then `npm run words:check`.
-- **Dictionary refresh**: `npm run frequency:download` refreshes bundled frequency files (ES-AR from ACTIV-ES Argentina corpus).
-- **Anki import (one-time)**: `npm run import:anki` while AnkiConnect is still running copies existing deck notes into Ten (scheduling starts fresh).
+Optional: `PORT`, `TEN_DB_PATH` (default `data/ten.db`). Keys and other env notes: `.env.example`.
+
+```bash
+npm run words:check              # dialect word-pool gate
+npm run frequency:download       # refresh bundled frequency JSON
+npm run deepl:check / google:check
+npm run import:anki              # one-shot; needs Anki Desktop + AnkiConnect
+```
+
+Word-pool editorial rules: `scaffold/skills/seed-daily-words/SKILL.md`.

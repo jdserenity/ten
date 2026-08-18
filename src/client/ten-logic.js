@@ -1,4 +1,4 @@
-export const DAILY_REVIEW_GOAL = 10;
+export const DAILY_REVIEW_GOAL = 5;
 
 export function userHasLearningLanguages(languages) {
   return Array.isArray(languages) && languages.length > 0;

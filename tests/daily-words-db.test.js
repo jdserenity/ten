@@ -3,6 +3,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, describe, it } from 'node:test';
+import { WORDS_PER_DAY } from '../src/client/daily-pool.js';
 
 let dbModule;
 try {
@@ -48,7 +49,7 @@ describeDb('daily word assignment persistence', () => {
   it('rejects empty or oversized lists', () => {
     assert.equal(setDailyWordAssignment(userId, 'FR', '2026-6-14', []).ok, false);
     assert.equal(
-      setDailyWordAssignment(userId, 'FR', '2026-6-14', Array.from({ length: 11 }, (_, i) => `w${i}`)).ok,
+      setDailyWordAssignment(userId, 'FR', '2026-6-14', Array.from({ length: WORDS_PER_DAY + 1 }, (_, i) => `w${i}`)).ok,
       false
     );
   });

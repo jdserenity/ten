@@ -3,6 +3,7 @@ import { createHash } from 'node:crypto';
 import { mkdirSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { WORDS_PER_DAY } from '../src/client/daily-pool.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, '..');
@@ -586,7 +587,7 @@ function parseDailyWordList(words) {
     if (!value) return null;
     normalized.push(value);
   }
-  if (!normalized.length || normalized.length > 10) return null;
+  if (!normalized.length || normalized.length > WORDS_PER_DAY) return null;
   return normalized;
 }
 

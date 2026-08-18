@@ -51,10 +51,10 @@ describe('pickDailyWords', () => {
     assert.notDeepEqual(dayA, dayB);
   });
 
-  it('returns fewer than 10 when the unseen pool is smaller', () => {
-    const tinyPool = pool.slice(0, 5);
+  it('returns fewer than WORDS_PER_DAY when the unseen pool is smaller', () => {
+    const tinyPool = pool.slice(0, 3);
     const picked = pickDailyWords(tinyPool, new Set(), '2026-6-12');
-    assert.equal(picked.length, 5);
+    assert.equal(picked.length, 3);
   });
 });
 
@@ -73,9 +73,10 @@ describe('resolveDailyWordsFromAssignment', () => {
 
 describe('computePoolDaysLeft', () => {
   it('counts down as words are surfaced', () => {
-    assert.equal(computePoolDaysLeft(300, 0), 30);
-    assert.equal(computePoolDaysLeft(300, 10), 29);
-    assert.equal(computePoolDaysLeft(300, 36), 26.4);
+    assert.equal(WORDS_PER_DAY, 5);
+    assert.equal(computePoolDaysLeft(300, 0), 60);
+    assert.equal(computePoolDaysLeft(300, 5), 59);
+    assert.equal(computePoolDaysLeft(300, 18), 56.4);
     assert.equal(computePoolDaysLeft(300, 300), 0);
   });
 
@@ -93,7 +94,7 @@ describe('countUnseenPoolWords', () => {
   it('treats unlocked words as no longer available in the pool', () => {
     const seen = new Set(['word1', 'word2', 'word3', 'word4', 'word5']);
     assert.equal(countUnseenPoolWords(pool, seen), 25);
-    assert.equal(computePoolDaysLeft(pool.length, seen.size), 2.5);
+    assert.equal(computePoolDaysLeft(pool.length, seen.size), 5);
   });
 });
 
@@ -109,7 +110,7 @@ describe('pickAdditionalDailyWords', () => {
 });
 
 describe('reconcileDailyWords', () => {
-  it('keeps assigned words that were already surfaced via 10/day today', () => {
+  it('keeps assigned words that were already surfaced via 5/new today', () => {
     const dayKey = '2026-6-12';
     const seen = new Set();
     const assigned = pickDailyWords(pool, seen, dayKey).map(entry => entry.word);
@@ -151,6 +152,14 @@ describe('reconcileDailyWords', () => {
     const reconciled = reconcileDailyWords(pool, null, seen, dayKey);
     const fresh = pickDailyWords(pool, seen, dayKey);
     assert.deepEqual(reconciled.map(entry => entry.word), fresh.map(entry => entry.word));
+  });
+
+  it('truncates a longer saved assignment down to wordsPerDay', () => {
+    const dayKey = '2026-6-12';
+    const assigned = pool.slice(0, 8).map(entry => entry.word);
+    const reconciled = reconcileDailyWords(pool, assigned, new Set(), dayKey);
+    assert.equal(reconciled.length, WORDS_PER_DAY);
+    assert.deepEqual(reconciled.map(entry => entry.word), assigned.slice(0, WORDS_PER_DAY));
   });
 });
 

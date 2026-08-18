@@ -41,18 +41,19 @@ test('userHasLearningLanguages is false until the user adds a track', () => {
   assert.equal(userHasLearningLanguages(['FR']), true);
 });
 
-test('resolveStartupTab opens 10/day, then review, then translate', () => {
+test('resolveStartupTab opens 5/new, then 5/review, then translate', () => {
   assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: false }), 'daily');
   assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: true }), 'daily');
   assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: false }), 'review');
   assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: true }), 'translate');
 });
 
-test('isDailyReviewComplete requires ten graded cards', () => {
-  assert.equal(isDailyReviewComplete(9), false);
-  assert.equal(isDailyReviewComplete(10), true);
-  assert.equal(isDailyReviewComplete(10, DAILY_REVIEW_GOAL), true);
-  assert.equal(isDailyReviewComplete(11), true);
+test('isDailyReviewComplete requires five graded cards', () => {
+  assert.equal(DAILY_REVIEW_GOAL, 5);
+  assert.equal(isDailyReviewComplete(4), false);
+  assert.equal(isDailyReviewComplete(5), true);
+  assert.equal(isDailyReviewComplete(5, DAILY_REVIEW_GOAL), true);
+  assert.equal(isDailyReviewComplete(6), true);
 });
 
 test('getReviewEmptyState returns i18n keys for empty and clear queues', () => {

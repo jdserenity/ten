@@ -102,3 +102,16 @@ test('tab labels are 5/new, 5/review, and Progress', () => {
   assert.equal(t('pt-BR', 'tab.review'), '5/revisar');
   assert.equal(t('pt-BR', 'tab.frequency'), 'Progresso');
 });
+
+test('add-to-review button copy and configure flashcard labels', () => {
+  assert.equal(t('en', 'daily.addAll'), 'Add all to review');
+  assert.equal(t('pt-BR', 'daily.addAll'), 'Adicionar tudo à revisão');
+  assert.equal(t('en', 'translate.addCard'), 'Add to review');
+  assert.equal(t('en', 'translate.addCardBtn'), 'Add to review');
+  assert.equal(t('pt-BR', 'translate.addCard'), 'Adicionar à revisão');
+  assert.equal(t('en', 'translate.configureNote'), 'Configure flashcard');
+  assert.equal(t('pt-BR', 'translate.configureNote'), 'Configurar cartão');
+  assert.equal(t('en', 'translate.hideNoteConfig'), 'Hide flashcard config');
+  assert.equal(CATALOGS.en['translate.addOpenReview'], undefined);
+  assert.equal(CATALOGS['pt-BR']['translate.addOpenReview'], undefined);
+});

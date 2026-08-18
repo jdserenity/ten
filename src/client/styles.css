@@ -702,7 +702,6 @@ header h1 {
 #card {
   flex: 1;
   min-height: 280px;
-  overflow-y: auto;
 }
 
 .word-row {
@@ -773,15 +772,55 @@ header h1 {
   color: var(--muted);
 }
 
+.sentence-reveal[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.sentence-reveal:not([open]) > *:not(summary) {
+  display: none;
+}
+
+.sentence-reveal > summary.sentences-label {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.4;
+  padding: 6px 0;
+}
+
+.sentence-reveal > summary.sentences-label::-webkit-details-marker,
+.sentence-reveal > summary.sentences-label::marker { display: none; content: ''; }
+
+.sentence-reveal > summary.sentences-label::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 5px solid currentColor;
+  transform-origin: 40% 50%;
+  transition: transform 0.2s ease;
+}
+
+.sentence-reveal[open] > summary.sentences-label::after {
+  transform: rotate(90deg);
+}
+
+.sentence-reveal-nested[open] > summary {
+  display: none;
+}
+
 .sentence {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
 }
 
-.sentence:last-of-type {
+.sentence-reveal-nested[open] > .sentence:last-child {
   padding-bottom: 0;
   border-bottom: none;
 }
@@ -791,12 +830,27 @@ header h1 {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 8px;
 }
 
 .sentence-l2 {
   font-size: 17px;
-  line-height: 1.55;
+  line-height: 1.7;
+  padding-top: 14px;
+}
+
+@keyframes sentence-reveal-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.sentence-reveal-animating {
+  animation: sentence-reveal-in 0.32s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sentence-reveal > summary.sentences-label::after { transition: none; }
+  .sentence-reveal-animating { animation: none; }
 }
 
 .sentence-speak-btn {
@@ -813,15 +867,16 @@ header h1 {
 .sentence-en {
   font-size: 15px;
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.55;
 }
 
 .sentence-actions {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
   align-items: center;
   flex-shrink: 0;
+  padding-top: 8px;
 }
 
 .add-btn-small {
@@ -935,6 +990,7 @@ input:disabled {
   flex-shrink: 0;
   opacity: 0.65;
   min-height: 1.2em;
+  display: none;
 }
 
 #pool-info.warning { color: #e5a84e; opacity: 1; }

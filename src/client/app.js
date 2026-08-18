@@ -37,7 +37,10 @@ import {
   shouldShowSettingsAddLanguageButton,
   sortLangPickerOptionsByLabel,
   swapTranslateDirection as swapTranslateDirectionPair,
-  userHasLearningLanguages
+  userHasLearningLanguages,
+  dailySentenceRevealVisibility,
+  shouldResetDailySentenceReveal,
+  collectSentenceRevealAnimationKeys
 } from './ten-logic.js';
 import {
   computePoolDaysLeft,
@@ -159,7 +162,8 @@ const state = {
   frequencyListFilter: 'all',
   frequencyNotLearnedFrozen: null,
   frequencyInlineTranslations: new Map(),
-  frequencyTranslatingWords: new Set()
+  frequencyTranslatingWords: new Set(),
+  sentenceRevealWord: ''
 };
 
 let dailyDots = [];
@@ -1254,8 +1258,65 @@ async function loadDailyGlosses(word) {
   }
 }
 
+function collapseDailySentenceReveals() {
+  ['sentence-reveal-1', 'sentence-reveal-2', 'sentence-reveal-3'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.open = false;
+  });
+  clearSentenceRevealAnimations();
+}
+
+function sentenceRevealAnimationElements() {
+  return {
+    s1: document.querySelector('#sentence-reveal-1 > .sentence'),
+    s2: document.querySelector('#sentence-reveal-2 > .sentence'),
+    s3: document.querySelector('#sentence-reveal-3 > .sentence'),
+    another2: document.getElementById('sentence-reveal-2'),
+    another3: document.getElementById('sentence-reveal-3')
+  };
+}
+
+function clearSentenceRevealAnimations() {
+  document.querySelectorAll('.sentence-reveal-animating').forEach(el => {
+    el.classList.remove('sentence-reveal-animating');
+  });
+}
+
+function replaySentenceRevealAnimation(fromLevel) {
+  const r1 = document.getElementById('sentence-reveal-1');
+  const r2 = document.getElementById('sentence-reveal-2');
+  const r3 = document.getElementById('sentence-reveal-3');
+  const els = sentenceRevealAnimationElements();
+  const nodes = collectSentenceRevealAnimationKeys(
+    [Boolean(r1?.open), Boolean(r2?.open), Boolean(r3?.open)],
+    fromLevel
+  ).map(key => els[key]).filter(el => el && !el.classList.contains('hidden'));
+  clearSentenceRevealAnimations();
+  if (r1) void r1.offsetWidth;
+  nodes.forEach(el => el.classList.add('sentence-reveal-animating'));
+}
+
+function applyDailySentenceRevealVisibility(firstText, secondText, thirdText) {
+  const visibility = dailySentenceRevealVisibility([
+    Boolean(firstText),
+    Boolean(secondText),
+    Boolean(thirdText)
+  ]);
+  const r1 = document.getElementById('sentence-reveal-1');
+  const r2 = document.getElementById('sentence-reveal-2');
+  const r3 = document.getElementById('sentence-reveal-3');
+  if (r1) r1.classList.toggle('hidden', !visibility.showOuter);
+  if (r2) r2.classList.toggle('hidden', !visibility.showNested2);
+  if (r3) r3.classList.toggle('hidden', !visibility.showNested3);
+}
+
 function renderDailyWord(index) {
   const word = state.todayWords[index];
+  const nextRevealWord = word ? word.word : '';
+  if (shouldResetDailySentenceReveal(state.sentenceRevealWord, nextRevealWord)) {
+    collapseDailySentenceReveals();
+    state.sentenceRevealWord = nextRevealWord;
+  }
   if (!word) {
     const noLanguage = !hasUserLearningLanguages();
     document.getElementById('word').textContent = noLanguage ? tr('daily.addLanguage') : tr('daily.unavailable');
@@ -1277,17 +1338,13 @@ function renderDailyWord(index) {
     ['word-add-btn','s1-add-btn','s2-add-btn','s3-add-btn','add-all-btn'].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
-    const sentenceLabel = document.getElementById('sentence-language-label');
     const divider = document.querySelector('#card .divider');
-    if (sentenceLabel) sentenceLabel.classList.toggle('hidden', true);
     if (divider) divider.classList.toggle('hidden', true);
-    document.querySelectorAll('#card .sentence').forEach(el => el.classList.add('hidden'));
+    applyDailySentenceRevealVisibility('', '', '');
     return;
   }
 
-  const sentenceLabel = document.getElementById('sentence-language-label');
   const divider = document.querySelector('#card .divider');
-  if (sentenceLabel) sentenceLabel.classList.remove('hidden');
   if (divider) divider.classList.remove('hidden');
 
   state.currentWordIndex = index;
@@ -1318,10 +1375,7 @@ function renderDailyWord(index) {
   document.getElementById('s2-speak-btn').disabled = !secondSentenceText || !speakPhraseAllowed();
   const s3Speak = document.getElementById('s3-speak-btn'); if (s3Speak) s3Speak.disabled = !thirdSentenceText || !speakPhraseAllowed();
 
-  const sentenceEls = document.querySelectorAll('#card .sentence');
-  if (sentenceEls[0]) sentenceEls[0].classList.toggle('hidden', !firstSentenceText);
-  if (sentenceEls[1]) sentenceEls[1].classList.toggle('hidden', !secondSentenceText);
-  if (sentenceEls[2]) sentenceEls[2].classList.toggle('hidden', !thirdSentenceText);
+  applyDailySentenceRevealVisibility(firstSentenceText, secondSentenceText, thirdSentenceText);
 
   void loadDailyGlosses(word);
 
@@ -1576,7 +1630,6 @@ function updateLanguageCopy() {
   const backInput = document.getElementById('card-back-input');
   const reviewFrontLabel = document.getElementById('review-edit-front-label');
   const reviewBackLabel = document.getElementById('review-edit-back-label');
-  const sentenceLabel = document.getElementById('sentence-language-label');
   const fromLabel = document.getElementById('translate-from-label');
   if (frontLabel) frontLabel.textContent = tr('translate.front', { language: nativeName });
   if (frontInput) frontInput.placeholder = tr('translate.frontPlaceholder', { language: nativeName });
@@ -1584,13 +1637,6 @@ function updateLanguageCopy() {
   if (backLabel) backLabel.textContent = tr('translate.back', { language: translatorLabel });
   if (backInput) backInput.placeholder = tr('translate.backPlaceholder', { language: translatorLabel });
   if (reviewBackLabel) reviewBackLabel.textContent = tr('translate.back', { language: translatorLabel });
-  if (sentenceLabel && hasUserLearningLanguages()) {
-    sentenceLabel.textContent = tr('daily.sentenceInUse', { language: translatorLabel });
-    sentenceLabel.classList.remove('hidden');
-  } else if (sentenceLabel) {
-    sentenceLabel.textContent = '';
-    sentenceLabel.classList.add('hidden');
-  }
   if (fromLabel && !state.lastDetectedSourceLang && hasUserLearningLanguages()) {
     fromLabel.textContent = getModeShortLabel(mode.id);
   }
@@ -2692,6 +2738,19 @@ function setupModeEvents() {
 }
 
 function setupDailyEvents() {
+  const reveal1 = document.getElementById('sentence-reveal-1');
+  const reveal2 = document.getElementById('sentence-reveal-2');
+  const reveal3 = document.getElementById('sentence-reveal-3');
+  reveal1?.addEventListener('toggle', () => {
+    if (reveal1.open) replaySentenceRevealAnimation(0);
+    else clearSentenceRevealAnimations();
+  });
+  reveal2?.addEventListener('toggle', () => {
+    if (reveal2.open) replaySentenceRevealAnimation(1);
+  });
+  reveal3?.addEventListener('toggle', () => {
+    if (reveal3.open) replaySentenceRevealAnimation(2);
+  });
   document.getElementById('prev-btn').addEventListener('click', () => {
     gotoDailyWord(state.currentWordIndex - 1);
   });
@@ -2767,7 +2826,7 @@ function setupDailyEvents() {
     await addSentenceCardWithGloss(l2, state.dailyGlosses.s3Gloss, 'daily-save-status');
   });
 
-  // Bottom "+Add all" — adds word + each example sentence as cards
+  // Bottom "Add all to review" — adds word + each example sentence as cards
   document.getElementById('add-all-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
@@ -2891,14 +2950,6 @@ function setupTranslateEvents() {
   document.getElementById('save-card-btn').addEventListener('click', async () => {
     const draft = getDraftFields();
     await addCard(draft, 'card-save-status');
-  });
-
-  document.getElementById('add-review-btn').addEventListener('click', async () => {
-    const draft = getDraftFields();
-    const ok = await addCard(draft, 'card-save-status');
-    if (ok) {
-      setActiveTab('review');
-    }
   });
 }
 

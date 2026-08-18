@@ -33,3 +33,11 @@ test('review setup uses existing review DOM ids and no refresh button', () => {
   });
   assert.doesNotMatch(app, /review-refresh-btn/);
 });
+
+test('translate page has no Add + Open Review button', () => {
+  assert.equal(htmlHasId('add-review-btn'), false);
+  assert.doesNotMatch(app, /add-review-btn/);
+  assert.match(html, />Add all to review</);
+  assert.match(html, />Add to review</);
+  assert.match(html, />Configure flashcard</);
+});

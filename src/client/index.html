@@ -146,37 +146,45 @@
         <p id="translation"></p>
         <p id="daily-frequency-rank" class="frequency-meta"></p>
         <hr class="divider" />
-        <span class="sentences-label hidden" id="sentence-language-label"></span>
-        <div class="sentence">
-          <div class="sentence-content">
-            <span class="sentence-l2" id="s1-l2"></span>
-            <span class="sentence-en" id="s1-en"></span>
+        <details id="sentence-reveal-1" class="sentence-reveal">
+          <summary class="sentences-label" id="sentence-language-label" data-i18n="daily.sentenceInUse">new word used in context</summary>
+          <div class="sentence">
+            <div class="sentence-content">
+              <span class="sentence-l2" id="s1-l2"></span>
+              <span class="sentence-en" id="s1-en"></span>
+            </div>
+            <div class="sentence-actions">
+              <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+              <button id="s1-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+            </div>
           </div>
-          <div class="sentence-actions">
-            <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s1-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
-          </div>
-        </div>
-        <div class="sentence">
-          <div class="sentence-content">
-            <span class="sentence-l2" id="s2-l2"></span>
-            <span class="sentence-en" id="s2-en"></span>
-          </div>
-          <div class="sentence-actions">
-            <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s2-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
-          </div>
-        </div>
-        <div class="sentence">
-          <div class="sentence-content">
-            <span class="sentence-l2" id="s3-l2"></span>
-            <span class="sentence-en" id="s3-en"></span>
-          </div>
-          <div class="sentence-actions">
-            <button class="sentence-speak-btn speak-btn" id="s3-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-            <button id="s3-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
-          </div>
-        </div>
+          <details id="sentence-reveal-2" class="sentence-reveal sentence-reveal-nested">
+            <summary class="sentences-label" data-i18n="daily.anotherContext">another</summary>
+            <div class="sentence">
+              <div class="sentence-content">
+                <span class="sentence-l2" id="s2-l2"></span>
+                <span class="sentence-en" id="s2-en"></span>
+              </div>
+              <div class="sentence-actions">
+                <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+                <button id="s2-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+              </div>
+            </div>
+            <details id="sentence-reveal-3" class="sentence-reveal sentence-reveal-nested">
+              <summary class="sentences-label" data-i18n="daily.anotherContext">another</summary>
+              <div class="sentence">
+                <div class="sentence-content">
+                  <span class="sentence-l2" id="s3-l2"></span>
+                  <span class="sentence-en" id="s3-en"></span>
+                </div>
+                <div class="sentence-actions">
+                  <button class="sentence-speak-btn speak-btn" id="s3-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
+                  <button id="s3-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+                </div>
+              </div>
+            </details>
+          </details>
+        </details>
       </div>
 
       <nav id="daily-nav">
@@ -185,7 +193,7 @@
       </nav>
       <p id="counter"></p>
       <p id="pool-info"></p>
-      <button id="add-all-btn" class="wide-btn" data-i18n="daily.addAll">+Add all as cards</button>
+      <button id="add-all-btn" class="wide-btn" data-i18n="daily.addAll">Add all to review</button>
       <p id="daily-save-status" class="status-line"></p>
     </section>
 
@@ -225,8 +233,8 @@
         </div>
         <button id="translate-speak-btn" type="button" class="speak-btn" data-i18n-title="daily.hearWord" data-i18n-aria-label="daily.hearWord" title="Hear pronunciation" aria-label="Hear pronunciation">🔊</button>
         <div class="button-row">
-          <button id="quick-add-card-btn" class="primary-btn" disabled data-i18n="translate.addCard">Add card</button>
-          <button id="toggle-note-config-btn" disabled data-i18n="translate.configureNote">Configure note</button>
+          <button id="quick-add-card-btn" class="primary-btn" disabled data-i18n="translate.addCard">Add to review</button>
+          <button id="toggle-note-config-btn" disabled data-i18n="translate.configureNote">Configure flashcard</button>
         </div>
         <p id="quick-add-status" class="status-line"></p>
       </div>
@@ -246,8 +254,7 @@
           <textarea id="card-context-input" rows="3" data-i18n-placeholder="translate.contextPlaceholder" placeholder="Sentence, nuance, or reminder"></textarea>
         </label>
         <div class="button-row">
-          <button id="save-card-btn" class="primary-btn" data-i18n="translate.addCardBtn">Add card</button>
-          <button id="add-review-btn" data-i18n="translate.addOpenReview">Add + Open Review</button>
+          <button id="save-card-btn" class="primary-btn" data-i18n="translate.addCardBtn">Add to review</button>
         </div>
         <p id="card-save-status" class="status-line"></p>
       </div>
@@ -346,6 +353,6 @@
   </div>
 
   <script src="/confetti.browser.js" defer></script>
-  <script type="module" src="/app.js?v=10"></script>
+  <script type="module" src="/app.js?v=15"></script>
 </body>
 </html>

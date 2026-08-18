@@ -32,7 +32,10 @@ import {
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
   swapTranslateDirection,
-  userHasLearningLanguages
+  userHasLearningLanguages,
+  dailySentenceRevealVisibility,
+  shouldResetDailySentenceReveal,
+  collectSentenceRevealAnimationKeys
 } from '../src/client/ten-logic.js';
 
 test('userHasLearningLanguages is false until the user adds a track', () => {
@@ -338,4 +341,43 @@ test('canSpeakWithInstalledVoice is false when only English voices are installed
   const english = { lang: 'en-US', name: 'Samantha', localService: true };
   assert.equal(canSpeakWithInstalledVoice([english], 'fr-CA'), false);
   assert.equal(canSpeakWithInstalledVoice([english], 'es-AR'), false);
+});
+
+test('dailySentenceRevealVisibility peels one nested dropdown per sentence', () => {
+  assert.deepEqual(dailySentenceRevealVisibility([true, true, true]), {
+    showOuter: true,
+    showNested2: true,
+    showNested3: true
+  });
+  assert.deepEqual(dailySentenceRevealVisibility([true, true, false]), {
+    showOuter: true,
+    showNested2: true,
+    showNested3: false
+  });
+  assert.deepEqual(dailySentenceRevealVisibility([true, false, false]), {
+    showOuter: true,
+    showNested2: false,
+    showNested3: false
+  });
+  assert.deepEqual(dailySentenceRevealVisibility([false, false, false]), {
+    showOuter: false,
+    showNested2: false,
+    showNested3: false
+  });
+});
+
+test('shouldResetDailySentenceReveal only when the headword changes', () => {
+  assert.equal(shouldResetDailySentenceReveal('manger', 'boire'), true);
+  assert.equal(shouldResetDailySentenceReveal('manger', 'manger'), false);
+  assert.equal(shouldResetDailySentenceReveal('', 'manger'), true);
+  assert.equal(shouldResetDailySentenceReveal('manger', ''), true);
+});
+
+test('collectSentenceRevealAnimationKeys replays visible sentences on each open', () => {
+  assert.deepEqual(collectSentenceRevealAnimationKeys([false, false, false], 0), []);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true, false, false], 0), ['s1', 'another2']);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, false], 0), ['s1', 's2', 'another3']);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, true], 0), ['s1', 's2', 's3']);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, false], 1), ['s2', 'another3']);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, true], 2), ['s3']);
 });

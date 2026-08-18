@@ -1,5 +1,5 @@
 /**
- * check-words.js — validate dialect 10/day word pools.
+ * check-words.js — validate dialect 5/new word pools.
  * Usage: node scripts/check-words.js
  * Also exportable for unit tests.
  */

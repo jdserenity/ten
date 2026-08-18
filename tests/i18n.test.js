@@ -93,3 +93,12 @@ test('pt-BR onboarding copy uses Brazilian Portuguese', () => {
   assert.equal(t('pt-BR', 'settings.signedInAs'), 'Logado como');
   assert.equal(t('pt-BR', 'translate.offline'), 'Sem internet: você precisa estar online para traduzir.');
 });
+
+test('tab labels are 5/new, 5/review, and Progress', () => {
+  assert.equal(t('en', 'tab.daily'), '5/new');
+  assert.equal(t('en', 'tab.review'), '5/review');
+  assert.equal(t('en', 'tab.frequency'), 'Progress');
+  assert.equal(t('pt-BR', 'tab.daily'), '5/novas');
+  assert.equal(t('pt-BR', 'tab.review'), '5/revisar');
+  assert.equal(t('pt-BR', 'tab.frequency'), 'Progresso');
+});

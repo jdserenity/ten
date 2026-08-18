@@ -1,13 +1,13 @@
 ---
 name: seed-daily-words
 description: >-
-  Curate or refill Ten 10/day word pools for a language flavour (PT-BR, FR-CA,
+  Curate or refill Ten 5/new word pools for a language flavour (PT-BR, FR-CA,
   FR-FR, ES-AR). Use when adding words, seeding days of cards, fixing pool
   quality, or when the user asks to generate/expand vocabulary for daily study.
   Agent/LLM writing only — no Tatoeba or scrape generators.
 ---
 
-# Seed 10/day word pools
+# Seed 5/new word pools
 
 ## When to use
 
@@ -86,11 +86,11 @@ Use `fr` or `es` instead of `pt` for those pools.
 
 ### Pool size hint
 
-| Words | Approx. days of 10/day |
+| Words | Approx. days of 5/new |
 | --- | --- |
-| 50 | ~5 days |
-| 200 | ~20 days |
-| 365 | ~1 year |
+| 50 | ~10 days |
+| 200 | ~40 days |
+| 365 | ~73 days |
 
 Dev footer `~N days left in <mode> pool` (amber at ≤7) signals when to add more.
 

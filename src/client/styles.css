@@ -702,6 +702,7 @@ header h1 {
 #card {
   flex: 1;
   min-height: 280px;
+  overflow-y: auto;
 }
 
 .word-row {

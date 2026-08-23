@@ -195,6 +195,77 @@ export function getLangPickerOptions(offeredModeIds, ownedModeIds = []) {
   }));
 }
 
+export const LANG_FAMILIES = {
+  es: { id: 'es', modeIds: ['es-ar'] },
+  fr: { id: 'fr', modeIds: ['fr', 'fr-fr'] },
+  pt: { id: 'pt', modeIds: ['pt-br'] }
+};
+const LANG_FAMILY_ORDER = ['es', 'fr', 'pt'];
+
+function toModeIdSet(value) {
+  if (value instanceof Set) return value;
+  return new Set(Array.isArray(value) ? value : []);
+}
+
+export function getLangFamilyId(modeId) {
+  const id = String(modeId || '');
+  if (id === 'es-ar') return 'es';
+  if (id === 'fr' || id === 'fr-fr') return 'fr';
+  if (id === 'pt-br') return 'pt';
+  return '';
+}
+
+export function getLangPickerFamilies(offeredModeIds, selectedModeIds = []) {
+  const offered = toModeIdSet(offeredModeIds);
+  const selected = toModeIdSet(selectedModeIds);
+  return LANG_FAMILY_ORDER.flatMap(familyId => {
+    const modeIds = LANG_FAMILIES[familyId].modeIds.filter(modeId => offered.has(modeId));
+    if (!modeIds.length) return [];
+    return [{ familyId, modeIds, selected: modeIds.some(modeId => selected.has(modeId)) }];
+  });
+}
+
+export function getLangPickerDialects(familyId, offeredModeIds, selectedModeIds = []) {
+  const family = LANG_FAMILIES[familyId];
+  if (!family) return [];
+  const offered = toModeIdSet(offeredModeIds);
+  const selected = toModeIdSet(selectedModeIds);
+  return family.modeIds
+    .filter(modeId => offered.has(modeId))
+    .map(modeId => ({ modeId, selected: selected.has(modeId) }));
+}
+
+export function getLangPickerDialectLabelKey(modeId) {
+  if (modeId === 'pt-br') return 'picker.dialect.ptBr';
+  if (modeId === 'fr') return 'picker.dialect.fr';
+  if (modeId === 'fr-fr') return 'picker.dialect.frFr';
+  if (modeId === 'es-ar') return 'picker.dialect.esAr';
+  return '';
+}
+
+export function langPickerPrimaryAction(step) {
+  return step === 'dialect' ? 'back' : 'confirm';
+}
+
+export function shouldCloseLangPickerOnOutsideClick(step) {
+  return step !== 'dialect';
+}
+
+export function applyLangPickerDialectToggle(selectedModeIds, modeId, checked) {
+  const next = new Set(toModeIdSet(selectedModeIds));
+  if (checked) next.add(modeId);
+  else next.delete(modeId);
+  return [...next];
+}
+
+export function buildLangPickerFamilyHtml({ familyId, flag = '', label = '', selected = false } = {}) {
+  const safeFamily = String(familyId || '').replace(/"/g, '');
+  const safeFlag = escapeLangPickerText(flag);
+  const safeLabel = escapeLangPickerText(label);
+  const selectedClass = selected ? ' is-selected' : '';
+  return `<button type="button" class="lang-picker-option lang-picker-family${selectedClass}" data-family="${safeFamily}"><span class="lang-picker-flag">${safeFlag}</span><span class="lang-picker-name">${safeLabel}</span><span class="lang-picker-tick" aria-hidden="true"></span><span class="lang-picker-chevron" aria-hidden="true"></span></button>`;
+}
+
 export function sortLangPickerOptionsByLabel(options, locale) {
   return [...(Array.isArray(options) ? options : [])].sort((a, b) =>
     String(a?.label || '').localeCompare(String(b?.label || ''), locale || undefined, { sensitivity: 'base' })

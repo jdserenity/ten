@@ -19,7 +19,15 @@ import {
   normalizeTranslateDirection,
   resolveStartupTab,
   resolveTranslateNativeLang,
+  applyLangPickerDialectToggle,
+  getLangPickerDialectLabelKey,
+  langPickerPrimaryAction,
+  shouldCloseLangPickerOnOutsideClick,
+  buildLangPickerFamilyHtml,
   buildLangPickerOptionHtml,
+  getLangFamilyId,
+  getLangPickerDialects,
+  getLangPickerFamilies,
   getLangPickerOptions,
   isLangPickerOutsideClick,
   pickSpeechVoice,
@@ -233,6 +241,110 @@ test('getLangPickerOptions includes owned languages as selected', () => {
     { modeId: 'pt-br', selected: false },
     { modeId: 'fr', selected: true }
   ]);
+});
+
+test('getLangFamilyId maps each track to its main language', () => {
+  assert.equal(getLangFamilyId('es-ar'), 'es');
+  assert.equal(getLangFamilyId('fr'), 'fr');
+  assert.equal(getLangFamilyId('fr-fr'), 'fr');
+  assert.equal(getLangFamilyId('pt-br'), 'pt');
+  assert.equal(getLangFamilyId('unknown'), '');
+});
+
+test('getLangPickerFamilies lists only families that still have an offered track', () => {
+  assert.deepEqual(getLangPickerFamilies(['pt-br', 'fr', 'fr-fr', 'es-ar']), [
+    { familyId: 'es', modeIds: ['es-ar'], selected: false },
+    { familyId: 'fr', modeIds: ['fr', 'fr-fr'], selected: false },
+    { familyId: 'pt', modeIds: ['pt-br'], selected: false }
+  ]);
+  assert.deepEqual(getLangPickerFamilies(['fr']), [
+    { familyId: 'fr', modeIds: ['fr'], selected: false }
+  ]);
+  assert.deepEqual(getLangPickerFamilies([]), []);
+});
+
+test('getLangPickerDialects lists a family\'s offered tracks and their selection', () => {
+  assert.deepEqual(
+    getLangPickerDialects('fr', ['pt-br', 'fr', 'fr-fr', 'es-ar'], ['fr', 'es-ar']),
+    [
+      { modeId: 'fr', selected: true },
+      { modeId: 'fr-fr', selected: false }
+    ]
+  );
+  assert.deepEqual(
+    getLangPickerDialects('es', ['pt-br', 'fr', 'fr-fr', 'es-ar'], []),
+    [{ modeId: 'es-ar', selected: false }]
+  );
+  assert.deepEqual(getLangPickerDialects('fr', ['pt-br'], ['fr']), []);
+});
+
+test('dialect selections stay when listing another family', () => {
+  const offered = ['pt-br', 'fr', 'fr-fr', 'es-ar'];
+  let selected = ['es-ar'];
+  selected = applyLangPickerDialectToggle(selected, 'fr', true);
+  assert.deepEqual(selected, ['es-ar', 'fr']);
+  assert.deepEqual(
+    getLangPickerDialects('fr', offered, selected),
+    [
+      { modeId: 'fr', selected: true },
+      { modeId: 'fr-fr', selected: false }
+    ]
+  );
+  assert.deepEqual(
+    getLangPickerDialects('es', offered, selected),
+    [{ modeId: 'es-ar', selected: true }]
+  );
+  const families = getLangPickerFamilies(offered, selected);
+  assert.equal(families.find(family => family.familyId === 'es').selected, true);
+  assert.equal(families.find(family => family.familyId === 'fr').selected, true);
+  assert.equal(families.find(family => family.familyId === 'pt').selected, false);
+  selected = applyLangPickerDialectToggle(selected, 'fr', false);
+  assert.deepEqual(selected, ['es-ar']);
+});
+
+test('dialect picker labels are region names, not full language names', () => {
+  assert.equal(getLangPickerDialectLabelKey('pt-br'), 'picker.dialect.ptBr');
+  assert.equal(getLangPickerDialectLabelKey('fr'), 'picker.dialect.fr');
+  assert.equal(getLangPickerDialectLabelKey('fr-fr'), 'picker.dialect.frFr');
+  assert.equal(getLangPickerDialectLabelKey('es-ar'), 'picker.dialect.esAr');
+  assert.equal(getLangPickerDialectLabelKey('unknown'), '');
+});
+
+test('dialect step uses Back as the only primary action and cannot dismiss', () => {
+  assert.equal(langPickerPrimaryAction('family'), 'confirm');
+  assert.equal(langPickerPrimaryAction('dialect'), 'back');
+  assert.equal(shouldCloseLangPickerOnOutsideClick('family'), true);
+  assert.equal(shouldCloseLangPickerOnOutsideClick('dialect'), false);
+});
+
+test('buildLangPickerFamilyHtml renders a drill-in row, not a checkbox', () => {
+  const html = buildLangPickerFamilyHtml({
+    familyId: 'fr',
+    flag: '🇫🇷',
+    label: 'French',
+    selected: true
+  });
+  assert.match(html, /<button type="button"/);
+  assert.match(html, /class="lang-picker-option lang-picker-family is-selected"/);
+  assert.match(html, /data-family="fr"/);
+  assert.match(html, /class="lang-picker-flag"/);
+  assert.match(html, /🇫🇷/);
+  assert.match(html, /class="lang-picker-name"/);
+  assert.match(html, /French/);
+  assert.match(html, /class="lang-picker-tick"/);
+  assert.match(html, /class="lang-picker-chevron"/);
+  assert.doesNotMatch(html, /type="checkbox"/);
+});
+
+test('buildLangPickerFamilyHtml escapes label HTML', () => {
+  const html = buildLangPickerFamilyHtml({
+    familyId: 'es',
+    flag: '🇪🇸',
+    label: 'Spanish <script> & "co"'
+  });
+  assert.match(html, /Spanish &lt;script&gt; &amp; &quot;co&quot;/);
+  assert.doesNotMatch(html, /<script>/);
+  assert.doesNotMatch(html, /class="[^"]*is-selected/);
 });
 
 test('sortLangPickerOptionsByLabel orders by display name alphabetically', () => {

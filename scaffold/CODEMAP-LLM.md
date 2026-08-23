@@ -72,7 +72,7 @@ Auth header **`X-User-Id`** (numeric) on data routes except login + translate + 
 Languages stored: `PT-BR`, `FR`, `FR-FR`, `ES-AR`.
 
 ## Data
-- Pools agent-curated; `npm run words:check`. One lemma/card; exactly 3 sentences (legacy PT-BR may still have 2); content words only; regional flavour mandatory. No Tatoeba/scrape generators. PT-BR 5/new pool is currently empty (maintainer is not studying Portuguese).
+- Pools agent-curated; `npm run words:check`. One lemma/card; exactly 3 sentences (legacy PT-BR may still have 2); content words only; regional flavour mandatory. Each card has `level` (`A1` \| `A2` \| `B1` \| `B2`); the checker requires it. 5/new does not filter by `level`. No Tatoeba/scrape generators. PT-BR 5/new pool is currently empty (maintainer is not studying Portuguese).
 - Frequency: `npm run frequency:download` (PT-BR Wiktionary, FR FrequencyWords, ES-AR ACTIV-ES `ar_orf` from `aes1grams.csv`, GPL-2.0 — cite Francom et al. if redistributing). ~5000 each.
 - `npm run import:anki`: AnkiConnect live; copies note text from decks `Brazilian Portuguese` and `French`; FSRS starts fresh (all imported = new); re-run skips duplicates.
 

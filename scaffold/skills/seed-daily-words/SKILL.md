@@ -15,14 +15,18 @@ Read this skill before adding or rewriting entries in any `src/client/words.*.js
 
 ## Pool files (one flavour each)
 
-| Mode | File | Sentence key | Level | Frequency source |
+| Mode | File | Sentence key | Default level for new cards | Frequency source |
 | --- | --- | --- | --- | --- |
-| `pt-br` | `src/client/words.pt-br.json` | `pt` | Intermediate (B1–B2) | Prefer intermediate vocab; frequency-pt-br is reference only |
-| `fr` (Quebec) | `src/client/words.fr-ca.json` | `fr` | Beginner (A1-ish) | `frequency-fr.json` top-down, after skip list |
-| `fr-fr` (France) | `src/client/words.fr-fr.json` | `fr` | Beginner (A1-ish) | `frequency-fr.json` top-down, after skip list |
-| `es-ar` | `src/client/words.es-ar.json` | `es` | Beginner (A1-ish) | `frequency-es-ar.json` top-down, after skip list |
+| `pt-br` | `src/client/words.pt-br.json` | `pt` | `B1` (intermediate) | Prefer intermediate vocab; frequency-pt-br is reference only |
+| `fr` (Quebec) | `src/client/words.fr-ca.json` | `fr` | `A1` | `frequency-fr.json` top-down, after skip list |
+| `fr-fr` (France) | `src/client/words.fr-fr.json` | `fr` | `A1` | `frequency-fr.json` top-down, after skip list |
+| `es-ar` | `src/client/words.es-ar.json` | `es` | `A1` | `frequency-es-ar.json` top-down, after skip list |
 
 Never share one JSON file across flavours. Quebec and France French are separate pools.
+
+## Level (required)
+
+Each card has exactly one `level`: `A1`, `A2`, `B1`, or `B2` (CEFR). Use the earliest band where the lemma is worth teaching. Do not invent extra bands. 5/new does not filter by level yet; the field is for a later per-user skill-level pick.
 
 ## Headword rules
 
@@ -65,6 +69,7 @@ Examples of banned headwords: *je, tu, il, le, la, de, et, que, yo, vos* (as pro
 ```json
 {
   "word": "sossego",
+  "level": "B1",
   "translation": "peace and quiet, calm",
   "sentences": [
     { "pt": "Preciso de um pouco de sossego para terminar esse trabalho.", "en": "I need a bit of peace and quiet to finish this work." },
@@ -78,11 +83,20 @@ Use `fr` or `es` instead of `pt` for those pools.
 
 ## Workflow
 
-1. Pick content lemmas from the flavour’s frequency list (skip glue).
-2. Write translation + 3 flavour-correct sentences with natural English.
-3. Write or append to the target pool file (append when extending; replace only when asked).
-4. Run `npm run words:check` and fix every error.
-5. Commit the pool (and checker/docs if you changed them).
+1. Pick up to **15** content lemmas from the flavour’s frequency list (skip glue). See batch size below.
+2. Set `level` (`A1` / `A2` / `B1` / `B2`) — default from the table above unless the lemma clearly belongs to another band.
+3. Write translation + 3 flavour-correct sentences with natural English.
+4. Write or append to the target pool file (append when extending; replace only when asked).
+5. Run `npm run words:check` and fix every error.
+6. Commit the pool (and checker/docs if you changed them).
+
+### Batch size (quality / quantity equilibrium)
+
+**15 words per writing pass.** That is 15 translations and 45 context sentences — 3 days of 5/new.
+
+Quality over quantity. Each card needs a real flavour-correct sentence in three different shapes (for example present / past / infinitive), a natural English line, the taught sense, and no copy-paste rhythm. After about 15, later sentences start to sound like the same template with a new noun swapped in. Do not write 40–50 cards in one shot.
+
+If the pool still needs more runway, do another 15-word pass after the current batch is in the file and `words:check` is clean. Do not ask the maintainer how many to generate — 15 is the default.
 
 ### Pool size hint
 

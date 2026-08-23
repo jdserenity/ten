@@ -7,6 +7,8 @@ import {
   t
 } from './i18n.js';
 import {
+  applyLangPickerDialectToggle,
+  buildLangPickerFamilyHtml,
   buildLangPickerOptionHtml,
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
@@ -17,7 +19,9 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierKey,
-  getLangPickerOptions,
+  getLangPickerDialectLabelKey,
+  getLangPickerDialects,
+  getLangPickerFamilies,
   getReviewEmptyState,
   isLangPickerOutsideClick,
   isDailyReviewComplete,
@@ -30,6 +34,8 @@ import {
   canSpeakWithInstalledVoice,
   voiceMatchesSpeechLang,
   resolveStartupTab,
+  langPickerPrimaryAction,
+  shouldCloseLangPickerOnOutsideClick,
   shouldOpenLangPickerOnModeClick,
   shouldShowAddLanguageHint,
   shouldShowHeaderAddLanguageButton,
@@ -118,6 +124,11 @@ const MODE_CONFIGS = {
   }
 };
 const OFFERED_LEARNING_LANGS = OFFERED_MODE_IDS.map(modeId => MODE_CONFIGS[modeId].learningLang);
+const LANG_FAMILY_CONFIGS = {
+  es: { flagEmoji: '🇪🇸', labelKey: 'picker.family.es' },
+  fr: { flagEmoji: '🇫🇷', labelKey: 'picker.family.fr' },
+  pt: { flagEmoji: '🇵🇹', labelKey: 'picker.family.pt' }
+};
 
 const state = {
   user: null,
@@ -125,6 +136,9 @@ const state = {
   activeMode: 'fr',
   activeTab: 'daily',
   languagePickerContext: '',
+  languagePickerStep: 'family',
+  languagePickerFamilyId: '',
+  pickerSelectedModeIds: [],
   feedbackOpen: false,
   settingsOpen: false,
   settings: {
@@ -193,10 +207,38 @@ function getLangPickerOptionsContainer(context) {
   return null;
 }
 
+function resetLanguagePickerState() {
+  state.languagePickerStep = 'family';
+  state.languagePickerFamilyId = '';
+  state.pickerSelectedModeIds = getUserModeIds();
+}
+
 function toggleLanguagePicker(context) {
   const open = state.languagePickerContext !== context;
+  if (open) resetLanguagePickerState();
   setLanguagePickerOpen(context, open);
-  if (open) renderPickerOptions(getLangPickerOptionsContainer(context));
+  if (open) renderLanguagePicker(context);
+}
+
+function getLangFamilyLabel(familyId) {
+  const key = LANG_FAMILY_CONFIGS[familyId]?.labelKey;
+  return key ? tr(key) : '';
+}
+
+function getPickerDialectLabel(modeId) {
+  const key = getLangPickerDialectLabelKey(modeId);
+  return key ? tr(key) : getModeLabel(modeId);
+}
+
+function readPickerSelectedModeIds() {
+  return (state.pickerSelectedModeIds || []).filter(modeId => MODE_CONFIGS[modeId]);
+}
+
+function goLangPickerBack() {
+  if (!state.languagePickerContext) return;
+  state.languagePickerStep = 'family';
+  state.languagePickerFamilyId = '';
+  renderLanguagePicker(state.languagePickerContext);
 }
 
 function unbindLangPickerOutsideClick() {
@@ -214,6 +256,7 @@ function bindLangPickerOutsideClick(context) {
   if (!picker) return;
   langPickerOutsideClickHandler = event => {
     if (state.languagePickerContext !== context) return;
+    if (!shouldCloseLangPickerOnOutsideClick(state.languagePickerStep)) return;
     if (!isLangPickerOutsideClick(event.target, picker, ignoreEl)) return;
     setLanguagePickerOpen(context, false);
   };
@@ -299,6 +342,7 @@ function applyAppLanguage() {
   updateDateLabel();
   renderSettingsAppLangButtons();
   syncNoLanguageUi();
+  if (state.languagePickerContext) renderLanguagePicker(state.languagePickerContext);
 }
 
 function syncAppLangFromUser() {
@@ -463,32 +507,76 @@ function resolveActiveModeForUser() {
   return modeIds[0];
 }
 
-function readPickerSelections(container) {
-  if (!container) return [];
-  return Array.from(container.querySelectorAll('input[type="checkbox"]:checked'))
-    .map(input => String(input.value || '').trim())
-    .filter(modeId => MODE_CONFIGS[modeId]);
+function syncLangPickerPrimaryButton(picker, context) {
+  const confirmBtn = picker.querySelector('.primary-btn');
+  if (!confirmBtn) return;
+  if (langPickerPrimaryAction(state.languagePickerStep) === 'back') {
+    confirmBtn.textContent = tr('picker.back');
+    return;
+  }
+  confirmBtn.textContent = context === 'header' ? tr('picker.add') : tr('picker.save');
 }
 
-function renderPickerOptions(container) {
-  if (!container) return;
-  const options = sortLangPickerOptionsByLabel(
-    getLangPickerOptions(OFFERED_MODE_IDS, getUserModeIds()).map(({ modeId, selected }) => ({
-      modeId,
-      selected,
-      label: getModeLabel(modeId)
-    })),
-    localeTagForAppLang(state.appLang)
-  );
-  container.innerHTML = options.map(({ modeId, selected, label }) => {
-    const mode = MODE_CONFIGS[modeId];
-    return buildLangPickerOptionHtml({
-      modeId,
-      flag: mode?.flagEmoji || '',
-      label,
-      selected
+function renderLanguagePicker(context = state.languagePickerContext) {
+  if (!context) return;
+  const container = getLangPickerOptionsContainer(context);
+  const pickerId = LANG_PICKER_CONTEXTS[context]?.pickerId;
+  const picker = pickerId ? document.getElementById(pickerId) : null;
+  if (!container || !picker) return;
+  const title = picker.querySelector('.lang-picker-title');
+  const locale = localeTagForAppLang(state.appLang);
+  syncLangPickerPrimaryButton(picker, context);
+  if (state.languagePickerStep === 'dialect' && state.languagePickerFamilyId) {
+    if (title) title.textContent = tr('picker.whichFamily', { language: getLangFamilyLabel(state.languagePickerFamilyId) });
+    const options = sortLangPickerOptionsByLabel(
+      getLangPickerDialects(state.languagePickerFamilyId, OFFERED_MODE_IDS, state.pickerSelectedModeIds).map(({ modeId, selected }) => ({
+        modeId,
+        selected,
+        label: getPickerDialectLabel(modeId)
+      })),
+      locale
+    );
+    container.innerHTML = options.map(({ modeId, selected, label }) => {
+      const mode = MODE_CONFIGS[modeId];
+      return buildLangPickerOptionHtml({
+        modeId,
+        flag: mode?.flagEmoji || '',
+        label,
+        selected
+      });
+    }).join('');
+    container.querySelectorAll('input[type="checkbox"]').forEach(input => {
+      input.addEventListener('change', () => {
+        state.pickerSelectedModeIds = applyLangPickerDialectToggle(
+          state.pickerSelectedModeIds,
+          input.value,
+          input.checked
+        );
+      });
     });
-  }).join('');
+    return;
+  }
+  if (title) title.textContent = tr('picker.chooseLanguages');
+  const families = sortLangPickerOptionsByLabel(
+    getLangPickerFamilies(OFFERED_MODE_IDS, state.pickerSelectedModeIds).map(family => ({
+      ...family,
+      label: getLangFamilyLabel(family.familyId)
+    })),
+    locale
+  );
+  container.innerHTML = families.map(family => buildLangPickerFamilyHtml({
+    familyId: family.familyId,
+    flag: LANG_FAMILY_CONFIGS[family.familyId]?.flagEmoji || '',
+    label: family.label,
+    selected: family.selected
+  })).join('');
+  container.querySelectorAll('[data-family]').forEach(button => {
+    button.addEventListener('click', () => {
+      state.languagePickerStep = 'dialect';
+      state.languagePickerFamilyId = button.dataset.family || '';
+      renderLanguagePicker(context);
+    });
+  });
 }
 
 function setLanguagePickerOpen(context, open) {
@@ -593,9 +681,7 @@ function renderSettings() {
     }).join('');
   }
   renderSettingsAppLangButtons();
-  renderPickerOptions(document.querySelector('#header-lang-picker .lang-picker-options'));
-  renderPickerOptions(document.querySelector('.settings-lang-picker-options'));
-  renderPickerOptions(document.querySelector('.header-mode-lang-picker-options'));
+  if (state.languagePickerContext) renderLanguagePicker(state.languagePickerContext);
 }
 
 function escapeHtml(value) {
@@ -2626,7 +2712,11 @@ function setupAuthEvents() {
   });
 
   document.getElementById('header-lang-confirm-btn')?.addEventListener('click', async () => {
-    const selected = readPickerSelections(document.querySelector('#header-lang-picker .lang-picker-options'));
+    if (langPickerPrimaryAction(state.languagePickerStep) === 'back') {
+      goLangPickerBack();
+      return;
+    }
+    const selected = readPickerSelectedModeIds();
     if (!selected.length) {
       setStatus('daily-save-status', tr('daily.pickLanguage'), 'error');
       return;
@@ -2644,7 +2734,11 @@ function setupAuthEvents() {
   });
 
   document.getElementById('settings-lang-confirm-btn')?.addEventListener('click', async () => {
-    const selected = readPickerSelections(document.querySelector('.settings-lang-picker-options'));
+    if (langPickerPrimaryAction(state.languagePickerStep) === 'back') {
+      goLangPickerBack();
+      return;
+    }
+    const selected = readPickerSelectedModeIds();
     try {
       await saveUserLanguages(selected, { replace: true });
       setLanguagePickerOpen('settings', false);
@@ -2727,7 +2821,11 @@ function setupModeEvents() {
   });
 
   document.getElementById('header-mode-lang-confirm-btn')?.addEventListener('click', async () => {
-    const selected = readPickerSelections(document.querySelector('.header-mode-lang-picker-options'));
+    if (langPickerPrimaryAction(state.languagePickerStep) === 'back') {
+      goLangPickerBack();
+      return;
+    }
+    const selected = readPickerSelectedModeIds();
     try {
       await saveUserLanguages(selected, { replace: true });
       setLanguagePickerOpen('flags', false);

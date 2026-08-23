@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import {
+  buildLangPickerFamilyHtml,
   buildLangPickerOptionHtml,
   getLangPickerOptions
 } from '../src/client/ten-logic.js';
@@ -32,8 +33,13 @@ test('settings and header share the same lang-picker chip classes', () => {
 });
 
 test('app and static HTML build picker options through the chip helper structure', () => {
+  assert.match(app, /buildLangPickerFamilyHtml/);
   assert.match(app, /buildLangPickerOptionHtml/);
-  assert.match(app, /getLangPickerOptions/);
+  assert.match(app, /getLangPickerFamilies/);
+  assert.match(app, /getLangPickerDialects/);
+  assert.match(app, /getLangPickerDialectLabelKey/);
+  assert.match(app, /getPickerDialectLabel/);
+  assert.match(app, /applyLangPickerDialectToggle/);
   assert.match(app, /sortLangPickerOptionsByLabel/);
   assert.match(app, /isLangPickerOutsideClick/);
   assert.match(app, /shouldOpenLangPickerOnModeClick/);
@@ -48,11 +54,53 @@ test('app and static HTML build picker options through the chip helper structure
   assert.doesNotMatch(html, /<input type="checkbox" value="pt-br" \/> 🇧🇷/);
 });
 
-test('static header picker lists languages alphabetically by English name', () => {
+test('static header picker first-paint lists main languages, not dialects', () => {
   const block = html.match(/id="header-lang-picker"[\s\S]*?lang-picker-options">([\s\S]*?)<\/div>/);
   assert.ok(block, 'header picker options exist');
-  const values = [...block[1].matchAll(/value="([^"]+)"/g)].map(match => match[1]);
-  assert.deepEqual(values, ['es-ar', 'pt-br', 'fr-fr', 'fr']);
+  const families = [...block[1].matchAll(/data-family="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(families, ['fr', 'pt', 'es']);
+  assert.doesNotMatch(block[1], /type="checkbox"/);
+  assert.doesNotMatch(block[1], /value="es-ar"|value="pt-br"|value="fr-fr"|value="fr"/);
+});
+
+test('dialect step reuses the primary button as Back; no separate back control', () => {
+  assert.doesNotMatch(html, /id="header-lang-back-btn"/);
+  assert.doesNotMatch(html, /id="settings-lang-back-btn"/);
+  assert.doesNotMatch(html, /id="header-mode-lang-back-btn"/);
+  assert.doesNotMatch(html, /class="lang-picker-back"/);
+  assert.match(html, /id="header-lang-confirm-btn"/);
+  assert.match(html, /id="settings-lang-confirm-btn"/);
+  assert.match(html, /id="header-mode-lang-confirm-btn"/);
+  assert.match(app, /langPickerPrimaryAction/);
+  assert.match(app, /shouldCloseLangPickerOnOutsideClick/);
+  assert.match(app, /pickerSelectedModeIds/);
+  assert.match(app, /readPickerSelectedModeIds/);
+  assert.doesNotMatch(app, /readPickerSelections\(/);
+});
+
+test('family and dialect chips share the same type size', () => {
+  assert.match(styles, /\.lang-picker-option\s*\{[^}]*font-size:\s*14px/s);
+  assert.doesNotMatch(styles, /\.lang-picker-family\s*\{[^}]*font:\s*inherit/s);
+  assert.match(app, /picker\.whichFamily/);
+  assert.doesNotMatch(app, /picker\.chooseDialect/);
+});
+
+test('lang picker CSS styles family rows', () => {
+  assert.match(styles, /\.lang-picker-family/);
+  assert.match(styles, /\.lang-picker-chevron/);
+  assert.match(styles, /\.lang-picker-family\.is-selected/);
+  assert.doesNotMatch(styles, /\.lang-picker-back/);
+});
+
+test('buildLangPickerFamilyHtml is the family-row helper used by tests', () => {
+  const htmlOption = buildLangPickerFamilyHtml({
+    familyId: 'es',
+    flag: '🇪🇸',
+    label: 'Spanish',
+    selected: false
+  });
+  assert.match(htmlOption, /data-family="es"/);
+  assert.match(htmlOption, /Spanish/);
 });
 
 test('getLangPickerOptions marks owned languages as selected so they can be deselected', () => {

@@ -103,6 +103,20 @@ test('tab labels are 5/new, 5/review, and Progress', () => {
   assert.equal(t('pt-BR', 'tab.frequency'), 'Progresso');
 });
 
+test('dialect step title is Which language', () => {
+  assert.equal(t('en', 'picker.whichFamily', { language: 'French' }), 'Which French?');
+  assert.equal(t('pt-BR', 'picker.whichFamily', { language: 'Francês' }), 'Qual Francês?');
+});
+
+test('dialect picker copy is the region name only', () => {
+  assert.equal(t('en', 'picker.dialect.ptBr'), 'Brazil');
+  assert.equal(t('en', 'picker.dialect.fr'), 'Quebec');
+  assert.equal(t('en', 'picker.dialect.frFr'), 'France');
+  assert.equal(t('en', 'picker.dialect.esAr'), 'Argentina');
+  assert.equal(t('pt-BR', 'picker.dialect.ptBr'), 'Brasil');
+  assert.equal(t('pt-BR', 'picker.dialect.frFr'), 'França');
+});
+
 test('add-to-review button copy and configure flashcard labels', () => {
   assert.equal(t('en', 'daily.addAll'), 'Add all to review');
   assert.equal(t('pt-BR', 'daily.addAll'), 'Adicionar tudo à revisão');

@@ -8,6 +8,7 @@ const ptMeta = { sentenceKey: 'pt', requireDiacritics: true, allowedSentenceCoun
 function frCard(overrides = {}) {
   return {
     word: 'manger',
+    level: 'A1',
     translation: 'to eat',
     sentences: [
       { fr: 'Je mange du pain tous les matins.', en: 'I eat bread every morning.' },
@@ -51,6 +52,7 @@ describe('checkWordPool', () => {
     const result = checkWordPool([
       {
         word: 'ecole',
+        level: 'A1',
         translation: 'school',
         sentences: [
           { fr: 'Je vais a lecole demain matin.', en: 'I am going to school tomorrow morning.' },
@@ -67,6 +69,7 @@ describe('checkWordPool', () => {
     const result = checkWordPool([
       {
         word: 'sossego',
+        level: 'B1',
         translation: 'peace and quiet',
         sentences: [
           { pt: 'Preciso de um pouco de sossego agora.', en: 'I need a bit of peace and quiet now.' },
@@ -75,6 +78,27 @@ describe('checkWordPool', () => {
       }
     ], ptMeta, 'words.pt-br.json');
     assert.equal(result.ok, true, result.errors.join('; '));
+  });
+
+  it('rejects a missing level', () => {
+    const card = frCard();
+    delete card.level;
+    const result = checkWordPool([card], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /level must be A1/);
+  });
+
+  it('rejects an unknown level', () => {
+    const result = checkWordPool([frCard({ level: 'C1' })], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /level must be A1/);
+  });
+
+  it('accepts A2, B1, and B2', () => {
+    for (const level of ['A2', 'B1', 'B2']) {
+      const result = checkWordPool([frCard({ level })], frMeta, 'words.fr-fr.json');
+      assert.equal(result.ok, true, `${level}: ${result.errors.join('; ')}`);
+    }
   });
 
   it('rejects duplicate headwords', () => {

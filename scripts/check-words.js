@@ -55,6 +55,9 @@ export const GLUE_HEADWORDS = new Set([
 
 const DIACRITIC_RE = /[àâäáãåéèêëíìîïóòôöõúùûüçñœæÀÂÄÁÃÅÉÈÊËÍÌÎÏÓÒÔÖÕÚÙÛÜÇÑŒÆ]/;
 
+/** CEFR band on each card. One level per lemma — later skill-level filtering uses this. */
+export const ALLOWED_LEVELS = new Set(['A1', 'A2', 'B1', 'B2']);
+
 export function normalizeHeadword(word) {
   return String(word || '').trim().toLowerCase();
 }
@@ -94,6 +97,11 @@ export function checkWordPool(entries, meta, fileLabel = 'pool') {
     seen.add(key);
     if (!meta.legacySoft && isGlueHeadword(word)) {
       errors.push(`${loc}: glue/function headword not allowed ("${word}")`);
+    }
+
+    const level = String(entry.level || '').trim();
+    if (!ALLOWED_LEVELS.has(level)) {
+      errors.push(`${loc}: level must be A1, A2, B1, or B2 (got ${JSON.stringify(entry.level)})`);
     }
 
     const translation = String(entry.translation || '').trim();

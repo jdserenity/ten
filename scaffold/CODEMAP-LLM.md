@@ -3,7 +3,7 @@
 Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.md`. Word-pool editorial rules → `scaffold/skills/seed-daily-words/SKILL.md`. Run → root `README.md`.
 
 ## Product
-- **Ten** — personal PWA. Tracks: **PT-BR** (intermediate / B1–B2), **FR** (Quebec beginner), **FR-FR** (France beginner; own pool + progress, shared `frequency-fr.json` with FR), **ES-AR** (Argentina beginner). Users pick any via header `+`; add/remove later in Settings (owned start selected; deselect + Save removes).
+- **Ten** — personal PWA. Tracks: **PT-BR** (intermediate / B1–B2), **FR** (Quebec beginner), **FR-FR** (France beginner; own pool + progress, shared `frequency-fr.json` with FR), **ES-AR** (Argentina beginner). Language picker (header `+`, Settings `+`, or tap the active header flag) is two steps: main language (Spanish / French / Portuguese), then dialect (Argentina after Spanish; Quebec and France after French; Brazil after Portuguese). Single-dialect families still show step 2. Dialect rows use the region only (Brazil, Quebec, France, Argentina). Dialect title is Which {language}?. Dialect screen’s only button is Back (no Add/Save; outside click does not close). Checks accumulate across families until Add/Save on the language list; Save still replaces the full set. Header flags and Settings chips stay one-per-track.
 - Username-only accounts. New username creates; existing signs in. Seed **`jd`** has `is_dev = 1`; everyone else `0`. Until ≥1 learning language: tabs show **Add a language!** (i18n), no fetch errors; Translate disabled; white chalk hint near header `+` (hidden while picker open; gone after any language added). Default open mode: last visited among the user's languages (`localStorage`; one-time migrate from `sessionStorage`).
 - Tabs L→R: **5/new** (up to 5 unseen pool words/day), **5/review** (5 flashcards/day then unlimited), **Progress** (bundled frequency lists + unlock highlighting), **Translate** (last). **Settings** is a header cog, not a tab. UI strings: `en` / `pt-BR` (Brazilian, not European) in `i18n.js`. Pre-login: `navigator.languages`. Signed-in override: `users.app_lang` (`NULL` = keep detecting). `<html lang>` follows app language. Translate / Progress inline translate use app language as the non-learning pole (fallback `EN` when it equals the learning language). Tab labels pt-BR: `5/novas`, `5/revisar`, `Progresso`.
 - Daily: `WORDS_PER_DAY = 5` (`daily-pool.js`), `DAILY_REVIEW_GOAL = 5` (`ten-logic.js`). Confetti once per language per calendar day on finishing the 5th new word and the 5th graded review (`localStorage` gates). After 5 reviews, **∞** — keep going. `resolveStartupTab`: 5/new unless that day's confetti gate is set → 5/review unless today's 5 grades are done → Translate.
@@ -25,6 +25,8 @@ Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.
 | `es-ar` | `/words.es-ar.json` | `es` | `ES-AR` | `es-AR` |
 
 Quebec and France must not share a word-pool file. Spanish pool is `words.es-ar.json`, not `words.es.json`. FR-CA vs FR-FR frequency list is shared (`frequency-fr.json`); unlocks/progress are not.
+
+Picker families (`LANG_FAMILIES` in `ten-logic.js`): `es` → `es-ar`; `fr` → `fr`, `fr-fr`; `pt` → `pt-br`. Adding a dialect appends a mode id on that family — the first picker screen does not grow.
 
 ## APIs (`server/index.js`)
 Auth header **`X-User-Id`** (numeric) on data routes except login + translate + health.

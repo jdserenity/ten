@@ -10,7 +10,7 @@ src/client/                 # the PWA I serve as static files (no bundler)
   styles.css
   app.js                    # all UI; MODE_CONFIGS; talks to /api/* with X-User-Id
   i18n.js                   # en + pt-BR catalogs; t(); applyAppLanguage overwrites [data-i18n]
-  ten-logic.js              # pure helpers (startup tab, review goal, frequency filters, TTS voice pick)
+  ten-logic.js              # pure helpers (startup tab, review goal, frequency filters, TTS voice pick, lang-family picker)
   daily-pool.js             # pick/reconcile today's 5/new list; WORDS_PER_DAY; pool-days math
   client-load.js            # planBootDataLoads — priority vs background tab data
   ops.html / ops.js         # /ops.html dashboard (dev users)
@@ -54,6 +54,8 @@ flowchart LR
   gloss -->|cache miss| translate[Google 1-5 words / DeepL 6+]
   http --> ops[server/pool-health.js]
 ```
+
+Language picker UI is in `index.html` / `app.js` (header `+`, Settings `+`, active flag). Draft checks live in `state.pickerSelectedModeIds` until Add/Save.
 
 Boot (in `app.js`): remembered user → `/api/me` or login → `resolveStartupTab` from localStorage confetti/review gates → `planBootDataLoads` → priority tab data, 5/new glosses via `/api/daily-glosses/ensure` on any tab, the rest in background.
 

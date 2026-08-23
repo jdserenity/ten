@@ -1,6 +1,7 @@
 [
   {
     "word": "casa",
+    "level": "A1",
     "translation": "house, home",
     "sentences": [
       {
@@ -19,6 +20,7 @@
   },
   {
     "word": "laburo",
+    "level": "A1",
     "translation": "work, job (colloquial Argentina)",
     "sentences": [
       {
@@ -37,6 +39,7 @@
   },
   {
     "word": "amigo",
+    "level": "A1",
     "translation": "friend (male); friend in general",
     "sentences": [
       {
@@ -55,6 +58,7 @@
   },
   {
     "word": "familia",
+    "level": "A1",
     "translation": "family",
     "sentences": [
       {
@@ -73,6 +77,7 @@
   },
   {
     "word": "chico",
+    "level": "A1",
     "translation": "boy; also small / little (adj.)",
     "sentences": [
       {
@@ -91,6 +96,7 @@
   },
   {
     "word": "chica",
+    "level": "A1",
     "translation": "girl; young woman",
     "sentences": [
       {
@@ -109,6 +115,7 @@
   },
   {
     "word": "colectivo",
+    "level": "A1",
     "translation": "city bus (Argentina)",
     "sentences": [
       {
@@ -127,6 +134,7 @@
   },
   {
     "word": "remera",
+    "level": "A1",
     "translation": "T-shirt (Argentina)",
     "sentences": [
       {
@@ -145,6 +153,7 @@
   },
   {
     "word": "plata",
+    "level": "A1",
     "translation": "money (colloquial); also silver",
     "sentences": [
       {
@@ -163,6 +172,7 @@
   },
   {
     "word": "comida",
+    "level": "A1",
     "translation": "food; meal",
     "sentences": [
       {
@@ -181,6 +191,7 @@
   },
   {
     "word": "agua",
+    "level": "A1",
     "translation": "water",
     "sentences": [
       {
@@ -199,6 +210,7 @@
   },
   {
     "word": "día",
+    "level": "A1",
     "translation": "day",
     "sentences": [
       {
@@ -217,6 +229,7 @@
   },
   {
     "word": "noche",
+    "level": "A1",
     "translation": "night, evening",
     "sentences": [
       {
@@ -235,6 +248,7 @@
   },
   {
     "word": "mañana",
+    "level": "A1",
     "translation": "tomorrow; also morning",
     "sentences": [
       {
@@ -253,6 +267,7 @@
   },
   {
     "word": "tiempo",
+    "level": "A1",
     "translation": "time; also weather",
     "sentences": [
       {
@@ -271,6 +286,7 @@
   },
   {
     "word": "vida",
+    "level": "A1",
     "translation": "life",
     "sentences": [
       {
@@ -289,6 +305,7 @@
   },
   {
     "word": "escuela",
+    "level": "A1",
     "translation": "school",
     "sentences": [
       {
@@ -307,6 +324,7 @@
   },
   {
     "word": "libro",
+    "level": "A1",
     "translation": "book",
     "sentences": [
       {
@@ -325,6 +343,7 @@
   },
   {
     "word": "hablar",
+    "level": "A1",
     "translation": "to speak, to talk",
     "sentences": [
       {
@@ -343,6 +362,7 @@
   },
   {
     "word": "escuchar",
+    "level": "A1",
     "translation": "to listen",
     "sentences": [
       {
@@ -361,6 +381,7 @@
   },
   {
     "word": "mirar",
+    "level": "A1",
     "translation": "to look at, to watch",
     "sentences": [
       {
@@ -379,6 +400,7 @@
   },
   {
     "word": "esperar",
+    "level": "A1",
     "translation": "to wait (for); also to hope",
     "sentences": [
       {
@@ -397,6 +419,7 @@
   },
   {
     "word": "entender",
+    "level": "A1",
     "translation": "to understand",
     "sentences": [
       {
@@ -415,6 +438,7 @@
   },
   {
     "word": "aprender",
+    "level": "A1",
     "translation": "to learn",
     "sentences": [
       {
@@ -433,6 +457,7 @@
   },
   {
     "word": "escribir",
+    "level": "A1",
     "translation": "to write",
     "sentences": [
       {
@@ -451,6 +476,7 @@
   },
   {
     "word": "leer",
+    "level": "A1",
     "translation": "to read",
     "sentences": [
       {
@@ -469,6 +495,7 @@
   },
   {
     "word": "comprar",
+    "level": "A1",
     "translation": "to buy",
     "sentences": [
       {
@@ -487,6 +514,7 @@
   },
   {
     "word": "vender",
+    "level": "A1",
     "translation": "to sell",
     "sentences": [
       {
@@ -505,6 +533,7 @@
   },
   {
     "word": "buscar",
+    "level": "A1",
     "translation": "to look for, to search for",
     "sentences": [
       {
@@ -523,6 +552,7 @@
   },
   {
     "word": "encontrar",
+    "level": "A1",
     "translation": "to find; also to meet",
     "sentences": [
       {
@@ -541,6 +571,7 @@
   },
   {
     "word": "dar",
+    "level": "A1",
     "translation": "to give",
     "sentences": [
       {
@@ -559,6 +590,7 @@
   },
   {
     "word": "tomar",
+    "level": "A1",
     "translation": "to take; to drink; to have (a class)",
     "sentences": [
       {
@@ -577,6 +609,7 @@
   },
   {
     "word": "abrir",
+    "level": "A1",
     "translation": "to open",
     "sentences": [
       {
@@ -595,6 +628,7 @@
   },
   {
     "word": "cerrar",
+    "level": "A1",
     "translation": "to close, to shut",
     "sentences": [
       {
@@ -613,6 +647,7 @@
   },
   {
     "word": "empezar",
+    "level": "A1",
     "translation": "to begin, to start",
     "sentences": [
       {
@@ -631,6 +666,7 @@
   },
   {
     "word": "terminar",
+    "level": "A1",
     "translation": "to finish, to end",
     "sentences": [
       {
@@ -649,6 +685,7 @@
   },
   {
     "word": "ir",
+    "level": "A1",
     "translation": "to go",
     "sentences": [
       {
@@ -667,6 +704,7 @@
   },
   {
     "word": "venir",
+    "level": "A1",
     "translation": "to come",
     "sentences": [
       {
@@ -685,6 +723,7 @@
   },
   {
     "word": "llegar",
+    "level": "A1",
     "translation": "to arrive",
     "sentences": [
       {
@@ -703,6 +742,7 @@
   },
   {
     "word": "quedar",
+    "level": "A1",
     "translation": "to stay; to arrange to meet; to fit / suit",
     "sentences": [
       {
@@ -721,6 +761,7 @@
   },
   {
     "word": "vivir",
+    "level": "A1",
     "translation": "to live",
     "sentences": [
       {
@@ -739,6 +780,7 @@
   },
   {
     "word": "querer",
+    "level": "A1",
     "translation": "to want; to love",
     "sentences": [
       {
@@ -757,6 +799,7 @@
   },
   {
     "word": "poder",
+    "level": "A1",
     "translation": "to be able to, can",
     "sentences": [
       {
@@ -775,6 +818,7 @@
   },
   {
     "word": "tener",
+    "level": "A1",
     "translation": "to have",
     "sentences": [
       {
@@ -793,6 +837,7 @@
   },
   {
     "word": "hacer",
+    "level": "A1",
     "translation": "to do, to make",
     "sentences": [
       {
@@ -811,6 +856,7 @@
   },
   {
     "word": "decir",
+    "level": "A1",
     "translation": "to say, to tell",
     "sentences": [
       {
@@ -829,6 +875,7 @@
   },
   {
     "word": "pedir",
+    "level": "A1",
     "translation": "to ask for; to order (food)",
     "sentences": [
       {
@@ -847,6 +894,7 @@
   },
   {
     "word": "responder",
+    "level": "A1",
     "translation": "to answer, to reply",
     "sentences": [
       {
@@ -865,6 +913,7 @@
   },
   {
     "word": "bueno",
+    "level": "A1",
     "translation": "good; okay (as interjection)",
     "sentences": [
       {
@@ -883,6 +932,7 @@
   },
   {
     "word": "lindo",
+    "level": "A1",
     "translation": "pretty, nice, lovely (not a person's name)",
     "sentences": [
       {

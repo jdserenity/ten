@@ -1,6 +1,7 @@
 [
   {
     "word": "bonjour",
+    "level": "A1",
     "translation": "hello, good morning",
     "sentences": [
       {
@@ -19,6 +20,7 @@
   },
   {
     "word": "merci",
+    "level": "A1",
     "translation": "thank you",
     "sentences": [
       {
@@ -37,6 +39,7 @@
   },
   {
     "word": "maison",
+    "level": "A1",
     "translation": "house, home",
     "sentences": [
       {
@@ -55,6 +58,7 @@
   },
   {
     "word": "école",
+    "level": "A1",
     "translation": "school",
     "sentences": [
       {
@@ -73,6 +77,7 @@
   },
   {
     "word": "travail",
+    "level": "A1",
     "translation": "work, job",
     "sentences": [
       {
@@ -91,6 +96,7 @@
   },
   {
     "word": "travailler",
+    "level": "A1",
     "translation": "to work",
     "sentences": [
       {
@@ -109,6 +115,7 @@
   },
   {
     "word": "ami",
+    "level": "A1",
     "translation": "friend (male); friend in general",
     "sentences": [
       {
@@ -127,6 +134,7 @@
   },
   {
     "word": "famille",
+    "level": "A1",
     "translation": "family",
     "sentences": [
       {
@@ -145,6 +153,7 @@
   },
   {
     "word": "enfant",
+    "level": "A1",
     "translation": "child",
     "sentences": [
       {
@@ -163,6 +172,7 @@
   },
   {
     "word": "manger",
+    "level": "A1",
     "translation": "to eat",
     "sentences": [
       {
@@ -181,6 +191,7 @@
   },
   {
     "word": "boire",
+    "level": "A1",
     "translation": "to drink",
     "sentences": [
       {
@@ -199,6 +210,7 @@
   },
   {
     "word": "eau",
+    "level": "A1",
     "translation": "water",
     "sentences": [
       {
@@ -217,6 +229,7 @@
   },
   {
     "word": "pain",
+    "level": "A1",
     "translation": "bread",
     "sentences": [
       {
@@ -235,6 +248,7 @@
   },
   {
     "word": "ville",
+    "level": "A1",
     "translation": "city, town",
     "sentences": [
       {
@@ -253,6 +267,7 @@
   },
   {
     "word": "livre",
+    "level": "A1",
     "translation": "book",
     "sentences": [
       {
@@ -271,6 +286,7 @@
   },
   {
     "word": "parler",
+    "level": "A1",
     "translation": "to speak, to talk",
     "sentences": [
       {
@@ -289,6 +305,7 @@
   },
   {
     "word": "écouter",
+    "level": "A1",
     "translation": "to listen",
     "sentences": [
       {
@@ -307,6 +324,7 @@
   },
   {
     "word": "regarder",
+    "level": "A1",
     "translation": "to look at, to watch",
     "sentences": [
       {
@@ -325,6 +343,7 @@
   },
   {
     "word": "attendre",
+    "level": "A1",
     "translation": "to wait (for)",
     "sentences": [
       {
@@ -343,6 +362,7 @@
   },
   {
     "word": "comprendre",
+    "level": "A1",
     "translation": "to understand",
     "sentences": [
       {
@@ -361,6 +381,7 @@
   },
   {
     "word": "apprendre",
+    "level": "A1",
     "translation": "to learn; also to teach (someone something)",
     "sentences": [
       {
@@ -379,6 +400,7 @@
   },
   {
     "word": "écrire",
+    "level": "A1",
     "translation": "to write",
     "sentences": [
       {
@@ -397,6 +419,7 @@
   },
   {
     "word": "lire",
+    "level": "A1",
     "translation": "to read",
     "sentences": [
       {
@@ -415,6 +438,7 @@
   },
   {
     "word": "acheter",
+    "level": "A1",
     "translation": "to buy",
     "sentences": [
       {
@@ -433,6 +457,7 @@
   },
   {
     "word": "vendre",
+    "level": "A1",
     "translation": "to sell",
     "sentences": [
       {
@@ -451,6 +476,7 @@
   },
   {
     "word": "chercher",
+    "level": "A1",
     "translation": "to look for, to search for",
     "sentences": [
       {
@@ -469,6 +495,7 @@
   },
   {
     "word": "trouver",
+    "level": "A1",
     "translation": "to find; also to think / find (that)",
     "sentences": [
       {
@@ -487,6 +514,7 @@
   },
   {
     "word": "donner",
+    "level": "A1",
     "translation": "to give",
     "sentences": [
       {
@@ -505,6 +533,7 @@
   },
   {
     "word": "prendre",
+    "level": "A1",
     "translation": "to take; also to have (food/drink)",
     "sentences": [
       {
@@ -523,6 +552,7 @@
   },
   {
     "word": "ouvrir",
+    "level": "A1",
     "translation": "to open",
     "sentences": [
       {
@@ -541,6 +571,7 @@
   },
   {
     "word": "fermer",
+    "level": "A1",
     "translation": "to close, to shut",
     "sentences": [
       {
@@ -559,6 +590,7 @@
   },
   {
     "word": "commencer",
+    "level": "A1",
     "translation": "to begin, to start",
     "sentences": [
       {
@@ -577,6 +609,7 @@
   },
   {
     "word": "finir",
+    "level": "A1",
     "translation": "to finish, to end",
     "sentences": [
       {
@@ -595,6 +628,7 @@
   },
   {
     "word": "partir",
+    "level": "A1",
     "translation": "to leave, to go away",
     "sentences": [
       {
@@ -613,6 +647,7 @@
   },
   {
     "word": "arriver",
+    "level": "A1",
     "translation": "to arrive; also to happen",
     "sentences": [
       {
@@ -631,6 +666,7 @@
   },
   {
     "word": "rester",
+    "level": "A1",
     "translation": "to stay, to remain",
     "sentences": [
       {
@@ -649,6 +685,7 @@
   },
   {
     "word": "habiter",
+    "level": "A1",
     "translation": "to live (in a place)",
     "sentences": [
       {
@@ -667,6 +704,7 @@
   },
   {
     "word": "aimer",
+    "level": "A1",
     "translation": "to like, to love",
     "sentences": [
       {
@@ -685,6 +723,7 @@
   },
   {
     "word": "vouloir",
+    "level": "A1",
     "translation": "to want",
     "sentences": [
       {
@@ -703,6 +742,7 @@
   },
   {
     "word": "pouvoir",
+    "level": "A1",
     "translation": "to be able to, can",
     "sentences": [
       {
@@ -721,6 +761,7 @@
   },
   {
     "word": "devoir",
+    "level": "A1",
     "translation": "must, to have to",
     "sentences": [
       {
@@ -739,6 +780,7 @@
   },
   {
     "word": "savoir",
+    "level": "A1",
     "translation": "to know (a fact / how to)",
     "sentences": [
       {
@@ -757,6 +799,7 @@
   },
   {
     "word": "voir",
+    "level": "A1",
     "translation": "to see",
     "sentences": [
       {
@@ -775,6 +818,7 @@
   },
   {
     "word": "venir",
+    "level": "A1",
     "translation": "to come",
     "sentences": [
       {
@@ -793,6 +837,7 @@
   },
   {
     "word": "dire",
+    "level": "A1",
     "translation": "to say, to tell",
     "sentences": [
       {
@@ -811,6 +856,7 @@
   },
   {
     "word": "demander",
+    "level": "A1",
     "translation": "to ask (for); to request",
     "sentences": [
       {
@@ -829,6 +875,7 @@
   },
   {
     "word": "répondre",
+    "level": "A1",
     "translation": "to answer, to reply",
     "sentences": [
       {
@@ -847,6 +894,7 @@
   },
   {
     "word": "petit",
+    "level": "A1",
     "translation": "small, little",
     "sentences": [
       {
@@ -865,6 +913,7 @@
   },
   {
     "word": "grand",
+    "level": "A1",
     "translation": "big, tall; also grown-up",
     "sentences": [
       {
@@ -883,6 +932,7 @@
   },
   {
     "word": "nouveau",
+    "level": "A1",
     "translation": "new",
     "sentences": [
       {
@@ -896,6 +946,861 @@
       {
         "fr": "Nous cherchons de nouvelles idées pour le projet.",
         "en": "We are looking for new ideas for the project."
+      }
+    ]
+  },
+  {
+    "word": "aller",
+    "level": "A1",
+    "translation": "to go",
+    "sentences": [
+      {
+        "fr": "Je vais au marché avec ma sœur.",
+        "en": "I am going to the market with my sister."
+      },
+      {
+        "fr": "Ils sont allés à Lyon en train.",
+        "en": "They went to Lyon by train."
+      },
+      {
+        "fr": "Tu veux aller au cinéma ce soir?",
+        "en": "Do you want to go to the cinema tonight?"
+      }
+    ]
+  },
+  {
+    "word": "faire",
+    "level": "A1",
+    "translation": "to do, to make",
+    "sentences": [
+      {
+        "fr": "Je fais le dîner pour toute la famille.",
+        "en": "I am making dinner for the whole family."
+      },
+      {
+        "fr": "Elle a fait un gâteau au chocolat hier.",
+        "en": "She made a chocolate cake yesterday."
+      },
+      {
+        "fr": "On peut faire une pause maintenant?",
+        "en": "Can we take a break now?"
+      }
+    ]
+  },
+  {
+    "word": "avoir",
+    "level": "A1",
+    "translation": "to have (possession)",
+    "sentences": [
+      {
+        "fr": "J'ai une voiture rouge assez vieille.",
+        "en": "I have a fairly old red car."
+      },
+      {
+        "fr": "Nous avons deux chats à la maison.",
+        "en": "We have two cats at home."
+      },
+      {
+        "fr": "Tu as le temps pour un café?",
+        "en": "Do you have time for a coffee?"
+      }
+    ]
+  },
+  {
+    "word": "aider",
+    "level": "A1",
+    "translation": "to help",
+    "sentences": [
+      {
+        "fr": "J'aide mon frère avec ses devoirs.",
+        "en": "I help my brother with his homework."
+      },
+      {
+        "fr": "Ils ont aidé les voisins à déménager.",
+        "en": "They helped the neighbors move."
+      },
+      {
+        "fr": "Tu peux m'aider à porter ces sacs?",
+        "en": "Can you help me carry these bags?"
+      }
+    ]
+  },
+  {
+    "word": "jour",
+    "level": "A1",
+    "translation": "day",
+    "sentences": [
+      {
+        "fr": "C'est un très beau jour pour se promener.",
+        "en": "It is a very beautiful day for a walk."
+      },
+      {
+        "fr": "Les jours passent trop vite en vacances.",
+        "en": "The days go by too quickly on vacation."
+      },
+      {
+        "fr": "On se voit le jour de ton anniversaire.",
+        "en": "We'll see each other on your birthday."
+      }
+    ]
+  },
+  {
+    "word": "nuit",
+    "level": "A1",
+    "translation": "night",
+    "sentences": [
+      {
+        "fr": "La nuit est calme dans ce petit village.",
+        "en": "The night is quiet in this little village."
+      },
+      {
+        "fr": "Ils ont voyagé toute la nuit en train.",
+        "en": "They traveled all night by train."
+      },
+      {
+        "fr": "Je dors mal pendant les nuits chaudes.",
+        "en": "I sleep badly during hot nights."
+      }
+    ]
+  },
+  {
+    "word": "père",
+    "level": "A1",
+    "translation": "father",
+    "sentences": [
+      {
+        "fr": "Mon père travaille dans un hôpital.",
+        "en": "My father works in a hospital."
+      },
+      {
+        "fr": "Les pères attendent devant l'école.",
+        "en": "The fathers are waiting in front of the school."
+      },
+      {
+        "fr": "Je téléphone à mon père chaque dimanche.",
+        "en": "I call my father every Sunday."
+      }
+    ]
+  },
+  {
+    "word": "mère",
+    "level": "A1",
+    "translation": "mother",
+    "sentences": [
+      {
+        "fr": "Ma mère prépare le petit-déjeuner.",
+        "en": "My mother is making breakfast."
+      },
+      {
+        "fr": "Les mères parlent près de l'école.",
+        "en": "The mothers are talking near the school."
+      },
+      {
+        "fr": "J'appelle ma mère tous les soirs.",
+        "en": "I call my mother every evening."
+      }
+    ]
+  },
+  {
+    "word": "femme",
+    "level": "A1",
+    "translation": "woman; also wife",
+    "sentences": [
+      {
+        "fr": "Cette femme habite près de la gare.",
+        "en": "That woman lives near the train station."
+      },
+      {
+        "fr": "Sa femme arrive demain matin en train.",
+        "en": "His wife arrives tomorrow morning by train."
+      },
+      {
+        "fr": "Les femmes attendent déjà devant le musée.",
+        "en": "The women are already waiting in front of the museum."
+      }
+    ]
+  },
+  {
+    "word": "homme",
+    "level": "A1",
+    "translation": "man",
+    "sentences": [
+      {
+        "fr": "Cet homme attend le bus depuis longtemps.",
+        "en": "That man has been waiting for the bus for a long time."
+      },
+      {
+        "fr": "Les hommes jouent au foot dans le parc.",
+        "en": "The men are playing soccer in the park."
+      },
+      {
+        "fr": "Un homme m'a demandé l'heure tout à l'heure.",
+        "en": "A man asked me the time a little while ago."
+      }
+    ]
+  },
+  {
+    "word": "chose",
+    "level": "A1",
+    "translation": "thing",
+    "sentences": [
+      {
+        "fr": "C'est une chose importante à retenir.",
+        "en": "That is an important thing to remember."
+      },
+      {
+        "fr": "J'ai oublié quelque chose à la maison.",
+        "en": "I forgot something at home."
+      },
+      {
+        "fr": "Il y a trop de choses dans ce sac.",
+        "en": "There are too many things in this bag."
+      }
+    ]
+  },
+  {
+    "word": "temps",
+    "level": "A1",
+    "translation": "time; also weather",
+    "sentences": [
+      {
+        "fr": "Je n'ai pas le temps ce matin.",
+        "en": "I do not have the time this morning."
+      },
+      {
+        "fr": "Quel temps fait-il aujourd'hui à Lyon?",
+        "en": "What is the weather like today in Lyon?"
+      },
+      {
+        "fr": "Le temps passe trop vite pendant les vacances.",
+        "en": "Time goes by too quickly during vacation."
+      }
+    ]
+  },
+  {
+    "word": "bon",
+    "level": "A1",
+    "translation": "good",
+    "sentences": [
+      {
+        "fr": "C'est un bon restaurant près d'ici.",
+        "en": "It is a good restaurant near here."
+      },
+      {
+        "fr": "Elle a de bonnes idées pour le dîner.",
+        "en": "She has good ideas for dinner."
+      },
+      {
+        "fr": "Ce gâteau est vraiment bon, merci.",
+        "en": "This cake is really good, thank you."
+      }
+    ]
+  },
+  {
+    "word": "maintenant",
+    "level": "A1",
+    "translation": "now",
+    "sentences": [
+      {
+        "fr": "Je dois partir maintenant, je suis en retard.",
+        "en": "I have to leave now, I am late."
+      },
+      {
+        "fr": "Maintenant, on ouvre les fenêtres.",
+        "en": "Now we are opening the windows."
+      },
+      {
+        "fr": "Tu peux m'appeler maintenant si tu veux.",
+        "en": "You can call me now if you want."
+      }
+    ]
+  },
+  {
+    "word": "toujours",
+    "level": "A1",
+    "translation": "always",
+    "sentences": [
+      {
+        "fr": "Il arrive toujours en avance au travail.",
+        "en": "He always arrives early to work."
+      },
+      {
+        "fr": "Nous déjeunons toujours ensemble le dimanche.",
+        "en": "We always have lunch together on Sunday."
+      },
+      {
+        "fr": "Tu es toujours aussi gentil avec moi.",
+        "en": "You are always so kind to me."
+      }
+    ]
+  },
+  {
+    "word": "passer",
+    "level": "A1",
+    "translation": "to pass by; also to spend (time)",
+    "sentences": [
+      {
+        "fr": "On passe souvent par ce petit village.",
+        "en": "We often pass through this little village."
+      },
+      {
+        "fr": "Nous avons passé deux jours à Bordeaux.",
+        "en": "We spent two days in Bordeaux."
+      },
+      {
+        "fr": "Elle veut passer me voir demain matin.",
+        "en": "She wants to drop by and see me tomorrow morning."
+      }
+    ]
+  },
+  {
+    "word": "sortir",
+    "level": "A1",
+    "translation": "to go out, to come out",
+    "sentences": [
+      {
+        "fr": "Les enfants sortent de l'école à seize heures.",
+        "en": "The children come out of school at four o'clock."
+      },
+      {
+        "fr": "Nous sommes sortis malgré la pluie.",
+        "en": "We went out despite the rain."
+      },
+      {
+        "fr": "Il faut sortir les poubelles ce soir.",
+        "en": "We have to take the trash out tonight."
+      }
+    ]
+  },
+  {
+    "word": "mettre",
+    "level": "A1",
+    "translation": "to put; also to put on (clothes)",
+    "sentences": [
+      {
+        "fr": "Paul met toujours son vélo dans la cour.",
+        "en": "Paul always puts his bike in the courtyard."
+      },
+      {
+        "fr": "J'ai mis les clés dans mon sac.",
+        "en": "I put the keys in my bag."
+      },
+      {
+        "fr": "Il faut mettre un pull, il fait froid.",
+        "en": "You have to put on a sweater, it is cold."
+      }
+    ]
+  },
+  {
+    "word": "penser",
+    "level": "A1",
+    "translation": "to think",
+    "sentences": [
+      {
+        "fr": "Marie pense déjà aux vacances d'été.",
+        "en": "Marie is already thinking about the summer holidays."
+      },
+      {
+        "fr": "Nous avons pensé à toi pendant le voyage.",
+        "en": "We thought of you during the trip."
+      },
+      {
+        "fr": "Il faut penser à fermer la porte.",
+        "en": "You have to remember to close the door."
+      }
+    ]
+  },
+  {
+    "word": "appeler",
+    "level": "A1",
+    "translation": "to call; also to be named (s'appeler)",
+    "sentences": [
+      {
+        "fr": "Je m'appelle Thomas et je viens de Lille.",
+        "en": "My name is Thomas and I come from Lille."
+      },
+      {
+        "fr": "Marc a appelé le médecin ce matin.",
+        "en": "Marc called the doctor this morning."
+      },
+      {
+        "fr": "N'oublie pas d'appeler ta sœur ce soir.",
+        "en": "Don't forget to call your sister tonight."
+      }
+    ]
+  },
+  {
+    "word": "voiture",
+    "level": "A1",
+    "translation": "car",
+    "sentences": [
+      {
+        "fr": "Leur voiture est en panne depuis mardi.",
+        "en": "Their car has been broken down since Tuesday."
+      },
+      {
+        "fr": "Les voitures s'arrêtent au feu rouge.",
+        "en": "The cars stop at the red light."
+      },
+      {
+        "fr": "On laisse la voiture près du métro.",
+        "en": "We leave the car near the metro."
+      }
+    ]
+  },
+  {
+    "word": "fille",
+    "level": "A1",
+    "translation": "girl; also daughter",
+    "sentences": [
+      {
+        "fr": "Une fille attend devant la boulangerie.",
+        "en": "A girl is waiting in front of the bakery."
+      },
+      {
+        "fr": "Leur fille étudie à Lyon cette année.",
+        "en": "Their daughter is studying in Lyon this year."
+      },
+      {
+        "fr": "Les filles rentrent à pied après le cours.",
+        "en": "The girls are walking home after class."
+      }
+    ]
+  },
+  {
+    "word": "frère",
+    "level": "A1",
+    "translation": "brother",
+    "sentences": [
+      {
+        "fr": "Son frère prépare le dîner ce soir.",
+        "en": "His brother is making dinner tonight."
+      },
+      {
+        "fr": "Mes deux frères vivent encore à Marseille.",
+        "en": "My two brothers still live in Marseille."
+      },
+      {
+        "fr": "J'écris souvent à mon frère aîné.",
+        "en": "I often write to my older brother."
+      }
+    ]
+  },
+  {
+    "word": "soir",
+    "level": "A1",
+    "translation": "evening",
+    "sentences": [
+      {
+        "fr": "Après le travail, le soir est très calme.",
+        "en": "After work, the evening is very quiet."
+      },
+      {
+        "fr": "Les soirs d'hiver, on reste à la maison.",
+        "en": "On winter evenings, we stay at home."
+      },
+      {
+        "fr": "On se retrouve demain soir vers huit heures.",
+        "en": "We'll meet tomorrow evening around eight o'clock."
+      }
+    ]
+  },
+  {
+    "word": "heure",
+    "level": "A1",
+    "translation": "hour; also o'clock / time of day",
+    "sentences": [
+      {
+        "fr": "Quelle heure est-il à Paris maintenant?",
+        "en": "What time is it in Paris now?"
+      },
+      {
+        "fr": "Le train part à six heures du matin.",
+        "en": "The train leaves at six in the morning."
+      },
+      {
+        "fr": "J'ai attendu une heure sous la pluie.",
+        "en": "I waited for an hour in the rain."
+      }
+    ]
+  },
+  {
+    "word": "argent",
+    "level": "A1",
+    "translation": "money",
+    "sentences": [
+      {
+        "fr": "Elle range son argent dans un petit tiroir.",
+        "en": "She puts her money away in a small drawer."
+      },
+      {
+        "fr": "Ils ont dépensé tout leur argent en voyage.",
+        "en": "They spent all their money on the trip."
+      },
+      {
+        "fr": "Sans argent, on reste à la maison ce week-end.",
+        "en": "Without money, we stay home this weekend."
+      }
+    ]
+  },
+  {
+    "word": "vie",
+    "level": "A1",
+    "translation": "life",
+    "sentences": [
+      {
+        "fr": "J'aime bien ma vie ici, près de la mer.",
+        "en": "I really like my life here, near the sea."
+      },
+      {
+        "fr": "Ils ont changé de vie après le lycée.",
+        "en": "They changed their life after high school."
+      },
+      {
+        "fr": "La vie est plus chère à Paris qu'ici.",
+        "en": "Life is more expensive in Paris than here."
+      }
+    ]
+  },
+  {
+    "word": "seul",
+    "level": "A1",
+    "translation": "alone; also only",
+    "sentences": [
+      {
+        "fr": "Marc dîne seul quand il rentre tard.",
+        "en": "Marc eats dinner alone when he gets home late."
+      },
+      {
+        "fr": "C'est le seul bus avant minuit.",
+        "en": "It is the only bus before midnight."
+      },
+      {
+        "fr": "Nous vivons seuls dans un petit studio.",
+        "en": "We live alone in a small studio."
+      }
+    ]
+  },
+  {
+    "word": "encore",
+    "level": "A1",
+    "translation": "still; also again",
+    "sentences": [
+      {
+        "fr": "Le magasin est encore ouvert à cette heure.",
+        "en": "The shop is still open at this hour."
+      },
+      {
+        "fr": "Chante encore cette chanson, s'il te plaît.",
+        "en": "Sing that song again, please."
+      },
+      {
+        "fr": "Ils cherchent encore un appartement.",
+        "en": "They are still looking for an apartment."
+      }
+    ]
+  },
+  {
+    "word": "jamais",
+    "level": "A1",
+    "translation": "never",
+    "sentences": [
+      {
+        "fr": "Nous n'allons jamais à la plage en hiver.",
+        "en": "We never go to the beach in winter."
+      },
+      {
+        "fr": "Luc n'a jamais goûté ce fromage.",
+        "en": "Luc has never tasted this cheese."
+      },
+      {
+        "fr": "Ne dis jamais ça devant les enfants.",
+        "en": "Never say that in front of the children."
+      }
+    ]
+  },
+  {
+    "word": "laisser",
+    "level": "A1",
+    "translation": "to leave (behind); also to let / allow",
+    "sentences": [
+      {
+        "fr": "Claire laisse ses clés sur la table.",
+        "en": "Claire leaves her keys on the table."
+      },
+      {
+        "fr": "Ils ont laissé la fenêtre ouverte.",
+        "en": "They left the window open."
+      },
+      {
+        "fr": "Tu peux laisser ton manteau ici.",
+        "en": "You can leave your coat here."
+      }
+    ]
+  },
+  {
+    "word": "jouer",
+    "level": "A1",
+    "translation": "to play",
+    "sentences": [
+      {
+        "fr": "Les enfants jouent dans la cour de l'école.",
+        "en": "The children are playing in the school courtyard."
+      },
+      {
+        "fr": "Nous avons joué aux cartes après le dîner.",
+        "en": "We played cards after dinner."
+      },
+      {
+        "fr": "Tu veux jouer au tennis ce week-end?",
+        "en": "Do you want to play tennis this weekend?"
+      }
+    ]
+  },
+  {
+    "word": "vivre",
+    "level": "A1",
+    "translation": "to live (a life); not the same as habiter",
+    "sentences": [
+      {
+        "fr": "Je vis à Toulouse depuis trois ans.",
+        "en": "I have been living in Toulouse for three years."
+      },
+      {
+        "fr": "Ils ont vécu longtemps à la campagne.",
+        "en": "They lived in the countryside for a long time."
+      },
+      {
+        "fr": "On peut vivre simplement près de la mer.",
+        "en": "You can live simply near the sea."
+      }
+    ]
+  },
+  {
+    "word": "croire",
+    "level": "A1",
+    "translation": "to believe",
+    "sentences": [
+      {
+        "fr": "Je crois déjà qu'il va pleuvoir.",
+        "en": "I already think it is going to rain."
+      },
+      {
+        "fr": "Elle a cru cette histoire dès le début.",
+        "en": "She believed that story from the start."
+      },
+      {
+        "fr": "Il faut croire ce que dit le médecin.",
+        "en": "You have to believe what the doctor says."
+      }
+    ]
+  },
+  {
+    "word": "porte",
+    "level": "A1",
+    "translation": "door",
+    "sentences": [
+      {
+        "fr": "La porte de l'immeuble est déjà fermée.",
+        "en": "The building door is already closed."
+      },
+      {
+        "fr": "Les portes du métro se ferment vite.",
+        "en": "The metro doors close quickly."
+      },
+      {
+        "fr": "Ferme la porte, s'il te plaît.",
+        "en": "Close the door, please."
+      }
+    ]
+  },
+  {
+    "word": "matin",
+    "level": "A1",
+    "translation": "morning",
+    "sentences": [
+      {
+        "fr": "Le matin, je prends un café très chaud.",
+        "en": "In the morning, I have a very hot coffee."
+      },
+      {
+        "fr": "Les matins d'hiver commencent trop tôt.",
+        "en": "Winter mornings start too early."
+      },
+      {
+        "fr": "On se voit demain matin devant la gare.",
+        "en": "We'll see each other tomorrow morning in front of the station."
+      }
+    ]
+  },
+  {
+    "word": "semaine",
+    "level": "A1",
+    "translation": "week",
+    "sentences": [
+      {
+        "fr": "Cette semaine, je travaille à la maison.",
+        "en": "This week I am working at home."
+      },
+      {
+        "fr": "Les semaines passent trop vite en été.",
+        "en": "The weeks go by too quickly in summer."
+      },
+      {
+        "fr": "On part en vacances la semaine prochaine.",
+        "en": "We leave on vacation next week."
+      }
+    ]
+  },
+  {
+    "word": "mois",
+    "level": "A1",
+    "translation": "month",
+    "sentences": [
+      {
+        "fr": "Le mois de mai est souvent très beau.",
+        "en": "The month of May is often very beautiful."
+      },
+      {
+        "fr": "Ils restent deux mois chez leurs parents.",
+        "en": "They are staying two months at their parents' place."
+      },
+      {
+        "fr": "J'ai commencé ce travail le mois dernier.",
+        "en": "I started this job last month."
+      }
+    ]
+  },
+  {
+    "word": "chambre",
+    "level": "A1",
+    "translation": "bedroom, room",
+    "sentences": [
+      {
+        "fr": "Ma chambre donne sur une rue calme.",
+        "en": "My bedroom looks out on a quiet street."
+      },
+      {
+        "fr": "Les chambres de l'hôtel sont trop petites.",
+        "en": "The hotel rooms are too small."
+      },
+      {
+        "fr": "Range ta chambre avant le dîner.",
+        "en": "Tidy your room before dinner."
+      }
+    ]
+  },
+  {
+    "word": "main",
+    "level": "A1",
+    "translation": "hand",
+    "sentences": [
+      {
+        "fr": "Il lève la main pour poser une question.",
+        "en": "He raises his hand to ask a question."
+      },
+      {
+        "fr": "Lave-toi les mains avant le dîner.",
+        "en": "Wash your hands before dinner."
+      },
+      {
+        "fr": "Elle m'a pris la main près de la gare.",
+        "en": "She took my hand near the station."
+      }
+    ]
+  },
+  {
+    "word": "garçon",
+    "level": "A1",
+    "translation": "boy",
+    "sentences": [
+      {
+        "fr": "Ce garçon habite près de l'école.",
+        "en": "That boy lives near the school."
+      },
+      {
+        "fr": "Les garçons attendent le bus sous la pluie.",
+        "en": "The boys are waiting for the bus in the rain."
+      },
+      {
+        "fr": "Un garçon m'a rendu mon ticket de métro.",
+        "en": "A boy gave me back my metro ticket."
+      }
+    ]
+  },
+  {
+    "word": "jeune",
+    "level": "A1",
+    "translation": "young",
+    "sentences": [
+      {
+        "fr": "Cette jeune femme travaille déjà à la mairie.",
+        "en": "That young woman already works at city hall."
+      },
+      {
+        "fr": "Ils sont encore trop jeunes pour conduire.",
+        "en": "They are still too young to drive."
+      },
+      {
+        "fr": "Mon voisin est jeune et très sportif.",
+        "en": "My neighbor is young and very athletic."
+      }
+    ]
+  },
+  {
+    "word": "beau",
+    "level": "A1",
+    "translation": "beautiful, handsome",
+    "sentences": [
+      {
+        "fr": "C'est un très beau village près d'ici.",
+        "en": "It is a very beautiful village near here."
+      },
+      {
+        "fr": "Elles portent de belles robes ce soir.",
+        "en": "They are wearing beautiful dresses tonight."
+      },
+      {
+        "fr": "Le temps est plus beau qu'hier à Lyon.",
+        "en": "The weather is nicer than yesterday in Lyon."
+      }
+    ]
+  },
+  {
+    "word": "aujourd'hui",
+    "level": "A1",
+    "translation": "today",
+    "sentences": [
+      {
+        "fr": "Aujourd'hui, le marché est ouvert jusqu'à midi.",
+        "en": "Today the market is open until noon."
+      },
+      {
+        "fr": "Je ne travaille pas aujourd'hui, je me repose.",
+        "en": "I am not working today, I am resting."
+      },
+      {
+        "fr": "Qu'est-ce qu'on mange aujourd'hui à midi?",
+        "en": "What are we eating today at noon?"
+      }
+    ]
+  },
+  {
+    "word": "demain",
+    "level": "A1",
+    "translation": "tomorrow",
+    "sentences": [
+      {
+        "fr": "Demain, le train part très tôt.",
+        "en": "Tomorrow the train leaves very early."
+      },
+      {
+        "fr": "On se téléphone demain après le déjeuner.",
+        "en": "We'll call each other tomorrow after lunch."
+      },
+      {
+        "fr": "Je dois finir ce devoir pour demain matin.",
+        "en": "I have to finish this homework for tomorrow morning."
       }
     ]
   }

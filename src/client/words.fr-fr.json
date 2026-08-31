@@ -1803,5 +1803,290 @@
         "en": "I have to finish this homework for tomorrow morning."
       }
     ]
+  },
+  {
+    "word": "bien",
+    "level": "A1",
+    "translation": "well",
+    "sentences": [
+      {
+        "fr": "Je comprends bien quand le professeur parle lentement.",
+        "en": "I understand well when the teacher speaks slowly."
+      },
+      {
+        "fr": "Nous avons bien mangé dans ce petit restaurant.",
+        "en": "We ate well in this little restaurant."
+      },
+      {
+        "fr": "Dors bien, le train part tôt demain matin.",
+        "en": "Sleep well; the train leaves early tomorrow morning."
+      }
+    ]
+  },
+  {
+    "word": "ici",
+    "level": "A1",
+    "translation": "here",
+    "sentences": [
+      {
+        "fr": "J'habite ici depuis trois ans.",
+        "en": "I have lived here for three years."
+      },
+      {
+        "fr": "Vous pouvez laisser votre manteau ici, près de la porte.",
+        "en": "You can leave your coat here, near the door."
+      },
+      {
+        "fr": "Nous nous sommes retrouvés ici après le travail.",
+        "en": "We met up here after work."
+      }
+    ]
+  },
+  {
+    "word": "là",
+    "level": "A1",
+    "translation": "there",
+    "sentences": [
+      {
+        "fr": "Pose les clés là, sur la petite table de l'entrée.",
+        "en": "Put the keys there, on the little table in the entrance."
+      },
+      {
+        "fr": "Nous étions déjà là quand le café a ouvert.",
+        "en": "We were already there when the café opened."
+      },
+      {
+        "fr": "Je serai là devant la gare à huit heures.",
+        "en": "I will be there in front of the station at eight o'clock."
+      }
+    ]
+  },
+  {
+    "word": "vraiment",
+    "level": "A1",
+    "translation": "really, truly",
+    "sentences": [
+      {
+        "fr": "Ce film est vraiment drôle, tu devrais le voir.",
+        "en": "This film is really funny; you should see it."
+      },
+      {
+        "fr": "J'ai vraiment aimé ce musée à Paris.",
+        "en": "I really liked this museum in Paris."
+      },
+      {
+        "fr": "Est-ce que vous voulez vraiment partir si tôt?",
+        "en": "Do you really want to leave so early?"
+      }
+    ]
+  },
+  {
+    "word": "besoin",
+    "level": "A1",
+    "translation": "need",
+    "sentences": [
+      {
+        "fr": "J'ai besoin d'un ticket pour prendre le métro.",
+        "en": "I need a ticket to take the metro."
+      },
+      {
+        "fr": "Nous avions besoin de pain, alors je suis allé à la boulangerie.",
+        "en": "We needed bread, so I went to the bakery."
+      },
+      {
+        "fr": "Si tu as besoin d'aide, appelle-moi ce soir.",
+        "en": "If you need help, call me tonight."
+      }
+    ]
+  },
+  {
+    "word": "fois",
+    "level": "A1",
+    "translation": "time, occurrence",
+    "sentences": [
+      {
+        "fr": "Je prends le métro deux fois par jour.",
+        "en": "I take the metro twice a day."
+      },
+      {
+        "fr": "La première fois, nous avons raté notre train.",
+        "en": "The first time, we missed our train."
+      },
+      {
+        "fr": "Combien de fois êtes-vous allé à Marseille?",
+        "en": "How many times have you been to Marseille?"
+      }
+    ]
+  },
+  {
+    "word": "monde",
+    "level": "A1",
+    "translation": "world; people, everyone",
+    "sentences": [
+      {
+        "fr": "Le monde est grand, mais j'aimerais le découvrir.",
+        "en": "The world is big, but I would like to discover it."
+      },
+      {
+        "fr": "Il y avait beaucoup de monde au marché ce matin.",
+        "en": "There were a lot of people at the market this morning."
+      },
+      {
+        "fr": "Tout le monde a applaudi à la fin du spectacle.",
+        "en": "Everyone applauded at the end of the show."
+      }
+    ]
+  },
+  {
+    "word": "raison",
+    "level": "A1",
+    "translation": "reason; to be right",
+    "sentences": [
+      {
+        "fr": "Quelle est la raison de votre retard à l'école?",
+        "en": "What is the reason for your delay at school?"
+      },
+      {
+        "fr": "Tu as raison, ce chemin est plus court.",
+        "en": "You are right; this route is shorter."
+      },
+      {
+        "fr": "Elle avait de bonnes raisons de rester chez elle.",
+        "en": "She had good reasons to stay at home."
+      }
+    ]
+  },
+  {
+    "word": "problème",
+    "level": "A1",
+    "translation": "problem",
+    "sentences": [
+      {
+        "fr": "J'ai un problème avec mon billet de train.",
+        "en": "I have a problem with my train ticket."
+      },
+      {
+        "fr": "Nous avons résolu deux problèmes avant midi.",
+        "en": "We solved two problems before noon."
+      },
+      {
+        "fr": "S'il y a un problème, téléphone-moi tout de suite.",
+        "en": "If there is a problem, call me right away."
+      }
+    ]
+  },
+  {
+    "word": "juste",
+    "level": "A1",
+    "translation": "fair, right; just, exactly",
+    "sentences": [
+      {
+        "fr": "Ce professeur est strict, mais il reste juste avec tous les élèves.",
+        "en": "This teacher is strict, but he remains fair with every student."
+      },
+      {
+        "fr": "J'ai juste assez d'argent pour acheter le billet.",
+        "en": "I have just enough money to buy the ticket."
+      },
+      {
+        "fr": "La pharmacie est juste en face de la mairie.",
+        "en": "The pharmacy is right across from city hall."
+      }
+    ]
+  },
+  {
+    "word": "sûr",
+    "level": "A1",
+    "translation": "sure, certain; safe",
+    "sentences": [
+      {
+        "fr": "Je suis sûr que le train part à neuf heures.",
+        "en": "I am sure that the train leaves at nine o'clock."
+      },
+      {
+        "fr": "Cette rue est sûre, même tard le soir.",
+        "en": "This street is safe, even late at night."
+      },
+      {
+        "fr": "Nous étions sûrs d'avoir fermé la porte.",
+        "en": "We were sure that we had closed the door."
+      }
+    ]
+  },
+  {
+    "word": "vrai",
+    "level": "A1",
+    "translation": "true, real",
+    "sentences": [
+      {
+        "fr": "Cette histoire est vraie, je l'ai lue dans le journal.",
+        "en": "This story is true; I read it in the newspaper."
+      },
+      {
+        "fr": "C'est un vrai ami, il est toujours là quand j'ai besoin d'aide.",
+        "en": "He is a true friend; he is always there when I need help."
+      },
+      {
+        "fr": "Ces informations sont vraies, mais difficiles à croire.",
+        "en": "This information is true, but difficult to believe."
+      }
+    ]
+  },
+  {
+    "word": "arrêter",
+    "level": "A1",
+    "translation": "to stop; to arrest",
+    "sentences": [
+      {
+        "fr": "Arrête de parler, le film commence.",
+        "en": "Stop talking; the film is starting."
+      },
+      {
+        "fr": "Le bus s'est arrêté devant la mairie.",
+        "en": "The bus stopped in front of city hall."
+      },
+      {
+        "fr": "La police a arrêté le voleur près de la gare.",
+        "en": "The police arrested the thief near the station."
+      }
+    ]
+  },
+  {
+    "word": "connaître",
+    "level": "A1",
+    "translation": "to know, to be familiar with",
+    "sentences": [
+      {
+        "fr": "Je connais bien ce quartier de Lyon.",
+        "en": "I know this neighborhood of Lyon well."
+      },
+      {
+        "fr": "Elle connaissait déjà l'adresse de l'hôtel.",
+        "en": "She already knew the hotel's address."
+      },
+      {
+        "fr": "J'aimerais mieux connaître mes nouveaux voisins.",
+        "en": "I would like to get to know my new neighbors better."
+      }
+    ]
+  },
+  {
+    "word": "entendre",
+    "level": "A1",
+    "translation": "to hear",
+    "sentences": [
+      {
+        "fr": "J'entends les cloches de l'église depuis ma chambre.",
+        "en": "I can hear the church bells from my room."
+      },
+      {
+        "fr": "Nous n'avons pas entendu l'annonce à la gare.",
+        "en": "We did not hear the announcement at the station."
+      },
+      {
+        "fr": "Parle plus fort pour que tout le monde t'entende.",
+        "en": "Speak louder so that everyone can hear you."
+      }
+    ]
   }
 ]

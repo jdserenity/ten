@@ -2373,5 +2373,290 @@
         "en": "Ask your question at city hall reception."
       }
     ]
+  },
+  {
+    "word": "histoire",
+    "level": "A1",
+    "translation": "story; history",
+    "sentences": [
+      {
+        "fr": "Cette histoire me fait rire à chaque fois.",
+        "en": "This story makes me laugh every time."
+      },
+      {
+        "fr": "Nous avons étudié l'histoire de France au lycée.",
+        "en": "We studied the history of France in high school."
+      },
+      {
+        "fr": "Le soir, ma mère raconte des histoires aux enfants.",
+        "en": "In the evening, my mother tells stories to the children."
+      }
+    ]
+  },
+  {
+    "word": "bébé",
+    "level": "A1",
+    "translation": "baby",
+    "sentences": [
+      {
+        "fr": "Le bébé dort dans la chambre de ses parents.",
+        "en": "The baby is sleeping in his parents' room."
+      },
+      {
+        "fr": "Ma sœur a eu un bébé au mois de juin.",
+        "en": "My sister had a baby in June."
+      },
+      {
+        "fr": "Les bébés pleurent souvent quand ils ont faim.",
+        "en": "Babies often cry when they are hungry."
+      }
+    ]
+  },
+  {
+    "word": "place",
+    "level": "A1",
+    "translation": "place; seat",
+    "sentences": [
+      {
+        "fr": "La place du village est devant la mairie.",
+        "en": "The village square is in front of city hall."
+      },
+      {
+        "fr": "J'ai trouvé une place libre dans le métro.",
+        "en": "I found a free seat on the metro."
+      },
+      {
+        "fr": "Mets ton sac à sa place avant de partir.",
+        "en": "Put your bag back in its place before leaving."
+      }
+    ]
+  },
+  {
+    "word": "train",
+    "level": "A1",
+    "translation": "train",
+    "sentences": [
+      {
+        "fr": "Le train pour Lyon part dans dix minutes.",
+        "en": "The train to Lyon leaves in ten minutes."
+      },
+      {
+        "fr": "Nous avons pris le train à la gare du Nord.",
+        "en": "We took the train at Gare du Nord."
+      },
+      {
+        "fr": "Mon train était en retard ce matin.",
+        "en": "My train was late this morning."
+      }
+    ]
+  },
+  {
+    "word": "œil",
+    "level": "A1",
+    "translation": "eye",
+    "sentences": [
+      {
+        "fr": "J'ai quelque chose dans l'œil droit.",
+        "en": "I have something in my right eye."
+      },
+      {
+        "fr": "Ses yeux sont bleus comme le ciel d'été.",
+        "en": "Her eyes are blue like the summer sky."
+      },
+      {
+        "fr": "Le médecin regarde mon œil avec une petite lumière.",
+        "en": "The doctor looks at my eye with a small light."
+      }
+    ]
+  },
+  {
+    "word": "côté",
+    "level": "A1",
+    "translation": "side",
+    "sentences": [
+      {
+        "fr": "La boulangerie est de l'autre côté de la rue.",
+        "en": "The bakery is on the other side of the street."
+      },
+      {
+        "fr": "Assieds-toi à côté de moi dans le bus.",
+        "en": "Sit next to me on the bus."
+      },
+      {
+        "fr": "Les deux côtés du papier sont blancs.",
+        "en": "Both sides of the paper are white."
+      }
+    ]
+  },
+  {
+    "word": "fin",
+    "level": "A1",
+    "translation": "end",
+    "sentences": [
+      {
+        "fr": "À la fin du film, tout le monde applaudit.",
+        "en": "At the end of the film, everyone applauds."
+      },
+      {
+        "fr": "Nous partons en vacances à la fin du mois.",
+        "en": "We are going on holiday at the end of the month."
+      },
+      {
+        "fr": "J'ai lu la fin du livre dans le métro.",
+        "en": "I read the end of the book on the metro."
+      }
+    ]
+  },
+  {
+    "word": "hier",
+    "level": "A1",
+    "translation": "yesterday",
+    "sentences": [
+      {
+        "fr": "Hier, j'ai acheté du pain à la boulangerie.",
+        "en": "Yesterday, I bought bread at the bakery."
+      },
+      {
+        "fr": "Nous sommes rentrés tard hier soir.",
+        "en": "We came home late yesterday evening."
+      },
+      {
+        "fr": "Tu étais malade hier, mais tu vas mieux.",
+        "en": "You were sick yesterday, but you are better now."
+      }
+    ]
+  },
+  {
+    "word": "dehors",
+    "level": "A1",
+    "translation": "outside",
+    "sentences": [
+      {
+        "fr": "Attends-moi dehors devant le cinéma.",
+        "en": "Wait for me outside in front of the cinema."
+      },
+      {
+        "fr": "Il fait froid dehors, prends ton manteau.",
+        "en": "It is cold outside, take your coat."
+      },
+      {
+        "fr": "Nous avons mangé dehors sur la terrasse.",
+        "en": "We ate outside on the terrace."
+      }
+    ]
+  },
+  {
+    "word": "docteur",
+    "level": "A1",
+    "translation": "doctor",
+    "sentences": [
+      {
+        "fr": "Le docteur arrive à neuf heures au cabinet.",
+        "en": "The doctor arrives at the office at nine o'clock."
+      },
+      {
+        "fr": "J'ai appelé le docteur parce que j'avais de la fièvre.",
+        "en": "I called the doctor because I had a fever."
+      },
+      {
+        "fr": "Les docteurs travaillent aussi le dimanche à l'hôpital.",
+        "en": "Doctors also work on Sundays at the hospital."
+      }
+    ]
+  },
+  {
+    "word": "journée",
+    "level": "A1",
+    "translation": "day, daytime",
+    "sentences": [
+      {
+        "fr": "Bonne journée, à demain matin!",
+        "en": "Have a good day, see you tomorrow morning!"
+      },
+      {
+        "fr": "Ma journée commence avec un café et un croissant.",
+        "en": "My day starts with a coffee and a croissant."
+      },
+      {
+        "fr": "Nous avons passé toute la journée au musée.",
+        "en": "We spent the whole day at the museum."
+      }
+    ]
+  },
+  {
+    "word": "téléphone",
+    "level": "A1",
+    "translation": "phone",
+    "sentences": [
+      {
+        "fr": "Mon téléphone est sur la table de la cuisine.",
+        "en": "My phone is on the kitchen table."
+      },
+      {
+        "fr": "J'ai oublié mon téléphone dans le train.",
+        "en": "I forgot my phone on the train."
+      },
+      {
+        "fr": "Les téléphones doivent rester éteints au cinéma.",
+        "en": "Phones must stay turned off at the cinema."
+      }
+    ]
+  },
+  {
+    "word": "fête",
+    "level": "A1",
+    "translation": "party, celebration",
+    "sentences": [
+      {
+        "fr": "La fête commence à huit heures chez mon frère.",
+        "en": "The party starts at eight o'clock at my brother's place."
+      },
+      {
+        "fr": "Nous avons fait la fête après l'examen.",
+        "en": "We celebrated after the exam."
+      },
+      {
+        "fr": "Les fêtes de village attirent beaucoup de monde en été.",
+        "en": "Village celebrations bring in a lot of people in summer."
+      }
+    ]
+  },
+  {
+    "word": "jeu",
+    "level": "A1",
+    "translation": "game",
+    "sentences": [
+      {
+        "fr": "Ce jeu est facile à comprendre.",
+        "en": "This game is easy to understand."
+      },
+      {
+        "fr": "Les enfants jouent à des jeux dans la cour.",
+        "en": "The children play games in the playground."
+      },
+      {
+        "fr": "J'ai acheté un nouveau jeu pour la soirée.",
+        "en": "I bought a new game for the evening."
+      }
+    ]
+  },
+  {
+    "word": "rentrer",
+    "level": "A1",
+    "translation": "to come home, to go back in",
+    "sentences": [
+      {
+        "fr": "Je rentre à la maison après le travail.",
+        "en": "I come home after work."
+      },
+      {
+        "fr": "Nous sommes rentrés tard de Marseille.",
+        "en": "We came back late from Marseille."
+      },
+      {
+        "fr": "Rentre vite, il commence à pleuvoir.",
+        "en": "Come inside quickly, it is starting to rain."
+      }
+    ]
   }
 ]

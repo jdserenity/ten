@@ -2658,5 +2658,290 @@
         "en": "Come inside quickly, it is starting to rain."
       }
     ]
+  },
+  {
+    "word": "chemin",
+    "level": "A1",
+    "translation": "path, way",
+    "sentences": [
+      {
+        "fr": "Ce chemin mène à la plage.",
+        "en": "This path leads to the beach."
+      },
+      {
+        "fr": "Nous avons pris le mauvais chemin en sortant de la gare.",
+        "en": "We took the wrong way when leaving the station."
+      },
+      {
+        "fr": "Les chemins du parc sont calmes le matin.",
+        "en": "The park paths are quiet in the morning."
+      }
+    ]
+  },
+  {
+    "word": "partout",
+    "level": "A1",
+    "translation": "everywhere",
+    "sentences": [
+      {
+        "fr": "Il y a des affiches partout dans la ville.",
+        "en": "There are posters everywhere in the city."
+      },
+      {
+        "fr": "J'ai cherché mes clés partout ce matin.",
+        "en": "I looked for my keys everywhere this morning."
+      },
+      {
+        "fr": "On trouve des boulangeries partout en France.",
+        "en": "You find bakeries everywhere in France."
+      }
+    ]
+  },
+  {
+    "word": "bras",
+    "level": "A1",
+    "translation": "arm",
+    "sentences": [
+      {
+        "fr": "J'ai mal au bras après le cours de sport.",
+        "en": "My arm hurts after gym class."
+      },
+      {
+        "fr": "Elle porte son bébé dans les bras.",
+        "en": "She is carrying her baby in her arms."
+      },
+      {
+        "fr": "Lève les bras pour montrer que tu es prêt.",
+        "en": "Raise your arms to show that you are ready."
+      }
+    ]
+  },
+  {
+    "word": "visage",
+    "level": "A1",
+    "translation": "face",
+    "sentences": [
+      {
+        "fr": "Son visage est rouge à cause du froid.",
+        "en": "His face is red because of the cold."
+      },
+      {
+        "fr": "Je lave mon visage avant de dormir.",
+        "en": "I wash my face before going to sleep."
+      },
+      {
+        "fr": "Les visages des enfants étaient pleins de joie.",
+        "en": "The children's faces were full of joy."
+      }
+    ]
+  },
+  {
+    "word": "soirée",
+    "level": "A1",
+    "translation": "evening",
+    "sentences": [
+      {
+        "fr": "Nous passons la soirée chez des amis.",
+        "en": "We are spending the evening at friends' place."
+      },
+      {
+        "fr": "La soirée était calme après le dîner.",
+        "en": "The evening was quiet after dinner."
+      },
+      {
+        "fr": "Les soirées d'été sont longues dans le Sud.",
+        "en": "Summer evenings are long in the south."
+      }
+    ]
+  },
+  {
+    "word": "message",
+    "level": "A1",
+    "translation": "message",
+    "sentences": [
+      {
+        "fr": "J'ai reçu un message de ma sœur.",
+        "en": "I received a message from my sister."
+      },
+      {
+        "fr": "Tu peux laisser un message après le bip.",
+        "en": "You can leave a message after the beep."
+      },
+      {
+        "fr": "Les messages arrivent sur mon téléphone.",
+        "en": "The messages arrive on my phone."
+      }
+    ]
+  },
+  {
+    "word": "rendez-vous",
+    "level": "A1",
+    "translation": "appointment, meeting",
+    "sentences": [
+      {
+        "fr": "J'ai rendez-vous chez le docteur à quinze heures.",
+        "en": "I have an appointment at the doctor's at three o'clock."
+      },
+      {
+        "fr": "Notre rendez-vous est devant le café de la gare.",
+        "en": "Our meeting is in front of the station cafe."
+      },
+      {
+        "fr": "Les rendez-vous du matin sont déjà complets.",
+        "en": "The morning appointments are already full."
+      }
+    ]
+  },
+  {
+    "word": "dormir",
+    "level": "A1",
+    "translation": "to sleep",
+    "sentences": [
+      {
+        "fr": "Je veux dormir tôt ce soir.",
+        "en": "I want to sleep early tonight."
+      },
+      {
+        "fr": "Le bébé dort dans sa chambre.",
+        "en": "The baby is sleeping in his room."
+      },
+      {
+        "fr": "Nous avons mal dormi à cause du bruit.",
+        "en": "We slept badly because of the noise."
+      }
+    ]
+  },
+  {
+    "word": "an",
+    "level": "A1",
+    "translation": "year",
+    "sentences": [
+      {
+        "fr": "Mon fils a six ans aujourd'hui.",
+        "en": "My son is six years old today."
+      },
+      {
+        "fr": "Nous habitons ici depuis un an.",
+        "en": "We have lived here for one year."
+      },
+      {
+        "fr": "Les années passent vite quand on travaille beaucoup.",
+        "en": "The years pass quickly when you work a lot."
+      }
+    ]
+  },
+  {
+    "word": "groupe",
+    "level": "A1",
+    "translation": "group",
+    "sentences": [
+      {
+        "fr": "Notre groupe attend le guide devant le musée.",
+        "en": "Our group is waiting for the guide in front of the museum."
+      },
+      {
+        "fr": "Les groupes entrent par la porte de gauche.",
+        "en": "The groups enter through the door on the left."
+      },
+      {
+        "fr": "Je travaille en groupe avec trois élèves.",
+        "en": "I work in a group with three students."
+      }
+    ]
+  },
+  {
+    "word": "rêve",
+    "level": "A1",
+    "translation": "dream",
+    "sentences": [
+      {
+        "fr": "Mon rêve est de visiter toute la France.",
+        "en": "My dream is to visit all of France."
+      },
+      {
+        "fr": "Elle rêve souvent de vivre près de la mer.",
+        "en": "She often dreams of living near the sea."
+      },
+      {
+        "fr": "J'ai fait un drôle de rêve cette nuit.",
+        "en": "I had a strange dream last night."
+      }
+    ]
+  },
+  {
+    "word": "carte",
+    "level": "A1",
+    "translation": "card; map; menu",
+    "sentences": [
+      {
+        "fr": "Je paie avec ma carte bancaire.",
+        "en": "I pay with my bank card."
+      },
+      {
+        "fr": "La carte montre toutes les lignes de métro.",
+        "en": "The map shows all the metro lines."
+      },
+      {
+        "fr": "Au restaurant, nous regardons la carte avant de commander.",
+        "en": "At the restaurant, we look at the menu before ordering."
+      }
+    ]
+  },
+  {
+    "word": "bonsoir",
+    "level": "A1",
+    "translation": "good evening",
+    "sentences": [
+      {
+        "fr": "Bonsoir madame, vous avez une réservation?",
+        "en": "Good evening madam, do you have a reservation?"
+      },
+      {
+        "fr": "Nous disons bonsoir aux voisins dans l'escalier.",
+        "en": "We say good evening to the neighbors on the stairs."
+      },
+      {
+        "fr": "Le serveur nous a dit bonsoir avec le sourire.",
+        "en": "The waiter said good evening to us with a smile."
+      }
+    ]
+  },
+  {
+    "word": "content",
+    "level": "A1",
+    "translation": "happy, pleased",
+    "sentences": [
+      {
+        "fr": "Je suis content de te revoir.",
+        "en": "I am happy to see you again."
+      },
+      {
+        "fr": "Elle était contente de son nouveau travail.",
+        "en": "She was pleased with her new job."
+      },
+      {
+        "fr": "Les enfants sont contents d'aller au parc.",
+        "en": "The children are happy to go to the park."
+      }
+    ]
+  },
+  {
+    "word": "sac",
+    "level": "A1",
+    "translation": "bag",
+    "sentences": [
+      {
+        "fr": "Mon sac est sous la table.",
+        "en": "My bag is under the table."
+      },
+      {
+        "fr": "Elle a oublié son sac dans le bus.",
+        "en": "She forgot her bag on the bus."
+      },
+      {
+        "fr": "Les sacs de courses sont lourds.",
+        "en": "The shopping bags are heavy."
+      }
+    ]
   }
 ]

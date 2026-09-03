@@ -2088,5 +2088,290 @@
         "en": "Speak louder so that everyone can hear you."
       }
     ]
+  },
+  {
+    "word": "accord",
+    "level": "A1",
+    "translation": "agreement; okay",
+    "sentences": [
+      {
+        "fr": "Je ne suis pas d'accord avec ce prix.",
+        "en": "I do not agree with this price."
+      },
+      {
+        "fr": "Nous avons signé l'accord à la mairie.",
+        "en": "We signed the agreement at city hall."
+      },
+      {
+        "fr": "Après une courte discussion, ils sont tombés d'accord.",
+        "en": "After a short discussion, they reached an agreement."
+      }
+    ]
+  },
+  {
+    "word": "mal",
+    "level": "A1",
+    "translation": "badly; pain, ache",
+    "sentences": [
+      {
+        "fr": "J'ai mal au dos depuis ce matin.",
+        "en": "I have had back pain since this morning."
+      },
+      {
+        "fr": "Tu as mal dormi dans ce petit hôtel.",
+        "en": "You slept badly in this small hotel."
+      },
+      {
+        "fr": "Ce plat est mal cuit, je le renvoie en cuisine.",
+        "en": "This dish is badly cooked, so I am sending it back to the kitchen."
+      }
+    ]
+  },
+  {
+    "word": "déjà",
+    "level": "A1",
+    "translation": "already",
+    "sentences": [
+      {
+        "fr": "Il est déjà huit heures, le train va partir.",
+        "en": "It is already eight o'clock; the train is going to leave."
+      },
+      {
+        "fr": "Nous avons déjà acheté les billets pour le musée.",
+        "en": "We have already bought the tickets for the museum."
+      },
+      {
+        "fr": "Tu connais déjà cette rue près de la gare.",
+        "en": "You already know this street near the station."
+      }
+    ]
+  },
+  {
+    "word": "beaucoup",
+    "level": "A1",
+    "translation": "a lot, much, many",
+    "sentences": [
+      {
+        "fr": "Il y a beaucoup de monde au marché le samedi.",
+        "en": "There are a lot of people at the market on Saturdays."
+      },
+      {
+        "fr": "Merci beaucoup pour votre aide.",
+        "en": "Thank you very much for your help."
+      },
+      {
+        "fr": "Nous avons beaucoup marché dans le centre-ville.",
+        "en": "We walked a lot in the city center."
+      }
+    ]
+  },
+  {
+    "word": "personne",
+    "level": "A1",
+    "translation": "person; nobody",
+    "sentences": [
+      {
+        "fr": "Cette personne attend le bus devant la mairie.",
+        "en": "This person is waiting for the bus in front of city hall."
+      },
+      {
+        "fr": "Il n'y avait personne dans la salle de classe.",
+        "en": "There was nobody in the classroom."
+      },
+      {
+        "fr": "Les personnes âgées passent devant nous dans la file.",
+        "en": "The older people go ahead of us in the line."
+      }
+    ]
+  },
+  {
+    "word": "monsieur",
+    "level": "A1",
+    "translation": "sir, gentleman, Mr.",
+    "sentences": [
+      {
+        "fr": "Ce monsieur cherche la gare depuis dix minutes.",
+        "en": "This gentleman has been looking for the station for ten minutes."
+      },
+      {
+        "fr": "Bonjour monsieur, vous avez réservé une table?",
+        "en": "Hello sir, have you reserved a table?"
+      },
+      {
+        "fr": "Monsieur Martin habite au deuxième étage.",
+        "en": "Mr. Martin lives on the second floor."
+      }
+    ]
+  },
+  {
+    "word": "nom",
+    "level": "A1",
+    "translation": "name",
+    "sentences": [
+      {
+        "fr": "Quel est votre nom et votre prénom?",
+        "en": "What are your last name and first name?"
+      },
+      {
+        "fr": "J'ai écrit mon nom sur le cahier d'école.",
+        "en": "I wrote my name on the school notebook."
+      },
+      {
+        "fr": "Son nom est difficile à prononcer.",
+        "en": "His name is hard to pronounce."
+      }
+    ]
+  },
+  {
+    "word": "maman",
+    "level": "A1",
+    "translation": "mum, mom",
+    "sentences": [
+      {
+        "fr": "Ma maman prépare le dîner pendant que je fais mes devoirs.",
+        "en": "My mum is making dinner while I do my homework."
+      },
+      {
+        "fr": "J'ai appelé maman en sortant du lycée.",
+        "en": "I called Mum when I left school."
+      },
+      {
+        "fr": "Les mamans attendent les enfants devant l'école.",
+        "en": "The mums are waiting for the children in front of the school."
+      }
+    ]
+  },
+  {
+    "word": "papa",
+    "level": "A1",
+    "translation": "dad",
+    "sentences": [
+      {
+        "fr": "Mon papa travaille près de la gare.",
+        "en": "My dad works near the station."
+      },
+      {
+        "fr": "J'ai demandé à papa de m'aider avec ce devoir.",
+        "en": "I asked Dad to help me with this homework."
+      },
+      {
+        "fr": "Les papas discutent devant le portail de l'école.",
+        "en": "The dads are chatting in front of the school gate."
+      }
+    ]
+  },
+  {
+    "word": "moment",
+    "level": "A1",
+    "translation": "moment, time",
+    "sentences": [
+      {
+        "fr": "Attends un moment, je cherche mes clés.",
+        "en": "Wait a moment, I am looking for my keys."
+      },
+      {
+        "fr": "Nous avons passé un bon moment au café.",
+        "en": "We had a good time at the cafe."
+      },
+      {
+        "fr": "À ce moment-là, tout le monde a commencé à rire.",
+        "en": "At that moment, everyone started laughing."
+      }
+    ]
+  },
+  {
+    "word": "peur",
+    "level": "A1",
+    "translation": "fear",
+    "sentences": [
+      {
+        "fr": "J'ai peur de rater le dernier métro.",
+        "en": "I am afraid of missing the last metro."
+      },
+      {
+        "fr": "Les enfants avaient peur pendant l'orage.",
+        "en": "The children were scared during the storm."
+      },
+      {
+        "fr": "N'aie pas peur, je reste avec toi.",
+        "en": "Do not be afraid, I am staying with you."
+      }
+    ]
+  },
+  {
+    "word": "tête",
+    "level": "A1",
+    "translation": "head",
+    "sentences": [
+      {
+        "fr": "J'ai mal à la tête depuis ce matin.",
+        "en": "I have had a headache since this morning."
+      },
+      {
+        "fr": "Elle tourne la tête quand le serveur arrive.",
+        "en": "She turns her head when the waiter arrives."
+      },
+      {
+        "fr": "Garde la tête froide avant l'examen.",
+        "en": "Keep a cool head before the exam."
+      }
+    ]
+  },
+  {
+    "word": "idée",
+    "level": "A1",
+    "translation": "idea",
+    "sentences": [
+      {
+        "fr": "J'ai une idée pour le repas de ce soir.",
+        "en": "I have an idea for tonight's meal."
+      },
+      {
+        "fr": "Tes idées sont simples et très utiles.",
+        "en": "Your ideas are simple and very useful."
+      },
+      {
+        "fr": "Cette idée m'a aidé à finir le travail.",
+        "en": "This idea helped me finish the work."
+      }
+    ]
+  },
+  {
+    "word": "chance",
+    "level": "A1",
+    "translation": "luck, chance",
+    "sentences": [
+      {
+        "fr": "Tu as de la chance, le magasin est encore ouvert.",
+        "en": "You are lucky; the shop is still open."
+      },
+      {
+        "fr": "J'ai eu la chance de visiter Nice en été.",
+        "en": "I had the chance to visit Nice in the summer."
+      },
+      {
+        "fr": "Bonne chance pour ton examen de français.",
+        "en": "Good luck on your French exam."
+      }
+    ]
+  },
+  {
+    "word": "question",
+    "level": "A1",
+    "translation": "question",
+    "sentences": [
+      {
+        "fr": "J'ai une question sur le billet de train.",
+        "en": "I have a question about the train ticket."
+      },
+      {
+        "fr": "Les questions du professeur étaient faciles.",
+        "en": "The teacher's questions were easy."
+      },
+      {
+        "fr": "Pose ta question à l'accueil de la mairie.",
+        "en": "Ask your question at city hall reception."
+      }
+    ]
   }
 ]

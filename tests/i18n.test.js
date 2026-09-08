@@ -113,8 +113,10 @@ test('dialect picker copy is the region name only', () => {
   assert.equal(t('en', 'picker.dialect.fr'), 'Quebec');
   assert.equal(t('en', 'picker.dialect.frFr'), 'France');
   assert.equal(t('en', 'picker.dialect.esAr'), 'Argentina');
+  assert.equal(t('en', 'picker.dialect.esVe'), 'Venezuela');
   assert.equal(t('pt-BR', 'picker.dialect.ptBr'), 'Brasil');
   assert.equal(t('pt-BR', 'picker.dialect.frFr'), 'França');
+  assert.equal(t('pt-BR', 'picker.dialect.esVe'), 'Venezuela');
 });
 
 test('add-to-review button copy and configure flashcard labels', () => {

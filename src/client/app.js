@@ -43,6 +43,7 @@ import {
   shouldShowSettingsAddLanguageButton,
   sortLangPickerOptionsByLabel,
   swapTranslateDirection as swapTranslateDirectionPair,
+  translateLanguagesAreCompatible,
   translateInputLanguageTag,
   userHasLearningLanguages,
   dailySentenceRevealVisibility,
@@ -63,12 +64,13 @@ const FREQUENCY_FILE_BY_LANGUAGE = {
   'PT-BR': '/frequency-pt-br.json',
   FR: '/frequency-fr.json',
   'FR-FR': '/frequency-fr.json',
-  'ES-AR': '/frequency-es-ar.json'
+  'ES-AR': '/frequency-es-ar.json',
+  'ES-VE': '/frequency-es-ve.json'
 };
 const SEEN_DAILY_WORDS_STORAGE_KEY = 'ten-seen-daily-words-v1';
 const ACTIVE_MODE_STORAGE_KEY = 'ten-active-mode';
 const USER_STORAGE_KEY = 'ten-user-v1';
-const OFFERED_MODE_IDS = ['pt-br', 'fr', 'fr-fr', 'es-ar'];
+const OFFERED_MODE_IDS = ['pt-br', 'fr', 'fr-fr', 'es-ar', 'es-ve'];
 
 const MODE_CONFIGS = {
   'pt-br': {
@@ -122,6 +124,19 @@ const MODE_CONFIGS = {
     htmlLang: 'es-AR',
     flagLabel: 'Argentina',
     flagEmoji: '🇦🇷'
+  },
+  'es-ve': {
+    id: 'es-ve',
+    label: 'Venezuelean Spanish',
+    shortLabel: 'Venezuela',
+    translatorLabel: 'Spanish',
+    wordsPath: '/words.es-ve.json',
+    sentenceKey: 'es',
+    speechLang: 'es-VE',
+    learningLang: 'ES-VE',
+    htmlLang: 'es-VE',
+    flagLabel: 'Venezuela',
+    flagEmoji: '🇻🇪'
   }
 };
 const OFFERED_LEARNING_LANGS = OFFERED_MODE_IDS.map(modeId => MODE_CONFIGS[modeId].learningLang);
@@ -285,7 +300,8 @@ function getModeI18nKey(modeId, field) {
     'pt-br': { label: 'mode.ptBr', short: 'mode.ptBrShort', translator: 'mode.ptBrTranslator', flag: 'mode.brazilFlag' },
     fr: { label: 'mode.fr', short: 'mode.frShort', translator: 'mode.frTranslator', flag: 'mode.quebecFlag' },
     'fr-fr': { label: 'mode.frFr', short: 'mode.frFrShort', translator: 'mode.frFrTranslator', flag: 'mode.franceFlag' },
-    'es-ar': { label: 'mode.esAr', short: 'mode.esArShort', translator: 'mode.esArTranslator', flag: 'mode.argentinaFlag' }
+    'es-ar': { label: 'mode.esAr', short: 'mode.esArShort', translator: 'mode.esArTranslator', flag: 'mode.argentinaFlag' },
+    'es-ve': { label: 'mode.esVe', short: 'mode.esVeShort', translator: 'mode.esVeTranslator', flag: 'mode.venezuelaFlag' }
   };
   return map[modeId]?.[field] || '';
 }
@@ -745,6 +761,7 @@ function displayTranslateLanguage(code) {
   if (canonical === 'FR') return tr('translate.lang.french');
   if (canonical === 'FR-FR') return tr('translate.lang.frFr');
   if (canonical === 'ES-AR') return tr('translate.lang.esAr');
+  if (canonical === 'ES-VE') return tr('translate.lang.esVe');
   if (canonical === 'PT-BR') return tr('translate.lang.ptBr');
   return code || '';
 }
@@ -754,6 +771,7 @@ function displayFrequencyLanguage(code) {
   if (canonical === 'FR') return tr('translate.lang.french');
   if (canonical === 'FR-FR') return tr('translate.lang.frFr');
   if (canonical === 'ES-AR') return tr('translate.lang.spanish');
+  if (canonical === 'ES-VE') return tr('translate.lang.spanish');
   if (canonical === 'PT-BR') return tr('translate.lang.ptBr');
   return code || '';
 }
@@ -777,6 +795,7 @@ function canonicalizeDetectedSourceLanguage(value) {
   if (code === 'PB' || code === 'PT-BR' || code === 'PT-PT' || code === 'PT') return 'PT-BR';
   if (code === 'FR' || code === 'FR-CA') return 'FR';
   if (code === 'FR-FR') return 'FR-FR';
+  if (code === 'ES-VE') return 'ES-VE';
   if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return code;
 }
@@ -794,6 +813,7 @@ function displayDetectedSourceLanguage(value) {
   if (code === 'FR-CA') return tr('translate.lang.frCa');
   if (code === 'FR-FR') return tr('translate.lang.frFr');
   if (code === 'ES-AR') return tr('translate.lang.esArRegion');
+  if (code === 'ES-VE') return tr('translate.lang.esVeRegion');
   if (code === 'ES') return tr('translate.lang.spanish');
   if (code === 'ES-419') return tr('translate.lang.es419');
   return code;
@@ -803,18 +823,11 @@ function shouldShowDetectedSourceMismatch(selectedSource, detectedSource) {
   const selectedCanonical = canonicalizeTranslateLanguage(selectedSource);
   const detectedCanonical = canonicalizeDetectedSourceLanguage(detectedSource);
   if (!selectedCanonical || !detectedCanonical) return false;
-  return selectedCanonical !== detectedCanonical;
+  return !translateLanguagesAreCompatible(selectedCanonical, detectedCanonical);
 }
 
 function getTranslateDirection(source, target) {
   return normalizeTranslateDirection(source, target, getLearningLanguage(), getNativeApiLang());
-}
-
-function toDeepLTargetLanguage(code) {
-  const canonical = canonicalizeTranslateLanguage(code) || getNativeApiLang();
-  if (canonical === 'ES-AR') return 'ES';
-  if (canonical === 'FR-FR') return 'FR';
-  return canonical;
 }
 
 function formatError(error) {
@@ -1828,7 +1841,7 @@ async function translateText(text, source, target) {
   const cleanText = String(text || '').trim();
   if (!cleanText) throw new Error(tr('error.translateEnterText'));
   const sourceLang = canonicalizeTranslateLanguage(source);
-  const targetLang = toDeepLTargetLanguage(target);
+  const targetLang = canonicalizeTranslateLanguage(target);
   const payload = {
     text: cleanText,
     sourceLang,

@@ -40,6 +40,7 @@ import {
   shouldShowPoolDaysFooter,
   shouldShowSettingsAddLanguageButton,
   swapTranslateDirection,
+  translateLanguagesAreCompatible,
   userHasLearningLanguages,
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
@@ -103,6 +104,7 @@ test('defaultTranslateDirection targets the native language from the active lear
   assert.deepEqual(defaultTranslateDirection('PT-BR', 'PT-BR'), { source: 'PT-BR', target: 'EN' });
   assert.deepEqual(defaultTranslateDirection('FR', 'PT-BR'), { source: 'FR', target: 'PT-BR' });
   assert.deepEqual(defaultTranslateDirection('ES-AR'), { source: 'ES-AR', target: 'EN' });
+  assert.deepEqual(defaultTranslateDirection('ES-VE'), { source: 'ES-VE', target: 'EN' });
 });
 
 test('resolveTranslateNativeLang falls back to English when native matches learning', () => {
@@ -245,6 +247,7 @@ test('getLangPickerOptions includes owned languages as selected', () => {
 
 test('getLangFamilyId maps each track to its main language', () => {
   assert.equal(getLangFamilyId('es-ar'), 'es');
+  assert.equal(getLangFamilyId('es-ve'), 'es');
   assert.equal(getLangFamilyId('fr'), 'fr');
   assert.equal(getLangFamilyId('fr-fr'), 'fr');
   assert.equal(getLangFamilyId('pt-br'), 'pt');
@@ -252,8 +255,8 @@ test('getLangFamilyId maps each track to its main language', () => {
 });
 
 test('getLangPickerFamilies lists only families that still have an offered track', () => {
-  assert.deepEqual(getLangPickerFamilies(['pt-br', 'fr', 'fr-fr', 'es-ar']), [
-    { familyId: 'es', modeIds: ['es-ar'], selected: false },
+  assert.deepEqual(getLangPickerFamilies(['pt-br', 'fr', 'fr-fr', 'es-ar', 'es-ve']), [
+    { familyId: 'es', modeIds: ['es-ar', 'es-ve'], selected: false },
     { familyId: 'fr', modeIds: ['fr', 'fr-fr'], selected: false },
     { familyId: 'pt', modeIds: ['pt-br'], selected: false }
   ]);
@@ -272,14 +275,14 @@ test('getLangPickerDialects lists a family\'s offered tracks and their selection
     ]
   );
   assert.deepEqual(
-    getLangPickerDialects('es', ['pt-br', 'fr', 'fr-fr', 'es-ar'], []),
-    [{ modeId: 'es-ar', selected: false }]
+    getLangPickerDialects('es', ['pt-br', 'fr', 'fr-fr', 'es-ar', 'es-ve'], []),
+    [{ modeId: 'es-ar', selected: false }, { modeId: 'es-ve', selected: false }]
   );
   assert.deepEqual(getLangPickerDialects('fr', ['pt-br'], ['fr']), []);
 });
 
 test('dialect selections stay when listing another family', () => {
-  const offered = ['pt-br', 'fr', 'fr-fr', 'es-ar'];
+  const offered = ['pt-br', 'fr', 'fr-fr', 'es-ar', 'es-ve'];
   let selected = ['es-ar'];
   selected = applyLangPickerDialectToggle(selected, 'fr', true);
   assert.deepEqual(selected, ['es-ar', 'fr']);
@@ -292,7 +295,7 @@ test('dialect selections stay when listing another family', () => {
   );
   assert.deepEqual(
     getLangPickerDialects('es', offered, selected),
-    [{ modeId: 'es-ar', selected: true }]
+    [{ modeId: 'es-ar', selected: true }, { modeId: 'es-ve', selected: false }]
   );
   const families = getLangPickerFamilies(offered, selected);
   assert.equal(families.find(family => family.familyId === 'es').selected, true);
@@ -307,6 +310,7 @@ test('dialect picker labels are region names, not full language names', () => {
   assert.equal(getLangPickerDialectLabelKey('fr'), 'picker.dialect.fr');
   assert.equal(getLangPickerDialectLabelKey('fr-fr'), 'picker.dialect.frFr');
   assert.equal(getLangPickerDialectLabelKey('es-ar'), 'picker.dialect.esAr');
+  assert.equal(getLangPickerDialectLabelKey('es-ve'), 'picker.dialect.esVe');
   assert.equal(getLangPickerDialectLabelKey('unknown'), '');
 });
 
@@ -352,9 +356,10 @@ test('sortLangPickerOptionsByLabel orders by display name alphabetically', () =>
     { modeId: 'pt-br', label: 'Brazilian Portuguese', selected: false },
     { modeId: 'fr', label: 'Quebec French', selected: true },
     { modeId: 'fr-fr', label: 'France French', selected: false },
-    { modeId: 'es-ar', label: 'Argentinian Spanish', selected: false }
+    { modeId: 'es-ar', label: 'Argentinian Spanish', selected: false },
+    { modeId: 'es-ve', label: 'Venezuelean Spanish', selected: false }
   ]);
-  assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr']);
+  assert.deepEqual(sorted.map(option => option.modeId), ['es-ar', 'pt-br', 'fr-fr', 'fr', 'es-ve']);
 });
 
 test('isLangPickerOutsideClick ignores clicks inside the picker or on ignored roots', () => {
@@ -378,9 +383,11 @@ test('mode and learning language ids round-trip', () => {
   assert.equal(learningLangFromModeId('fr'), 'FR');
   assert.equal(learningLangFromModeId('fr-fr'), 'FR-FR');
   assert.equal(learningLangFromModeId('es-ar'), 'ES-AR');
+  assert.equal(learningLangFromModeId('es-ve'), 'ES-VE');
   assert.equal(modeIdFromLearningLang('PT-BR'), 'pt-br');
   assert.equal(modeIdFromLearningLang('FR-FR'), 'fr-fr');
   assert.equal(modeIdFromLearningLang('ES-AR'), 'es-ar');
+  assert.equal(modeIdFromLearningLang('ES-VE'), 'es-ve');
 });
 
 test('canonicalizeTranslateLanguage maps French variants separately', () => {
@@ -392,8 +399,16 @@ test('canonicalizeTranslateLanguage maps French variants separately', () => {
 
 test('canonicalizeTranslateLanguage maps Spanish variants to ES-AR', () => {
   assert.equal(canonicalizeTranslateLanguage('es-ar'), 'ES-AR');
+  assert.equal(canonicalizeTranslateLanguage('es-ve'), 'ES-VE');
   assert.equal(canonicalizeTranslateLanguage('ES'), 'ES-AR');
   assert.equal(canonicalizeTranslateLanguage('ES-419'), 'ES-AR');
+});
+
+test('generic Spanish detection is compatible with either Spanish dialect', () => {
+  assert.equal(translateLanguagesAreCompatible('ES-AR', 'ES'), true);
+  assert.equal(translateLanguagesAreCompatible('ES-VE', 'ES'), true);
+  assert.equal(translateLanguagesAreCompatible('ES-VE', 'ES-AR'), true);
+  assert.equal(translateLanguagesAreCompatible('ES-VE', 'FR'), false);
 });
 
 test('formatTranslateFrequencyRank returns structured rank metadata', () => {
@@ -422,6 +437,13 @@ test('pickSpeechVoice prefers exact es-AR, then Latin American, then Spain', () 
   assert.equal(pickSpeechVoice([spain, mexico, argentina], 'es-AR'), argentina);
   assert.equal(pickSpeechVoice([spain, mexico], 'es-AR'), mexico);
   assert.equal(pickSpeechVoice([spain], 'es-AR'), spain);
+});
+
+test('pickSpeechVoice prefers exact es-VE for Caracas Spanish', () => {
+  const argentina = { lang: 'es-AR', name: 'Diego', localService: true };
+  const venezuela = { lang: 'es-VE', name: 'Venezuela', localService: true };
+  assert.equal(pickSpeechVoice([argentina, venezuela], 'es-VE'), venezuela);
+  assert.equal(pickSpeechVoice([argentina], 'es-VE'), argentina);
 });
 
 test('pickSpeechVoice returns null when no voice matches the language family', () => {

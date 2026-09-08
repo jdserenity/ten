@@ -14,13 +14,14 @@ src/client/                 # the PWA I serve as static files (no bundler)
   daily-pool.js             # pick/reconcile today's 5/new list; WORDS_PER_DAY; pool-days math
   client-load.js            # planBootDataLoads — priority vs background tab data
   ops.html / ops.js         # /ops.html dashboard (dev users)
-  words.{pt-br,fr-ca,fr-fr,es-ar}.json
-  frequency-{pt-br,fr,es-ar}.json
+  words.{pt-br,fr-ca,fr-fr,es-ar,es-ve}.json
+  frequency-{pt-br,fr,es-ar,es-ve}.json
   confetti.browser.js       # vendored canvas-confetti
   manifest.json, icon-192.png, icon-512.png
 
 server/
   index.js                  # Node HTTP: static + /api/*
+  language-codes.js         # translation/provider language-code normalization
   db.js                     # SQLite schema, users, unlocks, daily assignment/index/glosses, translation_cache
   cards.js                  # flashcard CRUD + review queue + grade
   fsrs.js                   # ts-fsrs wrapper

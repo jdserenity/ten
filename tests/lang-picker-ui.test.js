@@ -105,12 +105,13 @@ test('buildLangPickerFamilyHtml is the family-row helper used by tests', () => {
 
 test('getLangPickerOptions marks owned languages as selected so they can be deselected', () => {
   assert.deepEqual(
-    getLangPickerOptions(['pt-br', 'fr', 'fr-fr', 'es-ar'], ['fr', 'es-ar']),
+    getLangPickerOptions(['pt-br', 'fr', 'fr-fr', 'es-ar', 'es-ve'], ['fr', 'es-ar', 'es-ve']),
     [
       { modeId: 'pt-br', selected: false },
       { modeId: 'fr', selected: true },
       { modeId: 'fr-fr', selected: false },
-      { modeId: 'es-ar', selected: true }
+      { modeId: 'es-ar', selected: true },
+      { modeId: 'es-ve', selected: true }
     ]
   );
   assert.deepEqual(
@@ -142,4 +143,9 @@ test('fresh-user add-language hint is a chalk-style arrow near the header +', ()
   assert.match(styles, /prefers-reduced-motion:\s*reduce[^{]*\{\s*\.add-lang-hint\s*\{\s*animation:\s*none/s);
   assert.match(app, /shouldShowAddLanguageHint/);
   assert.match(app, /updateAddLanguageHint/);
+});
+
+test('all five language flags wrap below the header tools on narrow phones', () => {
+  assert.match(styles, /@media \(max-width:\s*430px\)[\s\S]*?\.header-tools\s*\{[^}]*flex-wrap:\s*wrap/s);
+  assert.match(styles, /@media \(max-width:\s*430px\)[\s\S]*?\.mode-toggle-wrap\s*\{[^}]*flex-basis:\s*100%/s);
 });

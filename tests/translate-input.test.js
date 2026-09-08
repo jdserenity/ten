@@ -12,6 +12,7 @@ test('translateInputLanguageTag maps translation sources to regional HTML langua
   assert.equal(translateInputLanguageTag('FR'), 'fr-CA');
   assert.equal(translateInputLanguageTag('FR-FR'), 'fr-FR');
   assert.equal(translateInputLanguageTag('ES-AR'), 'es-AR');
+  assert.equal(translateInputLanguageTag('ES-VE'), 'es-VE');
   assert.equal(translateInputLanguageTag('unknown'), '');
 });
 

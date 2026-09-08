@@ -22,7 +22,8 @@ const POOL_META = {
   },
   'words.fr-ca.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] },
   'words.fr-fr.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] },
-  'words.es-ar.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] }
+  'words.es-ar.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] },
+  'words.es-ve.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] }
 };
 
 /** Glue / function words banned as headwords (all flavours). */

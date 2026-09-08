@@ -3,7 +3,7 @@
 Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.md`. Word-pool editorial rules → `scaffold/skills/seed-daily-words/SKILL.md`. Run → root `README.md`.
 
 ## Product
-- **Ten** — personal PWA. Tracks: **PT-BR** (intermediate / B1–B2), **FR** (Quebec beginner), **FR-FR** (France beginner; own pool + progress, shared `frequency-fr.json` with FR), **ES-AR** (Argentina beginner). Language picker (header `+`, Settings `+`, or tap the active header flag) is two steps: main language (Spanish / French / Portuguese), then dialect (Argentina after Spanish; Quebec and France after French; Brazil after Portuguese). Single-dialect families still show step 2. Dialect rows use the region only (Brazil, Quebec, France, Argentina). Dialect title is Which {language}?. Dialect screen’s only button is Back (no Add/Save; outside click does not close). Checks accumulate across families until Add/Save on the language list; Save still replaces the full set. Header flags and Settings chips stay one-per-track.
+- **Ten** — personal PWA. Tracks: **PT-BR** (intermediate / B1–B2), **FR** (Quebec beginner), **FR-FR** (France beginner; own pool + progress, shared `frequency-fr.json` with FR), **ES-AR** (Argentina beginner), **ES-VE** (Caracas Venezuelan beginner; displayed in English as **Venezuelean Spanish**). Language picker (header `+`, Settings `+`, or tap the active header flag) is two steps: main language (Spanish / French / Portuguese), then dialect (Argentina and Venezuela after Spanish; Quebec and France after French; Brazil after Portuguese). Single-dialect families still show step 2. Dialect rows use the region only (Brazil, Quebec, France, Argentina, Venezuela). Dialect title is Which {language}?. Dialect screen’s only button is Back (no Add/Save; outside click does not close). Checks accumulate across families until Add/Save on the language list; Save still replaces the full set. Header flags and Settings chips stay one-per-track.
 - Username-only accounts. New username creates; existing signs in. Seed **`jd`** has `is_dev = 1`; everyone else `0`. Until ≥1 learning language: tabs show **Add a language!** (i18n), no fetch errors; Translate disabled; white chalk hint near header `+` (hidden while picker open; gone after any language added). Default open mode: last visited among the user's languages (`localStorage`; one-time migrate from `sessionStorage`).
 - Tabs L→R: **5/new** (up to 5 unseen pool words/day), **5/review** (5 flashcards/day then unlimited), **Progress** (bundled frequency lists + unlock highlighting), **Translate** (last). **Settings** is a header cog, not a tab. UI strings: `en` / `pt-BR` (Brazilian, not European) in `i18n.js`. Pre-login: `navigator.languages`. Signed-in override: `users.app_lang` (`NULL` = keep detecting). `<html lang>` follows app language. Translate / Progress inline translate use app language as the non-learning pole (fallback `EN` when it equals the learning language). Tab labels pt-BR: `5/novas`, `5/revisar`, `Progresso`.
 - Daily: `WORDS_PER_DAY = 5` (`daily-pool.js`), `DAILY_REVIEW_GOAL = 5` (`ten-logic.js`). Confetti once per language per calendar day on finishing the 5th new word and the 5th graded review (`localStorage` gates). After 5 reviews, **∞** — keep going. `resolveStartupTab`: 5/new unless that day's confetti gate is set → 5/review unless today's 5 grades are done → Translate.
@@ -23,10 +23,11 @@ Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.
 | `fr` | `/words.fr-ca.json` | `fr` | `FR` | `fr-CA` |
 | `fr-fr` | `/words.fr-fr.json` | `fr` | `FR-FR` | `fr-FR` |
 | `es-ar` | `/words.es-ar.json` | `es` | `ES-AR` | `es-AR` |
+| `es-ve` | `/words.es-ve.json` | `es` | `ES-VE` | `es-VE` |
 
-Quebec and France must not share a word-pool file. Spanish pool is `words.es-ar.json`, not `words.es.json`. FR-CA vs FR-FR frequency list is shared (`frequency-fr.json`); unlocks/progress are not.
+Quebec and France must not share a word-pool file. Argentina and Caracas Venezuelan Spanish must not share a word-pool file. FR-CA vs FR-FR frequency list is shared (`frequency-fr.json`); unlocks/progress are not.
 
-Picker families (`LANG_FAMILIES` in `ten-logic.js`): `es` → `es-ar`; `fr` → `fr`, `fr-fr`; `pt` → `pt-br`. Adding a dialect appends a mode id on that family — the first picker screen does not grow.
+Picker families (`LANG_FAMILIES` in `ten-logic.js`): `es` → `es-ar`, `es-ve`; `fr` → `fr`, `fr-fr`; `pt` → `pt-br`. Adding a dialect appends a mode id on that family — the first picker screen does not grow.
 
 ## APIs (`server/index.js`)
 Auth header **`X-User-Id`** (numeric) on data routes except login + translate + health.
@@ -36,7 +37,7 @@ Auth header **`X-User-Id`** (numeric) on data routes except login + translate + 
 | POST | `/api/auth/login` | `{ username }` → `{ id, username, isDev, languages, appLang }` |
 | GET | `/api/me` | current user |
 | PUT | `/api/app-language` | `{ appLang: 'en' \| 'pt-BR' }` |
-| PUT | `/api/user-languages` | `{ languages, replace? }` — `PT-BR` / `FR` / `FR-FR` / `ES-AR` |
+| PUT | `/api/user-languages` | `{ languages, replace? }` — `PT-BR` / `FR` / `FR-FR` / `ES-AR` / `ES-VE` |
 | POST/GET | `/api/feedback` | POST any user; GET dev-only |
 | GET | `/api/dev/ops` | dev-only: tightest pool runway + feedback |
 | POST | `/api/translate` | 1–5 words (punctuation ignored) Google; 6+ DeepL. SQLite `translation_cache`; hits return `provider: 'cache'`. No user header. |
@@ -57,7 +58,7 @@ Auth header **`X-User-Id`** (numeric) on data routes except login + translate + 
 - **5/review:** Dots toward 5; confetti on 5th grade; then ∞. Queue from `/api/cards/queue`. Grade buttons stay enabled except while editing a card (do not `disabled` on `reviewSubmitting`). After async grade/delete/edit, clear busy flag and `renderReview()` in `finally`. Daily grade count is client `localStorage`, not SQLite.
 - **Progress:** Unlocked = seen in 5/new or single-word translate. Summary **Unlocked** / **Not learned** toggle filters; tap again → all. Default on refresh: full list. Tap word → inline translate. **Not learned** freezes the visible pool until the tab is left or the filter is toggled off/on — inline unlock does not remove a row from that frozen list.
 - **Translate:** Swap direction or switch learning mode preserves the entry text and clears the stale result/card draft. The entry textarea's `lang` follows the selected source language so the device can apply its installed language-aware typing support; browsers cannot force-select an iPhone keyboard. The explicit clear button still clears the entry and result. Re-entering the tab resets direction to learning → app language (or `EN` if those match). Single learning-language word unlocks Progress + shows rank/tier when in the dictionary. Same rank meta on 5/new cards.
-- **TTS:** `speakText` must set `utt.voice` from `speechSynthesis.getVoices()` (`pickSpeechVoice`). `lang` alone keeps English on many browsers. `es-AR`: prefer Latin American tags before `es-ES`. Empty voice list until `voiceschanged`. If no matching non-English voice, do not `speak()` — never lang-only fallback.
+- **TTS:** `speakText` must set `utt.voice` from `speechSynthesis.getVoices()` (`pickSpeechVoice`). `lang` alone keeps English on many browsers. `es-AR` and `es-VE`: prefer the exact regional tag, then Latin American tags before `es-ES`. Empty voice list until `voiceschanged`. If no matching non-English voice, do not `speak()` — never lang-only fallback.
 - **i18n wiring:** `index.html` English is first-paint fallback. After boot, `applyAppLanguage()` overwrites `[data-i18n]`, placeholders, titles, aria-labels from `i18n.js`. `app.js?v=` query on the script tag is a cache buster.
 
 ## Persistence
@@ -71,11 +72,11 @@ Auth header **`X-User-Id`** (numeric) on data routes except login + translate + 
 - `daily_word_glosses` PK `(user_id, language, date_key, target_lang)`
 - `translation_cache` PK `(source_lang, target_lang, source_hash)`
 - `cards` unique `(user_id, language, front, back)` + FSRS columns
-Languages stored: `PT-BR`, `FR`, `FR-FR`, `ES-AR`.
+Languages stored: `PT-BR`, `FR`, `FR-FR`, `ES-AR`, `ES-VE`.
 
 ## Data
 - Pools agent-curated; `npm run words:check`. One lemma/card; exactly 3 sentences (legacy PT-BR may still have 2); content words only; regional flavour mandatory. Each card has `level` (`A1` \| `A2` \| `B1` \| `B2`); the checker requires it. 5/new does not filter by `level`. No Tatoeba/scrape generators. PT-BR 5/new pool is currently empty (maintainer is not studying Portuguese).
-- Frequency: `npm run frequency:download` (PT-BR Wiktionary, FR FrequencyWords, ES-AR ACTIV-ES `ar_orf` from `aes1grams.csv`, GPL-2.0 — cite Francom et al. if redistributing). ~5000 each.
+- Frequency: `npm run frequency:download` (PT-BR Wiktionary, FR FrequencyWords, ES-AR ACTIV-ES `ar_orf`; because ACTIV-ES has no Venezuela column, ES-VE uses its Mexican `mx_orf` column as the nearest available Latin American tuteo/ustedes proxy and keeps Caracas-specific teaching in its separate card pool. ACTIV-ES data comes from `aes1grams.csv`, GPL-2.0 — cite Francom et al. if redistributing). ~5000 each.
 - `npm run import:anki`: AnkiConnect live; copies note text from decks `Brazilian Portuguese` and `French`; FSRS starts fresh (all imported = new); re-run skips duplicates.
 
 ## Traps

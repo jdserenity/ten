@@ -96,6 +96,7 @@ export function canonicalizeTranslateLanguage(value) {
   if (code === 'PB' || code === 'PT' || code === 'PT-BR' || code === 'PT-PT') return 'PT-BR';
   if (code === 'FR' || code === 'FR-CA') return 'FR';
   if (code === 'FR-FR') return 'FR-FR';
+  if (code === 'ES-VE') return 'ES-VE';
   if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
   return '';
 }
@@ -107,7 +108,16 @@ export function translateInputLanguageTag(value) {
   if (language === 'FR') return 'fr-CA';
   if (language === 'FR-FR') return 'fr-FR';
   if (language === 'ES-AR') return 'es-AR';
+  if (language === 'ES-VE') return 'es-VE';
   return '';
+}
+
+export function translateLanguagesAreCompatible(first, second) {
+  const a = String(first || '').trim().toUpperCase();
+  const b = String(second || '').trim().toUpperCase();
+  if (!a || !b) return false;
+  const family = code => code === 'ES' || code === 'ES-419' || code.startsWith('ES-') ? 'ES' : canonicalizeTranslateLanguage(code);
+  return Boolean(family(a) && family(a) === family(b));
 }
 
 export function countWordsIgnoringPunctuation(text) {
@@ -159,6 +169,7 @@ export function learningLangFromModeId(modeId) {
   if (modeId === 'fr') return 'FR';
   if (modeId === 'fr-fr') return 'FR-FR';
   if (modeId === 'es-ar') return 'ES-AR';
+  if (modeId === 'es-ve') return 'ES-VE';
   return '';
 }
 
@@ -168,6 +179,7 @@ export function modeIdFromLearningLang(language) {
   if (code === 'FR') return 'fr';
   if (code === 'FR-FR') return 'fr-fr';
   if (code === 'ES-AR') return 'es-ar';
+  if (code === 'ES-VE') return 'es-ve';
   return '';
 }
 
@@ -206,7 +218,7 @@ export function getLangPickerOptions(offeredModeIds, ownedModeIds = []) {
 }
 
 export const LANG_FAMILIES = {
-  es: { id: 'es', modeIds: ['es-ar'] },
+  es: { id: 'es', modeIds: ['es-ar', 'es-ve'] },
   fr: { id: 'fr', modeIds: ['fr', 'fr-fr'] },
   pt: { id: 'pt', modeIds: ['pt-br'] }
 };
@@ -219,7 +231,7 @@ function toModeIdSet(value) {
 
 export function getLangFamilyId(modeId) {
   const id = String(modeId || '');
-  if (id === 'es-ar') return 'es';
+  if (id === 'es-ar' || id === 'es-ve') return 'es';
   if (id === 'fr' || id === 'fr-fr') return 'fr';
   if (id === 'pt-br') return 'pt';
   return '';
@@ -250,6 +262,7 @@ export function getLangPickerDialectLabelKey(modeId) {
   if (modeId === 'fr') return 'picker.dialect.fr';
   if (modeId === 'fr-fr') return 'picker.dialect.frFr';
   if (modeId === 'es-ar') return 'picker.dialect.esAr';
+  if (modeId === 'es-ve') return 'picker.dialect.esVe';
   return '';
 }
 
@@ -310,6 +323,7 @@ export function normalizeUsername(value) {
 /** Preferred BCP-47 fallbacks when an exact regional TTS voice is missing. */
 const SPEECH_LANG_FALLBACKS = {
   'es-ar': ['es-419', 'es-mx', 'es-us', 'es-uy', 'es-cl', 'es-co', 'es-pe', 'es-ve', 'es-es', 'es'],
+  'es-ve': ['es-419', 'es-co', 'es-mx', 'es-us', 'es-ar', 'es-pe', 'es-es', 'es'],
   'pt-br': ['pt-br', 'pt', 'pt-pt'],
   'fr-ca': ['fr-ca', 'fr', 'fr-fr'],
   'fr-fr': ['fr-fr', 'fr', 'fr-ca']

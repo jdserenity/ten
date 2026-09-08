@@ -2,7 +2,8 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import {
   isActivEsWordCandidate,
-  parseActivEsArgentinaCsv
+  parseActivEsArgentinaCsv,
+  parseActivEsCaracasProxyCsv
 } from '../scripts/download-frequency-dictionaries.js';
 
 const SAMPLE_CSV = `"","word","ar_orf","es_orf","mx_orf","aes_orf","ar_ord","es_ord","mx_ord","aes_ord"
@@ -13,6 +14,8 @@ const SAMPLE_CSV = `"","word","ar_orf","es_orf","mx_orf","aes_orf","ar_ord","es_
 "5","che",120.5,10.2,8.1,45.3,8.5,4.2,3.9,5.1
 "6","vos",95.2,12.1,11.0,40.0,7.8,4.0,3.8,4.9
 "7","hola",0,80.0,75.0,78.0,0,9.0,8.5,8.8
+"8","casa",45.0,50.0,60.0,51.0,5.0,5.5,6.0,5.5
+"9","perro",30.0,35.0,40.0,35.0,4.0,4.5,5.0,4.5
 `;
 
 test('isActivEsWordCandidate rejects junk and non-words', () => {
@@ -22,9 +25,16 @@ test('isActivEsWordCandidate rejects junk and non-words', () => {
   assert.equal(isActivEsWordCandidate('123'), false);
 });
 
+test('parseActivEsCaracasProxyCsv uses the Latin American tuteo frequency column', () => {
+  const words = parseActivEsCaracasProxyCsv(SAMPLE_CSV, 10);
+  assert.deepEqual(words.slice(0, 3), ['hola', 'casa', 'perro']);
+  assert.equal(words.includes('vos'), false);
+  assert.equal(words.includes('che'), false);
+});
+
 test('parseActivEsArgentinaCsv sorts by Argentina frequency and skips zero ar_orf', () => {
   const words = parseActivEsArgentinaCsv(SAMPLE_CSV, 10);
-  assert.deepEqual(words.slice(0, 3), ['che', 'vos', 'aa']);
+  assert.deepEqual(words.slice(0, 3), ['che', 'vos', 'casa']);
   assert.equal(words.includes('hola'), false);
   assert.equal(words.includes('aaaaaa'), false);
   assert.equal(words.includes('a'), false);

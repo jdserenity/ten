@@ -14,7 +14,8 @@ export const LANGUAGE_POOL_CONFIG = [
   { language: 'PT-BR', wordsFile: 'words.pt-br.json', flagEmoji: '🇧🇷', flagLabel: 'Brazil', label: 'Brazilian Portuguese' },
   { language: 'FR', wordsFile: 'words.fr-ca.json', flagEmoji: '🇨🇦', flagLabel: 'Quebec', label: 'Quebec French' },
   { language: 'FR-FR', wordsFile: 'words.fr-fr.json', flagEmoji: '🇫🇷', flagLabel: 'France', label: 'France French' },
-  { language: 'ES-AR', wordsFile: 'words.es-ar.json', flagEmoji: '🇦🇷', flagLabel: 'Argentina', label: 'Argentinian Spanish' }
+  { language: 'ES-AR', wordsFile: 'words.es-ar.json', flagEmoji: '🇦🇷', flagLabel: 'Argentina', label: 'Argentinian Spanish' },
+  { language: 'ES-VE', wordsFile: 'words.es-ve.json', flagEmoji: '🇻🇪', flagLabel: 'Venezuela', label: 'Venezuelean Spanish' }
 ];
 
 let poolCache = null;

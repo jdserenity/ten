@@ -21,6 +21,7 @@ const en = {
   'header.switchFr': 'Switch to Quebec French',
   'header.switchFrFr': 'Switch to France French',
   'header.switchEsAr': 'Switch to Argentinian Spanish',
+  'header.switchEsVe': 'Switch to Venezuelean Spanish',
   'picker.chooseLanguages': 'Choose languages',
   'picker.addLanguages': 'Add languages',
   'picker.add': 'Add',
@@ -34,10 +35,12 @@ const en = {
   'picker.dialect.fr': 'Quebec',
   'picker.dialect.frFr': 'France',
   'picker.dialect.esAr': 'Argentina',
+  'picker.dialect.esVe': 'Venezuela',
   'picker.ptBr': 'Brazilian Portuguese',
   'picker.fr': 'Quebec French',
   'picker.frFr': 'France French',
   'picker.esAr': 'Argentinian Spanish',
+  'picker.esVe': 'Venezuelean Spanish',
   'picker.allLanguages': 'You already have every language.',
   'settings.title': 'Settings',
   'settings.closeAria': 'Close settings',
@@ -125,8 +128,10 @@ const en = {
   'translate.lang.frCa': 'French (Canada)',
   'translate.lang.frFr': 'French (France)',
   'translate.lang.esAr': 'Argentinian Spanish',
+  'translate.lang.esVe': 'Venezuelean Spanish',
   'translate.lang.spanish': 'Spanish',
   'translate.lang.esArRegion': 'Spanish (Argentina)',
+  'translate.lang.esVeRegion': 'Spanish (Venezuela)',
   'translate.lang.es419': 'Spanish (Latin America)',
   'frequency.dictionary': '{language} dictionary',
   'frequency.unlocked': 'Unlocked',
@@ -195,7 +200,11 @@ const en = {
   'mode.esAr': 'Argentinian Spanish',
   'mode.esArShort': 'Argentina',
   'mode.esArTranslator': 'Spanish',
-  'mode.argentinaFlag': 'Argentina'
+  'mode.argentinaFlag': 'Argentina',
+  'mode.esVe': 'Venezuelean Spanish',
+  'mode.esVeShort': 'Venezuela',
+  'mode.esVeTranslator': 'Spanish',
+  'mode.venezuelaFlag': 'Venezuela'
 };
 
 const ptBR = {
@@ -219,6 +228,7 @@ const ptBR = {
   'header.switchFr': 'Mudar para francês do Quebec',
   'header.switchFrFr': 'Mudar para francês da França',
   'header.switchEsAr': 'Mudar para espanhol argentino',
+  'header.switchEsVe': 'Mudar para espanhol venezuelano',
   'picker.chooseLanguages': 'Escolha os idiomas',
   'picker.addLanguages': 'Adicionar idiomas',
   'picker.add': 'Adicionar',
@@ -232,10 +242,12 @@ const ptBR = {
   'picker.dialect.fr': 'Quebec',
   'picker.dialect.frFr': 'França',
   'picker.dialect.esAr': 'Argentina',
+  'picker.dialect.esVe': 'Venezuela',
   'picker.ptBr': 'Português do Brasil',
   'picker.fr': 'Francês do Quebec',
   'picker.frFr': 'Francês da França',
   'picker.esAr': 'Espanhol argentino',
+  'picker.esVe': 'Espanhol venezuelano',
   'picker.allLanguages': 'Você já tem todos os idiomas.',
   'settings.title': 'Configurações',
   'settings.closeAria': 'Fechar configurações',
@@ -321,8 +333,10 @@ const ptBR = {
   'translate.lang.frCa': 'Francês (Canadá)',
   'translate.lang.frFr': 'Francês (França)',
   'translate.lang.esAr': 'Espanhol argentino',
+  'translate.lang.esVe': 'Espanhol venezuelano',
   'translate.lang.spanish': 'Espanhol',
   'translate.lang.esArRegion': 'Espanhol (Argentina)',
+  'translate.lang.esVeRegion': 'Espanhol (Venezuela)',
   'translate.lang.es419': 'Espanhol (América Latina)',
   'frequency.dictionary': 'Lista de frequência — {language}',
   'frequency.unlocked': 'Desbloqueadas',
@@ -391,7 +405,11 @@ const ptBR = {
   'mode.esAr': 'Espanhol argentino',
   'mode.esArShort': 'Argentina',
   'mode.esArTranslator': 'Espanhol',
-  'mode.argentinaFlag': 'Argentina'
+  'mode.argentinaFlag': 'Argentina',
+  'mode.esVe': 'Espanhol venezuelano',
+  'mode.esVeShort': 'Venezuela',
+  'mode.esVeTranslator': 'Espanhol',
+  'mode.venezuelaFlag': 'Venezuela'
 };
 
 export const CATALOGS = { en, 'pt-BR': ptBR };

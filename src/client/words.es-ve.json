@@ -1,0 +1,502 @@
+[
+  {
+    "word": "casa",
+    "level": "A1",
+    "translation": "house, home",
+    "sentences": [
+      { "es": "Mi casa queda cerca de la estación del metro.", "en": "My house is near the metro station." },
+      { "es": "Volvimos a casa antes de que empezara a llover.", "en": "We returned home before it started raining." },
+      { "es": "Ellos buscan una casa tranquila en Caracas.", "en": "They are looking for a quiet house in Caracas." }
+    ]
+  },
+  {
+    "word": "trabajo",
+    "level": "A1",
+    "translation": "work, job",
+    "sentences": [
+      { "es": "Tengo bastante trabajo esta semana en la oficina.", "en": "I have quite a lot of work at the office this week." },
+      { "es": "Mi hermana consiguió un trabajo nuevo en Chacao.", "en": "My sister got a new job in Chacao." },
+      { "es": "Salimos del trabajo a las cinco de la tarde.", "en": "We leave work at five in the afternoon." }
+    ]
+  },
+  {
+    "word": "pana",
+    "level": "A1",
+    "translation": "friend, buddy (colloquial Venezuela)",
+    "sentences": [
+      { "es": "Mi pana vivió al otro lado de la ciudad por años.", "en": "My friend lived on the other side of the city for years." },
+      { "es": "Nos encontramos con unos panas en la plaza.", "en": "We met up with some friends in the square." },
+      { "es": "Ella es pana de mi hermana desde el colegio.", "en": "She has been my sister's friend since school." }
+    ]
+  },
+  {
+    "word": "familia",
+    "level": "A1",
+    "translation": "family",
+    "sentences": [
+      { "es": "Mi familia se reúne los domingos para almorzar.", "en": "My family gets together on Sundays for lunch." },
+      { "es": "Conocí a toda su familia durante las vacaciones.", "en": "I met his entire family during the vacation." },
+      { "es": "Varias familias pasean por el parque del Este.", "en": "Several families stroll through Parque del Este." }
+    ]
+  },
+  {
+    "word": "chamo",
+    "level": "A1",
+    "translation": "young person, guy; friend (Venezuela)",
+    "sentences": [
+      { "es": "Ese chamo estudia conmigo en la universidad.", "en": "That guy studies with me at university." },
+      { "es": "Los chamos están jugando fútbol en la cancha.", "en": "The young people are playing soccer on the field." },
+      { "es": "Conocimos a una chama muy simpática en el curso.", "en": "We met a very nice young woman in the course." }
+    ]
+  },
+  {
+    "word": "camioneta",
+    "level": "A1",
+    "translation": "minibus, bus; SUV or pickup truck",
+    "sentences": [
+      { "es": "Tomo una camioneta para llegar al centro de Caracas.", "en": "I take a minibus to get to downtown Caracas." },
+      { "es": "La camioneta pasó llena y tuvimos que esperar otra.", "en": "The minibus went by full, so we had to wait for another." },
+      { "es": "Mi tío compró una camioneta para viajar con la familia.", "en": "My uncle bought an SUV to travel with the family." }
+    ]
+  },
+  {
+    "word": "franela",
+    "level": "A1",
+    "translation": "T-shirt (Venezuela); flannel cloth",
+    "sentences": [
+      { "es": "Me puse una franela fresca porque hace mucho calor.", "en": "I put on a light T-shirt because it is very hot." },
+      { "es": "Compré dos franelas de colores en el centro comercial.", "en": "I bought two colored T-shirts at the mall." },
+      { "es": "Limpió la mesa con una franela húmeda.", "en": "She cleaned the table with a damp cloth." }
+    ]
+  },
+  {
+    "word": "dinero",
+    "level": "A1",
+    "translation": "money",
+    "sentences": [
+      { "es": "No tengo suficiente dinero para comprar eso hoy.", "en": "I don't have enough money to buy that today." },
+      { "es": "Guardamos el dinero para pagar el alquiler.", "en": "We saved the money to pay the rent." },
+      { "es": "¿Cuánto dinero necesitas para el pasaje?", "en": "How much money do you need for the fare?" }
+    ]
+  },
+  {
+    "word": "comida",
+    "level": "A1",
+    "translation": "food, meal",
+    "sentences": [
+      { "es": "La comida está lista; ven a sentarte en la mesa.", "en": "The food is ready; come sit at the table." },
+      { "es": "Preparamos una comida sencilla con caraotas y arroz.", "en": "We prepared a simple meal with black beans and rice." },
+      { "es": "Las comidas de mi abuela siempre quedan sabrosas.", "en": "My grandmother's meals always turn out delicious." }
+    ]
+  },
+  {
+    "word": "agua",
+    "level": "A1",
+    "translation": "water",
+    "sentences": [
+      { "es": "Trae una botella de agua fría para el camino.", "en": "Bring a bottle of cold water for the road." },
+      { "es": "Tomamos agua después de caminar por El Ávila.", "en": "We drank water after hiking on El Ávila." },
+      { "es": "Las aguas bajaron con fuerza después de la lluvia.", "en": "The waters came down strongly after the rain." }
+    ]
+  },
+  {
+    "word": "día",
+    "level": "A1",
+    "translation": "day",
+    "sentences": [
+      { "es": "Hoy será un día largo, pero bastante tranquilo.", "en": "Today will be a long but fairly calm day." },
+      { "es": "Pasamos todo el día visitando a nuestros primos.", "en": "We spent the whole day visiting our cousins." },
+      { "es": "Los días de lluvia el tráfico se pone más pesado.", "en": "On rainy days the traffic gets heavier." }
+    ]
+  },
+  {
+    "word": "noche",
+    "level": "A1",
+    "translation": "night, evening",
+    "sentences": [
+      { "es": "Esta noche vamos a cenar arepas en casa.", "en": "Tonight we are going to have arepas for dinner at home." },
+      { "es": "Anoche se fue la luz durante unos minutos.", "en": "Last night the power went out for a few minutes." },
+      { "es": "Las noches son más frescas cerca de la montaña.", "en": "Nights are cooler near the mountain." }
+    ]
+  },
+  {
+    "word": "mañana",
+    "level": "A1",
+    "translation": "morning; tomorrow",
+    "sentences": [
+      { "es": "Mañana tengo que salir temprano para el trabajo.", "en": "Tomorrow I have to leave early for work." },
+      { "es": "La mañana estuvo despejada y vimos toda la montaña.", "en": "The morning was clear and we saw the whole mountain." },
+      { "es": "Mis mañanas empiezan con café y una arepa.", "en": "My mornings begin with coffee and an arepa." }
+    ]
+  },
+  {
+    "word": "tiempo",
+    "level": "A1",
+    "translation": "time; weather",
+    "sentences": [
+      { "es": "No tengo tiempo para cocinar antes de la clase.", "en": "I don't have time to cook before class." },
+      { "es": "El tiempo cambió y comenzó a caer un palo de agua.", "en": "The weather changed and a heavy downpour began." },
+      { "es": "Pasamos buenos tiempos juntos cuando éramos niños.", "en": "We had good times together when we were children." }
+    ]
+  },
+  {
+    "word": "chévere",
+    "level": "A1",
+    "translation": "great, cool, nice",
+    "sentences": [
+      { "es": "La película estuvo chévere y nos reímos bastante.", "en": "The movie was great and we laughed a lot." },
+      { "es": "Tus nuevos vecinos parecen personas muy chéveres.", "en": "Your new neighbors seem like very nice people." },
+      { "es": "Qué chévere que puedas venir a la reunión.", "en": "It's great that you can come to the get-together." }
+    ]
+  },
+  {
+    "word": "vida",
+    "level": "A1",
+    "translation": "life",
+    "sentences": [
+      { "es": "La vida en Caracas puede ser rápida y ruidosa.", "en": "Life in Caracas can be fast and noisy." },
+      { "es": "Vivió una vida tranquila cerca de sus hijos.", "en": "She lived a quiet life near her children." },
+      { "es": "Nuestras vidas cambiaron después de aquel viaje.", "en": "Our lives changed after that trip." }
+    ]
+  },
+  {
+    "word": "colegio",
+    "level": "A1",
+    "translation": "school",
+    "sentences": [
+      { "es": "Los niños llegan al colegio antes de las siete.", "en": "The children arrive at school before seven." },
+      { "es": "Mi hermana estudió en un colegio cerca de aquí.", "en": "My sister studied at a school near here." },
+      { "es": "Varios colegios cerraron por el aguacero.", "en": "Several schools closed because of the downpour." }
+    ]
+  },
+  {
+    "word": "libro",
+    "level": "A1",
+    "translation": "book",
+    "sentences": [
+      { "es": "Estoy leyendo un libro sobre la historia de Venezuela.", "en": "I am reading a book about the history of Venezuela." },
+      { "es": "Dejé el libro encima de la mesa del comedor.", "en": "I left the book on the dining table." },
+      { "es": "Esos libros pertenecen a la biblioteca del colegio.", "en": "Those books belong to the school library." }
+    ]
+  },
+  {
+    "word": "hablar",
+    "level": "A1",
+    "translation": "to speak, talk",
+    "sentences": [
+      { "es": "Tú hablas español con mucha más confianza ahora.", "en": "You speak Spanish much more confidently now." },
+      { "es": "Hablamos por teléfono mientras esperaba el metro.", "en": "We talked on the phone while I waited for the metro." },
+      { "es": "Quiero hablar con la profesora después de clase.", "en": "I want to speak with the teacher after class." }
+    ]
+  },
+  {
+    "word": "escuchar",
+    "level": "A1",
+    "translation": "to listen, hear",
+    "sentences": [
+      { "es": "Escucho las noticias mientras preparo el desayuno.", "en": "I listen to the news while I make breakfast." },
+      { "es": "¿Escuchaste el trueno que sonó hace un momento?", "en": "Did you hear the thunder that sounded a moment ago?" },
+      { "es": "Vamos a escuchar música durante el viaje.", "en": "We are going to listen to music during the trip." }
+    ]
+  },
+  {
+    "word": "mirar",
+    "level": "A1",
+    "translation": "to look at, watch",
+    "sentences": [
+      { "es": "Mira bien antes de cruzar la avenida.", "en": "Look carefully before crossing the avenue." },
+      { "es": "Anoche miramos una serie venezolana en casa.", "en": "Last night we watched a Venezuelan series at home." },
+      { "es": "Ella miraba la montaña desde su ventana.", "en": "She was looking at the mountain from her window." }
+    ]
+  },
+  {
+    "word": "esperar",
+    "level": "A1",
+    "translation": "to wait; hope, expect",
+    "sentences": [
+      { "es": "Espero la camioneta frente a la panadería.", "en": "I wait for the minibus in front of the bakery." },
+      { "es": "Esperamos que mañana no llueva tanto.", "en": "We hope it does not rain so much tomorrow." },
+      { "es": "¿Cuánto tiempo esperaste para entrar al concierto?", "en": "How long did you wait to enter the concert?" }
+    ]
+  },
+  {
+    "word": "entender",
+    "level": "A1",
+    "translation": "to understand",
+    "sentences": [
+      { "es": "Entiendo casi todo cuando hablan más despacio.", "en": "I understand almost everything when they speak more slowly." },
+      { "es": "¿Tú entendiste las instrucciones del profesor?", "en": "Did you understand the teacher's instructions?" },
+      { "es": "Al principio no entendíamos algunas expresiones.", "en": "At first we did not understand some expressions." }
+    ]
+  },
+  {
+    "word": "aprender",
+    "level": "A1",
+    "translation": "to learn",
+    "sentences": [
+      { "es": "Aprendo palabras nuevas hablando con mis panas.", "en": "I learn new words by talking with my friends." },
+      { "es": "Ella aprendió a preparar cachapas con su abuela.", "en": "She learned to make cachapas with her grandmother." },
+      { "es": "Queremos aprender más sobre la cultura caraqueña.", "en": "We want to learn more about Caracas culture." }
+    ]
+  },
+  {
+    "word": "escribir",
+    "level": "A1",
+    "translation": "to write",
+    "sentences": [
+      { "es": "Escribo mensajes cortos para practicar español.", "en": "I write short messages to practice Spanish." },
+      { "es": "¿Tú escribiste la dirección correctamente?", "en": "Did you write the address correctly?" },
+      { "es": "Mis primos escriben cada vez que pueden conectarse.", "en": "My cousins write whenever they can get online." }
+    ]
+  },
+  {
+    "word": "leer",
+    "level": "A1",
+    "translation": "to read",
+    "sentences": [
+      { "es": "Leo el periódico mientras me tomo un guayoyo.", "en": "I read the newspaper while drinking a light black coffee." },
+      { "es": "Leímos el aviso antes de entrar al edificio.", "en": "We read the notice before entering the building." },
+      { "es": "Tienes que leer este cuento venezolano.", "en": "You have to read this Venezuelan short story." }
+    ]
+  },
+  {
+    "word": "comprar",
+    "level": "A1",
+    "translation": "to buy",
+    "sentences": [
+      { "es": "Voy a comprar pan y queso en la bodega.", "en": "I am going to buy bread and cheese at the corner shop." },
+      { "es": "Compramos cambures maduros para el desayuno.", "en": "We bought ripe bananas for breakfast." },
+      { "es": "¿Dónde compraste esa franela tan chévere?", "en": "Where did you buy that cool T-shirt?" }
+    ]
+  },
+  {
+    "word": "vender",
+    "level": "A1",
+    "translation": "to sell",
+    "sentences": [
+      { "es": "La señora vende empanadas desde muy temprano.", "en": "The woman sells empanadas from very early in the morning." },
+      { "es": "Vendieron su carro antes de mudarse del país.", "en": "They sold their car before moving out of the country." },
+      { "es": "Aquí venden jugos naturales y agua fría.", "en": "They sell fresh juices and cold water here." }
+    ]
+  },
+  {
+    "word": "buscar",
+    "level": "A1",
+    "translation": "to look for, fetch",
+    "sentences": [
+      { "es": "Busco mis llaves porque tengo que salir pronto.", "en": "I am looking for my keys because I have to leave soon." },
+      { "es": "Mi papá me buscó en la estación del metro.", "en": "My dad picked me up at the metro station." },
+      { "es": "Estamos buscando un lugar bueno para almorzar.", "en": "We are looking for a good place to have lunch." }
+    ]
+  },
+  {
+    "word": "encontrar",
+    "level": "A1",
+    "translation": "to find; meet",
+    "sentences": [
+      { "es": "Encontré los documentos dentro de la mochila.", "en": "I found the documents inside the backpack." },
+      { "es": "Nos encontramos en Plaza Venezuela a mediodía.", "en": "We are meeting at Plaza Venezuela at noon." },
+      { "es": "Ellos no encontraron una camioneta vacía.", "en": "They did not find an empty minibus." }
+    ]
+  },
+  {
+    "word": "dar",
+    "level": "A1",
+    "translation": "to give; face or lead onto",
+    "sentences": [
+      { "es": "Te doy la dirección para que llegues sin problema.", "en": "I'll give you the address so you arrive without trouble." },
+      { "es": "Mi abuela nos dio dulces de guayaba para el camino.", "en": "My grandmother gave us guava sweets for the road." },
+      { "es": "La ventana da hacia una calle bastante tranquila.", "en": "The window faces a fairly quiet street." }
+    ]
+  },
+  {
+    "word": "tomar",
+    "level": "A1",
+    "translation": "to take; drink",
+    "sentences": [
+      { "es": "Tomo el metro para evitar el tráfico de la autopista.", "en": "I take the metro to avoid highway traffic." },
+      { "es": "Nos tomamos un café después de la reunión.", "en": "We had a coffee after the meeting." },
+      { "es": "Tienes que tomar esta avenida hasta la próxima esquina.", "en": "You have to take this avenue to the next corner." }
+    ]
+  },
+  {
+    "word": "abrir",
+    "level": "A1",
+    "translation": "to open",
+    "sentences": [
+      { "es": "Abre la ventana para que entre un poco de aire.", "en": "Open the window so a little air comes in." },
+      { "es": "La panadería abrió más tarde de lo normal.", "en": "The bakery opened later than usual." },
+      { "es": "Vamos a abrir los regalos después de la cena.", "en": "We are going to open the gifts after dinner." }
+    ]
+  },
+  {
+    "word": "cerrar",
+    "level": "A1",
+    "translation": "to close, shut",
+    "sentences": [
+      { "es": "Cierra bien la puerta cuando salgas de la casa.", "en": "Close the door properly when you leave the house." },
+      { "es": "La policía cerró la avenida por una carrera de bicicletas.", "en": "The police closed the avenue for a bicycle race." },
+      { "es": "Las tiendas cierran temprano los domingos.", "en": "The stores close early on Sundays." }
+    ]
+  },
+  {
+    "word": "empezar",
+    "level": "A1",
+    "translation": "to begin, start",
+    "sentences": [
+      { "es": "La clase empieza a las ocho de la mañana.", "en": "The class starts at eight in the morning." },
+      { "es": "Empezamos a cocinar antes de que llegara la familia.", "en": "We started cooking before the family arrived." },
+      { "es": "¿Cuándo empezaste a estudiar español venezolano?", "en": "When did you start studying Venezuelan Spanish?" }
+    ]
+  },
+  {
+    "word": "terminar",
+    "level": "A1",
+    "translation": "to finish, end",
+    "sentences": [
+      { "es": "Termino el trabajo y después te escribo.", "en": "I'll finish the work and then write to you." },
+      { "es": "La película terminó cerca de la medianoche.", "en": "The movie ended near midnight." },
+      { "es": "Tenemos que terminar las hallacas antes de cenar.", "en": "We have to finish making the hallacas before dinner." }
+    ]
+  },
+  {
+    "word": "ir",
+    "level": "A1",
+    "translation": "to go",
+    "sentences": [
+      { "es": "Voy al mercado de Chacao los sábados temprano.", "en": "I go to the Chacao market early on Saturdays." },
+      { "es": "Ayer fuimos a caminar por Los Próceres.", "en": "Yesterday we went for a walk along Los Próceres." },
+      { "es": "¿Tú vas a venir con nosotros esta noche?", "en": "Are you going to come with us tonight?" }
+    ]
+  },
+  {
+    "word": "venir",
+    "level": "A1",
+    "translation": "to come",
+    "sentences": [
+      { "es": "Ven a mi casa cuando salgas del colegio.", "en": "Come to my house when you leave school." },
+      { "es": "Mis primos vinieron desde Valencia el fin de semana.", "en": "My cousins came from Valencia for the weekend." },
+      { "es": "¿Tú vienes en metro o en camioneta?", "en": "Are you coming by metro or minibus?" }
+    ]
+  },
+  {
+    "word": "llegar",
+    "level": "A1",
+    "translation": "to arrive, reach",
+    "sentences": [
+      { "es": "Llego temprano para conseguir un buen puesto.", "en": "I arrive early to get a good spot." },
+      { "es": "La camioneta llegó llena a la parada.", "en": "The minibus arrived at the stop full." },
+      { "es": "Avísame cuando llegues a Plaza Venezuela.", "en": "Let me know when you reach Plaza Venezuela." }
+    ]
+  },
+  {
+    "word": "quedar",
+    "level": "A1",
+    "translation": "to be located; arrange to meet; fit or suit",
+    "sentences": [
+      { "es": "La farmacia queda justo al lado de la panadería.", "en": "The pharmacy is right beside the bakery." },
+      { "es": "Quedamos en vernos frente a la estación de Altamira.", "en": "We agreed to meet in front of Altamira station." },
+      { "es": "Esa franela azul te queda muy bien.", "en": "That blue T-shirt looks very good on you." }
+    ]
+  },
+  {
+    "word": "vivir",
+    "level": "A1",
+    "translation": "to live",
+    "sentences": [
+      { "es": "Vivo con mi familia en el este de Caracas.", "en": "I live with my family in eastern Caracas." },
+      { "es": "Ella vivió varios años cerca de la universidad.", "en": "She lived near the university for several years." },
+      { "es": "¿Dónde viven ustedes ahora?", "en": "Where do you live now?" }
+    ]
+  },
+  {
+    "word": "querer",
+    "level": "A1",
+    "translation": "to want; love",
+    "sentences": [
+      { "es": "¿Tú quieres una arepa de queso para desayunar?", "en": "Do you want a cheese arepa for breakfast?" },
+      { "es": "Quiero aprender a entender mejor el acento caraqueño.", "en": "I want to learn to understand the Caracas accent better." },
+      { "es": "Mis abuelos se quieren muchísimo desde hace años.", "en": "My grandparents have loved each other very much for years." }
+    ]
+  },
+  {
+    "word": "poder",
+    "level": "A1",
+    "translation": "can, to be able to",
+    "sentences": [
+      { "es": "¿Puedes ayudarme a cargar estas bolsas?", "en": "Can you help me carry these bags?" },
+      { "es": "No pudimos salir porque cayó un aguacero.", "en": "We could not go out because there was a downpour." },
+      { "es": "Mañana podré acompañarte hasta la estación.", "en": "Tomorrow I will be able to go with you to the station." }
+    ]
+  },
+  {
+    "word": "tener",
+    "level": "A1",
+    "translation": "to have",
+    "sentences": [
+      { "es": "Tú tienes razón; debemos salir un poco más temprano.", "en": "You are right; we should leave a little earlier." },
+      { "es": "Tuvimos una reunión larga en la oficina.", "en": "We had a long meeting at the office." },
+      { "es": "Mi edificio tiene una vista bonita de El Ávila.", "en": "My building has a beautiful view of El Ávila." }
+    ]
+  },
+  {
+    "word": "hacer",
+    "level": "A1",
+    "translation": "to do, make; weather expression",
+    "sentences": [
+      { "es": "¿Qué haces después de terminar el trabajo?", "en": "What do you do after finishing work?" },
+      { "es": "Hicimos una torta para celebrar su cumpleaños.", "en": "We made a cake to celebrate her birthday." },
+      { "es": "Hoy hace bastante calor en el centro de Caracas.", "en": "It is quite hot in downtown Caracas today." }
+    ]
+  },
+  {
+    "word": "decir",
+    "level": "A1",
+    "translation": "to say, tell",
+    "sentences": [
+      { "es": "¿Qué dices cuando alguien te pregunta de dónde eres?", "en": "What do you say when someone asks where you are from?" },
+      { "es": "Mi pana dijo que llegaría después de las seis.", "en": "My friend said he would arrive after six." },
+      { "es": "Dime la verdad para saber cómo puedo ayudarte.", "en": "Tell me the truth so I know how I can help you." }
+    ]
+  },
+  {
+    "word": "pedir",
+    "level": "A1",
+    "translation": "to ask for, order",
+    "sentences": [
+      { "es": "Voy a pedir una arepa de carne mechada.", "en": "I am going to order a shredded-beef arepa." },
+      { "es": "Ella pidió ayuda para subir las cajas.", "en": "She asked for help carrying up the boxes." },
+      { "es": "¿Qué postre piden ustedes normalmente?", "en": "What dessert do you normally order?" }
+    ]
+  },
+  {
+    "word": "responder",
+    "level": "A1",
+    "translation": "to answer, respond",
+    "sentences": [
+      { "es": "Responde el mensaje cuando tengas un momento libre.", "en": "Answer the message when you have a free moment." },
+      { "es": "El profesor respondió todas nuestras preguntas.", "en": "The teacher answered all our questions." },
+      { "es": "No pude responder porque estaba dentro del metro.", "en": "I couldn't answer because I was inside the metro." }
+    ]
+  },
+  {
+    "word": "bonito",
+    "level": "A1",
+    "translation": "pretty, beautiful, nice",
+    "sentences": [
+      { "es": "El cielo se ve bonito después de la lluvia.", "en": "The sky looks beautiful after the rain." },
+      { "es": "Compró unas flores bonitas para su mamá.", "en": "He bought some pretty flowers for his mother." },
+      { "es": "Qué bonito quedó el mural de la comunidad.", "en": "The community mural turned out so nice." }
+    ]
+  },
+  {
+    "word": "cambur",
+    "level": "A1",
+    "translation": "banana (Venezuela)",
+    "sentences": [
+      { "es": "Me como un cambur antes de salir a caminar.", "en": "I eat a banana before going for a walk." },
+      { "es": "Mi mamá compró varios cambures maduros en el mercado.", "en": "My mother bought several ripe bananas at the market." },
+      { "es": "El jugo lleva cambur, leche y un poquito de canela.", "en": "The shake contains banana, milk, and a little cinnamon." }
+    ]
+  }
+]

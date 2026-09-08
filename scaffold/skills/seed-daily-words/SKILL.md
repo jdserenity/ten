@@ -2,7 +2,7 @@
 name: seed-daily-words
 description: >-
   Curate or refill Ten 5/new word pools for a language flavour (PT-BR, FR-CA,
-  FR-FR, ES-AR). Use when adding words, seeding days of cards, fixing pool
+  FR-FR, ES-AR, ES-VE). Use when adding words, seeding days of cards, fixing pool
   quality, or when the user asks to generate/expand vocabulary for daily study.
   Agent/LLM writing only — no Tatoeba or scrape generators.
 ---
@@ -21,6 +21,7 @@ Read this skill before adding or rewriting entries in any `src/client/words.*.js
 | `fr` (Quebec) | `src/client/words.fr-ca.json` | `fr` | `A1` | `frequency-fr.json` top-down, after skip list |
 | `fr-fr` (France) | `src/client/words.fr-fr.json` | `fr` | `A1` | `frequency-fr.json` top-down, after skip list |
 | `es-ar` | `src/client/words.es-ar.json` | `es` | `A1` | `frequency-es-ar.json` top-down, after skip list |
+| `es-ve` (Caracas) | `src/client/words.es-ve.json` | `es` | `A1` | `frequency-es-ve.json` top-down, after skip list |
 
 Never share one JSON file across flavours. Quebec and France French are separate pools.
 
@@ -60,6 +61,7 @@ Examples of banned headwords: *je, tu, il, le, la, de, et, que, yo, vos* (as pro
 ## Regional flavour (mandatory)
 
 - **ES-AR:** Rioplatense. Use **voseo** (`vos tenés`, `querés`, etc.), not default *tú/tienes*. Local vocab when it is the normal word (*remera*, *colectivo*, *laburo* where natural) — do not force slang into every line.
+- **ES-VE:** Educated everyday Caracas Venezuelan Spanish. Use **tuteo** (`tú tienes`, `quieres`) and plural **ustedes**, not Argentine voseo or Spain's *vosotros*. Prefer normal Caracas words (*camioneta*, *franela*, *cambur*, *pana*, *chamo*, *chévere*) where natural; do not force slang into every line.
 - **FR-FR:** Metropolitan France French spelling and usage. No Quebecisms.
 - **FR-CA:** Natural Quebec French where it differs; still correct French orthography.
 - **PT-BR:** Brazilian Portuguese only (not European spellings: *fato* not *facto*, *ônibus* not *autocarro*).
@@ -112,7 +114,7 @@ Dev footer `~N days left in <mode> pool` (amber at ≤7) signals when to add mor
 
 `npm run words:check` validates all dialect pools. Do not ship pool edits that fail it.
 
-Legacy **PT-BR** entries may still have 2 sentences and softer checker rules until that pool is re-seeded; **new** PT cards must have 3 and pass the same strict rules as other flavours. FR-CA, FR-FR, and ES-AR always require exactly 3.
+Legacy **PT-BR** entries may still have 2 sentences and softer checker rules until that pool is re-seeded; **new** PT cards must have 3 and pass the same strict rules as other flavours. FR-CA, FR-FR, ES-AR, and ES-VE always require exactly 3.
 
 ## Do not
 

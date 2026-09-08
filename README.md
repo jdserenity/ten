@@ -1,6 +1,6 @@
 # Ten
 
-Phone PWA: Brazilian Portuguese, Quebec French, France French, Argentinian Spanish.
+Phone PWA: Brazilian Portuguese, Quebec French, France French, Argentinian Spanish, Caracas-based Venezuelean Spanish.
 
 ```bash
 cp .env.example .env    # GOOGLE_TRANSLATE_API_KEY, DEEPL_AUTH_KEY

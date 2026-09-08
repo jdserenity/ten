@@ -24,12 +24,24 @@ const SOURCES = [
     url: 'https://raw.githubusercontent.com/francojc/activ-es/master/activ-es-v.02/wordlists/plain/aes1grams.csv',
     outFile: join(CLIENT_DIR, 'frequency-es-ar.json'),
     format: 'activ-es-csv'
+  },
+  {
+    language: 'ES-VE',
+    url: 'https://raw.githubusercontent.com/francojc/activ-es/master/activ-es-v.02/wordlists/plain/aes1grams.csv',
+    outFile: join(CLIENT_DIR, 'frequency-es-ve.json'),
+    format: 'activ-es-caracas-proxy-csv'
   }
 ];
 
 const LIMIT = 5000;
 const WORD_RE = /^[\p{L}\p{M}]+(?:['’\-][\p{L}\p{M}]+)*$/u;
 const JUNK_RE = /(.)\1{3,}/u;
+const CARACAS_PROXY_EXCLUDED = new Set([
+  'che', 'vos', 'vosotros', 'vosotras', 'os', 'sos', 'tenés', 'querés', 'podés', 'sabés',
+  'hacés', 'decís', 'venís', 'vivís', 'hablás', 'comés', 'tomás', 'llegás', 'mirás',
+  'escuchás', 'esperás', 'entendés', 'aprendés', 'escribís', 'leés', 'comprás', 'vendés',
+  'buscás', 'encontrás', 'andá', 'vení', 'mirá', 'decime', 'haceme'
+]);
 
 export function isActivEsWordCandidate(word) {
   if (!word || word.length < 2) return false;
@@ -55,6 +67,37 @@ export function parseActivEsArgentinaCsv(text, limit = LIMIT) {
   }
 
   rows.sort((a, b) => b.arOrf - a.arOrf);
+
+  const words = [];
+  const seen = new Set();
+  for (const row of rows) {
+    if (words.length >= limit) break;
+    if (seen.has(row.word)) continue;
+    seen.add(row.word);
+    words.push(row.word);
+  }
+
+  return words;
+}
+
+export function parseActivEsCaracasProxyCsv(text, limit = LIMIT) {
+  const lines = String(text || '').split('\n');
+  const rows = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+    const match = line.match(/^"?\d+"?,"([^"]+)",[0-9.]+,[0-9.]+,([0-9.]+),/);
+    if (!match) continue;
+    const word = match[1].trim().toLocaleLowerCase();
+    const frequency = Number(match[2]);
+    if (!Number.isFinite(frequency) || frequency <= 0) continue;
+    if (!isActivEsWordCandidate(word)) continue;
+    if (CARACAS_PROXY_EXCLUDED.has(word)) continue;
+    rows.push({ word, frequency });
+  }
+
+  rows.sort((a, b) => b.frequency - a.frequency);
 
   const words = [];
   const seen = new Set();
@@ -118,6 +161,8 @@ async function downloadOne(source) {
     ? parseCountedLines(payload)
     : source.format === 'activ-es-csv'
       ? parseActivEsArgentinaCsv(payload)
+      : source.format === 'activ-es-caracas-proxy-csv'
+        ? parseActivEsCaracasProxyCsv(payload)
       : parseWords(payload);
   if (!words.length) {
     throw new Error(`No words parsed for ${source.language}`);

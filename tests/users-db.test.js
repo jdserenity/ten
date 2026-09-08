@@ -65,9 +65,9 @@ describeDb('users and per-user data', () => {
   });
 
   it('stores and returns user languages', () => {
-    const saved = setUserLanguages(friend.id, ['FR', 'FR-FR', 'PT-BR']);
+    const saved = setUserLanguages(friend.id, ['FR', 'FR-FR', 'PT-BR', 'ES-VE']);
     assert.equal(saved.ok, true);
-    assert.deepEqual(getUserLanguages(friend.id), ['FR', 'FR-FR', 'PT-BR']);
+    assert.deepEqual(getUserLanguages(friend.id), ['ES-VE', 'FR', 'FR-FR', 'PT-BR']);
   });
 
   it('stores and returns app language on the user account', () => {
@@ -83,8 +83,10 @@ describeDb('users and per-user data', () => {
   it('scopes unlocked words per user', () => {
     addUnlockedWord(jd.id, 'FR', 'bonjour');
     addUnlockedWord(friend.id, 'FR', 'salut');
+    addUnlockedWord(friend.id, 'ES-VE', 'chévere');
     assert.deepEqual(getAllUnlockedWords(jd.id)['FR'], ['bonjour']);
     assert.deepEqual(getAllUnlockedWords(friend.id)['FR'], ['salut']);
+    assert.deepEqual(getAllUnlockedWords(friend.id)['ES-VE'], ['chévere']);
   });
 
   it('stores feedback and lists it for dev review', () => {

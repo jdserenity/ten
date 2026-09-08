@@ -29,6 +29,13 @@ import {
 import { ensureDailyGlosses } from './daily-glosses.js';
 import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
 import { buildDevOpsPayload, loadWordPools } from './pool-health.js';
+import {
+  normalizeDetectedSourceLanguage,
+  normalizeSourceLanguage,
+  normalizeTargetLanguage,
+  toDeepLTargetLanguage,
+  toGoogleLanguageCode
+} from './language-codes.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -113,56 +120,6 @@ function serializeUser(user) {
     languages: getUserLanguages(user.id),
     appLang: user.appLang || null
   };
-}
-
-function normalizeTargetLanguage(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-CA') return 'FR';
-  if (code === 'FR-FR') return 'FR-FR';
-  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
-  return code;
-}
-
-function normalizeSourceLanguage(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (!code) return '';
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-CA') return 'FR';
-  if (code === 'FR-FR') return 'FR-FR';
-  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
-  return '';
-}
-
-function toGoogleLanguageCode(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'en';
-  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'pt-BR';
-  if (code === 'FR' || code === 'FR-CA') return 'fr';
-  if (code === 'FR-FR') return 'fr-FR';
-  if (code === 'ES-AR') return 'es-AR';
-  if (code === 'ES' || code === 'ES-419') return 'es';
-  return code.toLowerCase();
-}
-
-function toDeepLTargetLanguage(value) {
-  const code = normalizeTargetLanguage(value);
-  if (code === 'ES-AR') return 'ES';
-  if (code === 'FR-FR') return 'FR';
-  return code;
-}
-
-function normalizeDetectedSourceLanguage(value) {
-  const code = String(value || '').trim().toUpperCase();
-  if (!code) return '';
-  if (code === 'EN' || code === 'EN-US' || code === 'EN-GB') return 'EN';
-  if (code === 'PT' || code === 'PT-BR' || code === 'PT-PT' || code === 'PB') return 'PT-BR';
-  if (code === 'FR' || code === 'FR-CA') return 'FR';
-  if (code === 'FR-FR') return 'FR-FR';
-  if (code === 'ES' || code === 'ES-AR' || code === 'ES-419') return 'ES-AR';
-  return code;
 }
 
 function countWordsIgnoringPunctuation(text) {

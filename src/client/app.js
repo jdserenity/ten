@@ -43,6 +43,7 @@ import {
   shouldShowSettingsAddLanguageButton,
   sortLangPickerOptionsByLabel,
   swapTranslateDirection as swapTranslateDirectionPair,
+  translateInputLanguageTag,
   userHasLearningLanguages,
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
@@ -1784,7 +1785,7 @@ async function setLearningMode(modeId, options = {}) {
     updateFrequencyModeLabel();
     fillSettingsInputs();
 
-    if (resetTranslate) clearTranslateDraft();
+    if (resetTranslate) clearTranslateResult();
 
     try {
       await Promise.all([
@@ -2576,6 +2577,10 @@ function updateTranslateDirectionUi() {
   const fromCaption = document.getElementById('translate-from-caption');
   const fromLabel = document.getElementById('translate-from-label');
   const toLabel = document.getElementById('translate-to-label');
+  const translateInput = document.getElementById('translate-input');
+  const inputLanguage = translateInputLanguageTag(state.settings.translateSource);
+  if (translateInput && inputLanguage) translateInput.lang = inputLanguage;
+  else translateInput?.removeAttribute('lang');
   if (!fromLabel || !toLabel || !fromCaption || !fromSide) return;
 
   if (!hasUserLearningLanguages()) {
@@ -2616,7 +2621,8 @@ function swapTranslateDirection() {
   state.settings.translateTarget = swapped.target;
   state.lastDetectedSourceLang = '';
   updateTranslateDirectionUi();
-  clearTranslateDraft();
+  clearTranslateResult();
+  focusTranslateInputAtEnd();
 }
 
 function clearTranslateFrequencyRank() {
@@ -2626,9 +2632,7 @@ function clearTranslateFrequencyRank() {
   outputEl.className = 'frequency-meta';
 }
 
-function clearTranslateDraft() {
-  const translateInput = document.getElementById('translate-input');
-  translateInput.value = '';
+function clearTranslateResult() {
   document.getElementById('translate-result-text').textContent = '';
   document.getElementById('card-front-input').value = '';
   document.getElementById('card-back-input').value = '';
@@ -2640,8 +2644,19 @@ function clearTranslateDraft() {
   setStatus('quick-add-status', '');
   setStatus('card-save-status', '');
   updateTranslateResultUi();
+}
+
+function focusTranslateInputAtEnd() {
+  const translateInput = document.getElementById('translate-input');
+  const cursor = translateInput.value.length;
   translateInput.focus({ preventScroll: true });
-  translateInput.setSelectionRange(0, 0);
+  translateInput.setSelectionRange(cursor, cursor);
+}
+
+function clearTranslateDraft() {
+  document.getElementById('translate-input').value = '';
+  clearTranslateResult();
+  focusTranslateInputAtEnd();
 }
 
 function setupFrequencyEvents() {

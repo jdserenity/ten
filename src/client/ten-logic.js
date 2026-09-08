@@ -100,6 +100,16 @@ export function canonicalizeTranslateLanguage(value) {
   return '';
 }
 
+export function translateInputLanguageTag(value) {
+  const language = canonicalizeTranslateLanguage(value);
+  if (language === 'EN') return 'en';
+  if (language === 'PT-BR') return 'pt-BR';
+  if (language === 'FR') return 'fr-CA';
+  if (language === 'FR-FR') return 'fr-FR';
+  if (language === 'ES-AR') return 'es-AR';
+  return '';
+}
+
 export function countWordsIgnoringPunctuation(text) {
   const matches = String(text || '').match(/[\p{L}\p{N}]+(?:['’\-][\p{L}\p{N}]+)*/gu);
   return matches ? matches.length : 0;

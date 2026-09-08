@@ -1,152 +1,152 @@
 [
   {
-    "word": "hombre",
-    "level": "A1",
-    "translation": "man",
+    "word": "acuerdo",
+    "level": "B1",
+    "translation": "agreement; arrangement",
     "sentences": [
-      { "es": "El hombre de la panadería siempre saluda con una sonrisa.", "en": "The man at the bakery always greets us with a smile." },
-      { "es": "Dos hombres nos ayudaron a empujar la camioneta.", "en": "Two men helped us push the SUV." },
-      { "es": "Mi abuelo fue un hombre muy querido en su comunidad.", "en": "My grandfather was a much-loved man in his community." }
+      { "es": "Llegamos a un acuerdo después de conversar toda la tarde.", "en": "We reached an agreement after talking all afternoon." },
+      { "es": "El acuerdo con el arrendador vence a finales de año.", "en": "The agreement with the landlord expires at the end of the year." },
+      { "es": "Ustedes deben respetar los acuerdos que firmaron.", "en": "You must honor the agreements you signed." }
     ]
   },
   {
-    "word": "hacer",
-    "level": "A1",
-    "translation": "to do, to make",
+    "word": "vergüenza",
+    "level": "B1",
+    "translation": "embarrassment; shame",
     "sentences": [
-      { "es": "Voy a hacer arepas para el desayuno de mañana.", "en": "I am going to make arepas for tomorrow's breakfast." },
-      { "es": "Mi hermana hace ejercicios cerca del Ávila cada tarde.", "en": "My sister exercises near El Ávila every afternoon." },
-      { "es": "Ayer hicimos todas las diligencias antes del mediodía.", "en": "Yesterday we ran all our errands before noon." }
+      { "es": "Me dio vergüenza admitir que había olvidado su nombre.", "en": "I was embarrassed to admit that I had forgotten his name." },
+      { "es": "La corrupción debería causar vergüenza, no indiferencia.", "en": "Corruption should cause shame, not indifference." },
+      { "es": "Contó sus vergüenzas con tanta gracia que todos se rieron.", "en": "She recounted her embarrassing moments so humorously that everyone laughed." }
     ]
   },
   {
-    "word": "mejor",
-    "level": "A1",
-    "translation": "better; best",
+    "word": "pendiente",
+    "level": "B2",
+    "translation": "pending; attentive, keeping an eye on",
     "sentences": [
-      { "es": "Esta ruta es mejor cuando hay mucho tráfico en Caracas.", "en": "This route is better when there is heavy traffic in Caracas." },
-      { "es": "Compramos los mejores cambures que había en el mercado.", "en": "We bought the best bananas available at the market." },
-      { "es": "Hoy me siento mejor después de descansar toda la mañana.", "en": "Today I feel better after resting all morning." }
+      { "es": "El trámite sigue pendiente porque falta una constancia.", "en": "The paperwork is still pending because a certificate is missing." },
+      { "es": "Quedé pendiente de tu mensaje para salir hacia Chacao.", "en": "I kept an eye out for your message before leaving for Chacao." },
+      { "es": "Tenemos varios asuntos pendientes para la próxima reunión.", "en": "We have several outstanding matters for the next meeting." }
     ]
   },
   {
-    "word": "casa",
-    "level": "A1",
-    "translation": "house, home",
+    "word": "delicado",
+    "level": "B2",
+    "translation": "delicate; sensitive, serious",
     "sentences": [
-      { "es": "Mi casa queda a pocas cuadras de la estación del metro.", "en": "My house is a few blocks from the metro station." },
-      { "es": "Buscamos casas tranquilas por esta zona de Caracas.", "en": "We are looking for quiet houses around this part of Caracas." },
-      { "es": "Volví a casa antes de que comenzara el aguacero.", "en": "I returned home before the downpour began." }
+      { "es": "Es un tema delicado y conviene hablarlo con calma.", "en": "It is a sensitive subject, and it is best discussed calmly." },
+      { "es": "La situación se volvió delicada cuando cerraron la vía.", "en": "The situation became serious when they closed the road." },
+      { "es": "Guardaron las piezas delicadas en cajas separadas.", "en": "They stored the delicate pieces in separate boxes." }
     ]
   },
   {
-    "word": "vida",
-    "level": "A1",
-    "translation": "life",
+    "word": "riesgo",
+    "level": "B1",
+    "translation": "risk",
     "sentences": [
-      { "es": "La vida en la ciudad empezó temprano entre semana.", "en": "Life in the city started early on weekdays." },
-      { "es": "Sus vidas cambiaron cuando se mudaron a Caracas.", "en": "Their lives changed when they moved to Caracas." },
-      { "es": "Quiero llevar una vida tranquila cerca de mi familia.", "en": "I want to lead a quiet life near my family." }
+      { "es": "Existe el riesgo de que el aguacero retrase el vuelo.", "en": "There is a risk that the downpour will delay the flight." },
+      { "es": "Evaluamos los riesgos antes de aceptar la propuesta.", "en": "We evaluated the risks before accepting the proposal." },
+      { "es": "Corres un riesgo innecesario si manejas con sueño.", "en": "You are taking an unnecessary risk if you drive while sleepy." }
     ]
   },
   {
-    "word": "hijo",
-    "level": "A1",
-    "translation": "son; child",
+    "word": "plazo",
+    "level": "B2",
+    "translation": "deadline; term, period",
     "sentences": [
-      { "es": "Mi hijo tomó la camioneta para llegar al colegio.", "en": "My son took the minibus to get to school." },
-      { "es": "Sus hijas estudian juntas todas las tardes.", "en": "Their daughters study together every afternoon." },
-      { "es": "Ellos tienen dos hijos que viven en La Candelaria.", "en": "They have two children who live in La Candelaria." }
+      { "es": "El plazo para entregar los documentos vence mañana.", "en": "The deadline for submitting the documents is tomorrow." },
+      { "es": "Negociaron plazos más flexibles para pagar la deuda.", "en": "They negotiated more flexible terms for paying the debt." },
+      { "es": "A largo plazo, mudarnos más cerca reducirá el trayecto.", "en": "In the long term, moving closer will shorten the commute." }
     ]
   },
   {
-    "word": "mamá",
-    "level": "A1",
-    "translation": "mom, mother",
+    "word": "conseguir",
+    "level": "B1",
+    "translation": "to obtain; to manage to",
     "sentences": [
-      { "es": "Mi mamá compra verduras frescas en el mercado de Chacao.", "en": "My mom buys fresh vegetables at the Chacao market." },
-      { "es": "Las mamás conversaron mientras los chamos jugaban.", "en": "The mothers chatted while the kids played." },
-      { "es": "Le escribí a mamá para avisarle que llegaría tarde.", "en": "I texted Mom to let her know I would arrive late." }
+      { "es": "Espero conseguir una cita antes de que termine el mes.", "en": "I hope to get an appointment before the end of the month." },
+      { "es": "Mi pana consiguió trabajo después de varias entrevistas.", "en": "My friend got a job after several interviews." },
+      { "es": "Ustedes han conseguido avanzar a pesar de las dificultades.", "en": "You have managed to make progress despite the difficulties." }
     ]
   },
   {
-    "word": "tiempo",
-    "level": "A1",
-    "translation": "time; weather",
+    "word": "evitar",
+    "level": "B1",
+    "translation": "to avoid; to prevent",
     "sentences": [
-      { "es": "Hoy tengo tiempo para tomar un café con mis panas.", "en": "Today I have time to have coffee with my friends." },
-      { "es": "Pasamos mucho tiempo esperando la camioneta.", "en": "We spent a long time waiting for the minibus." },
-      { "es": "El tiempo está fresco después de la lluvia.", "en": "The weather is cool after the rain." }
+      { "es": "Salimos temprano para evitar la cola en la autopista.", "en": "We left early to avoid the traffic jam on the highway." },
+      { "es": "Ella evitó responder hasta conocer todos los detalles.", "en": "She avoided answering until she knew all the details." },
+      { "es": "Estas medidas evitan que el problema vuelva a ocurrir.", "en": "These measures prevent the problem from happening again." }
     ]
   },
   {
-    "word": "dinero",
-    "level": "A1",
-    "translation": "money",
+    "word": "mantener",
+    "level": "B1",
+    "translation": "to maintain; to keep",
     "sentences": [
-      { "es": "No tengo suficiente dinero para comprar esa franela.", "en": "I do not have enough money to buy that T-shirt." },
-      { "es": "Guardamos el dinero para pagar el alquiler este mes.", "en": "We saved the money to pay the rent this month." },
-      { "es": "¿Cuánto dinero necesitan ustedes para el pasaje?", "en": "How much money do you need for the fare?" }
+      { "es": "Cuesta mantener la calma cuando el metro se detiene.", "en": "It is hard to remain calm when the metro stops." },
+      { "es": "Mantén los recibos por si necesitas hacer un reclamo.", "en": "Keep the receipts in case you need to make a complaint." },
+      { "es": "Los vecinos mantuvieron limpia la plaza durante el evento.", "en": "The neighbors kept the square clean during the event." }
     ]
   },
   {
-    "word": "día",
-    "level": "A1",
-    "translation": "day",
+    "word": "manejar",
+    "level": "B1",
+    "translation": "to drive; to manage, handle",
     "sentences": [
-      { "es": "Hoy será un día chévere para caminar por Los Próceres.", "en": "Today will be a great day to walk along Los Próceres." },
-      { "es": "Pasamos dos días visitando a la familia.", "en": "We spent two days visiting the family." },
-      { "es": "Tú puedes venir cualquier día después del trabajo.", "en": "You can come any day after work." }
+      { "es": "Tú manejas con prudencia cuando llueve en Caracas.", "en": "You drive carefully when it rains in Caracas." },
+      { "es": "La coordinadora manejó el conflicto con mucha paciencia.", "en": "The coordinator handled the conflict with great patience." },
+      { "es": "Aprender a manejar bien el tiempo requiere práctica.", "en": "Learning to manage time well takes practice." }
     ]
   },
   {
-    "word": "ir",
-    "level": "A1",
-    "translation": "to go",
+    "word": "averiguar",
+    "level": "B1",
+    "translation": "to find out; to investigate",
     "sentences": [
-      { "es": "Quiero ir al centro temprano para evitar el tráfico.", "en": "I want to go downtown early to avoid the traffic." },
-      { "es": "Tú vas en metro y nosotros vamos en camioneta.", "en": "You go by metro, and we go by minibus." },
-      { "es": "Ayer fuimos a comer cachapas con unos panas.", "en": "Yesterday we went to eat cachapas with some friends." }
+      { "es": "Voy a averiguar cuánto cuesta reparar la camioneta.", "en": "I am going to find out how much it costs to repair the SUV." },
+      { "es": "¿Averiguaste por qué suspendieron el servicio de agua?", "en": "Did you find out why they suspended the water service?" },
+      { "es": "Averiguamos quién había enviado el paquete por error.", "en": "We found out who had sent the package by mistake." }
     ]
   },
   {
-    "word": "decir",
-    "level": "A1",
-    "translation": "to say, to tell",
+    "word": "reconocer",
+    "level": "B1",
+    "translation": "to recognize; to acknowledge",
     "sentences": [
-      { "es": "Te voy a decir cómo llegar a Plaza Venezuela.", "en": "I am going to tell you how to get to Plaza Venezuela." },
-      { "es": "Mi pana dice que esa arepera es muy buena.", "en": "My friend says that arepa place is very good." },
-      { "es": "Ustedes dijeron la verdad desde el principio.", "en": "You told the truth from the beginning." }
+      { "es": "No reconocí la avenida después de tantos cambios.", "en": "I did not recognize the avenue after so many changes." },
+      { "es": "Ella reconoce que pudo haber actuado con más cuidado.", "en": "She acknowledges that she could have acted more carefully." },
+      { "es": "Hay que reconocer el esfuerzo de quienes organizaron todo.", "en": "We should acknowledge the effort of those who organized everything." }
     ]
   },
   {
-    "word": "cosa",
-    "level": "A1",
-    "translation": "thing",
+    "word": "resolver",
+    "level": "B1",
+    "translation": "to solve; to manage, find a workaround",
     "sentences": [
-      { "es": "Tengo una cosa importante que contarte esta tarde.", "en": "I have something important to tell you this afternoon." },
-      { "es": "Compramos varias cosas para preparar la cena.", "en": "We bought several things to prepare dinner." },
-      { "es": "Esa fue la cosa más rara que vimos en el camino.", "en": "That was the strangest thing we saw on the way." }
+      { "es": "Resolvimos el problema sin cancelar la reunión.", "en": "We solved the problem without canceling the meeting." },
+      { "es": "En Caracas uno aprende a resolver con lo que tiene.", "en": "In Caracas, you learn to make do with what you have." },
+      { "es": "Tú resolverás más rápido si pides ayuda a tiempo.", "en": "You will sort it out faster if you ask for help in time." }
     ]
   },
   {
-    "word": "trabajo",
-    "level": "A1",
-    "translation": "work, job",
+    "word": "brindar",
+    "level": "B2",
+    "translation": "to provide; to toast",
     "sentences": [
-      { "es": "Tengo bastante trabajo esta semana en la oficina.", "en": "I have quite a lot of work at the office this week." },
-      { "es": "Mi hermana consiguió un trabajo nuevo en Chacao.", "en": "My sister got a new job in Chacao." },
-      { "es": "Salimos del trabajo a las cinco de la tarde.", "en": "We leave work at five in the afternoon." }
+      { "es": "La organización brinda apoyo a las familias afectadas.", "en": "The organization provides support to the affected families." },
+      { "es": "La experiencia nos brindó una perspectiva distinta.", "en": "The experience gave us a different perspective." },
+      { "es": "Brindamos por los logros del equipo al terminar la cena.", "en": "We toasted the team's achievements after dinner." }
     ]
   },
   {
-    "word": "saber",
-    "level": "A1",
-    "translation": "to know; to know how",
+    "word": "aprovechar",
+    "level": "B1",
+    "translation": "to make the most of; to take advantage of",
     "sentences": [
-      { "es": "Quiero saber a qué hora pasa la última camioneta.", "en": "I want to know what time the last minibus passes." },
-      { "es": "Tú sabes preparar unas arepas muy sabrosas.", "en": "You know how to make very tasty arepas." },
-      { "es": "Ellos supieron la noticia cuando llegaron a casa.", "en": "They learned the news when they arrived home." }
+      { "es": "Aprovecha la mañana fresca para caminar por el Ávila.", "en": "Make the most of the cool morning to hike on El Ávila." },
+      { "es": "Aprovechamos el viaje para visitar a unos panas.", "en": "We took advantage of the trip to visit some friends." },
+      { "es": "Quiero aprovechar mejor las oportunidades que aparezcan.", "en": "I want to make better use of the opportunities that arise." }
     ]
   }
 ]

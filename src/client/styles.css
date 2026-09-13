@@ -892,6 +892,22 @@ header h1 {
   padding-top: 14px;
 }
 
+.sentence-translation-toggle {
+  appearance: none;
+  border: 0;
+  background: none;
+  color: inherit;
+  font-family: inherit;
+  text-align: left;
+  padding: 14px 0 0;
+  cursor: pointer;
+}
+
+.sentence-translation-toggle:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
 @keyframes sentence-reveal-in {
   from { opacity: 0; transform: translateY(-8px); }
   to { opacity: 1; transform: none; }

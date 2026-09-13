@@ -1358,7 +1358,13 @@ async function loadDailyGlosses(word) {
   }
 }
 
+function setDailySentenceTranslationVisible(number, visible) {
+  document.getElementById(`s${number}-en`).classList.toggle('hidden', !visible);
+  document.getElementById(`s${number}-l2`).setAttribute('aria-expanded', String(visible));
+}
+
 function collapseDailySentenceReveals() {
+  [1, 2].forEach(number => setDailySentenceTranslationVisible(number, false));
   ['sentence-reveal-1', 'sentence-reveal-2', 'sentence-reveal-3'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.open = false;
@@ -2864,6 +2870,11 @@ function setupModeEvents() {
 }
 
 function setupDailyEvents() {
+  [1, 2].forEach(number => {
+    document.getElementById(`s${number}-l2`).addEventListener('click', () => {
+      setDailySentenceTranslationVisible(number, true);
+    });
+  });
   const reveal1 = document.getElementById('sentence-reveal-1');
   const reveal2 = document.getElementById('sentence-reveal-2');
   const reveal3 = document.getElementById('sentence-reveal-3');

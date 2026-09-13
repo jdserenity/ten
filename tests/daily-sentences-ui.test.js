@@ -67,3 +67,44 @@ test('Add all to review saves the word and only the first two examples', async (
   assert.deepEqual(saved.map(card => card.back), ['bonjour', 'First', 'Second']);
   assert.equal(JSON.stringify(word), original, 'all three stored examples remain intact');
 });
+
+test('context translations start hidden behind keyboard-accessible sentence buttons', () => {
+  for (const number of [1, 2]) {
+    assert.match(html, new RegExp(`<button[^>]*id="s${number}-l2"[^>]*type="button"[^>]*aria-expanded="false"[^>]*aria-controls="s${number}-en"`));
+    assert.match(html, new RegExp(`<span class="sentence-en hidden" id="s${number}-en"`));
+  }
+});
+
+test('click reveals only the saved translation and changing cards hides both again', () => {
+  const elements = new Map();
+  const element = id => {
+    if (!elements.has(id)) elements.set(id, {
+      textContent: id.endsWith('-en') ? `Saved ${id}` : '',
+      hidden: true, attributes: {}, handlers: {}, open: true,
+      classList: { toggle(name, value) { element(id).hidden = value; } },
+      setAttribute(name, value) { this.attributes[name] = value; },
+      addEventListener(event, handler) { this.handlers[event] = handler; }
+    });
+    return elements.get(id);
+  };
+  const context = vm.createContext({
+    document: { getElementById: element },
+    clearSentenceRevealAnimations() {}
+  });
+  const helpers = app.slice(app.indexOf('function setDailySentenceTranslationVisible('), app.indexOf('function sentenceRevealAnimationElements('));
+  const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
+  vm.runInContext(`${helpers}\n${setup}\nsetupDailyEvents(); collapseDailySentenceReveals();`, context);
+  element('s1-l2').handlers.click();
+  assert.equal(element('s1-en').hidden, false);
+  assert.equal(element('s2-en').hidden, true);
+  assert.equal(element('s1-en').textContent, 'Saved s1-en');
+  assert.equal(element('s1-l2').attributes['aria-expanded'], 'true');
+  element('s2-l2').handlers.click();
+  assert.equal(element('s2-en').hidden, false);
+  vm.runInContext('collapseDailySentenceReveals();', context);
+  for (const number of [1, 2]) {
+    assert.equal(element(`s${number}-en`).hidden, true);
+    assert.equal(element(`s${number}-l2`).attributes['aria-expanded'], 'false');
+  }
+  assert.match(app, /shouldResetDailySentenceReveal\(state\.sentenceRevealWord, nextRevealWord\)\)\s*\{\s*collapseDailySentenceReveals\(\)/);
+});

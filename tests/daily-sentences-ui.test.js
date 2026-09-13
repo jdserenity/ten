@@ -108,3 +108,20 @@ test('click reveals only the saved translation and changing cards hides both aga
   }
   assert.match(app, /shouldResetDailySentenceReveal\(state\.sentenceRevealWord, nextRevealWord\)\)\s*\{\s*collapseDailySentenceReveals\(\)/);
 });
+
+test('daily event setup succeeds with only elements present in the current page', () => {
+  const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
+  const context = vm.createContext({
+    document: { getElementById: id => ids.has(id) ? { addEventListener() {} } : null }
+  });
+  const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
+  assert.doesNotThrow(() => vm.runInContext(`${setup}; setupDailyEvents();`, context));
+});
+
+test('the two-example page requests fresh assets instead of the old PWA URLs', () => {
+  const script = html.match(/<script type="module" src="([^"]+)"/)[1];
+  const stylesheet = html.match(/<link rel="stylesheet" href="([^"]+)"/)[1];
+  assert.match(script, /^\/app\.js\?v=.+/);
+  assert.notEqual(script, '/app.js?v=21');
+  assert.match(stylesheet, /^\/styles\.css\?v=.+/);
+});

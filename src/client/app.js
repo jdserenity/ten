@@ -1475,7 +1475,7 @@ function renderDailyWord(index) {
   const s3L2 = document.getElementById('s3-l2'); if (s3L2) s3L2.textContent = thirdSentenceText;
   document.getElementById('counter').textContent = `${index + 1} / ${state.todayWords.length}`;
   document.getElementById('prev-btn').disabled = index === 0;
-  document.getElementById('next-btn').disabled = index === state.todayWords.length - 1;
+  document.getElementById('next-btn').disabled = false;
   document.getElementById('speak-btn').disabled = !word.word || !speakPhraseAllowed();
   document.getElementById('s1-speak-btn').disabled = !firstSentenceText || !speakPhraseAllowed();
   document.getElementById('s2-speak-btn').disabled = !secondSentenceText || !speakPhraseAllowed();
@@ -1487,6 +1487,15 @@ function renderDailyWord(index) {
 
   updateDailyDots();
   maybeCelebrateDailyComplete(index);
+}
+
+function advanceDailyWord() {
+  if (!state.todayWords.length) return;
+  if (state.currentWordIndex === state.todayWords.length - 1) {
+    setActiveTab('review');
+    return;
+  }
+  gotoDailyWord(state.currentWordIndex + 1);
 }
 
 function gotoDailyWord(index) {
@@ -2897,7 +2906,7 @@ function setupDailyEvents() {
     gotoDailyWord(state.currentWordIndex - 1);
   });
   document.getElementById('next-btn').addEventListener('click', () => {
-    gotoDailyWord(state.currentWordIndex + 1);
+    advanceDailyWord();
   });
   document.getElementById('speak-btn').addEventListener('click', () => {
     const word = state.todayWords[state.currentWordIndex];
@@ -2985,7 +2994,7 @@ function setupDailyKeyboard() {
     if (!state.todayWords.length) return;
 
     if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
-      gotoDailyWord(state.currentWordIndex + 1);
+      advanceDailyWord();
     }
     if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
       gotoDailyWord(state.currentWordIndex - 1);

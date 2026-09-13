@@ -67,3 +67,20 @@ test('celebration gates persist and are scoped to the language and day', () => {
   s.run('maybeCelebrateComplete()');
   assert.equal(s.bursts(), 1);
 });
+
+test('Next advances new words and opens Review from the last one', () => {
+  const moves = [];
+  const state = { todayWords: Array(5).fill({}), currentWordIndex: 3 };
+  const context = vm.createContext({ state, gotoDailyWord: index => moves.push(index), setActiveTab: tab => moves.push(tab) });
+  const code = app.slice(app.indexOf('function advanceDailyWord()'), app.indexOf('function gotoDailyWord(index)'));
+  vm.runInContext(`${code}\nadvanceDailyWord();`, context);
+  assert.deepEqual(moves, [4]);
+  state.currentWordIndex = 4;
+  vm.runInContext('advanceDailyWord()', context);
+  assert.deepEqual(moves, [4, 'review']);
+  state.todayWords = [];
+  vm.runInContext('advanceDailyWord()', context);
+  assert.equal(moves.length, 2);
+  assert.match(app, /document.getElementById\('next-btn'\).disabled = false;/);
+  assert.match(app, /getElementById\('next-btn'\).addEventListener\('click', \(\) => \{\s*advanceDailyWord\(\);/);
+});

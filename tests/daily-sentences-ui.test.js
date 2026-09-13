@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import test from 'node:test';
+import vm from 'node:vm';
 
 const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
@@ -45,4 +46,24 @@ test('sentence dropdown CSS uses a rotating triangle and hides nested headers af
   assert.match(styles, /@keyframes\s+sentence-reveal-in/);
   assert.match(styles, /\.sentence-reveal-animating/);
   assert.match(styles, /padding-top:\s*14px/);
+});
+
+test('Add all to review saves the word and only the first two examples', async () => {
+  const handlers = new Map();
+  const saved = [];
+  const word = { word: 'bonjour', sentences: [{ fr: 'First' }, { fr: 'Second' }, { fr: 'Third' }] };
+  const original = JSON.stringify(word);
+  const context = vm.createContext({
+    document: { getElementById: id => ({ addEventListener: (event, handler) => handlers.set(id, handler) }) },
+    state: { todayWords: [word], currentWordIndex: 0, activeTab: 'daily', dailyGlosses: { wordGloss: 'hello', s1Gloss: 'One', s2Gloss: 'Two' } },
+    setStatus() {}, tr: key => key,
+    getSentenceText: sentence => sentence.fr,
+    addCard: async card => { saved.push(card); return true; },
+    addSentenceCardWithGloss: async (back, front) => { saved.push({ front, back }); return true; }
+  });
+  const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
+  vm.runInContext(`${setup}; setupDailyEvents();`, context);
+  await handlers.get('add-all-btn')();
+  assert.deepEqual(saved.map(card => card.back), ['bonjour', 'First', 'Second']);
+  assert.equal(JSON.stringify(word), original, 'all three stored examples remain intact');
 });

@@ -1220,7 +1220,7 @@ function updateDailyAddButtons(word, glosses) {
   const btnS1 = document.getElementById('s1-add-btn'); if (btnS1) btnS1.disabled = !hasS1;
   const btnS2 = document.getElementById('s2-add-btn'); if (btnS2) btnS2.disabled = !hasS2;
   const btnS3 = document.getElementById('s3-add-btn'); if (btnS3) btnS3.disabled = !hasS3;
-  const required = hasWord && hasS1 && hasS2 && (!thirdSentenceText || hasS3);
+  const required = hasWord && hasS1 && hasS2;
   const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !required;
 }
 
@@ -2946,16 +2946,14 @@ function setupDailyEvents() {
     }
     const s1 = word.sentences && word.sentences[0] ? word.sentences[0] : null;
     const s2 = word.sentences && word.sentences[1] ? word.sentences[1] : null;
-    const s3 = word.sentences && word.sentences[2] ? word.sentences[2] : null;
 
     setStatus('daily-save-status', tr('daily.savingCards'));
 
     const wOk = await addCard({ front: state.dailyGlosses.wordGloss, back: word.word }, 'daily-save-status');
     const s1Ok = s1 ? await addSentenceCardWithGloss(getSentenceText(s1), state.dailyGlosses.s1Gloss, 'daily-save-status') : false;
     const s2Ok = s2 ? await addSentenceCardWithGloss(getSentenceText(s2), state.dailyGlosses.s2Gloss, 'daily-save-status') : false;
-    const s3Ok = s3 ? await addSentenceCardWithGloss(getSentenceText(s3), state.dailyGlosses.s3Gloss, 'daily-save-status') : false;
 
-    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0) + (s3Ok ? 1 : 0);
+    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0);
     if (total > 0) {
       setStatus('daily-save-status', total > 1 ? tr('daily.addedCardsPlural', { count: total }) : tr('daily.addedCards', { count: total }), 'success');
     }

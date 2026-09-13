@@ -58,7 +58,7 @@ flowchart LR
 
 Language picker UI is in `index.html` / `app.js` (header `+`, Settings `+`, active flag). Draft checks live in `state.pickerSelectedModeIds` until Add/Save.
 
-Boot (in `app.js`): remembered user → `/api/me` or login → `resolveStartupTab` from localStorage confetti/review gates → `planBootDataLoads` → priority tab data, 5/new glosses via `/api/daily-glosses/ensure` on any tab, the rest in background.
+Boot (in `app.js`): remembered user → `/api/me` or login → `resolveStartupTab` from localStorage new-word completion/review gates → `planBootDataLoads` → priority tab data, 5/new glosses via `/api/daily-glosses/ensure` on any tab, the rest in background.
 
 5/new: pool JSON + unlocked set + saved assignment → `reconcileDailyWords` → `/api/daily-words` + `/api/daily-progress`. Viewing a card unlocks it (`/api/unlocked-words`).
 
@@ -72,8 +72,8 @@ Progress: bundled frequency JSON; green = unlocked set. Translate: `/api/transla
 browser localStorage
   ten-user-v1                         # {id, username} so I stay signed in
   ten-active-mode                     # last learning track (legacy sessionStorage migrated once)
-  ten-daily-confetti-v1:LANG:date     # 5/new celebration already fired
-  ten-review-confetti-v1:LANG:date
+  ten-daily-confetti-v1:LANG:date     # 5/new complete (legacy key retained)
+  ten-complete-confetti-v1:LANG:date  # combined daily celebration already fired
   ten-review-daily-progress-v1:LANG:date   # integer graded toward 5
   ten-seen-daily-words-v1             # leftover; imported to SQLite then removed
 

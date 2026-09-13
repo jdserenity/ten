@@ -1559,17 +1559,17 @@ async function persistDailyCardIndex(cardIndex) {
 
 const DAILY_CONFETTI_STORAGE_PREFIX = 'ten-daily-confetti-v1';
 const REVIEW_DAILY_PROGRESS_PREFIX = 'ten-review-daily-progress-v1';
-const REVIEW_CONFETTI_STORAGE_PREFIX = 'ten-review-confetti-v1';
+const COMPLETE_CONFETTI_STORAGE_PREFIX = 'ten-complete-confetti-v1';
 
 function getDailyConfettiStorageKey() {
   return `${DAILY_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
 }
 
-function hasCelebratedDailyCompleteToday() {
+function hasCompletedDailyWordsToday() {
   return localStorage.getItem(getDailyConfettiStorageKey()) === '1';
 }
 
-function markDailyCompleteCelebrated() {
+function markDailyWordsComplete() {
   localStorage.setItem(getDailyConfettiStorageKey(), '1');
 }
 
@@ -1594,16 +1594,16 @@ function hasCompletedDailyReviewToday() {
   return isDailyReviewComplete(getReviewGradedToday());
 }
 
-function getReviewConfettiStorageKey() {
-  return `${REVIEW_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
+function getCompleteConfettiStorageKey() {
+  return `${COMPLETE_CONFETTI_STORAGE_PREFIX}:${getFrequencyLanguageForMode()}:${dateKey()}`;
 }
 
-function hasCelebratedReviewCompleteToday() {
-  return localStorage.getItem(getReviewConfettiStorageKey()) === '1';
+function hasCelebratedCompleteToday() {
+  return localStorage.getItem(getCompleteConfettiStorageKey()) === '1';
 }
 
-function markReviewCompleteCelebrated() {
-  localStorage.setItem(getReviewConfettiStorageKey(), '1');
+function markCompleteCelebrated() {
+  localStorage.setItem(getCompleteConfettiStorageKey(), '1');
 }
 
 function fireCompleteConfetti() {
@@ -1627,16 +1627,21 @@ function fireCompleteConfetti() {
   }, 180);
 }
 
-function maybeCelebrateDailyComplete(index) {
-  if (index !== WORDS_PER_DAY - 1 || hasCelebratedDailyCompleteToday()) return;
-  markDailyCompleteCelebrated();
+function maybeCelebrateComplete() {
+  if (!hasCompletedDailyWordsToday() || !hasCompletedDailyReviewToday() || hasCelebratedCompleteToday()) return;
+  markCompleteCelebrated();
   fireCompleteConfetti();
 }
 
+function maybeCelebrateDailyComplete(index) {
+  if (state.activeTab !== 'daily' || index !== WORDS_PER_DAY - 1) return;
+  markDailyWordsComplete();
+  maybeCelebrateComplete();
+}
+
 function maybeCelebrateReviewComplete(gradedCount) {
-  if (gradedCount < DAILY_REVIEW_GOAL || hasCelebratedReviewCompleteToday()) return;
-  markReviewCompleteCelebrated();
-  fireCompleteConfetti();
+  if (gradedCount < DAILY_REVIEW_GOAL) return;
+  maybeCelebrateComplete();
 }
 
 function buildReviewDots() {
@@ -3229,7 +3234,7 @@ async function bootApp() {
   const nextMode = resolveActiveModeForUser();
   if (nextMode) state.activeMode = nextMode;
   const startupTab = resolveStartupTab({
-    dailyCompleteToday: hasCelebratedDailyCompleteToday(),
+    dailyCompleteToday: hasCompletedDailyWordsToday(),
     reviewCompleteToday: hasCompletedDailyReviewToday()
   });
 

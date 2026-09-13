@@ -2897,11 +2897,6 @@ function setupDailyEvents() {
     const text = word && word.sentences && word.sentences[1] ? getSentenceText(word.sentences[1]) : '';
     speakText(text, document.getElementById('s2-speak-btn'));
   });
-  document.getElementById('s3-speak-btn').addEventListener('click', () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const text = word && word.sentences && word.sentences[2] ? getSentenceText(word.sentences[2]) : '';
-    speakText(text, document.getElementById('s3-speak-btn'));
-  });
 
   // Small + buttons (beside word and each sentence)
   document.getElementById('word-add-btn').addEventListener('click', async () => {
@@ -2941,16 +2936,6 @@ function setupDailyEvents() {
     await addSentenceCardWithGloss(l2, state.dailyGlosses.s2Gloss, 'daily-save-status');
   });
 
-  document.getElementById('s3-add-btn').addEventListener('click', async () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const sent = word && word.sentences && word.sentences[2] ? word.sentences[2] : null;
-    if (!sent) {
-      setStatus('daily-save-status', tr('daily.noSentence'), 'error');
-      return;
-    }
-    const l2 = getSentenceText(sent);
-    await addSentenceCardWithGloss(l2, state.dailyGlosses.s3Gloss, 'daily-save-status');
-  });
 
   // Bottom "Add all to review" — adds word + each example sentence as cards
   document.getElementById('add-all-btn').addEventListener('click', async () => {

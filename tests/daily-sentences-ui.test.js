@@ -9,10 +9,10 @@ const styles = readFileSync(new URL('../src/client/styles.css', import.meta.url)
 test('5/new example sentences are nested dropdowns collapsed by default', () => {
   assert.match(html, /<details id="sentence-reveal-1" class="sentence-reveal">/);
   assert.match(html, /<details id="sentence-reveal-2" class="sentence-reveal sentence-reveal-nested">/);
-  assert.match(html, /<details id="sentence-reveal-3" class="sentence-reveal sentence-reveal-nested">/);
+  assert.doesNotMatch(html, /id="(?:sentence-reveal-3|s3-[^"]+)"/);
   assert.doesNotMatch(html, /id="sentence-reveal-[123]"[^>]*\sopen/);
 
-  const order = ['sentence-reveal-1', 's1-l2', 'sentence-reveal-2', 's2-l2', 'sentence-reveal-3', 's3-l2']
+  const order = ['sentence-reveal-1', 's1-l2', 'sentence-reveal-2', 's2-l2']
     .map(id => html.indexOf(`id="${id}"`));
   assert.ok(order.every(index => index >= 0), 'nested sentence dropdown ids exist');
   assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals the next sentence, then another dropdown');

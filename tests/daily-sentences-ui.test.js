@@ -125,3 +125,9 @@ test('the two-example page requests fresh assets instead of the old PWA URLs', (
   assert.notEqual(script, '/app.js?v=21');
   assert.match(stylesheet, /^\/styles\.css\?v=.+/);
 });
+
+test('revealed translations fade and slide in while respecting reduced motion', () => {
+  assert.match(styles, /\.sentence-en:not\(\.hidden\),\s*\.sentence-reveal-animating\s*\{\s*animation: sentence-reveal-in 0\.32s ease;/);
+  assert.match(styles, /@keyframes sentence-reveal-in\s*\{\s*from\s*\{ opacity: 0; transform: translateY\(-8px\); \}\s*to\s*\{ opacity: 1; transform: none;/);
+  assert.match(styles, /@media \(prefers-reduced-motion: reduce\)\s*\{[\s\S]*?\.sentence-en:not\(\.hidden\),\s*\.sentence-reveal-animating \{ animation: none; \}/);
+});

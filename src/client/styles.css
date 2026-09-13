@@ -913,12 +913,14 @@ header h1 {
   to { opacity: 1; transform: none; }
 }
 
+.sentence-en:not(.hidden),
 .sentence-reveal-animating {
   animation: sentence-reveal-in 0.32s ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .sentence-reveal > summary.sentences-label::after { transition: none; }
+  .sentence-en:not(.hidden),
   .sentence-reveal-animating { animation: none; }
 }
 

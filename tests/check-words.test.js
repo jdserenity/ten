@@ -2,7 +2,7 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { checkWordPool, isGlueHeadword } from '../scripts/check-words.js';
 
-const frMeta = { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] };
+const frMeta = { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [2, 3] };
 const ptMeta = { sentenceKey: 'pt', requireDiacritics: true, allowedSentenceCounts: [2, 3] };
 
 function frCard(overrides = {}) {
@@ -40,12 +40,19 @@ describe('checkWordPool', () => {
     assert.match(result.errors.join('\n'), /glue/);
   });
 
-  it('rejects wrong sentence count', () => {
+  it('accepts the two example sentences required for new French cards', () => {
     const card = frCard();
     card.sentences = card.sentences.slice(0, 2);
     const result = checkWordPool([card], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, true, result.errors.join('; '));
+  });
+
+  it('rejects a wrong sentence count', () => {
+    const card = frCard();
+    card.sentences = card.sentences.slice(0, 1);
+    const result = checkWordPool([card], frMeta, 'words.fr-fr.json');
     assert.equal(result.ok, false);
-    assert.match(result.errors.join('\n'), /expected 3/);
+    assert.match(result.errors.join('\n'), /expected 2 or 3/);
   });
 
   it('rejects ASCII-only French entries', () => {

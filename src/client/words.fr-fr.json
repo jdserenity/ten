@@ -2943,5 +2943,140 @@
         "en": "The shopping bags are heavy."
       }
     ]
+  },
+  {
+    "word": "voyage",
+    "level": "A2",
+    "translation": "trip, journey",
+    "sentences": [
+      { "fr": "Notre voyage en Bretagne débute samedi matin.", "en": "Our trip to Brittany starts on Saturday morning." },
+      { "fr": "Elle raconte son voyage avec beaucoup d'enthousiasme.", "en": "She talks about her journey with great enthusiasm." }
+    ]
+  },
+  {
+    "word": "voisin",
+    "level": "A2",
+    "translation": "neighbour",
+    "sentences": [
+      { "fr": "Mon voisin prête souvent ses outils aux habitants de l'immeuble.", "en": "My neighbour often lends his tools to the building's residents." },
+      { "fr": "Nous avons invité nos voisins à prendre un café dimanche.", "en": "We invited our neighbours for coffee on Sunday." }
+    ]
+  },
+  {
+    "word": "cuisine",
+    "level": "A2",
+    "translation": "kitchen; cooking",
+    "sentences": [
+      { "fr": "La cuisine est assez grande pour préparer le dîner ensemble.", "en": "The kitchen is big enough to prepare dinner together." },
+      { "fr": "Il aime la cuisine italienne et apprend de nouvelles recettes.", "en": "He likes Italian cooking and is learning new recipes." }
+    ]
+  },
+  {
+    "word": "choisir",
+    "level": "A2",
+    "translation": "to choose",
+    "sentences": [
+      { "fr": "Tu peux choisir une activité pour samedi après-midi.", "en": "You can choose an activity for Saturday afternoon." },
+      { "fr": "Nous avons choisi un hôtel près de la gare.", "en": "We chose a hotel near the train station." }
+    ]
+  },
+  {
+    "word": "oublier",
+    "level": "A2",
+    "translation": "to forget",
+    "sentences": [
+      { "fr": "N'oublie pas tes clés avant de partir au travail.", "en": "Don't forget your keys before leaving for work." },
+      { "fr": "J'ai oublié le nom du restaurant que tu conseillais.", "en": "I forgot the name of the restaurant you recommended." }
+    ]
+  },
+  {
+    "word": "réussir",
+    "level": "A2",
+    "translation": "to succeed; to manage",
+    "sentences": [
+      { "fr": "Elle a réussi son examen de conduite du premier coup.", "en": "She passed her driving test on the first try." },
+      { "fr": "Nous réussirons à finir le projet avant vendredi.", "en": "We will manage to finish the project before Friday." }
+    ]
+  },
+  {
+    "word": "quartier",
+    "level": "A2",
+    "translation": "neighbourhood, district",
+    "sentences": [
+      { "fr": "Ce quartier est calme le soir après la fermeture des magasins.", "en": "This neighbourhood is quiet in the evening after the shops close." },
+      { "fr": "Ils cherchent un appartement dans un quartier proche du métro.", "en": "They are looking for a flat in a neighbourhood near the metro." }
+    ]
+  },
+  {
+    "word": "habitude",
+    "level": "A2",
+    "translation": "habit",
+    "sentences": [
+      { "fr": "J'ai l'habitude de marcher jusqu'à la boulangerie le matin.", "en": "I am used to walking to the bakery in the morning." },
+      { "fr": "Prendre le train est devenu une habitude pour son travail.", "en": "Taking the train has become a habit for her work." }
+    ]
+  },
+  {
+    "word": "proposer",
+    "level": "A2",
+    "translation": "to suggest, offer",
+    "sentences": [
+      { "fr": "Le serveur propose le plat du jour avec une salade.", "en": "The waiter offers the dish of the day with a salad." },
+      { "fr": "Je te propose de nous retrouver devant le cinéma.", "en": "I suggest that we meet in front of the cinema." }
+    ]
+  },
+  {
+    "word": "inviter",
+    "level": "A2",
+    "translation": "to invite",
+    "sentences": [
+      { "fr": "Ils invitent leurs amis à dîner vendredi soir.", "en": "They are inviting their friends to dinner on Friday evening." },
+      { "fr": "Ma collègue m'a invité à son anniversaire samedi.", "en": "My colleague invited me to her birthday on Saturday." }
+    ]
+  },
+  {
+    "word": "décider",
+    "level": "A2",
+    "translation": "to decide",
+    "sentences": [
+      { "fr": "On doit décider du lieu avant de réserver les billets.", "en": "We need to decide on the place before booking the tickets." },
+      { "fr": "Elle a décidé de suivre des cours de dessin le soir.", "en": "She decided to take drawing classes in the evening." }
+    ]
+  },
+  {
+    "word": "préparer",
+    "level": "A2",
+    "translation": "to prepare",
+    "sentences": [
+      { "fr": "Je prépare mes affaires la veille de chaque voyage.", "en": "I prepare my things the day before every trip." },
+      { "fr": "Nous avons préparé une tarte aux pommes pour le dessert.", "en": "We prepared an apple tart for dessert." }
+    ]
+  },
+  {
+    "word": "sourire",
+    "level": "A2",
+    "translation": "smile; to smile",
+    "sentences": [
+      { "fr": "Son sourire a rassuré les enfants avant le spectacle.", "en": "Her smile reassured the children before the show." },
+      { "fr": "Le bébé sourit dès qu'il entend la voix de sa mère.", "en": "The baby smiles as soon as he hears his mother's voice." }
+    ]
+  },
+  {
+    "word": "conseil",
+    "level": "A2",
+    "translation": "advice, tip",
+    "sentences": [
+      { "fr": "Le médecin lui a donné un conseil simple pour mieux dormir.", "en": "The doctor gave her a simple piece of advice for sleeping better." },
+      { "fr": "Tes conseils m'ont aidé à choisir un bon ordinateur.", "en": "Your advice helped me choose a good computer." }
+    ]
+  },
+  {
+    "word": "réparer",
+    "level": "A2",
+    "translation": "to repair, fix",
+    "sentences": [
+      { "fr": "Le mécanicien répare ma voiture depuis ce matin.", "en": "The mechanic has been fixing my car since this morning." },
+      { "fr": "Tu peux réparer cette chaise avant l'arrivée des invités ?", "en": "Can you fix this chair before the guests arrive?" }
+    ]
   }
 ]

@@ -21,7 +21,7 @@ const POOL_META = {
     legacySoft: true
   },
   'words.fr-ca.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] },
-  'words.fr-fr.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] },
+  'words.fr-fr.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [2, 3] },
   'words.es-ar.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] },
   'words.es-ve.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] }
 };

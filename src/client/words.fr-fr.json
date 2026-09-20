@@ -3213,5 +3213,140 @@
       { "fr": "Je marche jusqu'au bureau quand il fait beau.", "en": "I walk to the office when the weather is nice." },
       { "fr": "Mon ordinateur a marché après la mise à jour.", "en": "My computer worked after the update." }
     ]
+  },
+  {
+    "word": "vieux",
+    "level": "A1",
+    "translation": "old",
+    "sentences": [
+      { "fr": "Mon grand-père vit dans un vieux village près de Lyon.", "en": "My grandfather lives in an old village near Lyon." },
+      { "fr": "Cette maison est vieille, mais elle reste très solide.", "en": "This house is old, but it remains very sturdy." }
+    ]
+  },
+  {
+    "word": "minute",
+    "level": "A1",
+    "translation": "minute",
+    "sentences": [
+      { "fr": "Le bus arrive dans cinq minutes, alors dépêchons-nous.", "en": "The bus arrives in five minutes, so let us hurry." },
+      { "fr": "Attends une minute, je cherche encore mes clés.", "en": "Wait a minute, I am still looking for my keys." }
+    ]
+  },
+  {
+    "word": "facile",
+    "level": "A1",
+    "translation": "easy",
+    "sentences": [
+      { "fr": "Cette recette est facile à préparer le soir.", "en": "This recipe is easy to prepare in the evening." },
+      { "fr": "Les exercices étaient faciles pour toute la classe.", "en": "The exercises were easy for the whole class." }
+    ]
+  },
+  {
+    "word": "heureux",
+    "level": "A1",
+    "translation": "happy",
+    "sentences": [
+      { "fr": "Je suis heureux de retrouver mes amis ce week-end.", "en": "I am happy to see my friends again this weekend." },
+      { "fr": "Elles étaient heureuses après la bonne nouvelle.", "en": "They were happy after the good news." }
+    ]
+  },
+  {
+    "word": "lit",
+    "level": "A1",
+    "translation": "bed",
+    "sentences": [
+      { "fr": "Le chat dort sur le lit près de la fenêtre.", "en": "The cat sleeps on the bed near the window." },
+      { "fr": "J'ai fait les lits avant l'arrivée des invités.", "en": "I made the beds before the guests arrived." }
+    ]
+  },
+  {
+    "word": "chien",
+    "level": "A1",
+    "translation": "dog",
+    "sentences": [
+      { "fr": "Le chien attend son maître devant la boulangerie.", "en": "The dog waits for its owner in front of the bakery." },
+      { "fr": "Nos chiens aiment courir dans le jardin après la pluie.", "en": "Our dogs like running in the garden after the rain." }
+    ]
+  },
+  {
+    "word": "photo",
+    "level": "A1",
+    "translation": "photo",
+    "sentences": [
+      { "fr": "Cette photo montre notre famille pendant les vacances.", "en": "This photo shows our family during the holidays." },
+      { "fr": "Il a envoyé des photos de son séjour à Marseille.", "en": "He sent photos from his stay in Marseille." }
+    ]
+  },
+  {
+    "word": "musique",
+    "level": "A1",
+    "translation": "music",
+    "sentences": [
+      { "fr": "J'écoute de la musique en préparant le dîner.", "en": "I listen to music while preparing dinner." },
+      { "fr": "La musique était trop forte dans le café hier soir.", "en": "The music was too loud in the café last night." }
+    ]
+  },
+  {
+    "word": "marché",
+    "level": "A1",
+    "translation": "market",
+    "sentences": [
+      { "fr": "Le marché du samedi vend des légumes très frais.", "en": "The Saturday market sells very fresh vegetables." },
+      { "fr": "Nous allons au marché avant de préparer le repas.", "en": "We go to the market before preparing the meal." }
+    ]
+  },
+  {
+    "word": "malade",
+    "level": "A1",
+    "translation": "ill, sick",
+    "sentences": [
+      { "fr": "Ma sœur est malade et reste à la maison aujourd'hui.", "en": "My sister is ill and is staying home today." },
+      { "fr": "Les enfants étaient malades après le voyage.", "en": "The children were ill after the trip." }
+    ]
+  },
+  {
+    "word": "table",
+    "level": "A1",
+    "translation": "table",
+    "sentences": [
+      { "fr": "Les assiettes sont déjà sur la table pour le dîner.", "en": "The plates are already on the table for dinner." },
+      { "fr": "Nous avons choisi une table près de la terrasse.", "en": "We chose a table near the terrace." }
+    ]
+  },
+  {
+    "word": "noir",
+    "level": "A1",
+    "translation": "black",
+    "sentences": [
+      { "fr": "Il porte un pull noir pour aller au travail.", "en": "He wears a black sweater to go to work." },
+      { "fr": "Les chaussures noires sont près de l'entrée.", "en": "The black shoes are near the entrance." }
+    ]
+  },
+  {
+    "word": "café",
+    "level": "A1",
+    "translation": "coffee; café",
+    "sentences": [
+      { "fr": "Je prends un café chaud avant de commencer la journée.", "en": "I have a hot coffee before starting the day." },
+      { "fr": "Le petit café près de la gare ferme à dix-huit heures.", "en": "The small café near the station closes at six p.m." }
+    ]
+  },
+  {
+    "word": "yeux",
+    "level": "A1",
+    "translation": "eyes",
+    "sentences": [
+      { "fr": "Elle a les yeux bleus comme ceux de sa mère.", "en": "She has blue eyes like her mother's." },
+      { "fr": "Ferme les yeux pendant quelques minutes pour te reposer.", "en": "Close your eyes for a few minutes to rest." }
+    ]
+  },
+  {
+    "word": "film",
+    "level": "A1",
+    "translation": "film, movie",
+    "sentences": [
+      { "fr": "Nous regardons un film français après le dîner.", "en": "We are watching a French film after dinner." },
+      { "fr": "Ce film était mon préféré quand j'étais enfant.", "en": "This film was my favourite when I was a child." }
+    ]
   }
 ]

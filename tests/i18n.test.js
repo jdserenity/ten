@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import test from 'node:test';
 import {
   appLangToApiCode,
@@ -10,6 +11,8 @@ import {
   resolveAppLang,
   t
 } from '../src/client/i18n.js';
+
+const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
 
 test('normalizeAppLang maps browser tags to supported locales', () => {
   assert.equal(normalizeAppLang('en'), 'en');
@@ -101,6 +104,11 @@ test('tab labels are 5/new, 5/review, and Progress', () => {
   assert.equal(t('pt-BR', 'tab.daily'), '5/novas');
   assert.equal(t('pt-BR', 'tab.review'), '5/revisar');
   assert.equal(t('pt-BR', 'tab.frequency'), 'Progresso');
+});
+
+test('Translate is the third tab and Progress is the fourth tab', () => {
+  const tabs = [...html.matchAll(/<button class="top-tab(?: active)?" data-tab="([^"]+)"/g)].map(match => match[1]);
+  assert.deepEqual(tabs, ['daily', 'review', 'translate', 'frequency']);
 });
 
 test('dialect step title is Which language', () => {

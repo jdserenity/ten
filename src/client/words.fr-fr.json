@@ -3078,5 +3078,140 @@
       { "fr": "Le mécanicien répare ma voiture depuis ce matin.", "en": "The mechanic has been fixing my car since this morning." },
       { "fr": "Tu peux réparer cette chaise avant l'arrivée des invités ?", "en": "Can you fix this chair before the guests arrive?" }
     ]
+  },
+  {
+    "word": "porter",
+    "level": "A2",
+    "translation": "to carry, wear",
+    "sentences": [
+      { "fr": "Je porte un manteau épais quand il fait froid.", "en": "I wear a thick coat when it is cold." },
+      { "fr": "Elle a porté les courses jusqu'à la voiture.", "en": "She carried the groceries to the car." }
+    ]
+  },
+  {
+    "word": "rencontrer",
+    "level": "A2",
+    "translation": "to meet, encounter",
+    "sentences": [
+      { "fr": "Nous rencontrons nos amis près de la mairie à midi.", "en": "We are meeting our friends near the town hall at noon." },
+      { "fr": "J'ai rencontré mon voisin dans le train hier soir.", "en": "I met my neighbour on the train last night." }
+    ]
+  },
+  {
+    "word": "expliquer",
+    "level": "A2",
+    "translation": "to explain",
+    "sentences": [
+      { "fr": "Le professeur explique la règle avec un exemple simple.", "en": "The teacher explains the rule with a simple example." },
+      { "fr": "Elle m'a expliqué comment utiliser cette application.", "en": "She explained how to use this app to me." }
+    ]
+  },
+  {
+    "word": "continuer",
+    "level": "A2",
+    "translation": "to continue",
+    "sentences": [
+      { "fr": "Il continue à apprendre le français chaque soir.", "en": "He continues to learn French every evening." },
+      { "fr": "Nous avons continué la promenade malgré la pluie.", "en": "We continued the walk despite the rain." }
+    ]
+  },
+  {
+    "word": "changer",
+    "level": "A2",
+    "translation": "to change",
+    "sentences": [
+      { "fr": "Le temps change souvent après le déjeuner en montagne.", "en": "The weather often changes after lunch in the mountains." },
+      { "fr": "J'ai changé de place pour mieux voir la scène.", "en": "I changed seats to see the stage better." }
+    ]
+  },
+  {
+    "word": "gagner",
+    "level": "A2",
+    "translation": "to win, earn",
+    "sentences": [
+      { "fr": "Cette équipe gagne presque tous ses matchs à domicile.", "en": "This team wins almost all its home matches." },
+      { "fr": "Elle a gagné un peu d'argent pendant les vacances.", "en": "She earned a little money during the holidays." }
+    ]
+  },
+  {
+    "word": "perdre",
+    "level": "A2",
+    "translation": "to lose",
+    "sentences": [
+      { "fr": "Ne perds pas ton téléphone près de la piscine.", "en": "Do not lose your phone near the pool." },
+      { "fr": "J'ai perdu mes lunettes après le concert.", "en": "I lost my glasses after the concert." }
+    ]
+  },
+  {
+    "word": "envoyer",
+    "level": "A2",
+    "translation": "to send",
+    "sentences": [
+      { "fr": "Envoie-moi les photos dès que tu arrives chez toi.", "en": "Send me the photos as soon as you get home." },
+      { "fr": "Je t'ai envoyé l'adresse du restaurant par message.", "en": "I sent you the restaurant's address by message." }
+    ]
+  },
+  {
+    "word": "recevoir",
+    "level": "A2",
+    "translation": "to receive",
+    "sentences": [
+      { "fr": "Nous recevons souvent des colis à la réception.", "en": "We often receive parcels at reception." },
+      { "fr": "J'ai reçu une réponse très rapidement ce matin.", "en": "I received an answer very quickly this morning." }
+    ]
+  },
+  {
+    "word": "montrer",
+    "level": "A2",
+    "translation": "to show",
+    "sentences": [
+      { "fr": "Le musée montre des objets anciens de la région.", "en": "The museum shows old objects from the region." },
+      { "fr": "Elle m'a montré le chemin jusqu'à la gare.", "en": "She showed me the way to the station." }
+    ]
+  },
+  {
+    "word": "servir",
+    "level": "A2",
+    "translation": "to serve",
+    "sentences": [
+      { "fr": "Le restaurant sert du poisson préparé chaque matin.", "en": "The restaurant serves fish prepared each morning." },
+      { "fr": "On nous a servi le dessert après le café.", "en": "We were served dessert after coffee." }
+    ]
+  },
+  {
+    "word": "tomber",
+    "level": "A2",
+    "translation": "to fall",
+    "sentences": [
+      { "fr": "Les feuilles tombent après les premières nuits froides.", "en": "The leaves fall after the first cold nights." },
+      { "fr": "Il est tombé de vélo, mais il ne s'est pas blessé.", "en": "He fell off his bike, but he was not hurt." }
+    ]
+  },
+  {
+    "word": "devenir",
+    "level": "A2",
+    "translation": "to become",
+    "sentences": [
+      { "fr": "Mon frère devient très calme quand il lit.", "en": "My brother becomes very calm when he reads." },
+      { "fr": "Après le cours, elle est devenue mon amie.", "en": "After the class, she became my friend." }
+    ]
+  },
+  {
+    "word": "retourner",
+    "level": "A2",
+    "translation": "to return, go back",
+    "sentences": [
+      { "fr": "Je retourne à Paris lundi pour le travail.", "en": "I am returning to Paris on Monday for work." },
+      { "fr": "Nous sommes retournés dans ce village l'été dernier.", "en": "We went back to that village last summer." }
+    ]
+  },
+  {
+    "word": "marcher",
+    "level": "A2",
+    "translation": "to walk, work",
+    "sentences": [
+      { "fr": "Je marche jusqu'au bureau quand il fait beau.", "en": "I walk to the office when the weather is nice." },
+      { "fr": "Mon ordinateur a marché après la mise à jour.", "en": "My computer worked after the update." }
+    ]
   }
 ]

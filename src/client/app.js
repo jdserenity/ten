@@ -1616,7 +1616,8 @@ function markCompleteCelebrated() {
 }
 
 function fireCompleteConfetti() {
-  if (typeof confetti !== 'function') return;
+  if (typeof confetti !== 'function') return false;
+  if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return false;
   const burst = (options = {}) =>
     confetti({
       disableForReducedMotion: true,
@@ -1634,12 +1635,12 @@ function fireCompleteConfetti() {
   setTimeout(() => {
     burst({ particleCount: 80, spread: 130, origin: { x: 0.5, y: 0.55 } });
   }, 180);
+  return true;
 }
 
 function maybeCelebrateComplete() {
   if (!hasCompletedDailyWordsToday() || !hasCompletedDailyReviewToday() || hasCelebratedCompleteToday()) return;
-  markCompleteCelebrated();
-  fireCompleteConfetti();
+  if (fireCompleteConfetti()) markCompleteCelebrated();
 }
 
 function maybeCelebrateDailyComplete(index) {

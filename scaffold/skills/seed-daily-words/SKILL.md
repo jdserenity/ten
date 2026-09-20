@@ -47,13 +47,13 @@ Examples of banned headwords: *je, tu, il, le, la, de, et, que, yo, vos* (as pro
 ## Sense rules
 
 - Gloss real usage in one concise line. If the lemma has **two meaningfully different common senses**, note both (e.g. *combinar* → arrange/agree; also match).
-- When multi-sense, the **three sentences should showcase those senses** (at least one sentence per major sense worth teaching).
+- When multi-sense, the **two sentences should showcase those senses** (at least one sentence per major sense worth teaching).
 - Sentences must demonstrate the **taught** sense and part of speech — never a proper-noun reading of an adjective/noun (*linda* = beautiful, not “Linda went to the market”), never a wrong POS.
 
 ## Sentences
 
-- **Exactly 3** example sentences per card.
-- Each sentence uses a **real conjugated/inflected shape** of the lemma (or the lemma itself). Prefer **different shapes** across the three (e.g. infinitive / present / past; singular / plural) so the learner sees the word in use — without making those shapes separate cards.
+- **Exactly 2** example sentences per card.
+- Each sentence uses a **real conjugated/inflected shape** of the lemma (or the lemma itself). Prefer **different shapes** across the two (e.g. present / past; singular / plural) so the learner sees the word in use — without making those shapes separate cards.
 - Length **20–140 characters** per learning-language sentence.
 - Natural English glosses (not word-for-word calques).
 - Correct orthography including **accents/diacritics** (French, Spanish, Portuguese). ASCII-only French/Spanish is a hard fail.
@@ -75,8 +75,7 @@ Examples of banned headwords: *je, tu, il, le, la, de, et, que, yo, vos* (as pro
   "translation": "peace and quiet, calm",
   "sentences": [
     { "pt": "Preciso de um pouco de sossego para terminar esse trabalho.", "en": "I need a bit of peace and quiet to finish this work." },
-    { "pt": "No fim de semana, só quero sossego e nada mais.", "en": "On the weekend, all I want is peace and quiet." },
-    { "pt": "Depois da festa a casa voltou ao sossego.", "en": "After the party the house went back to peace and quiet." }
+    { "pt": "No fim de semana, só quero sossego e nada mais.", "en": "On the weekend, all I want is peace and quiet." }
   ]
 }
 ```
@@ -87,16 +86,16 @@ Use `fr` or `es` instead of `pt` for those pools.
 
 1. Pick up to **15** content lemmas from the flavour’s frequency list (skip glue). See batch size below.
 2. Set `level` (`A1` / `A2` / `B1` / `B2`) — default from the table above unless the lemma clearly belongs to another band.
-3. Write translation + 3 flavour-correct sentences with natural English.
+3. Write a translation and 2 flavour-correct sentences with natural English.
 4. Write or append to the target pool file (append when extending; replace only when asked).
 5. Run `npm run words:check` and fix every error.
 6. Commit the pool (and checker/docs if you changed them).
 
 ### Batch size (quality / quantity equilibrium)
 
-**15 words per writing pass.** That is 15 translations and 45 context sentences — 3 days of 5/new.
+**15 words per writing pass.** That is 15 required CEFR levels, 15 translations, and 30 context sentences — 3 days of 5/new.
 
-Quality over quantity. Each card needs a real flavour-correct sentence in three different shapes (for example present / past / infinitive), a natural English line, the taught sense, and no copy-paste rhythm. After about 15, later sentences start to sound like the same template with a new noun swapped in. Do not write 40–50 cards in one shot.
+Quality over quantity. Each card needs a required CEFR level (`A1`, `A2`, `B1`, or `B2`), real flavour-correct sentences in two different shapes (for example present / past), natural English lines, the taught sense, and no copy-paste rhythm. After about 15, later sentences start to sound like the same template with a new noun swapped in. Do not write 40–50 cards in one shot.
 
 If the pool still needs more runway, do another 15-word pass after the current batch is in the file and `words:check` is clean. Do not ask the maintainer how many to generate — 15 is the default.
 
@@ -114,7 +113,7 @@ Dev footer `~N days left in <mode> pool` (amber at ≤7) signals when to add mor
 
 `npm run words:check` validates all dialect pools. Do not ship pool edits that fail it.
 
-Legacy **PT-BR** entries may still have 2 sentences and softer checker rules until that pool is re-seeded; **new** PT cards must have 3 and pass the same strict rules as other flavours. FR-CA, FR-FR, ES-AR, and ES-VE always require exactly 3.
+Legacy **PT-BR** entries may still have 2 sentences and softer checker rules until that pool is re-seeded; **new** PT cards must have 2 and pass the same strict rules as other flavours. FR-CA, FR-FR, ES-AR, and ES-VE always require exactly 2.
 
 ## Do not
 

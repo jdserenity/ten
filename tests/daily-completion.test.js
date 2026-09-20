@@ -4,8 +4,9 @@ import test from 'node:test';
 import vm from 'node:vm';
 
 const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
+const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
 
-function session() {
+function session({ realConfetti = false } = {}) {
   const storage = new Map();
   let bursts = 0;
   const context = vm.createContext({
@@ -13,10 +14,12 @@ function session() {
     localStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) },
     getFrequencyLanguageForMode: () => 'FR', dateKey: () => '2026-09-13',
     isDailyReviewComplete: count => count >= 5,
-    celebrate: () => { bursts++; }
+    celebrate: () => { bursts++; return true; },
+    setTimeout: () => 1, window: {}
   });
   const code = app.slice(app.indexOf('const DAILY_CONFETTI_STORAGE_PREFIX'), app.indexOf('function buildReviewDots()'));
-  vm.runInContext(`${code}\nfireCompleteConfetti = celebrate;`, context);
+  vm.runInContext(code, context);
+  if (!realConfetti) vm.runInContext('fireCompleteConfetti = celebrate;', context);
   return { context, run: code => vm.runInContext(code, context), bursts: () => bursts };
 }
 
@@ -83,4 +86,45 @@ test('Next advances new words and opens Review from the last one', () => {
   assert.equal(moves.length, 2);
   assert.match(app, /document.getElementById\('next-btn'\).disabled = false;/);
   assert.match(app, /getElementById\('next-btn'\).addEventListener\('click', \(\) => \{\s*advanceDailyWord\(\);/);
+});
+
+test('missing confetti script does not consume the celebration and can retry', () => {
+  const s = session({ realConfetti: true });
+  s.run('maybeCelebrateDailyComplete(4)');
+  for (let i = 0; i < 5; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  assert.equal(s.run('hasCelebratedCompleteToday()'), false);
+  const calls = [];
+  s.context.confetti = options => calls.push(options);
+  s.run('maybeCelebrateComplete()');
+  assert.equal(calls.length, 2);
+  assert.equal(s.run('hasCelebratedCompleteToday()'), true);
+  s.run('maybeCelebrateComplete()');
+  assert.equal(calls.length, 2);
+});
+
+test('bundled confetti renders normally but suppresses all particles with Reduce Motion', () => {
+  const vendor = readFileSync(new URL('../src/client/confetti.browser.js', import.meta.url), 'utf8');
+  for (const reducedMotion of [false, true]) {
+    const s = session({ realConfetti: true });
+    const canvases = [];
+    Object.assign(s.context, {
+      matchMedia: () => ({ matches: reducedMotion }),
+      document: {
+        documentElement: { clientWidth: 390, clientHeight: 844 },
+        createElement: () => ({ style: {}, getContext: () => ({}) }),
+        body: { appendChild: canvas => canvases.push(canvas) }
+      },
+      addEventListener() {}, removeEventListener() {},
+      requestAnimationFrame: () => 1, cancelAnimationFrame() {}
+    });
+    s.context.window = s.context;
+    vm.runInContext(vendor, s.context);
+    s.run('fireCompleteConfetti()');
+    assert.equal(canvases.length, reducedMotion ? 0 : 1);
+  }
+});
+
+test('the PWA loads confetti before the app module can initialize', () => {
+  assert.match(html, /<script src="\/confetti\.browser\.js"><\/script>\s*<script type="module" src="\/app\.js\?v=26"><\/script>/);
+  assert.doesNotMatch(html, /confetti\.browser\.js" defer/);
 });

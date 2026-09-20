@@ -14,6 +14,12 @@ export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GO
   return reviewedCountToday >= goal;
 }
 
+export function combinedDailyStudyProgress(newWordsSeen, reviewedCount, wordsPerDay = 5, reviewGoal = DAILY_REVIEW_GOAL) {
+  const newProgress = Math.min(Math.max(Number(newWordsSeen) || 0, 0), wordsPerDay);
+  const reviewProgress = Math.min(Math.max(Number(reviewedCount) || 0, 0), reviewGoal);
+  return { completed: newProgress + reviewProgress, total: wordsPerDay + reviewGoal };
+}
+
 export function getReviewEmptyState(totalCardCount) {
   if (!totalCardCount) {
     return {

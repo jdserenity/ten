@@ -1045,7 +1045,7 @@ input:disabled {
   padding: 11px 10px;
 }
 
-#counter {
+.study-progress-counter {
   text-align: center;
   font-size: 13px;
   color: var(--muted);

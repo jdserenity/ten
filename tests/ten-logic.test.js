@@ -4,6 +4,7 @@ import {
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
   DAILY_REVIEW_GOAL,
+  combinedDailyStudyProgress,
   defaultTranslateDirection,
   extractPrimaryWordToken,
   extractSingleLearningWord,
@@ -66,6 +67,12 @@ test('isDailyReviewComplete requires five graded cards', () => {
   assert.equal(isDailyReviewComplete(5), true);
   assert.equal(isDailyReviewComplete(5, DAILY_REVIEW_GOAL), true);
   assert.equal(isDailyReviewComplete(6), true);
+});
+
+test('combinedDailyStudyProgress counts up to five new words and five reviews', () => {
+  assert.deepEqual(combinedDailyStudyProgress(0, 0), { completed: 0, total: 10 });
+  assert.deepEqual(combinedDailyStudyProgress(3, 2), { completed: 5, total: 10 });
+  assert.deepEqual(combinedDailyStudyProgress(8, 9), { completed: 10, total: 10 });
 });
 
 test('getReviewEmptyState returns i18n keys for empty and clear queues', () => {

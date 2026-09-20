@@ -29,3 +29,12 @@ test('review async handlers re-render after clearing busy flags', () => {
   assert.ok(deleteFinally, 'review delete finally block exists');
   assert.match(deleteFinally[1], /renderReview\(\)/, 'review delete must re-render after delete completes');
 });
+
+test('both study tabs display the same combined daily progress counter', () => {
+  const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
+  const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
+  assert.match(html, /<p id="counter" class="study-progress-counter"><\/p>/);
+  assert.match(html, /<p id="review-counter" class="study-progress-counter"><\/p>/);
+  assert.match(app, /function updateDailyStudyProgressCounters\(\)/);
+  assert.match(app, /\['counter', 'review-counter'\]/);
+});

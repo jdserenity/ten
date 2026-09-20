@@ -12,6 +12,7 @@ import {
   buildLangPickerOptionHtml,
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
+  combinedDailyStudyProgress,
   DAILY_REVIEW_GOAL,
   defaultTranslateDirection,
   extractSingleLearningWord,
@@ -1434,7 +1435,7 @@ function renderDailyWord(index) {
     document.getElementById('s2-en').textContent = '';
     const s3L2Empty = document.getElementById('s3-l2'); if (s3L2Empty) s3L2Empty.textContent = '';
     const s3EnEmpty = document.getElementById('s3-en'); if (s3EnEmpty) s3EnEmpty.textContent = '';
-    document.getElementById('counter').textContent = '0 / 0';
+    updateDailyStudyProgressCounters();
     document.getElementById('prev-btn').disabled = true;
     document.getElementById('next-btn').disabled = true;
     document.getElementById('speak-btn').disabled = true;
@@ -1473,7 +1474,7 @@ function renderDailyWord(index) {
   document.getElementById('s1-l2').textContent = firstSentenceText;
   document.getElementById('s2-l2').textContent = secondSentenceText;
   const s3L2 = document.getElementById('s3-l2'); if (s3L2) s3L2.textContent = thirdSentenceText;
-  document.getElementById('counter').textContent = `${index + 1} / ${state.todayWords.length}`;
+  updateDailyStudyProgressCounters();
   document.getElementById('prev-btn').disabled = index === 0;
   document.getElementById('next-btn').disabled = false;
   document.getElementById('speak-btn').disabled = !word.word || !speakPhraseAllowed();
@@ -1591,6 +1592,14 @@ function getReviewGradedToday() {
   const count = Number(raw);
   if (!Number.isInteger(count) || count < 0) return 0;
   return count;
+}
+
+function updateDailyStudyProgressCounters() {
+  const progress = combinedDailyStudyProgress(state.seenWordIndexes.size, getReviewGradedToday(), WORDS_PER_DAY);
+  ['counter', 'review-counter'].forEach(id => {
+    const counter = document.getElementById(id);
+    if (counter) counter.textContent = `${progress.completed} / ${progress.total}`;
+  });
 }
 
 function incrementReviewGradedToday() {
@@ -2056,6 +2065,7 @@ function renderReview() {
   document.getElementById('review-due-count').textContent = String(state.reviewCards.length);
   document.getElementById('review-total-count').textContent = String(state.reviewTotalCount);
   updateReviewDots();
+  updateDailyStudyProgressCounters();
 
   const empty = document.getElementById('review-empty');
   const cardPanel = document.getElementById('review-card-panel');

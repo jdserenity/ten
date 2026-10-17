@@ -73,10 +73,10 @@ describe('resolveDailyWordsFromAssignment', () => {
 
 describe('computePoolDaysLeft', () => {
   it('counts down as words are surfaced', () => {
-    assert.equal(WORDS_PER_DAY, 5);
-    assert.equal(computePoolDaysLeft(300, 0), 60);
-    assert.equal(computePoolDaysLeft(300, 5), 59);
-    assert.equal(computePoolDaysLeft(300, 18), 56.4);
+    assert.equal(WORDS_PER_DAY, 3);
+    assert.equal(computePoolDaysLeft(300, 0), 100);
+    assert.equal(computePoolDaysLeft(300, 3), 99);
+    assert.equal(computePoolDaysLeft(300, 18), 94);
     assert.equal(computePoolDaysLeft(300, 300), 0);
   });
 
@@ -94,7 +94,7 @@ describe('countUnseenPoolWords', () => {
   it('treats unlocked words as no longer available in the pool', () => {
     const seen = new Set(['word1', 'word2', 'word3', 'word4', 'word5']);
     assert.equal(countUnseenPoolWords(pool, seen), 25);
-    assert.equal(computePoolDaysLeft(pool.length, seen.size), 5);
+    assert.equal(computePoolDaysLeft(pool.length, seen.size), 8.3);
   });
 });
 
@@ -129,7 +129,7 @@ describe('reconcileDailyWords', () => {
     assert.equal(normalizePoolWord(reconciled[0].word), 'word1');
     assert.equal(normalizePoolWord(reconciled[1].word), 'word2');
     assert.equal(reconciled.some(entry => normalizePoolWord(entry.word) === 'missing-word'), false);
-    const surfacedInAssignment = new Set(assigned.slice(0, 2).map(normalizePoolWord));
+    const surfacedInAssignment = new Set(['word1', 'word2'].map(normalizePoolWord));
     for (const entry of reconciled) {
       const norm = normalizePoolWord(entry.word);
       if (surfacedInAssignment.has(norm)) assert.equal(seen.has(norm), true);

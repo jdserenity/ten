@@ -1,13 +1,13 @@
 ---
 name: seed-daily-words
 description: >-
-  Curate or refill Ten 5/new word pools for a language flavour (PT-BR, FR-CA,
+  Curate or refill Ten 3/new word pools for a language flavour (PT-BR, FR-CA,
   FR-FR, ES-AR, ES-VE). Use when adding words, seeding days of cards, fixing pool
   quality, or when the user asks to generate/expand vocabulary for daily study.
   Agent/LLM writing only — no Tatoeba or scrape generators.
 ---
 
-# Seed 5/new word pools
+# Seed 3/new word pools
 
 ## When to use
 
@@ -27,7 +27,7 @@ Never share one JSON file across flavours. Quebec and France French are separate
 
 ## Level (required)
 
-Each card has exactly one `level`: `A1`, `A2`, `B1`, or `B2` (CEFR). Use the earliest band where the lemma is worth teaching. Do not invent extra bands. 5/new does not filter by level yet; the field is for a later per-user skill-level pick.
+Each card has exactly one `level`: `A1`, `A2`, `B1`, or `B2` (CEFR). Use the earliest band where the lemma is worth teaching. Do not invent extra bands. 3/new does not filter by level yet; the field is for a later per-user skill-level pick.
 
 ## Headword rules
 
@@ -93,7 +93,7 @@ Use `fr` or `es` instead of `pt` for those pools.
 
 ### Batch size (quality / quantity equilibrium)
 
-**15 words per writing pass.** That is 15 required CEFR levels, 15 translations, and 30 context sentences — 3 days of 5/new.
+**15 words per writing pass.** That is 15 required CEFR levels, 15 translations, and 30 context sentences — 5 days of 3/new.
 
 Quality over quantity. Each card needs a required CEFR level (`A1`, `A2`, `B1`, or `B2`), real flavour-correct sentences in two different shapes (for example present / past), natural English lines, the taught sense, and no copy-paste rhythm. After about 15, later sentences start to sound like the same template with a new noun swapped in. Do not write 40–50 cards in one shot.
 
@@ -101,11 +101,11 @@ If the pool still needs more runway, do another 15-word pass after the current b
 
 ### Pool size hint
 
-| Words | Approx. days of 5/new |
+| Words | Approx. days of 3/new |
 | --- | --- |
-| 50 | ~10 days |
-| 200 | ~40 days |
-| 365 | ~73 days |
+| 50 | ~17 days |
+| 200 | ~67 days |
+| 365 | ~122 days |
 
 Dev footer `~N days left in <mode> pool` (amber at ≤7) signals when to add more.
 

@@ -1,4 +1,4 @@
-export const DAILY_REVIEW_GOAL = 5;
+export const DAILY_REVIEW_GOAL = 7;
 
 export function userHasLearningLanguages(languages) {
   return Array.isArray(languages) && languages.length > 0;
@@ -14,7 +14,7 @@ export function isDailyReviewComplete(reviewedCountToday, goal = DAILY_REVIEW_GO
   return reviewedCountToday >= goal;
 }
 
-export function combinedDailyStudyProgress(newWordsSeen, reviewedCount, wordsPerDay = 5, reviewGoal = DAILY_REVIEW_GOAL) {
+export function combinedDailyStudyProgress(newWordsSeen, reviewedCount, wordsPerDay = 3, reviewGoal = DAILY_REVIEW_GOAL) {
   const newProgress = Math.min(Math.max(Number(newWordsSeen) || 0, 0), wordsPerDay);
   const reviewProgress = Math.min(Math.max(Number(reviewedCount) || 0, 0), reviewGoal);
   return { completed: newProgress + reviewProgress, total: wordsPerDay + reviewGoal };

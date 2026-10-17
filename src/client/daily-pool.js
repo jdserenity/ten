@@ -1,4 +1,4 @@
-export const WORDS_PER_DAY = 5;
+export const WORDS_PER_DAY = 3;
 
 export function normalizePoolWord(value) {
   return String(value || '')

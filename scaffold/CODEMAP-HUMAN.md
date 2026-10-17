@@ -11,7 +11,7 @@ src/client/                 # the PWA I serve as static files (no bundler)
   app.js                    # all UI; MODE_CONFIGS; talks to /api/* with X-User-Id
   i18n.js                   # en + pt-BR catalogs; t(); applyAppLanguage overwrites [data-i18n]
   ten-logic.js              # pure helpers (startup tab, review goal, frequency filters, TTS voice pick, lang-family picker)
-  daily-pool.js             # pick/reconcile today's 5/new list; WORDS_PER_DAY; pool-days math
+  daily-pool.js             # pick/reconcile today's 3/new list; WORDS_PER_DAY; pool-days math
   client-load.js            # planBootDataLoads — priority vs background tab data
   ops.html / ops.js         # /ops.html dashboard (dev users)
   words.{pt-br,fr-ca,fr-fr,es-ar,es-ve}.json
@@ -25,7 +25,7 @@ server/
   db.js                     # SQLite schema, users, unlocks, daily assignment/index/glosses, translation_cache
   cards.js                  # flashcard CRUD + review queue + grade
   fsrs.js                   # ts-fsrs wrapper
-  daily-glosses.js          # resolve today's 5/new glosses (cache, then Google/DeepL)
+  daily-glosses.js          # resolve today's 3/new glosses (cache, then Google/DeepL)
   pool-health.js            # ops runway report
   *.test.js                 # server unit tests next to the module
 
@@ -58,11 +58,11 @@ flowchart LR
 
 Language picker UI is in `index.html` / `app.js` (header `+`, Settings `+`, active flag). Draft checks live in `state.pickerSelectedModeIds` until Add/Save.
 
-Boot (in `app.js`): remembered user → `/api/me` or login → `resolveStartupTab` from localStorage new-word completion/review gates → `planBootDataLoads` → priority tab data, 5/new glosses via `/api/daily-glosses/ensure` on any tab, the rest in background.
+Boot (in `app.js`): remembered user → `/api/me` or login → `resolveStartupTab` from localStorage new-word completion/review gates → `planBootDataLoads` → priority tab data, 3/new glosses via `/api/daily-glosses/ensure` on any tab, the rest in background.
 
-5/new: pool JSON + unlocked set + saved assignment → `reconcileDailyWords` → `/api/daily-words` + `/api/daily-progress`. Viewing a card unlocks it (`/api/unlocked-words`).
+3/new: pool JSON + unlocked set + saved assignment → `reconcileDailyWords` → `/api/daily-words` + `/api/daily-progress`. Viewing a card unlocks it (`/api/unlocked-words`).
 
-5/review: `/api/cards/queue` → grade `/api/cards/:id/answer`. Daily dots count is localStorage only; FSRS state is SQLite.
+7/review: `/api/cards/queue` → grade `/api/cards/:id/answer`. Daily dots count is localStorage only; FSRS state is SQLite.
 
 Progress: bundled frequency JSON; green = unlocked set. Translate: `/api/translate` (no user header); single learning-language word also POSTs unlock.
 
@@ -72,17 +72,17 @@ Progress: bundled frequency JSON; green = unlocked set. Translate: `/api/transla
 browser localStorage
   ten-user-v1                         # {id, username} so I stay signed in
   ten-active-mode                     # last learning track (legacy sessionStorage migrated once)
-  ten-daily-confetti-v1:LANG:date     # 5/new complete (legacy key retained)
+  ten-daily-confetti-v1:LANG:date     # 3/new complete (legacy key retained)
   ten-complete-confetti-v1:LANG:date  # combined daily celebration already fired
-  ten-review-daily-progress-v1:LANG:date   # integer graded toward 5
+  ten-review-daily-progress-v1:LANG:date   # integer graded toward 7
   ten-seen-daily-words-v1             # leftover; imported to SQLite then removed
 
 SQLite  TEN_DB_PATH || data/ten.db
   users, user_languages, feedback
-  unlocked_words                      # Progress green + 5/new exclusion
-  daily_word_assignment               # today's 5 headwords
-  daily_card_index                    # which 5/new card is open
-  daily_word_glosses                  # translated 5/new fields per app-lang pole
+  unlocked_words                      # Progress green + 3/new exclusion
+  daily_word_assignment               # today's 3 headwords
+  daily_card_index                    # which 3/new card is open
+  daily_word_glosses                  # translated 3/new fields per app-lang pole
   translation_cache                   # Google/DeepL results
   cards                               # flashcard text + FSRS columns
 

@@ -54,22 +54,22 @@ test('userHasLearningLanguages is false until the user adds a track', () => {
   assert.equal(userHasLearningLanguages(['FR']), true);
 });
 
-test('resolveStartupTab opens 5/new, then 5/review, then translate', () => {
+test('resolveStartupTab opens 3/new, then 7/review, then translate', () => {
   assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: false }), 'daily');
   assert.equal(resolveStartupTab({ dailyCompleteToday: false, reviewCompleteToday: true }), 'daily');
   assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: false }), 'review');
   assert.equal(resolveStartupTab({ dailyCompleteToday: true, reviewCompleteToday: true }), 'translate');
 });
 
-test('isDailyReviewComplete requires five graded cards', () => {
-  assert.equal(DAILY_REVIEW_GOAL, 5);
-  assert.equal(isDailyReviewComplete(4), false);
-  assert.equal(isDailyReviewComplete(5), true);
-  assert.equal(isDailyReviewComplete(5, DAILY_REVIEW_GOAL), true);
-  assert.equal(isDailyReviewComplete(6), true);
+test('isDailyReviewComplete requires seven graded cards', () => {
+  assert.equal(DAILY_REVIEW_GOAL, 7);
+  assert.equal(isDailyReviewComplete(6), false);
+  assert.equal(isDailyReviewComplete(7), true);
+  assert.equal(isDailyReviewComplete(7, DAILY_REVIEW_GOAL), true);
+  assert.equal(isDailyReviewComplete(8), true);
 });
 
-test('combinedDailyStudyProgress counts up to five new words and five reviews', () => {
+test('combinedDailyStudyProgress counts up to three new words and seven reviews', () => {
   assert.deepEqual(combinedDailyStudyProgress(0, 0), { completed: 0, total: 10 });
   assert.deepEqual(combinedDailyStudyProgress(3, 2), { completed: 5, total: 10 });
   assert.deepEqual(combinedDailyStudyProgress(8, 9), { completed: 10, total: 10 });

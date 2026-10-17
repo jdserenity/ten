@@ -10,10 +10,10 @@ function session({ realConfetti = false } = {}) {
   const storage = new Map();
   let bursts = 0;
   const context = vm.createContext({
-    state: { activeTab: 'daily' }, WORDS_PER_DAY: 5, DAILY_REVIEW_GOAL: 5,
+    state: { activeTab: 'daily' }, WORDS_PER_DAY: 3, DAILY_REVIEW_GOAL: 7,
     localStorage: { getItem: key => storage.get(key), setItem: (key, value) => storage.set(key, value) },
     getFrequencyLanguageForMode: () => 'FR', dateKey: () => '2026-09-13',
-    isDailyReviewComplete: count => count >= 5,
+    isDailyReviewComplete: count => count >= 7,
     celebrate: () => { bursts++; return true; },
     setTimeout: () => 1, window: {}
   });
@@ -23,42 +23,42 @@ function session({ realConfetti = false } = {}) {
   return { context, run: code => vm.runInContext(code, context), bursts: () => bursts };
 }
 
-test('new words first celebrates only after the fifth graded review, once', () => {
+test('new words first celebrates only after the seventh graded review, once', () => {
   const s = session();
-  for (let i = 0; i < 5; i++) s.run(`maybeCelebrateDailyComplete(${i})`);
+  for (let i = 0; i < 3; i++) s.run(`maybeCelebrateDailyComplete(${i})`);
   assert.equal(s.bursts(), 0);
   assert.equal(s.run('hasCompletedDailyWordsToday()'), true);
-  for (let i = 0; i < 4; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  for (let i = 0; i < 6; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   assert.equal(s.bursts(), 0);
   s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   assert.equal(s.bursts(), 1);
-  s.run('maybeCelebrateDailyComplete(4); maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  s.run('maybeCelebrateDailyComplete(2); maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   assert.equal(s.bursts(), 1);
 });
 
-test('review first celebrates only on reaching the fifth new word', () => {
+test('review first celebrates only on reaching the third new word', () => {
   const s = session();
-  for (let i = 0; i < 5; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  for (let i = 0; i < 7; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   assert.equal(s.bursts(), 0);
-  for (let i = 0; i < 4; i++) s.run(`maybeCelebrateDailyComplete(${i})`);
+  for (let i = 0; i < 2; i++) s.run(`maybeCelebrateDailyComplete(${i})`);
   assert.equal(s.bursts(), 0);
-  s.run('maybeCelebrateDailyComplete(4)');
+  s.run('maybeCelebrateDailyComplete(2)');
   assert.equal(s.bursts(), 1);
 });
 
 test('background daily rendering cannot mark new words complete or celebrate', () => {
   const s = session();
   s.context.state.activeTab = 'review';
-  for (let i = 0; i < 5; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
-  s.run('maybeCelebrateDailyComplete(4)');
+  for (let i = 0; i < 7; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  s.run('maybeCelebrateDailyComplete(2)');
   assert.equal(s.run('hasCompletedDailyWordsToday()'), false);
   assert.equal(s.bursts(), 0);
 });
 
 test('celebration gates persist and are scoped to the language and day', () => {
   const s = session();
-  s.run('maybeCelebrateDailyComplete(4)');
-  for (let i = 0; i < 5; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  s.run('maybeCelebrateDailyComplete(2)');
+  for (let i = 0; i < 7; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   s.run('maybeCelebrateComplete()');
   assert.equal(s.bursts(), 1);
   s.context.dateKey = () => '2026-09-14';
@@ -73,14 +73,14 @@ test('celebration gates persist and are scoped to the language and day', () => {
 
 test('Next advances new words and opens Review from the last one', () => {
   const moves = [];
-  const state = { todayWords: Array(5).fill({}), currentWordIndex: 3 };
+  const state = { todayWords: Array(3).fill({}), currentWordIndex: 1 };
   const context = vm.createContext({ state, gotoDailyWord: index => moves.push(index), setActiveTab: tab => moves.push(tab) });
   const code = app.slice(app.indexOf('function advanceDailyWord()'), app.indexOf('function gotoDailyWord(index)'));
   vm.runInContext(`${code}\nadvanceDailyWord();`, context);
-  assert.deepEqual(moves, [4]);
-  state.currentWordIndex = 4;
+  assert.deepEqual(moves, [2]);
+  state.currentWordIndex = 2;
   vm.runInContext('advanceDailyWord()', context);
-  assert.deepEqual(moves, [4, 'review']);
+  assert.deepEqual(moves, [2, 'review']);
   state.todayWords = [];
   vm.runInContext('advanceDailyWord()', context);
   assert.equal(moves.length, 2);
@@ -90,8 +90,8 @@ test('Next advances new words and opens Review from the last one', () => {
 
 test('missing confetti script does not consume the celebration and can retry', () => {
   const s = session({ realConfetti: true });
-  s.run('maybeCelebrateDailyComplete(4)');
-  for (let i = 0; i < 5; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
+  s.run('maybeCelebrateDailyComplete(2)');
+  for (let i = 0; i < 7; i++) s.run('maybeCelebrateReviewComplete(incrementReviewGradedToday())');
   assert.equal(s.run('hasCelebratedCompleteToday()'), false);
   const calls = [];
   s.context.confetti = options => calls.push(options);
@@ -125,6 +125,6 @@ test('bundled confetti renders normally but suppresses all particles with Reduce
 });
 
 test('the PWA loads confetti before the app module can initialize', () => {
-  assert.match(html, /<script src="\/confetti\.browser\.js"><\/script>\s*<script type="module" src="\/app\.js\?v=26"><\/script>/);
+  assert.match(html, /<script src="\/confetti\.browser\.js"><\/script>\s*<script type="module" src="\/app\.js\?v=27"><\/script>/);
   assert.doesNotMatch(html, /confetti\.browser\.js" defer/);
 });

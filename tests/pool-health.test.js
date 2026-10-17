@@ -43,13 +43,13 @@ describe('computeUserPoolRunway', () => {
   it('counts days left from unseen pool words', () => {
     const runway = computeUserPoolRunway(tinyPool, ['casa', 'perro']);
     assert.equal(runway.unseenCount, 18);
-    assert.equal(runway.daysLeft, 3.6);
+    assert.equal(runway.daysLeft, 6);
     assert.equal(runway.warning, true);
   });
 
   it('marks warning at the pool warn threshold', () => {
     const pool = Array.from({ length: 80 }, (_, index) => ({ word: `w${index}` }));
-    const unlocked = pool.slice(0, 45).map(entry => entry.word);
+    const unlocked = pool.slice(0, 59).map(entry => entry.word);
     const runway = computeUserPoolRunway(pool, unlocked);
     assert.equal(runway.daysLeft, POOL_WARN_DAYS);
     assert.equal(runway.warning, true);
@@ -80,9 +80,9 @@ describe('buildPoolHealthReport', () => {
     ];
     const report = buildPoolHealthReport(users, pools);
     assert.equal(report.languages[0].language, 'FR');
-    assert.equal(report.languages[0].minDaysLeft, 0.2);
+    assert.equal(report.languages[0].minDaysLeft, 0.3);
     assert.equal(report.languages[1].language, 'ES-AR');
-    assert.equal(report.languages[1].minDaysLeft, 0.6);
+    assert.equal(report.languages[1].minDaysLeft, 1);
     assert.equal(report.languages.length, 5);
     assert.equal(report.alertCount, 2);
   });
@@ -91,8 +91,8 @@ describe('buildPoolHealthReport', () => {
     const report = buildPoolHealthReport([], pools);
     assert.equal(report.languages.length, 5);
     assert.equal(report.languages[0].language, 'FR');
-    assert.equal(report.languages[0].minDaysLeft, 0.2);
-    assert.equal(report.languages.find(lang => lang.language === 'PT-BR')?.minDaysLeft, 20);
+    assert.equal(report.languages[0].minDaysLeft, 0.3);
+    assert.equal(report.languages.find(lang => lang.language === 'PT-BR')?.minDaysLeft, 33.3);
     assert.equal(report.alertCount, 2);
   });
 });

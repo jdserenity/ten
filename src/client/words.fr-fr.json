@@ -4743,5 +4743,230 @@
         "en": "They preferred to stay home this weekend."
       }
     ]
+  },
+  {
+    "word": "loin",
+    "level": "A1",
+    "translation": "far (away)",
+    "sentences": [
+      {
+        "fr": "La plage n’est pas très loin de l’hôtel.",
+        "en": "The beach isn’t very far from the hotel."
+      },
+      {
+        "fr": "Ils habitent trop loin pour venir ce soir.",
+        "en": "They live too far away to come tonight."
+      }
+    ]
+  },
+  {
+    "word": "près",
+    "level": "A1",
+    "translation": "near, close",
+    "sentences": [
+      {
+        "fr": "Il y a une boulangerie juste près de chez moi.",
+        "en": "There’s a bakery right near my place."
+      },
+      {
+        "fr": "Reste près de moi dans la foule, s’il te plaît.",
+        "en": "Stay close to me in the crowd, please."
+      }
+    ]
+  },
+  {
+    "word": "cours",
+    "level": "A1",
+    "translation": "class, lesson; also course (of a river / flow)",
+    "sentences": [
+      {
+        "fr": "J’ai un cours de français tous les lundis.",
+        "en": "I have a French class every Monday."
+      },
+      {
+        "fr": "Le cours de la rivière passe derrière le village.",
+        "en": "The course of the river runs behind the village."
+      }
+    ]
+  },
+  {
+    "word": "rendre",
+    "level": "A1",
+    "translation": "to give back; to make / render",
+    "sentences": [
+      {
+        "fr": "Je dois rendre ce livre à la bibliothèque demain.",
+        "en": "I have to give this book back to the library tomorrow."
+      },
+      {
+        "fr": "Ce film m’a rendu très triste.",
+        "en": "That movie made me very sad."
+      }
+    ]
+  },
+  {
+    "word": "verre",
+    "level": "A1",
+    "translation": "glass (drinking glass); also glass (material)",
+    "sentences": [
+      {
+        "fr": "Peux-tu me passer un verre d’eau fraîche ?",
+        "en": "Can you pass me a glass of cold water?"
+      },
+      {
+        "fr": "Cette table en verre est très fragile.",
+        "en": "This glass table is very fragile."
+      }
+    ]
+  },
+  {
+    "word": "mur",
+    "level": "A1",
+    "translation": "wall",
+    "sentences": [
+      {
+        "fr": "Il a accroché une photo sur le mur du salon.",
+        "en": "He hung a photo on the living-room wall."
+      },
+      {
+        "fr": "Les murs de cette maison sont très épais.",
+        "en": "The walls of this house are very thick."
+      }
+    ]
+  },
+  {
+    "word": "gauche",
+    "level": "A1",
+    "translation": "left",
+    "sentences": [
+      {
+        "fr": "Tourne à gauche au prochain feu rouge.",
+        "en": "Turn left at the next traffic light."
+      },
+      {
+        "fr": "Ma main gauche est plus faible que la droite.",
+        "en": "My left hand is weaker than the right."
+      }
+    ]
+  },
+  {
+    "word": "droite",
+    "level": "A1",
+    "translation": "right",
+    "sentences": [
+      {
+        "fr": "La banque est à droite de la pharmacie.",
+        "en": "The bank is to the right of the pharmacy."
+      },
+      {
+        "fr": "Écris avec ta main droite, s’il te plaît.",
+        "en": "Write with your right hand, please."
+      }
+    ]
+  },
+  {
+    "word": "lumière",
+    "level": "A1",
+    "translation": "light",
+    "sentences": [
+      {
+        "fr": "Peux-tu allumer la lumière dans la cuisine ?",
+        "en": "Can you turn on the light in the kitchen?"
+      },
+      {
+        "fr": "Il n’y a presque plus de lumière dehors.",
+        "en": "There’s almost no light left outside."
+      }
+    ]
+  },
+  {
+    "word": "professeur",
+    "level": "A1",
+    "translation": "teacher, professor",
+    "sentences": [
+      {
+        "fr": "Notre professeur explique toujours très clairement.",
+        "en": "Our teacher always explains very clearly."
+      },
+      {
+        "fr": "Les professeurs ont organisé une réunion hier.",
+        "en": "The teachers held a meeting yesterday."
+      }
+    ]
+  },
+  {
+    "word": "classe",
+    "level": "A1",
+    "translation": "class (school group / classroom)",
+    "sentences": [
+      {
+        "fr": "Toute la classe est partie en voyage scolaire.",
+        "en": "The whole class went on a school trip."
+      },
+      {
+        "fr": "Nous avons changé de classe au mois de septembre.",
+        "en": "We changed classrooms in September."
+      }
+    ]
+  },
+  {
+    "word": "rire",
+    "level": "A1",
+    "translation": "to laugh; laughter",
+    "sentences": [
+      {
+        "fr": "Ils rient beaucoup pendant cette comédie.",
+        "en": "They laugh a lot during this comedy."
+      },
+      {
+        "fr": "Son rire s’entendait déjà depuis la cuisine.",
+        "en": "His laughter could already be heard from the kitchen."
+      }
+    ]
+  },
+  {
+    "word": "appartement",
+    "level": "A1",
+    "translation": "apartment, flat",
+    "sentences": [
+      {
+        "fr": "Nous cherchons un appartement près du métro.",
+        "en": "We’re looking for an apartment near the metro."
+      },
+      {
+        "fr": "Elle a loué un petit appartement en centre-ville.",
+        "en": "She rented a small apartment downtown."
+      }
+    ]
+  },
+  {
+    "word": "mer",
+    "level": "A1",
+    "translation": "sea",
+    "sentences": [
+      {
+        "fr": "En été, nous nageons souvent dans la mer.",
+        "en": "In summer we often swim in the sea."
+      },
+      {
+        "fr": "La mer était calme ce matin-là.",
+        "en": "The sea was calm that morning."
+      }
+    ]
+  },
+  {
+    "word": "danser",
+    "level": "A1",
+    "translation": "to dance",
+    "sentences": [
+      {
+        "fr": "Tu veux danser avec moi ce soir ?",
+        "en": "Do you want to dance with me tonight?"
+      },
+      {
+        "fr": "Ils ont dansé jusqu’à minuit à la fête.",
+        "en": "They danced until midnight at the party."
+      }
+    ]
   }
 ]

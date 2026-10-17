@@ -2949,8 +2949,14 @@
     "level": "A2",
     "translation": "trip, journey",
     "sentences": [
-      { "fr": "Notre voyage en Bretagne débute samedi matin.", "en": "Our trip to Brittany starts on Saturday morning." },
-      { "fr": "Elle raconte son voyage avec beaucoup d'enthousiasme.", "en": "She talks about her journey with great enthusiasm." }
+      {
+        "fr": "Notre voyage en Bretagne débute samedi matin.",
+        "en": "Our trip to Brittany starts on Saturday morning."
+      },
+      {
+        "fr": "Elle raconte son voyage avec beaucoup d'enthousiasme.",
+        "en": "She talks about her journey with great enthusiasm."
+      }
     ]
   },
   {
@@ -2958,8 +2964,14 @@
     "level": "A2",
     "translation": "neighbour",
     "sentences": [
-      { "fr": "Mon voisin prête souvent ses outils aux habitants de l'immeuble.", "en": "My neighbour often lends his tools to the building's residents." },
-      { "fr": "Nous avons invité nos voisins à prendre un café dimanche.", "en": "We invited our neighbours for coffee on Sunday." }
+      {
+        "fr": "Mon voisin prête souvent ses outils aux habitants de l'immeuble.",
+        "en": "My neighbour often lends his tools to the building's residents."
+      },
+      {
+        "fr": "Nous avons invité nos voisins à prendre un café dimanche.",
+        "en": "We invited our neighbours for coffee on Sunday."
+      }
     ]
   },
   {
@@ -2967,8 +2979,14 @@
     "level": "A2",
     "translation": "kitchen; cooking",
     "sentences": [
-      { "fr": "La cuisine est assez grande pour préparer le dîner ensemble.", "en": "The kitchen is big enough to prepare dinner together." },
-      { "fr": "Il aime la cuisine italienne et apprend de nouvelles recettes.", "en": "He likes Italian cooking and is learning new recipes." }
+      {
+        "fr": "La cuisine est assez grande pour préparer le dîner ensemble.",
+        "en": "The kitchen is big enough to prepare dinner together."
+      },
+      {
+        "fr": "Il aime la cuisine italienne et apprend de nouvelles recettes.",
+        "en": "He likes Italian cooking and is learning new recipes."
+      }
     ]
   },
   {
@@ -2976,8 +2994,14 @@
     "level": "A2",
     "translation": "to choose",
     "sentences": [
-      { "fr": "Tu peux choisir une activité pour samedi après-midi.", "en": "You can choose an activity for Saturday afternoon." },
-      { "fr": "Nous avons choisi un hôtel près de la gare.", "en": "We chose a hotel near the train station." }
+      {
+        "fr": "Tu peux choisir une activité pour samedi après-midi.",
+        "en": "You can choose an activity for Saturday afternoon."
+      },
+      {
+        "fr": "Nous avons choisi un hôtel près de la gare.",
+        "en": "We chose a hotel near the train station."
+      }
     ]
   },
   {
@@ -2985,8 +3009,14 @@
     "level": "A2",
     "translation": "to forget",
     "sentences": [
-      { "fr": "N'oublie pas tes clés avant de partir au travail.", "en": "Don't forget your keys before leaving for work." },
-      { "fr": "J'ai oublié le nom du restaurant que tu conseillais.", "en": "I forgot the name of the restaurant you recommended." }
+      {
+        "fr": "N'oublie pas tes clés avant de partir au travail.",
+        "en": "Don't forget your keys before leaving for work."
+      },
+      {
+        "fr": "J'ai oublié le nom du restaurant que tu conseillais.",
+        "en": "I forgot the name of the restaurant you recommended."
+      }
     ]
   },
   {
@@ -2994,8 +3024,14 @@
     "level": "A2",
     "translation": "to succeed; to manage",
     "sentences": [
-      { "fr": "Elle a réussi son examen de conduite du premier coup.", "en": "She passed her driving test on the first try." },
-      { "fr": "Nous réussirons à finir le projet avant vendredi.", "en": "We will manage to finish the project before Friday." }
+      {
+        "fr": "Elle a réussi son examen de conduite du premier coup.",
+        "en": "She passed her driving test on the first try."
+      },
+      {
+        "fr": "Nous réussirons à finir le projet avant vendredi.",
+        "en": "We will manage to finish the project before Friday."
+      }
     ]
   },
   {
@@ -3003,8 +3039,14 @@
     "level": "A2",
     "translation": "neighbourhood, district",
     "sentences": [
-      { "fr": "Ce quartier est calme le soir après la fermeture des magasins.", "en": "This neighbourhood is quiet in the evening after the shops close." },
-      { "fr": "Ils cherchent un appartement dans un quartier proche du métro.", "en": "They are looking for a flat in a neighbourhood near the metro." }
+      {
+        "fr": "Ce quartier est calme le soir après la fermeture des magasins.",
+        "en": "This neighbourhood is quiet in the evening after the shops close."
+      },
+      {
+        "fr": "Ils cherchent un appartement dans un quartier proche du métro.",
+        "en": "They are looking for a flat in a neighbourhood near the metro."
+      }
     ]
   },
   {
@@ -3012,8 +3054,14 @@
     "level": "A2",
     "translation": "habit",
     "sentences": [
-      { "fr": "J'ai l'habitude de marcher jusqu'à la boulangerie le matin.", "en": "I am used to walking to the bakery in the morning." },
-      { "fr": "Prendre le train est devenu une habitude pour son travail.", "en": "Taking the train has become a habit for her work." }
+      {
+        "fr": "J'ai l'habitude de marcher jusqu'à la boulangerie le matin.",
+        "en": "I am used to walking to the bakery in the morning."
+      },
+      {
+        "fr": "Prendre le train est devenu une habitude pour son travail.",
+        "en": "Taking the train has become a habit for her work."
+      }
     ]
   },
   {
@@ -3021,8 +3069,14 @@
     "level": "A2",
     "translation": "to suggest, offer",
     "sentences": [
-      { "fr": "Le serveur propose le plat du jour avec une salade.", "en": "The waiter offers the dish of the day with a salad." },
-      { "fr": "Je te propose de nous retrouver devant le cinéma.", "en": "I suggest that we meet in front of the cinema." }
+      {
+        "fr": "Le serveur propose le plat du jour avec une salade.",
+        "en": "The waiter offers the dish of the day with a salad."
+      },
+      {
+        "fr": "Je te propose de nous retrouver devant le cinéma.",
+        "en": "I suggest that we meet in front of the cinema."
+      }
     ]
   },
   {
@@ -3030,8 +3084,14 @@
     "level": "A2",
     "translation": "to invite",
     "sentences": [
-      { "fr": "Ils invitent leurs amis à dîner vendredi soir.", "en": "They are inviting their friends to dinner on Friday evening." },
-      { "fr": "Ma collègue m'a invité à son anniversaire samedi.", "en": "My colleague invited me to her birthday on Saturday." }
+      {
+        "fr": "Ils invitent leurs amis à dîner vendredi soir.",
+        "en": "They are inviting their friends to dinner on Friday evening."
+      },
+      {
+        "fr": "Ma collègue m'a invité à son anniversaire samedi.",
+        "en": "My colleague invited me to her birthday on Saturday."
+      }
     ]
   },
   {
@@ -3039,8 +3099,14 @@
     "level": "A2",
     "translation": "to decide",
     "sentences": [
-      { "fr": "On doit décider du lieu avant de réserver les billets.", "en": "We need to decide on the place before booking the tickets." },
-      { "fr": "Elle a décidé de suivre des cours de dessin le soir.", "en": "She decided to take drawing classes in the evening." }
+      {
+        "fr": "On doit décider du lieu avant de réserver les billets.",
+        "en": "We need to decide on the place before booking the tickets."
+      },
+      {
+        "fr": "Elle a décidé de suivre des cours de dessin le soir.",
+        "en": "She decided to take drawing classes in the evening."
+      }
     ]
   },
   {
@@ -3048,8 +3114,14 @@
     "level": "A2",
     "translation": "to prepare",
     "sentences": [
-      { "fr": "Je prépare mes affaires la veille de chaque voyage.", "en": "I prepare my things the day before every trip." },
-      { "fr": "Nous avons préparé une tarte aux pommes pour le dessert.", "en": "We prepared an apple tart for dessert." }
+      {
+        "fr": "Je prépare mes affaires la veille de chaque voyage.",
+        "en": "I prepare my things the day before every trip."
+      },
+      {
+        "fr": "Nous avons préparé une tarte aux pommes pour le dessert.",
+        "en": "We prepared an apple tart for dessert."
+      }
     ]
   },
   {
@@ -3057,8 +3129,14 @@
     "level": "A2",
     "translation": "smile; to smile",
     "sentences": [
-      { "fr": "Son sourire a rassuré les enfants avant le spectacle.", "en": "Her smile reassured the children before the show." },
-      { "fr": "Le bébé sourit dès qu'il entend la voix de sa mère.", "en": "The baby smiles as soon as he hears his mother's voice." }
+      {
+        "fr": "Son sourire a rassuré les enfants avant le spectacle.",
+        "en": "Her smile reassured the children before the show."
+      },
+      {
+        "fr": "Le bébé sourit dès qu'il entend la voix de sa mère.",
+        "en": "The baby smiles as soon as he hears his mother's voice."
+      }
     ]
   },
   {
@@ -3066,8 +3144,14 @@
     "level": "A2",
     "translation": "advice, tip",
     "sentences": [
-      { "fr": "Le médecin lui a donné un conseil simple pour mieux dormir.", "en": "The doctor gave her a simple piece of advice for sleeping better." },
-      { "fr": "Tes conseils m'ont aidé à choisir un bon ordinateur.", "en": "Your advice helped me choose a good computer." }
+      {
+        "fr": "Le médecin lui a donné un conseil simple pour mieux dormir.",
+        "en": "The doctor gave her a simple piece of advice for sleeping better."
+      },
+      {
+        "fr": "Tes conseils m'ont aidé à choisir un bon ordinateur.",
+        "en": "Your advice helped me choose a good computer."
+      }
     ]
   },
   {
@@ -3075,8 +3159,14 @@
     "level": "A2",
     "translation": "to repair, fix",
     "sentences": [
-      { "fr": "Le mécanicien répare ma voiture depuis ce matin.", "en": "The mechanic has been fixing my car since this morning." },
-      { "fr": "Tu peux réparer cette chaise avant l'arrivée des invités ?", "en": "Can you fix this chair before the guests arrive?" }
+      {
+        "fr": "Le mécanicien répare ma voiture depuis ce matin.",
+        "en": "The mechanic has been fixing my car since this morning."
+      },
+      {
+        "fr": "Tu peux réparer cette chaise avant l'arrivée des invités ?",
+        "en": "Can you fix this chair before the guests arrive?"
+      }
     ]
   },
   {
@@ -3084,8 +3174,14 @@
     "level": "A2",
     "translation": "to carry, wear",
     "sentences": [
-      { "fr": "Je porte un manteau épais quand il fait froid.", "en": "I wear a thick coat when it is cold." },
-      { "fr": "Elle a porté les courses jusqu'à la voiture.", "en": "She carried the groceries to the car." }
+      {
+        "fr": "Je porte un manteau épais quand il fait froid.",
+        "en": "I wear a thick coat when it is cold."
+      },
+      {
+        "fr": "Elle a porté les courses jusqu'à la voiture.",
+        "en": "She carried the groceries to the car."
+      }
     ]
   },
   {
@@ -3093,8 +3189,14 @@
     "level": "A2",
     "translation": "to meet, encounter",
     "sentences": [
-      { "fr": "Nous rencontrons nos amis près de la mairie à midi.", "en": "We are meeting our friends near the town hall at noon." },
-      { "fr": "J'ai rencontré mon voisin dans le train hier soir.", "en": "I met my neighbour on the train last night." }
+      {
+        "fr": "Nous rencontrons nos amis près de la mairie à midi.",
+        "en": "We are meeting our friends near the town hall at noon."
+      },
+      {
+        "fr": "J'ai rencontré mon voisin dans le train hier soir.",
+        "en": "I met my neighbour on the train last night."
+      }
     ]
   },
   {
@@ -3102,8 +3204,14 @@
     "level": "A2",
     "translation": "to explain",
     "sentences": [
-      { "fr": "Le professeur explique la règle avec un exemple simple.", "en": "The teacher explains the rule with a simple example." },
-      { "fr": "Elle m'a expliqué comment utiliser cette application.", "en": "She explained how to use this app to me." }
+      {
+        "fr": "Le professeur explique la règle avec un exemple simple.",
+        "en": "The teacher explains the rule with a simple example."
+      },
+      {
+        "fr": "Elle m'a expliqué comment utiliser cette application.",
+        "en": "She explained how to use this app to me."
+      }
     ]
   },
   {
@@ -3111,8 +3219,14 @@
     "level": "A2",
     "translation": "to continue",
     "sentences": [
-      { "fr": "Il continue à apprendre le français chaque soir.", "en": "He continues to learn French every evening." },
-      { "fr": "Nous avons continué la promenade malgré la pluie.", "en": "We continued the walk despite the rain." }
+      {
+        "fr": "Il continue à apprendre le français chaque soir.",
+        "en": "He continues to learn French every evening."
+      },
+      {
+        "fr": "Nous avons continué la promenade malgré la pluie.",
+        "en": "We continued the walk despite the rain."
+      }
     ]
   },
   {
@@ -3120,8 +3234,14 @@
     "level": "A2",
     "translation": "to change",
     "sentences": [
-      { "fr": "Le temps change souvent après le déjeuner en montagne.", "en": "The weather often changes after lunch in the mountains." },
-      { "fr": "J'ai changé de place pour mieux voir la scène.", "en": "I changed seats to see the stage better." }
+      {
+        "fr": "Le temps change souvent après le déjeuner en montagne.",
+        "en": "The weather often changes after lunch in the mountains."
+      },
+      {
+        "fr": "J'ai changé de place pour mieux voir la scène.",
+        "en": "I changed seats to see the stage better."
+      }
     ]
   },
   {
@@ -3129,8 +3249,14 @@
     "level": "A2",
     "translation": "to win, earn",
     "sentences": [
-      { "fr": "Cette équipe gagne presque tous ses matchs à domicile.", "en": "This team wins almost all its home matches." },
-      { "fr": "Elle a gagné un peu d'argent pendant les vacances.", "en": "She earned a little money during the holidays." }
+      {
+        "fr": "Cette équipe gagne presque tous ses matchs à domicile.",
+        "en": "This team wins almost all its home matches."
+      },
+      {
+        "fr": "Elle a gagné un peu d'argent pendant les vacances.",
+        "en": "She earned a little money during the holidays."
+      }
     ]
   },
   {
@@ -3138,8 +3264,14 @@
     "level": "A2",
     "translation": "to lose",
     "sentences": [
-      { "fr": "Ne perds pas ton téléphone près de la piscine.", "en": "Do not lose your phone near the pool." },
-      { "fr": "J'ai perdu mes lunettes après le concert.", "en": "I lost my glasses after the concert." }
+      {
+        "fr": "Ne perds pas ton téléphone près de la piscine.",
+        "en": "Do not lose your phone near the pool."
+      },
+      {
+        "fr": "J'ai perdu mes lunettes après le concert.",
+        "en": "I lost my glasses after the concert."
+      }
     ]
   },
   {
@@ -3147,8 +3279,14 @@
     "level": "A2",
     "translation": "to send",
     "sentences": [
-      { "fr": "Envoie-moi les photos dès que tu arrives chez toi.", "en": "Send me the photos as soon as you get home." },
-      { "fr": "Je t'ai envoyé l'adresse du restaurant par message.", "en": "I sent you the restaurant's address by message." }
+      {
+        "fr": "Envoie-moi les photos dès que tu arrives chez toi.",
+        "en": "Send me the photos as soon as you get home."
+      },
+      {
+        "fr": "Je t'ai envoyé l'adresse du restaurant par message.",
+        "en": "I sent you the restaurant's address by message."
+      }
     ]
   },
   {
@@ -3156,8 +3294,14 @@
     "level": "A2",
     "translation": "to receive",
     "sentences": [
-      { "fr": "Nous recevons souvent des colis à la réception.", "en": "We often receive parcels at reception." },
-      { "fr": "J'ai reçu une réponse très rapidement ce matin.", "en": "I received an answer very quickly this morning." }
+      {
+        "fr": "Nous recevons souvent des colis à la réception.",
+        "en": "We often receive parcels at reception."
+      },
+      {
+        "fr": "J'ai reçu une réponse très rapidement ce matin.",
+        "en": "I received an answer very quickly this morning."
+      }
     ]
   },
   {
@@ -3165,8 +3309,14 @@
     "level": "A2",
     "translation": "to show",
     "sentences": [
-      { "fr": "Le musée montre des objets anciens de la région.", "en": "The museum shows old objects from the region." },
-      { "fr": "Elle m'a montré le chemin jusqu'à la gare.", "en": "She showed me the way to the station." }
+      {
+        "fr": "Le musée montre des objets anciens de la région.",
+        "en": "The museum shows old objects from the region."
+      },
+      {
+        "fr": "Elle m'a montré le chemin jusqu'à la gare.",
+        "en": "She showed me the way to the station."
+      }
     ]
   },
   {
@@ -3174,8 +3324,14 @@
     "level": "A2",
     "translation": "to serve",
     "sentences": [
-      { "fr": "Le restaurant sert du poisson préparé chaque matin.", "en": "The restaurant serves fish prepared each morning." },
-      { "fr": "On nous a servi le dessert après le café.", "en": "We were served dessert after coffee." }
+      {
+        "fr": "Le restaurant sert du poisson préparé chaque matin.",
+        "en": "The restaurant serves fish prepared each morning."
+      },
+      {
+        "fr": "On nous a servi le dessert après le café.",
+        "en": "We were served dessert after coffee."
+      }
     ]
   },
   {
@@ -3183,8 +3339,14 @@
     "level": "A2",
     "translation": "to fall",
     "sentences": [
-      { "fr": "Les feuilles tombent après les premières nuits froides.", "en": "The leaves fall after the first cold nights." },
-      { "fr": "Il est tombé de vélo, mais il ne s'est pas blessé.", "en": "He fell off his bike, but he was not hurt." }
+      {
+        "fr": "Les feuilles tombent après les premières nuits froides.",
+        "en": "The leaves fall after the first cold nights."
+      },
+      {
+        "fr": "Il est tombé de vélo, mais il ne s'est pas blessé.",
+        "en": "He fell off his bike, but he was not hurt."
+      }
     ]
   },
   {
@@ -3192,8 +3354,14 @@
     "level": "A2",
     "translation": "to become",
     "sentences": [
-      { "fr": "Mon frère devient très calme quand il lit.", "en": "My brother becomes very calm when he reads." },
-      { "fr": "Après le cours, elle est devenue mon amie.", "en": "After the class, she became my friend." }
+      {
+        "fr": "Mon frère devient très calme quand il lit.",
+        "en": "My brother becomes very calm when he reads."
+      },
+      {
+        "fr": "Après le cours, elle est devenue mon amie.",
+        "en": "After the class, she became my friend."
+      }
     ]
   },
   {
@@ -3201,8 +3369,14 @@
     "level": "A2",
     "translation": "to return, go back",
     "sentences": [
-      { "fr": "Je retourne à Paris lundi pour le travail.", "en": "I am returning to Paris on Monday for work." },
-      { "fr": "Nous sommes retournés dans ce village l'été dernier.", "en": "We went back to that village last summer." }
+      {
+        "fr": "Je retourne à Paris lundi pour le travail.",
+        "en": "I am returning to Paris on Monday for work."
+      },
+      {
+        "fr": "Nous sommes retournés dans ce village l'été dernier.",
+        "en": "We went back to that village last summer."
+      }
     ]
   },
   {
@@ -3210,8 +3384,14 @@
     "level": "A2",
     "translation": "to walk, work",
     "sentences": [
-      { "fr": "Je marche jusqu'au bureau quand il fait beau.", "en": "I walk to the office when the weather is nice." },
-      { "fr": "Mon ordinateur a marché après la mise à jour.", "en": "My computer worked after the update." }
+      {
+        "fr": "Je marche jusqu'au bureau quand il fait beau.",
+        "en": "I walk to the office when the weather is nice."
+      },
+      {
+        "fr": "Mon ordinateur a marché après la mise à jour.",
+        "en": "My computer worked after the update."
+      }
     ]
   },
   {
@@ -3219,8 +3399,14 @@
     "level": "A1",
     "translation": "old",
     "sentences": [
-      { "fr": "Mon grand-père vit dans un vieux village près de Lyon.", "en": "My grandfather lives in an old village near Lyon." },
-      { "fr": "Cette maison est vieille, mais elle reste très solide.", "en": "This house is old, but it remains very sturdy." }
+      {
+        "fr": "Mon grand-père vit dans un vieux village près de Lyon.",
+        "en": "My grandfather lives in an old village near Lyon."
+      },
+      {
+        "fr": "Cette maison est vieille, mais elle reste très solide.",
+        "en": "This house is old, but it remains very sturdy."
+      }
     ]
   },
   {
@@ -3228,8 +3414,14 @@
     "level": "A1",
     "translation": "minute",
     "sentences": [
-      { "fr": "Le bus arrive dans cinq minutes, alors dépêchons-nous.", "en": "The bus arrives in five minutes, so let us hurry." },
-      { "fr": "Attends une minute, je cherche encore mes clés.", "en": "Wait a minute, I am still looking for my keys." }
+      {
+        "fr": "Le bus arrive dans cinq minutes, alors dépêchons-nous.",
+        "en": "The bus arrives in five minutes, so let us hurry."
+      },
+      {
+        "fr": "Attends une minute, je cherche encore mes clés.",
+        "en": "Wait a minute, I am still looking for my keys."
+      }
     ]
   },
   {
@@ -3237,8 +3429,14 @@
     "level": "A1",
     "translation": "easy",
     "sentences": [
-      { "fr": "Cette recette est facile à préparer le soir.", "en": "This recipe is easy to prepare in the evening." },
-      { "fr": "Les exercices étaient faciles pour toute la classe.", "en": "The exercises were easy for the whole class." }
+      {
+        "fr": "Cette recette est facile à préparer le soir.",
+        "en": "This recipe is easy to prepare in the evening."
+      },
+      {
+        "fr": "Les exercices étaient faciles pour toute la classe.",
+        "en": "The exercises were easy for the whole class."
+      }
     ]
   },
   {
@@ -3246,8 +3444,14 @@
     "level": "A1",
     "translation": "happy",
     "sentences": [
-      { "fr": "Je suis heureux de retrouver mes amis ce week-end.", "en": "I am happy to see my friends again this weekend." },
-      { "fr": "Elles étaient heureuses après la bonne nouvelle.", "en": "They were happy after the good news." }
+      {
+        "fr": "Je suis heureux de retrouver mes amis ce week-end.",
+        "en": "I am happy to see my friends again this weekend."
+      },
+      {
+        "fr": "Elles étaient heureuses après la bonne nouvelle.",
+        "en": "They were happy after the good news."
+      }
     ]
   },
   {
@@ -3255,8 +3459,14 @@
     "level": "A1",
     "translation": "bed",
     "sentences": [
-      { "fr": "Le chat dort sur le lit près de la fenêtre.", "en": "The cat sleeps on the bed near the window." },
-      { "fr": "J'ai fait les lits avant l'arrivée des invités.", "en": "I made the beds before the guests arrived." }
+      {
+        "fr": "Le chat dort sur le lit près de la fenêtre.",
+        "en": "The cat sleeps on the bed near the window."
+      },
+      {
+        "fr": "J'ai fait les lits avant l'arrivée des invités.",
+        "en": "I made the beds before the guests arrived."
+      }
     ]
   },
   {
@@ -3264,8 +3474,14 @@
     "level": "A1",
     "translation": "dog",
     "sentences": [
-      { "fr": "Le chien attend son maître devant la boulangerie.", "en": "The dog waits for its owner in front of the bakery." },
-      { "fr": "Nos chiens aiment courir dans le jardin après la pluie.", "en": "Our dogs like running in the garden after the rain." }
+      {
+        "fr": "Le chien attend son maître devant la boulangerie.",
+        "en": "The dog waits for its owner in front of the bakery."
+      },
+      {
+        "fr": "Nos chiens aiment courir dans le jardin après la pluie.",
+        "en": "Our dogs like running in the garden after the rain."
+      }
     ]
   },
   {
@@ -3273,8 +3489,14 @@
     "level": "A1",
     "translation": "photo",
     "sentences": [
-      { "fr": "Cette photo montre notre famille pendant les vacances.", "en": "This photo shows our family during the holidays." },
-      { "fr": "Il a envoyé des photos de son séjour à Marseille.", "en": "He sent photos from his stay in Marseille." }
+      {
+        "fr": "Cette photo montre notre famille pendant les vacances.",
+        "en": "This photo shows our family during the holidays."
+      },
+      {
+        "fr": "Il a envoyé des photos de son séjour à Marseille.",
+        "en": "He sent photos from his stay in Marseille."
+      }
     ]
   },
   {
@@ -3282,8 +3504,14 @@
     "level": "A1",
     "translation": "music",
     "sentences": [
-      { "fr": "J'écoute de la musique en préparant le dîner.", "en": "I listen to music while preparing dinner." },
-      { "fr": "La musique était trop forte dans le café hier soir.", "en": "The music was too loud in the café last night." }
+      {
+        "fr": "J'écoute de la musique en préparant le dîner.",
+        "en": "I listen to music while preparing dinner."
+      },
+      {
+        "fr": "La musique était trop forte dans le café hier soir.",
+        "en": "The music was too loud in the café last night."
+      }
     ]
   },
   {
@@ -3291,8 +3519,14 @@
     "level": "A1",
     "translation": "market",
     "sentences": [
-      { "fr": "Le marché du samedi vend des légumes très frais.", "en": "The Saturday market sells very fresh vegetables." },
-      { "fr": "Nous allons au marché avant de préparer le repas.", "en": "We go to the market before preparing the meal." }
+      {
+        "fr": "Le marché du samedi vend des légumes très frais.",
+        "en": "The Saturday market sells very fresh vegetables."
+      },
+      {
+        "fr": "Nous allons au marché avant de préparer le repas.",
+        "en": "We go to the market before preparing the meal."
+      }
     ]
   },
   {
@@ -3300,8 +3534,14 @@
     "level": "A1",
     "translation": "ill, sick",
     "sentences": [
-      { "fr": "Ma sœur est malade et reste à la maison aujourd'hui.", "en": "My sister is ill and is staying home today." },
-      { "fr": "Les enfants étaient malades après le voyage.", "en": "The children were ill after the trip." }
+      {
+        "fr": "Ma sœur est malade et reste à la maison aujourd'hui.",
+        "en": "My sister is ill and is staying home today."
+      },
+      {
+        "fr": "Les enfants étaient malades après le voyage.",
+        "en": "The children were ill after the trip."
+      }
     ]
   },
   {
@@ -3309,8 +3549,14 @@
     "level": "A1",
     "translation": "table",
     "sentences": [
-      { "fr": "Les assiettes sont déjà sur la table pour le dîner.", "en": "The plates are already on the table for dinner." },
-      { "fr": "Nous avons choisi une table près de la terrasse.", "en": "We chose a table near the terrace." }
+      {
+        "fr": "Les assiettes sont déjà sur la table pour le dîner.",
+        "en": "The plates are already on the table for dinner."
+      },
+      {
+        "fr": "Nous avons choisi une table près de la terrasse.",
+        "en": "We chose a table near the terrace."
+      }
     ]
   },
   {
@@ -3318,8 +3564,14 @@
     "level": "A1",
     "translation": "black",
     "sentences": [
-      { "fr": "Il porte un pull noir pour aller au travail.", "en": "He wears a black sweater to go to work." },
-      { "fr": "Les chaussures noires sont près de l'entrée.", "en": "The black shoes are near the entrance." }
+      {
+        "fr": "Il porte un pull noir pour aller au travail.",
+        "en": "He wears a black sweater to go to work."
+      },
+      {
+        "fr": "Les chaussures noires sont près de l'entrée.",
+        "en": "The black shoes are near the entrance."
+      }
     ]
   },
   {
@@ -3327,8 +3579,14 @@
     "level": "A1",
     "translation": "coffee; café",
     "sentences": [
-      { "fr": "Je prends un café chaud avant de commencer la journée.", "en": "I have a hot coffee before starting the day." },
-      { "fr": "Le petit café près de la gare ferme à dix-huit heures.", "en": "The small café near the station closes at six p.m." }
+      {
+        "fr": "Je prends un café chaud avant de commencer la journée.",
+        "en": "I have a hot coffee before starting the day."
+      },
+      {
+        "fr": "Le petit café près de la gare ferme à dix-huit heures.",
+        "en": "The small café near the station closes at six p.m."
+      }
     ]
   },
   {
@@ -3336,8 +3594,14 @@
     "level": "A1",
     "translation": "eyes",
     "sentences": [
-      { "fr": "Elle a les yeux bleus comme ceux de sa mère.", "en": "She has blue eyes like her mother's." },
-      { "fr": "Ferme les yeux pendant quelques minutes pour te reposer.", "en": "Close your eyes for a few minutes to rest." }
+      {
+        "fr": "Elle a les yeux bleus comme ceux de sa mère.",
+        "en": "She has blue eyes like her mother's."
+      },
+      {
+        "fr": "Ferme les yeux pendant quelques minutes pour te reposer.",
+        "en": "Close your eyes for a few minutes to rest."
+      }
     ]
   },
   {
@@ -3345,68 +3609,1139 @@
     "level": "A1",
     "translation": "film, movie",
     "sentences": [
-      { "fr": "Nous regardons un film français après le dîner.", "en": "We are watching a French film after dinner." },
-      { "fr": "Ce film était mon préféré quand j'étais enfant.", "en": "This film was my favourite when I was a child." }
+      {
+        "fr": "Nous regardons un film français après le dîner.",
+        "en": "We are watching a French film after dinner."
+      },
+      {
+        "fr": "Ce film était mon préféré quand j'étais enfant.",
+        "en": "This film was my favourite when I was a child."
+      }
     ]
   },
-  { "word": "visiter", "level": "A2", "translation": "to visit", "sentences": [{ "fr": "Nous visitons le musée après le déjeuner.", "en": "We are visiting the museum after lunch." }, { "fr": "Elle a visité Lyon pendant les vacances.", "en": "She visited Lyon during the holidays." }] },
-  { "word": "courir", "level": "A2", "translation": "to run", "sentences": [{ "fr": "Je cours dans le parc chaque samedi matin.", "en": "I run in the park every Saturday morning." }, { "fr": "Les enfants ont couru jusqu'à la plage.", "en": "The children ran to the beach." }] },
-  { "word": "nager", "level": "A2", "translation": "to swim", "sentences": [{ "fr": "Tu nages souvent à la piscine municipale ?", "en": "Do you often swim at the public pool?" }, { "fr": "Nous avons nagé dans la mer cet été.", "en": "We swam in the sea this summer." }] },
-  { "word": "laver", "level": "A2", "translation": "to wash", "sentences": [{ "fr": "Je lave les verres après le repas du soir.", "en": "I wash the glasses after the evening meal." }, { "fr": "Il a lavé sa voiture samedi dernier.", "en": "He washed his car last Saturday." }] },
-  { "word": "monter", "level": "A2", "translation": "to go up, assemble", "sentences": [{ "fr": "Nous montons les escaliers jusqu'au troisième étage.", "en": "We go up the stairs to the third floor." }, { "fr": "Elle a monté la nouvelle étagère hier soir.", "en": "She assembled the new shelf last night." }] },
-  { "word": "descendre", "level": "A2", "translation": "to go down, get off", "sentences": [{ "fr": "Je descends à la prochaine station de métro.", "en": "I get off at the next metro station." }, { "fr": "Ils sont descendus de la montagne avant la nuit.", "en": "They came down from the mountain before nightfall." }] },
-  { "word": "conduire", "level": "A2", "translation": "to drive", "sentences": [{ "fr": "Mon frère conduit jusqu'à son bureau chaque jour.", "en": "My brother drives to his office every day." }, { "fr": "Elle a conduit pendant trois heures sans pause.", "en": "She drove for three hours without a break." }] },
-  { "word": "emprunter", "level": "A2", "translation": "to borrow; take", "sentences": [{ "fr": "Tu peux emprunter mon vélo pour aller au marché.", "en": "You can borrow my bike to go to the market." }, { "fr": "Nous avons emprunté cette route pour éviter les bouchons.", "en": "We took this road to avoid the traffic jams." }] },
-  { "word": "partager", "level": "A2", "translation": "to share", "sentences": [{ "fr": "Les enfants partagent leurs jouets avec leurs amis.", "en": "The children share their toys with their friends." }, { "fr": "J'ai partagé la tarte avec mes collègues.", "en": "I shared the tart with my colleagues." }] },
-  { "word": "payer", "level": "A2", "translation": "to pay", "sentences": [{ "fr": "Nous payons le repas directement au serveur.", "en": "We pay the waiter directly for the meal." }, { "fr": "Elle a payé ses billets en ligne hier soir.", "en": "She paid for her tickets online last night." }] },
-  { "word": "raconter", "level": "A2", "translation": "to tell, recount", "sentences": [{ "fr": "Mon grand-père raconte toujours de belles histoires.", "en": "My grandfather always tells lovely stories." }, { "fr": "Elle nous a raconté son voyage en détail.", "en": "She told us about her trip in detail." }] },
-  { "word": "voyager", "level": "A2", "translation": "to travel", "sentences": [{ "fr": "Ils voyagent souvent en train à travers la France.", "en": "They often travel by train across France." }, { "fr": "J'ai voyagé seul pour la première fois l'an dernier.", "en": "I travelled alone for the first time last year." }] },
-  { "word": "utiliser", "level": "A2", "translation": "to use", "sentences": [{ "fr": "J'utilise cette application pour acheter mes billets.", "en": "I use this app to buy my tickets." }, { "fr": "Nous avons utilisé une carte pour trouver le village.", "en": "We used a map to find the village." }] },
-  { "word": "répéter", "level": "A2", "translation": "to repeat", "sentences": [{ "fr": "Le professeur répète la question plus lentement.", "en": "The teacher repeats the question more slowly." }, { "fr": "Tu as répété son nom plusieurs fois hier.", "en": "You repeated his name several times yesterday." }] },
-  { "word": "prévenir", "level": "A2", "translation": "to warn, let know", "sentences": [{ "fr": "Préviens-moi si tu arrives en retard ce soir.", "en": "Let me know if you arrive late this evening." }, { "fr": "Elle a prévenu ses amis avant de partir.", "en": "She informed her friends before leaving." }] },
-  { "word": "espérer", "level": "A2", "translation": "to hope", "sentences": [{ "fr": "J'espère que le soleil reviendra demain matin.", "en": "I hope the sun will return tomorrow morning." }, { "fr": "Nous avons espéré une réponse toute la journée.", "en": "We hoped for an answer all day." }] },
-  { "word": "louer", "level": "A2", "translation": "to rent", "sentences": [{ "fr": "Ils louent un appartement près de la gare.", "en": "They are renting a flat near the station." }, { "fr": "Nous avons loué des vélos pour visiter la ville.", "en": "We rented bikes to visit the city." }] },
-  { "word": "terminer", "level": "A2", "translation": "to finish", "sentences": [{ "fr": "Je termine ce livre avant de commencer le suivant.", "en": "I am finishing this book before starting the next one." }, { "fr": "Elle a terminé son travail vers dix-huit heures.", "en": "She finished her work around six p.m." }] },
-  { "word": "annuler", "level": "A2", "translation": "to cancel", "sentences": [{ "fr": "Le train annule parfois ses départs en hiver.", "en": "The train sometimes cancels its departures in winter." }, { "fr": "Nous avons annulé le dîner à cause de la pluie.", "en": "We cancelled dinner because of the rain." }] },
-  { "word": "accompagner", "level": "A2", "translation": "to accompany", "sentences": [{ "fr": "J'accompagne ma sœur chez le médecin demain.", "en": "I am accompanying my sister to the doctor tomorrow." }, { "fr": "Il a accompagné ses enfants à l'école.", "en": "He accompanied his children to school." }] },
-  { "word": "profiter", "level": "A2", "translation": "to enjoy, make the most of", "sentences": [{ "fr": "Nous profitons du beau temps pour marcher dehors.", "en": "We are enjoying the good weather by walking outside." }, { "fr": "Elle a profité des soldes pour acheter un manteau.", "en": "She took advantage of the sales to buy a coat." }] },
-  { "word": "installer", "level": "A2", "translation": "to install, settle in", "sentences": [{ "fr": "Mon frère installe une nouvelle lampe dans le salon.", "en": "My brother is installing a new lamp in the living room." }, { "fr": "Nous nous sommes installés près de la fenêtre.", "en": "We settled near the window." }] },
-  { "word": "remplir", "level": "A2", "translation": "to fill in, fill", "sentences": [{ "fr": "Tu remplis ce formulaire à la réception.", "en": "You fill in this form at reception." }, { "fr": "J'ai rempli la bouteille d'eau avant de partir.", "en": "I filled the water bottle before leaving." }] },
-  { "word": "vérifier", "level": "A2", "translation": "to check", "sentences": [{ "fr": "Je vérifie toujours l'adresse avant d'envoyer un colis.", "en": "I always check the address before sending a parcel." }, { "fr": "Elle a vérifié les horaires sur son téléphone.", "en": "She checked the times on her phone." }] },
-  { "word": "réfléchir", "level": "A2", "translation": "to think, reflect", "sentences": [{ "fr": "Réfléchis bien avant de choisir ton billet.", "en": "Think carefully before choosing your ticket." }, { "fr": "Nous avons réfléchi à cette question pendant le repas.", "en": "We thought about that question during the meal." }] },
-  { "word": "discuter", "level": "A2", "translation": "to discuss, chat", "sentences": [{ "fr": "Les collègues discutent de leur projet à midi.", "en": "The colleagues discuss their project at noon." }, { "fr": "J'ai discuté avec le voisin devant l'immeuble.", "en": "I chatted with the neighbour in front of the building." }] },
-  { "word": "promener", "level": "A2", "translation": "to take for a walk", "sentences": [{ "fr": "Elle promène son chien dans le parc chaque soir.", "en": "She walks her dog in the park every evening." }, { "fr": "Nous nous sommes promenés près de la rivière.", "en": "We went for a walk near the river." }] },
-  { "word": "cuisiner", "level": "A2", "translation": "to cook", "sentences": [{ "fr": "Je cuisine souvent des pâtes le vendredi soir.", "en": "I often cook pasta on Friday evening." }, { "fr": "Ils ont cuisiné un bon repas pour leurs amis.", "en": "They cooked a good meal for their friends." }] },
-  { "word": "nettoyer", "level": "A2", "translation": "to clean", "sentences": [{ "fr": "Nous nettoyons la cuisine après le petit déjeuner.", "en": "We clean the kitchen after breakfast." }, { "fr": "Il a nettoyé ses chaussures avant le départ.", "en": "He cleaned his shoes before leaving." }] },
-  { "word": "ranger", "level": "A2", "translation": "to tidy, put away", "sentences": [{ "fr": "Tu ranges tes livres après avoir étudié ?", "en": "Do you put your books away after studying?" }, { "fr": "J'ai rangé les courses dans le réfrigérateur.", "en": "I put the groceries away in the refrigerator." }] },
-  { "word": "allumer", "level": "A2", "translation": "to turn on, light", "sentences": [{ "fr": "Allume la lumière avant de chercher tes clés.", "en": "Turn on the light before looking for your keys." }, { "fr": "Il a allumé son ordinateur après le déjeuner.", "en": "He turned on his computer after lunch." }] },
-  { "word": "éteindre", "level": "A2", "translation": "to turn off, extinguish", "sentences": [{ "fr": "Éteins la télévision quand le film est terminé.", "en": "Turn off the television when the film is over." }, { "fr": "Nous avons éteint les lumières avant de sortir.", "en": "We turned off the lights before going out." }] },
-  { "word": "sentir", "level": "A2", "translation": "to smell, feel", "sentences": [{ "fr": "Cette soupe sent très bon dans la cuisine.", "en": "This soup smells very good in the kitchen." }, { "fr": "Elle a senti le vent froid en ouvrant la porte.", "en": "She felt the cold wind when opening the door." }] },
-  { "word": "goûter", "level": "A2", "translation": "to taste", "sentences": [{ "fr": "Goûte cette sauce avant d'ajouter du sel.", "en": "Taste this sauce before adding salt." }, { "fr": "Nous avons goûté un fromage local au marché.", "en": "We tasted a local cheese at the market." }] },
-  { "word": "offrir", "level": "A2", "translation": "to offer, give", "sentences": [{ "fr": "Le magasin offre une réduction aux étudiants.", "en": "The shop offers a discount to students." }, { "fr": "J'ai offert des fleurs à ma mère hier.", "en": "I gave flowers to my mother yesterday." }] },
-  { "word": "coûter", "level": "A2", "translation": "to cost", "sentences": [{ "fr": "Combien coûte ce billet de train pour Paris ?", "en": "How much does this train ticket to Paris cost?" }, { "fr": "Cette veste a coûté moins cher pendant les soldes.", "en": "This jacket cost less during the sales." }] },
-  { "word": "commander", "level": "A2", "translation": "to order", "sentences": [{ "fr": "Nous commandons deux cafés après le repas.", "en": "We order two coffees after the meal." }, { "fr": "Elle a commandé une pizza pour ce soir.", "en": "She ordered a pizza for this evening." }] },
-  { "word": "adorer", "level": "A2", "translation": "to love, adore", "sentences": [{ "fr": "J'adore écouter de la musique en cuisinant.", "en": "I love listening to music while cooking." }, { "fr": "Les enfants ont adoré le spectacle de samedi.", "en": "The children loved Saturday's show." }] },
-  { "word": "manquer", "level": "A2", "translation": "to miss; lack", "sentences": [{ "fr": "Tu me manques quand tu voyages trop longtemps.", "en": "I miss you when you travel for too long." }, { "fr": "Il a manqué le bus de huit heures ce matin.", "en": "He missed the eight o'clock bus this morning." }] },
-  { "word": "ajouter", "level": "A2", "translation": "to add", "sentences": [{ "fr": "Ajoute un peu de sucre dans ton café.", "en": "Add a little sugar to your coffee." }, { "fr": "J'ai ajouté son numéro à mes contacts.", "en": "I added her number to my contacts." }] },
-  { "word": "enlever", "level": "A2", "translation": "to remove, take off", "sentences": [{ "fr": "Enlève tes chaussures avant d'entrer dans le salon.", "en": "Take off your shoes before entering the living room." }, { "fr": "Elle a enlevé la tache avec de l'eau chaude.", "en": "She removed the stain with hot water." }] },
-  { "word": "couper", "level": "A2", "translation": "to cut", "sentences": [{ "fr": "Coupe le pain en petites tranches pour les invités.", "en": "Cut the bread into small slices for the guests." }, { "fr": "Le téléphone a coupé pendant notre conversation.", "en": "The phone call cut off during our conversation." }] },
-  { "word": "pousser", "level": "A2", "translation": "to push, grow", "sentences": [{ "fr": "Pousse la porte pour entrer dans le magasin.", "en": "Push the door to enter the shop." }, { "fr": "Les fleurs ont poussé rapidement ce printemps.", "en": "The flowers grew quickly this spring." }] },
-  { "word": "tirer", "level": "A2", "translation": "to pull", "sentences": [{ "fr": "Tire la chaise près de la table, s'il te plaît.", "en": "Pull the chair close to the table, please." }, { "fr": "Il a tiré le rideau pour cacher le soleil.", "en": "He pulled the curtain to block the sun." }] },
-  { "word": "garder", "level": "A2", "translation": "to keep, look after", "sentences": [{ "fr": "Je garde mon ticket jusqu'à la fin du voyage.", "en": "I keep my ticket until the end of the journey." }, { "fr": "Elle a gardé les enfants samedi après-midi.", "en": "She looked after the children on Saturday afternoon." }] },
-  { "word": "chaud", "level": "A1", "translation": "hot, warm", "sentences": [{ "fr": "Le café est encore chaud ce matin.", "en": "The coffee is still hot this morning." }, { "fr": "Nous avons mangé une soupe chaude après la pluie.", "en": "We ate a hot soup after the rain." }] },
-  { "word": "froid", "level": "A1", "translation": "cold", "sentences": [{ "fr": "Il fait très froid dehors ce soir.", "en": "It is very cold outside this evening." }, { "fr": "J'ai bu de l'eau froide après la course.", "en": "I drank cold water after the run." }] },
-  { "word": "blanc", "level": "A1", "translation": "white", "sentences": [{ "fr": "Elle porte une chemise blanche pour le travail.", "en": "She wears a white shirt to work." }, { "fr": "Les murs blancs rendent la pièce plus claire.", "en": "The white walls make the room brighter." }] },
-  { "word": "rouge", "level": "A1", "translation": "red", "sentences": [{ "fr": "La voiture rouge est garée devant la maison.", "en": "The red car is parked in front of the house." }, { "fr": "Son écharpe rouge est sa préférée en hiver.", "en": "Her red scarf is her favourite in winter." }] },
-  { "word": "fruit", "level": "A1", "translation": "fruit", "sentences": [{ "fr": "Je mange un fruit frais après le déjeuner.", "en": "I eat fresh fruit after lunch." }, { "fr": "Les fruits du marché sont très bons aujourd'hui.", "en": "The fruit at the market is very good today." }] },
-  { "word": "lait", "level": "A1", "translation": "milk", "sentences": [{ "fr": "J'ajoute du lait dans mon café le matin.", "en": "I add milk to my coffee in the morning." }, { "fr": "Le bébé a bu son lait avant de dormir.", "en": "The baby drank their milk before sleeping." }] },
-  { "word": "poisson", "level": "A1", "translation": "fish", "sentences": [{ "fr": "Le restaurant prépare du poisson frais aujourd'hui.", "en": "The restaurant prepares fresh fish today." }, { "fr": "Nous avons choisi les poissons au marché ce matin.", "en": "We chose the fish at the market this morning." }] },
-  { "word": "bateau", "level": "A1", "translation": "boat", "sentences": [{ "fr": "Le bateau part du port à neuf heures.", "en": "The boat leaves the harbour at nine o'clock." }, { "fr": "Ils ont vu plusieurs bateaux près de la plage.", "en": "They saw several boats near the beach." }] },
-  { "word": "soleil", "level": "A1", "translation": "sun", "sentences": [{ "fr": "Le soleil brille déjà au-dessus des toits.", "en": "The sun is already shining above the rooftops." }, { "fr": "Nous avons profité du soleil pendant le déjeuner.", "en": "We enjoyed the sun during lunch." }] },
-  { "word": "lettre", "level": "A1", "translation": "letter", "sentences": [{ "fr": "J'écris une lettre à ma grand-mère ce soir.", "en": "I am writing a letter to my grandmother this evening." }, { "fr": "Il a reçu deux lettres de son ami français.", "en": "He received two letters from his French friend." }] },
-  { "word": "chanson", "level": "A1", "translation": "song", "sentences": [{ "fr": "Cette chanson passe souvent à la radio.", "en": "This song often plays on the radio." }, { "fr": "Elle a chanté sa chanson préférée au concert.", "en": "She sang her favourite song at the concert." }] },
-  { "word": "cadeau", "level": "A1", "translation": "gift, present", "sentences": [{ "fr": "J'ai choisi un cadeau spécial pour son anniversaire.", "en": "I chose a special gift for her birthday." }, { "fr": "Les enfants ont ouvert leurs cadeaux avec joie.", "en": "The children opened their gifts happily." }] },
-  { "word": "bouche", "level": "A1", "translation": "mouth", "sentences": [{ "fr": "Ouvre la bouche pour goûter cette soupe.", "en": "Open your mouth to taste this soup." }, { "fr": "Il s'est lavé la bouche après le repas.", "en": "He washed his mouth after the meal." }] },
-  { "word": "nez", "level": "A1", "translation": "nose", "sentences": [{ "fr": "Mon chien a le nez très froid ce matin.", "en": "My dog has a very cold nose this morning." }, { "fr": "Elle s'est touché le nez en réfléchissant.", "en": "She touched her nose while thinking." }] },
-  { "word": "pied", "level": "A1", "translation": "foot", "sentences": [{ "fr": "J'ai mal au pied après cette longue marche.", "en": "My foot hurts after that long walk." }, { "fr": "Les enfants enlèvent leurs chaussures et se lavent les pieds.", "en": "The children take off their shoes and wash their feet." }] }
+  {
+    "word": "visiter",
+    "level": "A2",
+    "translation": "to visit",
+    "sentences": [
+      {
+        "fr": "Nous visitons le musée après le déjeuner.",
+        "en": "We are visiting the museum after lunch."
+      },
+      {
+        "fr": "Elle a visité Lyon pendant les vacances.",
+        "en": "She visited Lyon during the holidays."
+      }
+    ]
+  },
+  {
+    "word": "courir",
+    "level": "A2",
+    "translation": "to run",
+    "sentences": [
+      {
+        "fr": "Je cours dans le parc chaque samedi matin.",
+        "en": "I run in the park every Saturday morning."
+      },
+      {
+        "fr": "Les enfants ont couru jusqu'à la plage.",
+        "en": "The children ran to the beach."
+      }
+    ]
+  },
+  {
+    "word": "nager",
+    "level": "A2",
+    "translation": "to swim",
+    "sentences": [
+      {
+        "fr": "Tu nages souvent à la piscine municipale ?",
+        "en": "Do you often swim at the public pool?"
+      },
+      {
+        "fr": "Nous avons nagé dans la mer cet été.",
+        "en": "We swam in the sea this summer."
+      }
+    ]
+  },
+  {
+    "word": "laver",
+    "level": "A2",
+    "translation": "to wash",
+    "sentences": [
+      {
+        "fr": "Je lave les verres après le repas du soir.",
+        "en": "I wash the glasses after the evening meal."
+      },
+      {
+        "fr": "Il a lavé sa voiture samedi dernier.",
+        "en": "He washed his car last Saturday."
+      }
+    ]
+  },
+  {
+    "word": "monter",
+    "level": "A2",
+    "translation": "to go up, assemble",
+    "sentences": [
+      {
+        "fr": "Nous montons les escaliers jusqu'au troisième étage.",
+        "en": "We go up the stairs to the third floor."
+      },
+      {
+        "fr": "Elle a monté la nouvelle étagère hier soir.",
+        "en": "She assembled the new shelf last night."
+      }
+    ]
+  },
+  {
+    "word": "descendre",
+    "level": "A2",
+    "translation": "to go down, get off",
+    "sentences": [
+      {
+        "fr": "Je descends à la prochaine station de métro.",
+        "en": "I get off at the next metro station."
+      },
+      {
+        "fr": "Ils sont descendus de la montagne avant la nuit.",
+        "en": "They came down from the mountain before nightfall."
+      }
+    ]
+  },
+  {
+    "word": "conduire",
+    "level": "A2",
+    "translation": "to drive",
+    "sentences": [
+      {
+        "fr": "Mon frère conduit jusqu'à son bureau chaque jour.",
+        "en": "My brother drives to his office every day."
+      },
+      {
+        "fr": "Elle a conduit pendant trois heures sans pause.",
+        "en": "She drove for three hours without a break."
+      }
+    ]
+  },
+  {
+    "word": "emprunter",
+    "level": "A2",
+    "translation": "to borrow; take",
+    "sentences": [
+      {
+        "fr": "Tu peux emprunter mon vélo pour aller au marché.",
+        "en": "You can borrow my bike to go to the market."
+      },
+      {
+        "fr": "Nous avons emprunté cette route pour éviter les bouchons.",
+        "en": "We took this road to avoid the traffic jams."
+      }
+    ]
+  },
+  {
+    "word": "partager",
+    "level": "A2",
+    "translation": "to share",
+    "sentences": [
+      {
+        "fr": "Les enfants partagent leurs jouets avec leurs amis.",
+        "en": "The children share their toys with their friends."
+      },
+      {
+        "fr": "J'ai partagé la tarte avec mes collègues.",
+        "en": "I shared the tart with my colleagues."
+      }
+    ]
+  },
+  {
+    "word": "payer",
+    "level": "A2",
+    "translation": "to pay",
+    "sentences": [
+      {
+        "fr": "Nous payons le repas directement au serveur.",
+        "en": "We pay the waiter directly for the meal."
+      },
+      {
+        "fr": "Elle a payé ses billets en ligne hier soir.",
+        "en": "She paid for her tickets online last night."
+      }
+    ]
+  },
+  {
+    "word": "raconter",
+    "level": "A2",
+    "translation": "to tell, recount",
+    "sentences": [
+      {
+        "fr": "Mon grand-père raconte toujours de belles histoires.",
+        "en": "My grandfather always tells lovely stories."
+      },
+      {
+        "fr": "Elle nous a raconté son voyage en détail.",
+        "en": "She told us about her trip in detail."
+      }
+    ]
+  },
+  {
+    "word": "voyager",
+    "level": "A2",
+    "translation": "to travel",
+    "sentences": [
+      {
+        "fr": "Ils voyagent souvent en train à travers la France.",
+        "en": "They often travel by train across France."
+      },
+      {
+        "fr": "J'ai voyagé seul pour la première fois l'an dernier.",
+        "en": "I travelled alone for the first time last year."
+      }
+    ]
+  },
+  {
+    "word": "utiliser",
+    "level": "A2",
+    "translation": "to use",
+    "sentences": [
+      {
+        "fr": "J'utilise cette application pour acheter mes billets.",
+        "en": "I use this app to buy my tickets."
+      },
+      {
+        "fr": "Nous avons utilisé une carte pour trouver le village.",
+        "en": "We used a map to find the village."
+      }
+    ]
+  },
+  {
+    "word": "répéter",
+    "level": "A2",
+    "translation": "to repeat",
+    "sentences": [
+      {
+        "fr": "Le professeur répète la question plus lentement.",
+        "en": "The teacher repeats the question more slowly."
+      },
+      {
+        "fr": "Tu as répété son nom plusieurs fois hier.",
+        "en": "You repeated his name several times yesterday."
+      }
+    ]
+  },
+  {
+    "word": "prévenir",
+    "level": "A2",
+    "translation": "to warn, let know",
+    "sentences": [
+      {
+        "fr": "Préviens-moi si tu arrives en retard ce soir.",
+        "en": "Let me know if you arrive late this evening."
+      },
+      {
+        "fr": "Elle a prévenu ses amis avant de partir.",
+        "en": "She informed her friends before leaving."
+      }
+    ]
+  },
+  {
+    "word": "espérer",
+    "level": "A2",
+    "translation": "to hope",
+    "sentences": [
+      {
+        "fr": "J'espère que le soleil reviendra demain matin.",
+        "en": "I hope the sun will return tomorrow morning."
+      },
+      {
+        "fr": "Nous avons espéré une réponse toute la journée.",
+        "en": "We hoped for an answer all day."
+      }
+    ]
+  },
+  {
+    "word": "louer",
+    "level": "A2",
+    "translation": "to rent",
+    "sentences": [
+      {
+        "fr": "Ils louent un appartement près de la gare.",
+        "en": "They are renting a flat near the station."
+      },
+      {
+        "fr": "Nous avons loué des vélos pour visiter la ville.",
+        "en": "We rented bikes to visit the city."
+      }
+    ]
+  },
+  {
+    "word": "terminer",
+    "level": "A2",
+    "translation": "to finish",
+    "sentences": [
+      {
+        "fr": "Je termine ce livre avant de commencer le suivant.",
+        "en": "I am finishing this book before starting the next one."
+      },
+      {
+        "fr": "Elle a terminé son travail vers dix-huit heures.",
+        "en": "She finished her work around six p.m."
+      }
+    ]
+  },
+  {
+    "word": "annuler",
+    "level": "A2",
+    "translation": "to cancel",
+    "sentences": [
+      {
+        "fr": "Le train annule parfois ses départs en hiver.",
+        "en": "The train sometimes cancels its departures in winter."
+      },
+      {
+        "fr": "Nous avons annulé le dîner à cause de la pluie.",
+        "en": "We cancelled dinner because of the rain."
+      }
+    ]
+  },
+  {
+    "word": "accompagner",
+    "level": "A2",
+    "translation": "to accompany",
+    "sentences": [
+      {
+        "fr": "J'accompagne ma sœur chez le médecin demain.",
+        "en": "I am accompanying my sister to the doctor tomorrow."
+      },
+      {
+        "fr": "Il a accompagné ses enfants à l'école.",
+        "en": "He accompanied his children to school."
+      }
+    ]
+  },
+  {
+    "word": "profiter",
+    "level": "A2",
+    "translation": "to enjoy, make the most of",
+    "sentences": [
+      {
+        "fr": "Nous profitons du beau temps pour marcher dehors.",
+        "en": "We are enjoying the good weather by walking outside."
+      },
+      {
+        "fr": "Elle a profité des soldes pour acheter un manteau.",
+        "en": "She took advantage of the sales to buy a coat."
+      }
+    ]
+  },
+  {
+    "word": "installer",
+    "level": "A2",
+    "translation": "to install, settle in",
+    "sentences": [
+      {
+        "fr": "Mon frère installe une nouvelle lampe dans le salon.",
+        "en": "My brother is installing a new lamp in the living room."
+      },
+      {
+        "fr": "Nous nous sommes installés près de la fenêtre.",
+        "en": "We settled near the window."
+      }
+    ]
+  },
+  {
+    "word": "remplir",
+    "level": "A2",
+    "translation": "to fill in, fill",
+    "sentences": [
+      {
+        "fr": "Tu remplis ce formulaire à la réception.",
+        "en": "You fill in this form at reception."
+      },
+      {
+        "fr": "J'ai rempli la bouteille d'eau avant de partir.",
+        "en": "I filled the water bottle before leaving."
+      }
+    ]
+  },
+  {
+    "word": "vérifier",
+    "level": "A2",
+    "translation": "to check",
+    "sentences": [
+      {
+        "fr": "Je vérifie toujours l'adresse avant d'envoyer un colis.",
+        "en": "I always check the address before sending a parcel."
+      },
+      {
+        "fr": "Elle a vérifié les horaires sur son téléphone.",
+        "en": "She checked the times on her phone."
+      }
+    ]
+  },
+  {
+    "word": "réfléchir",
+    "level": "A2",
+    "translation": "to think, reflect",
+    "sentences": [
+      {
+        "fr": "Réfléchis bien avant de choisir ton billet.",
+        "en": "Think carefully before choosing your ticket."
+      },
+      {
+        "fr": "Nous avons réfléchi à cette question pendant le repas.",
+        "en": "We thought about that question during the meal."
+      }
+    ]
+  },
+  {
+    "word": "discuter",
+    "level": "A2",
+    "translation": "to discuss, chat",
+    "sentences": [
+      {
+        "fr": "Les collègues discutent de leur projet à midi.",
+        "en": "The colleagues discuss their project at noon."
+      },
+      {
+        "fr": "J'ai discuté avec le voisin devant l'immeuble.",
+        "en": "I chatted with the neighbour in front of the building."
+      }
+    ]
+  },
+  {
+    "word": "promener",
+    "level": "A2",
+    "translation": "to take for a walk",
+    "sentences": [
+      {
+        "fr": "Elle promène son chien dans le parc chaque soir.",
+        "en": "She walks her dog in the park every evening."
+      },
+      {
+        "fr": "Nous nous sommes promenés près de la rivière.",
+        "en": "We went for a walk near the river."
+      }
+    ]
+  },
+  {
+    "word": "cuisiner",
+    "level": "A2",
+    "translation": "to cook",
+    "sentences": [
+      {
+        "fr": "Je cuisine souvent des pâtes le vendredi soir.",
+        "en": "I often cook pasta on Friday evening."
+      },
+      {
+        "fr": "Ils ont cuisiné un bon repas pour leurs amis.",
+        "en": "They cooked a good meal for their friends."
+      }
+    ]
+  },
+  {
+    "word": "nettoyer",
+    "level": "A2",
+    "translation": "to clean",
+    "sentences": [
+      {
+        "fr": "Nous nettoyons la cuisine après le petit déjeuner.",
+        "en": "We clean the kitchen after breakfast."
+      },
+      {
+        "fr": "Il a nettoyé ses chaussures avant le départ.",
+        "en": "He cleaned his shoes before leaving."
+      }
+    ]
+  },
+  {
+    "word": "ranger",
+    "level": "A2",
+    "translation": "to tidy, put away",
+    "sentences": [
+      {
+        "fr": "Tu ranges tes livres après avoir étudié ?",
+        "en": "Do you put your books away after studying?"
+      },
+      {
+        "fr": "J'ai rangé les courses dans le réfrigérateur.",
+        "en": "I put the groceries away in the refrigerator."
+      }
+    ]
+  },
+  {
+    "word": "allumer",
+    "level": "A2",
+    "translation": "to turn on, light",
+    "sentences": [
+      {
+        "fr": "Allume la lumière avant de chercher tes clés.",
+        "en": "Turn on the light before looking for your keys."
+      },
+      {
+        "fr": "Il a allumé son ordinateur après le déjeuner.",
+        "en": "He turned on his computer after lunch."
+      }
+    ]
+  },
+  {
+    "word": "éteindre",
+    "level": "A2",
+    "translation": "to turn off, extinguish",
+    "sentences": [
+      {
+        "fr": "Éteins la télévision quand le film est terminé.",
+        "en": "Turn off the television when the film is over."
+      },
+      {
+        "fr": "Nous avons éteint les lumières avant de sortir.",
+        "en": "We turned off the lights before going out."
+      }
+    ]
+  },
+  {
+    "word": "sentir",
+    "level": "A2",
+    "translation": "to smell, feel",
+    "sentences": [
+      {
+        "fr": "Cette soupe sent très bon dans la cuisine.",
+        "en": "This soup smells very good in the kitchen."
+      },
+      {
+        "fr": "Elle a senti le vent froid en ouvrant la porte.",
+        "en": "She felt the cold wind when opening the door."
+      }
+    ]
+  },
+  {
+    "word": "goûter",
+    "level": "A2",
+    "translation": "to taste",
+    "sentences": [
+      {
+        "fr": "Goûte cette sauce avant d'ajouter du sel.",
+        "en": "Taste this sauce before adding salt."
+      },
+      {
+        "fr": "Nous avons goûté un fromage local au marché.",
+        "en": "We tasted a local cheese at the market."
+      }
+    ]
+  },
+  {
+    "word": "offrir",
+    "level": "A2",
+    "translation": "to offer, give",
+    "sentences": [
+      {
+        "fr": "Le magasin offre une réduction aux étudiants.",
+        "en": "The shop offers a discount to students."
+      },
+      {
+        "fr": "J'ai offert des fleurs à ma mère hier.",
+        "en": "I gave flowers to my mother yesterday."
+      }
+    ]
+  },
+  {
+    "word": "coûter",
+    "level": "A2",
+    "translation": "to cost",
+    "sentences": [
+      {
+        "fr": "Combien coûte ce billet de train pour Paris ?",
+        "en": "How much does this train ticket to Paris cost?"
+      },
+      {
+        "fr": "Cette veste a coûté moins cher pendant les soldes.",
+        "en": "This jacket cost less during the sales."
+      }
+    ]
+  },
+  {
+    "word": "commander",
+    "level": "A2",
+    "translation": "to order",
+    "sentences": [
+      {
+        "fr": "Nous commandons deux cafés après le repas.",
+        "en": "We order two coffees after the meal."
+      },
+      {
+        "fr": "Elle a commandé une pizza pour ce soir.",
+        "en": "She ordered a pizza for this evening."
+      }
+    ]
+  },
+  {
+    "word": "adorer",
+    "level": "A2",
+    "translation": "to love, adore",
+    "sentences": [
+      {
+        "fr": "J'adore écouter de la musique en cuisinant.",
+        "en": "I love listening to music while cooking."
+      },
+      {
+        "fr": "Les enfants ont adoré le spectacle de samedi.",
+        "en": "The children loved Saturday's show."
+      }
+    ]
+  },
+  {
+    "word": "manquer",
+    "level": "A2",
+    "translation": "to miss; lack",
+    "sentences": [
+      {
+        "fr": "Tu me manques quand tu voyages trop longtemps.",
+        "en": "I miss you when you travel for too long."
+      },
+      {
+        "fr": "Il a manqué le bus de huit heures ce matin.",
+        "en": "He missed the eight o'clock bus this morning."
+      }
+    ]
+  },
+  {
+    "word": "ajouter",
+    "level": "A2",
+    "translation": "to add",
+    "sentences": [
+      {
+        "fr": "Ajoute un peu de sucre dans ton café.",
+        "en": "Add a little sugar to your coffee."
+      },
+      {
+        "fr": "J'ai ajouté son numéro à mes contacts.",
+        "en": "I added her number to my contacts."
+      }
+    ]
+  },
+  {
+    "word": "enlever",
+    "level": "A2",
+    "translation": "to remove, take off",
+    "sentences": [
+      {
+        "fr": "Enlève tes chaussures avant d'entrer dans le salon.",
+        "en": "Take off your shoes before entering the living room."
+      },
+      {
+        "fr": "Elle a enlevé la tache avec de l'eau chaude.",
+        "en": "She removed the stain with hot water."
+      }
+    ]
+  },
+  {
+    "word": "couper",
+    "level": "A2",
+    "translation": "to cut",
+    "sentences": [
+      {
+        "fr": "Coupe le pain en petites tranches pour les invités.",
+        "en": "Cut the bread into small slices for the guests."
+      },
+      {
+        "fr": "Le téléphone a coupé pendant notre conversation.",
+        "en": "The phone call cut off during our conversation."
+      }
+    ]
+  },
+  {
+    "word": "pousser",
+    "level": "A2",
+    "translation": "to push, grow",
+    "sentences": [
+      {
+        "fr": "Pousse la porte pour entrer dans le magasin.",
+        "en": "Push the door to enter the shop."
+      },
+      {
+        "fr": "Les fleurs ont poussé rapidement ce printemps.",
+        "en": "The flowers grew quickly this spring."
+      }
+    ]
+  },
+  {
+    "word": "tirer",
+    "level": "A2",
+    "translation": "to pull",
+    "sentences": [
+      {
+        "fr": "Tire la chaise près de la table, s'il te plaît.",
+        "en": "Pull the chair close to the table, please."
+      },
+      {
+        "fr": "Il a tiré le rideau pour cacher le soleil.",
+        "en": "He pulled the curtain to block the sun."
+      }
+    ]
+  },
+  {
+    "word": "garder",
+    "level": "A2",
+    "translation": "to keep, look after",
+    "sentences": [
+      {
+        "fr": "Je garde mon ticket jusqu'à la fin du voyage.",
+        "en": "I keep my ticket until the end of the journey."
+      },
+      {
+        "fr": "Elle a gardé les enfants samedi après-midi.",
+        "en": "She looked after the children on Saturday afternoon."
+      }
+    ]
+  },
+  {
+    "word": "chaud",
+    "level": "A1",
+    "translation": "hot, warm",
+    "sentences": [
+      {
+        "fr": "Le café est encore chaud ce matin.",
+        "en": "The coffee is still hot this morning."
+      },
+      {
+        "fr": "Nous avons mangé une soupe chaude après la pluie.",
+        "en": "We ate a hot soup after the rain."
+      }
+    ]
+  },
+  {
+    "word": "froid",
+    "level": "A1",
+    "translation": "cold",
+    "sentences": [
+      {
+        "fr": "Il fait très froid dehors ce soir.",
+        "en": "It is very cold outside this evening."
+      },
+      {
+        "fr": "J'ai bu de l'eau froide après la course.",
+        "en": "I drank cold water after the run."
+      }
+    ]
+  },
+  {
+    "word": "blanc",
+    "level": "A1",
+    "translation": "white",
+    "sentences": [
+      {
+        "fr": "Elle porte une chemise blanche pour le travail.",
+        "en": "She wears a white shirt to work."
+      },
+      {
+        "fr": "Les murs blancs rendent la pièce plus claire.",
+        "en": "The white walls make the room brighter."
+      }
+    ]
+  },
+  {
+    "word": "rouge",
+    "level": "A1",
+    "translation": "red",
+    "sentences": [
+      {
+        "fr": "La voiture rouge est garée devant la maison.",
+        "en": "The red car is parked in front of the house."
+      },
+      {
+        "fr": "Son écharpe rouge est sa préférée en hiver.",
+        "en": "Her red scarf is her favourite in winter."
+      }
+    ]
+  },
+  {
+    "word": "fruit",
+    "level": "A1",
+    "translation": "fruit",
+    "sentences": [
+      {
+        "fr": "Je mange un fruit frais après le déjeuner.",
+        "en": "I eat fresh fruit after lunch."
+      },
+      {
+        "fr": "Les fruits du marché sont très bons aujourd'hui.",
+        "en": "The fruit at the market is very good today."
+      }
+    ]
+  },
+  {
+    "word": "lait",
+    "level": "A1",
+    "translation": "milk",
+    "sentences": [
+      {
+        "fr": "J'ajoute du lait dans mon café le matin.",
+        "en": "I add milk to my coffee in the morning."
+      },
+      {
+        "fr": "Le bébé a bu son lait avant de dormir.",
+        "en": "The baby drank their milk before sleeping."
+      }
+    ]
+  },
+  {
+    "word": "poisson",
+    "level": "A1",
+    "translation": "fish",
+    "sentences": [
+      {
+        "fr": "Le restaurant prépare du poisson frais aujourd'hui.",
+        "en": "The restaurant prepares fresh fish today."
+      },
+      {
+        "fr": "Nous avons choisi les poissons au marché ce matin.",
+        "en": "We chose the fish at the market this morning."
+      }
+    ]
+  },
+  {
+    "word": "bateau",
+    "level": "A1",
+    "translation": "boat",
+    "sentences": [
+      {
+        "fr": "Le bateau part du port à neuf heures.",
+        "en": "The boat leaves the harbour at nine o'clock."
+      },
+      {
+        "fr": "Ils ont vu plusieurs bateaux près de la plage.",
+        "en": "They saw several boats near the beach."
+      }
+    ]
+  },
+  {
+    "word": "soleil",
+    "level": "A1",
+    "translation": "sun",
+    "sentences": [
+      {
+        "fr": "Le soleil brille déjà au-dessus des toits.",
+        "en": "The sun is already shining above the rooftops."
+      },
+      {
+        "fr": "Nous avons profité du soleil pendant le déjeuner.",
+        "en": "We enjoyed the sun during lunch."
+      }
+    ]
+  },
+  {
+    "word": "lettre",
+    "level": "A1",
+    "translation": "letter",
+    "sentences": [
+      {
+        "fr": "J'écris une lettre à ma grand-mère ce soir.",
+        "en": "I am writing a letter to my grandmother this evening."
+      },
+      {
+        "fr": "Il a reçu deux lettres de son ami français.",
+        "en": "He received two letters from his French friend."
+      }
+    ]
+  },
+  {
+    "word": "chanson",
+    "level": "A1",
+    "translation": "song",
+    "sentences": [
+      {
+        "fr": "Cette chanson passe souvent à la radio.",
+        "en": "This song often plays on the radio."
+      },
+      {
+        "fr": "Elle a chanté sa chanson préférée au concert.",
+        "en": "She sang her favourite song at the concert."
+      }
+    ]
+  },
+  {
+    "word": "cadeau",
+    "level": "A1",
+    "translation": "gift, present",
+    "sentences": [
+      {
+        "fr": "J'ai choisi un cadeau spécial pour son anniversaire.",
+        "en": "I chose a special gift for her birthday."
+      },
+      {
+        "fr": "Les enfants ont ouvert leurs cadeaux avec joie.",
+        "en": "The children opened their gifts happily."
+      }
+    ]
+  },
+  {
+    "word": "bouche",
+    "level": "A1",
+    "translation": "mouth",
+    "sentences": [
+      {
+        "fr": "Ouvre la bouche pour goûter cette soupe.",
+        "en": "Open your mouth to taste this soup."
+      },
+      {
+        "fr": "Il s'est lavé la bouche après le repas.",
+        "en": "He washed his mouth after the meal."
+      }
+    ]
+  },
+  {
+    "word": "nez",
+    "level": "A1",
+    "translation": "nose",
+    "sentences": [
+      {
+        "fr": "Mon chien a le nez très froid ce matin.",
+        "en": "My dog has a very cold nose this morning."
+      },
+      {
+        "fr": "Elle s'est touché le nez en réfléchissant.",
+        "en": "She touched her nose while thinking."
+      }
+    ]
+  },
+  {
+    "word": "pied",
+    "level": "A1",
+    "translation": "foot",
+    "sentences": [
+      {
+        "fr": "J'ai mal au pied après cette longue marche.",
+        "en": "My foot hurts after that long walk."
+      },
+      {
+        "fr": "Les enfants enlèvent leurs chaussures et se lavent les pieds.",
+        "en": "The children take off their shoes and wash their feet."
+      }
+    ]
+  },
+  {
+    "word": "bureau",
+    "level": "A1",
+    "translation": "office; desk",
+    "sentences": [
+      {
+        "fr": "Je travaille dans un petit bureau près de la gare.",
+        "en": "I work in a small office near the train station."
+      },
+      {
+        "fr": "Elle a posé ses clés sur le bureau ce matin.",
+        "en": "She put her keys on the desk this morning."
+      }
+    ]
+  },
+  {
+    "word": "pays",
+    "level": "A1",
+    "translation": "country",
+    "sentences": [
+      {
+        "fr": "Dans quel pays veux-tu habiter plus tard ?",
+        "en": "Which country do you want to live in later?"
+      },
+      {
+        "fr": "Ils ont visité plusieurs pays pendant les vacances.",
+        "en": "They visited several countries during the holidays."
+      }
+    ]
+  },
+  {
+    "word": "cœur",
+    "level": "A1",
+    "translation": "heart; also figurative heart / courage",
+    "sentences": [
+      {
+        "fr": "Le médecin écoute mon cœur avec attention.",
+        "en": "The doctor listens carefully to my heart."
+      },
+      {
+        "fr": "Merci, tu as vraiment un bon cœur.",
+        "en": "Thank you — you really have a good heart."
+      }
+    ]
+  },
+  {
+    "word": "hôpital",
+    "level": "A1",
+    "translation": "hospital",
+    "sentences": [
+      {
+        "fr": "Mon frère travaille à l’hôpital du centre-ville.",
+        "en": "My brother works at the downtown hospital."
+      },
+      {
+        "fr": "Nous sommes allés à l’hôpital après l’accident.",
+        "en": "We went to the hospital after the accident."
+      }
+    ]
+  },
+  {
+    "word": "salle",
+    "level": "A1",
+    "translation": "room; hall",
+    "sentences": [
+      {
+        "fr": "La salle de bain est au bout du couloir.",
+        "en": "The bathroom is at the end of the hallway."
+      },
+      {
+        "fr": "Ils ont réservé une grande salle pour la fête.",
+        "en": "They reserved a large hall for the party."
+      }
+    ]
+  },
+  {
+    "word": "prix",
+    "level": "A1",
+    "translation": "price; also prize / award",
+    "sentences": [
+      {
+        "fr": "Le prix de ce ticket a beaucoup augmenté.",
+        "en": "The price of this ticket has gone up a lot."
+      },
+      {
+        "fr": "Elle a reçu un prix pour son travail à l’école.",
+        "en": "She received a prize for her work at school."
+      }
+    ]
+  },
+  {
+    "word": "rue",
+    "level": "A1",
+    "translation": "street",
+    "sentences": [
+      {
+        "fr": "Ma sœur habite dans une rue calme.",
+        "en": "My sister lives on a quiet street."
+      },
+      {
+        "fr": "Nous avons marché dans les rues du vieux quartier.",
+        "en": "We walked through the streets of the old neighborhood."
+      }
+    ]
+  },
+  {
+    "word": "avion",
+    "level": "A1",
+    "translation": "plane, airplane",
+    "sentences": [
+      {
+        "fr": "Notre avion part demain matin à huit heures.",
+        "en": "Our plane leaves tomorrow morning at eight."
+      },
+      {
+        "fr": "J’ai peur en avion, mais j’y vais quand même.",
+        "en": "I’m afraid on planes, but I go anyway."
+      }
+    ]
+  },
+  {
+    "word": "faim",
+    "level": "A1",
+    "translation": "hunger",
+    "sentences": [
+      {
+        "fr": "J’ai faim, on mange quelque chose ?",
+        "en": "I’m hungry — shall we eat something?"
+      },
+      {
+        "fr": "Après la randonnée, ils avaient vraiment faim.",
+        "en": "After the hike, they were really hungry."
+      }
+    ]
+  },
+  {
+    "word": "clé",
+    "level": "A1",
+    "translation": "key",
+    "sentences": [
+      {
+        "fr": "Tu as pris la clé de l’appartement ?",
+        "en": "Did you take the apartment key?"
+      },
+      {
+        "fr": "J’ai perdu mes clés dans le métro hier.",
+        "en": "I lost my keys on the metro yesterday."
+      }
+    ]
+  },
+  {
+    "word": "fenêtre",
+    "level": "A1",
+    "translation": "window",
+    "sentences": [
+      {
+        "fr": "Ouvre la fenêtre, il fait trop chaud ici.",
+        "en": "Open the window — it’s too hot in here."
+      },
+      {
+        "fr": "Les enfants regardent par la fenêtre le train passer.",
+        "en": "The children watch the train go by through the window."
+      }
+    ]
+  },
+  {
+    "word": "magasin",
+    "level": "A1",
+    "translation": "shop, store",
+    "sentences": [
+      {
+        "fr": "Il y a un nouveau magasin près de chez moi.",
+        "en": "There’s a new shop near my place."
+      },
+      {
+        "fr": "Nous avons trouvé ce manteau dans un petit magasin.",
+        "en": "We found this coat in a small shop."
+      }
+    ]
+  },
+  {
+    "word": "entrer",
+    "level": "A1",
+    "translation": "to enter, to go in",
+    "sentences": [
+      {
+        "fr": "Tu peux entrer, la porte est ouverte.",
+        "en": "You can come in — the door is open."
+      },
+      {
+        "fr": "Ils sont entrés dans la salle sans faire de bruit.",
+        "en": "They entered the room without making noise."
+      }
+    ]
+  },
+  {
+    "word": "essayer",
+    "level": "A1",
+    "translation": "to try; to try on",
+    "sentences": [
+      {
+        "fr": "Je vais essayer de finir ce travail ce soir.",
+        "en": "I’m going to try to finish this work tonight."
+      },
+      {
+        "fr": "Elle a essayé la robe avant de l’acheter.",
+        "en": "She tried on the dress before buying it."
+      }
+    ]
+  },
+  {
+    "word": "préférer",
+    "level": "A1",
+    "translation": "to prefer",
+    "sentences": [
+      {
+        "fr": "Je préfère le thé au café le matin.",
+        "en": "I prefer tea to coffee in the morning."
+      },
+      {
+        "fr": "Ils ont préféré rester à la maison ce week-end.",
+        "en": "They preferred to stay home this weekend."
+      }
+    ]
+  }
 ]

@@ -1,6 +1,9 @@
 import { createEmptyCard, fsrs, Rating, State } from 'ts-fsrs';
 
-const scheduler = fsrs();
+// Short-term steps off: reviews happen once a day here, so the default 1m/10m
+// steps kept Again/Hard (and a first Good) due within minutes — the same cards
+// came back every morning and Hard never graduated. Day-level intervals instead.
+const scheduler = fsrs({ enable_short_term: false });
 
 const RATING_BY_NAME = {
   again: Rating.Again,

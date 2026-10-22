@@ -2000,10 +2000,13 @@ function mapApiCardToReviewCard(card) {
 }
 
 function orderReviewCards(cards) {
-  return cards.sort((a, b) => {
-    if (a.queueKind !== b.queueKind) return a.queueKind === 'new' ? -1 : 1;
-    return a.id - b.id;
-  });
+  // Server already sends new first, then due cards earliest-due first. Keep
+  // that order — sorting due cards by id put the oldest-created cards first
+  // every day regardless of when they were actually due.
+  return [
+    ...cards.filter(card => card.queueKind === 'new'),
+    ...cards.filter(card => card.queueKind !== 'new')
+  ];
 }
 
 function getCurrentReviewCard() {

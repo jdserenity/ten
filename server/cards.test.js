@@ -68,6 +68,19 @@ describe('cards', () => {
     assert.equal(card, undefined);
   });
 
+  it('returns due cards most-overdue first', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const later = addCard(userId, 'FR', { front: 'Later', back: 'Plus tard' });
+    const sooner = addCard(userId, 'FR', { front: 'Sooner', back: 'Plus tôt' });
+    answerCard(userId, later.id, 'good');
+    answerCard(userId, sooner.id, 'good');
+    const now = Date.now();
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(now - 1000, later.id);
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(now - 9000, sooner.id);
+    const queue = getReviewQueue(userId, 'FR', now);
+    assert.deepEqual(queue.cards.map(card => card.id), [sooner.id, later.id]);
+  });
+
   it('deletes a card', t => {
     if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
     const added = addCard(userId, 'FR', { front: 'Fish', back: 'Poisson' });

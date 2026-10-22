@@ -30,6 +30,13 @@ test('review async handlers re-render after clearing busy flags', () => {
   assert.match(deleteFinally[1], /renderReview\(\)/, 'review delete must re-render after delete completes');
 });
 
+test('review queue keeps the server due-date order instead of re-sorting by card id', () => {
+  const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
+  const orderFn = app.match(/function orderReviewCards\(cards\) \{([\s\S]*?)\n\}/);
+  assert.ok(orderFn, 'orderReviewCards exists');
+  assert.doesNotMatch(orderFn[1], /a\.id\s*-\s*b\.id/, 'due cards must stay in earliest-due-first order from the server');
+});
+
 test('both study tabs display the same combined daily progress counter', () => {
   const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
   const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');

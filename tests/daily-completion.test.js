@@ -125,6 +125,6 @@ test('bundled confetti renders normally but suppresses all particles with Reduce
 });
 
 test('the PWA loads confetti before the app module can initialize', () => {
-  assert.match(html, /<script src="\/confetti\.browser\.js"><\/script>\s*<script type="module" src="\/app\.js\?v=28"><\/script>/);
+  assert.match(html, /<script src="\/confetti\.browser\.js"><\/script>\s*<script type="module" src="\/app\.js\?v=29"><\/script>/);
   assert.doesNotMatch(html, /confetti\.browser\.js" defer/);
 });

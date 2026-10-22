@@ -1454,6 +1454,12 @@ details.surface-card[open] { gap: 10px; }
   line-height: 1.2;
 }
 
+.review-grade-stats {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
 .grade-row button[data-grade="again"] { border-color: #5c2a2f; color: #f08a92; }
 .grade-row button[data-grade="hard"] { border-color: #5b4a2a; color: #f0c37a; }
 .grade-row button[data-grade="good"] { border-color: #2d5a3b; color: #8fd6a8; }

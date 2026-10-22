@@ -20,6 +20,7 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierKey,
+  gradeCountEntries,
   getLangPickerDialectLabelKey,
   getLangPickerDialects,
   getLangPickerFamilies,
@@ -1995,7 +1996,8 @@ function mapApiCardToReviewCard(card) {
     queueKind: card.queueKind === 'new' ? 'new' : 'due',
     front: String(card.front || ''),
     back: String(card.back || ''),
-    context: String(card.context || '')
+    context: String(card.context || ''),
+    gradeCounts: card.gradeCounts && typeof card.gradeCounts === 'object' ? card.gradeCounts : {}
   };
 }
 
@@ -2108,6 +2110,15 @@ function renderReview() {
   const contextEl = document.getElementById('review-context');
   contextEl.textContent = card.context;
   contextEl.classList.toggle('hidden', editing || !card.context);
+
+  const gradeStatsEl = document.getElementById('review-grade-stats');
+  if (gradeStatsEl) {
+    const entries = gradeCountEntries(card.gradeCounts);
+    gradeStatsEl.textContent = entries
+      .map(entry => `${tr(`review.grade.${entry.rating}`)} ×${entry.count}`)
+      .join(' · ');
+    gradeStatsEl.classList.toggle('hidden', editing || !state.reviewAnswerVisible || !entries.length);
+  }
 
   const speakBtn = document.getElementById('review-speak-btn');
   if (speakBtn) {

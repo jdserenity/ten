@@ -170,6 +170,12 @@ export function isReviewGradeButtonsDisabled({ reviewEditing }) {
   return Boolean(reviewEditing);
 }
 
+export function gradeCountEntries(gradeCounts) {
+  return ['again', 'hard', 'good', 'easy']
+    .map(rating => ({ rating, count: Math.max(0, Number(gradeCounts?.[rating]) || 0) }))
+    .filter(entry => entry.count > 0);
+}
+
 export function learningLangFromModeId(modeId) {
   if (modeId === 'pt-br') return 'PT-BR';
   if (modeId === 'fr') return 'FR';

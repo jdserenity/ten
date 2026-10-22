@@ -67,6 +67,14 @@ function migrateAppLangColumn() {
   }
 }
 
+function migrateCardGradeCountColumns() {
+  for (const column of ['again_count', 'hard_count', 'good_count', 'easy_count']) {
+    if (!tableHasColumn('cards', column)) {
+      getDb().exec(`ALTER TABLE cards ADD COLUMN ${column} INTEGER NOT NULL DEFAULT 0`);
+    }
+  }
+}
+
 function migrateTranslationCacheTable() {
   getDb().exec(`
     CREATE TABLE IF NOT EXISTS translation_cache (
@@ -323,6 +331,10 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
       lapses INTEGER NOT NULL DEFAULT 0,
       fsrs_state INTEGER NOT NULL DEFAULT 0,
       last_review INTEGER,
+      again_count INTEGER NOT NULL DEFAULT 0,
+      hard_count INTEGER NOT NULL DEFAULT 0,
+      good_count INTEGER NOT NULL DEFAULT 0,
+      easy_count INTEGER NOT NULL DEFAULT 0,
       UNIQUE (language, front, back)
     );
     CREATE INDEX IF NOT EXISTS idx_cards_language_due ON cards (language, due);
@@ -339,6 +351,7 @@ export function initDb(dbPath = process.env.TEN_DB_PATH || DEFAULT_DB_PATH) {
   migrateTranslationCacheTable();
   migrateDailyWordGlossesTable();
   runMultiUserMigrations();
+  migrateCardGradeCountColumns();
   return db;
 }
 

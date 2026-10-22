@@ -5,13 +5,26 @@ function trimField(value) {
   return String(value || '').trim();
 }
 
+const GRADE_COUNT_COLUMN = {
+  again: 'again_count',
+  hard: 'hard_count',
+  good: 'good_count',
+  easy: 'easy_count'
+};
+
 function mapRowToReviewCard(row) {
   return {
     id: row.id,
     queueKind: Number(row.fsrs_state) === State.New ? 'new' : 'due',
     front: row.front,
     back: row.back,
-    context: row.context || ''
+    context: row.context || '',
+    gradeCounts: {
+      again: Number(row.again_count) || 0,
+      hard: Number(row.hard_count) || 0,
+      good: Number(row.good_count) || 0,
+      easy: Number(row.easy_count) || 0
+    }
   };
 }
 
@@ -125,6 +138,9 @@ export function answerCard(userId, id, rating, now = new Date()) {
   const row = getCardById(userId, id);
   if (!row) return { ok: false, reason: 'not_found' };
 
+  const countColumn = GRADE_COUNT_COLUMN[String(rating || '').trim().toLowerCase()];
+  if (!countColumn) return { ok: false, reason: 'invalid' };
+
   const fsrsCard = rowToFsrsCard(row);
   const { card: nextCard } = applyRating(fsrsCard, rating, now);
   const fields = fsrsCardToRowFields(nextCard);
@@ -134,7 +150,7 @@ export function answerCard(userId, id, rating, now = new Date()) {
       UPDATE cards SET
         due = ?, stability = ?, difficulty = ?, elapsed_days = ?,
         scheduled_days = ?, learning_steps = ?, reps = ?, lapses = ?,
-        fsrs_state = ?, last_review = ?
+        fsrs_state = ?, last_review = ?, ${countColumn} = ${countColumn} + 1
       WHERE id = ? AND user_id = ?
     `)
     .run(

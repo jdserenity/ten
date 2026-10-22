@@ -118,6 +118,34 @@ describe('cards', () => {
   });
 });
 
+describe('grade counts', () => {
+  it('starts at zero and counts each rating pressed per card', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const added = addCard(userId, 'FR', { front: 'Bird', back: 'Oiseau' });
+    let queue = getReviewQueue(userId, 'FR');
+    assert.deepEqual(queue.cards.find(card => card.id === added.id).gradeCounts, { again: 0, hard: 0, good: 0, easy: 0 });
+
+    answerCard(userId, added.id, 'again');
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(0, added.id);
+    answerCard(userId, added.id, 'again');
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(0, added.id);
+    answerCard(userId, added.id, 'easy');
+
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(0, added.id);
+    queue = getReviewQueue(userId, 'FR', Date.now());
+    assert.deepEqual(queue.cards.find(card => card.id === added.id).gradeCounts, { again: 2, hard: 0, good: 0, easy: 1 });
+  });
+
+  it('does not count an invalid rating', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const added = addCard(userId, 'FR', { front: 'Cat', back: 'Chat' });
+    const result = answerCard(userId, added.id, 'nope');
+    assert.equal(result.ok, false);
+    const queue = getReviewQueue(userId, 'FR');
+    assert.deepEqual(queue.cards.find(card => card.id === added.id).gradeCounts, { again: 0, hard: 0, good: 0, easy: 0 });
+  });
+});
+
 describe('fsrs grading', () => {
   it('updates reps after a good rating', t => {
     if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');

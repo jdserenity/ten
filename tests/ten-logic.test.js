@@ -45,7 +45,8 @@ import {
   userHasLearningLanguages,
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
-  collectSentenceRevealAnimationKeys
+  collectSentenceRevealAnimationKeys,
+  gradeCountEntries
 } from '../src/client/ten-logic.js';
 
 test('userHasLearningLanguages is false until the user adds a track', () => {
@@ -512,6 +513,21 @@ test('shouldResetDailySentenceReveal only when the headword changes', () => {
   assert.equal(shouldResetDailySentenceReveal('manger', 'manger'), false);
   assert.equal(shouldResetDailySentenceReveal('', 'manger'), true);
   assert.equal(shouldResetDailySentenceReveal('manger', ''), true);
+});
+
+test('gradeCountEntries lists only pressed ratings in again-hard-good-easy order', () => {
+  assert.deepEqual(gradeCountEntries({ again: 3, hard: 0, good: 2, easy: 1 }), [
+    { rating: 'again', count: 3 },
+    { rating: 'good', count: 2 },
+    { rating: 'easy', count: 1 }
+  ]);
+  assert.deepEqual(gradeCountEntries({ easy: 1, again: 2 }), [
+    { rating: 'again', count: 2 },
+    { rating: 'easy', count: 1 }
+  ]);
+  assert.deepEqual(gradeCountEntries({ again: 0, hard: 0, good: 0, easy: 0 }), []);
+  assert.deepEqual(gradeCountEntries(null), []);
+  assert.deepEqual(gradeCountEntries({ again: 'x', hard: -2 }), []);
 });
 
 test('collectSentenceRevealAnimationKeys replays visible sentences on each open', () => {

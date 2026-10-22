@@ -27,7 +27,6 @@ describeDb('users and per-user data', () => {
     getUserById,
     getUserLanguages,
     initDb,
-    setUserAppLang,
     setUserLanguages
   } = dbModule;
 
@@ -70,14 +69,8 @@ describeDb('users and per-user data', () => {
     assert.deepEqual(getUserLanguages(friend.id), ['ES-VE', 'FR', 'FR-FR', 'PT-BR']);
   });
 
-  it('stores and returns app language on the user account', () => {
-    assert.equal(getUserById(friend.id).appLang, null);
-    const saved = setUserAppLang(friend.id, 'pt-BR');
-    assert.equal(saved.ok, true);
-    assert.equal(saved.appLang, 'pt-BR');
-    assert.equal(getUserById(friend.id).appLang, 'pt-BR');
-    const invalid = setUserAppLang(friend.id, 'fr');
-    assert.equal(invalid.ok, false);
+  it('does not store an app language on the user account', () => {
+    assert.equal('appLang' in getUserById(friend.id), false);
   });
 
   it('scopes unlocked words per user', () => {
@@ -143,4 +136,32 @@ describeDb('users and per-user data', () => {
       rmSync(resumeDir, { recursive: true, force: true });
     }
   });
+
+  it('drops a legacy app_lang column and its saved value on init', () => {
+    const legacyDir = mkdtempSync(join(tmpdir(), 'ten-users-applang-'));
+    const legacyPath = join(legacyDir, 'legacy.db');
+    try {
+      const legacy = new Database(legacyPath);
+      legacy.exec(`
+        CREATE TABLE users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT NOT NULL UNIQUE,
+          is_dev INTEGER NOT NULL DEFAULT 0,
+          app_lang TEXT,
+          created_at INTEGER NOT NULL DEFAULT (unixepoch())
+        );
+        INSERT INTO users (username, is_dev, app_lang) VALUES ('jd', 1, 'pt-BR');
+      `);
+      legacy.close();
+
+      initDb(legacyPath);
+      const check = new Database(legacyPath, { readonly: true });
+      const columns = check.prepare('PRAGMA table_info(users)').all().map(col => col.name);
+      check.close();
+      assert.equal(columns.includes('app_lang'), false);
+    } finally {
+      rmSync(legacyDir, { recursive: true, force: true });
+    }
+  });
+
 });

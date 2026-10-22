@@ -23,7 +23,6 @@ import {
   setDailyCardIndex,
   setDailyWordAssignment,
   setDailyWordGlosses,
-  setUserAppLang,
   setUserLanguages
 } from './db.js';
 import { ensureDailyGlosses } from './daily-glosses.js';
@@ -117,8 +116,7 @@ function serializeUser(user) {
     id: user.id,
     username: user.username,
     isDev: user.isDev,
-    languages: getUserLanguages(user.id),
-    appLang: user.appLang || null
+    languages: getUserLanguages(user.id)
   };
 }
 
@@ -588,22 +586,6 @@ function handleMeGet(req, res) {
   return sendJson(res, 200, serializeUser(user));
 }
 
-async function handleAppLanguagePut(req, res) {
-  const user = requireUser(req, res);
-  if (!user) return;
-  let body;
-  try { body = await readJsonBody(req); }
-  catch { return sendJson(res, 400, { error: 'Invalid JSON body.' }); }
-
-  const appLang = String(body.appLang || '').trim();
-  if (!appLang) return sendJson(res, 400, { error: 'Missing app language.' });
-
-  const result = setUserAppLang(user.id, appLang);
-  if (!result.ok) return sendJson(res, 400, { error: 'Invalid app language.' });
-  const updated = getUserById(user.id);
-  return sendJson(res, 200, { ok: true, appLang: updated.appLang });
-}
-
 async function handleUserLanguagesPut(req, res) {
   const user = requireUser(req, res);
   if (!user) return;
@@ -692,7 +674,6 @@ const server = createServer(async (req, res) => {
   if (pathname === '/api/translate' && req.method === 'POST') return proxyTranslate(req, res);
   if (pathname === '/api/auth/login' && req.method === 'POST') return handleAuthLogin(req, res);
   if (pathname === '/api/me' && req.method === 'GET') return handleMeGet(req, res);
-  if (pathname === '/api/app-language' && req.method === 'PUT') return handleAppLanguagePut(req, res);
   if (pathname === '/api/user-languages' && req.method === 'PUT') return handleUserLanguagesPut(req, res);
   if (pathname === '/api/feedback' && req.method === 'POST') return handleFeedbackPost(req, res);
   if (pathname === '/api/feedback' && req.method === 'GET') return handleFeedbackGet(req, res);

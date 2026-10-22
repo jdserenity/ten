@@ -3,7 +3,6 @@ import {
   detectAppLanguage,
   formatPoolDaysLabel,
   localeTagForAppLang,
-  resolveAppLang,
   t
 } from './i18n.js';
 import {
@@ -341,7 +340,7 @@ function formatFrequencyRankMessage(labelKey, rank) {
 }
 
 function applyAppLanguage() {
-  document.documentElement.lang = state.appLang === 'pt-BR' ? 'pt-BR' : 'en';
+  document.documentElement.lang = 'en';
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
     if (key) el.textContent = tr(key);
@@ -359,50 +358,8 @@ function applyAppLanguage() {
   updateTranslateDirectionUi();
   updateFrequencyModeLabel();
   updateDateLabel();
-  renderSettingsAppLangButtons();
   syncNoLanguageUi();
   if (state.languagePickerContext) renderLanguagePicker(state.languagePickerContext);
-}
-
-function syncAppLangFromUser() {
-  state.appLang = resolveAppLang(state.user?.appLang, navigator.languages);
-  applyAppLanguage();
-}
-
-function renderSettingsAppLangButtons() {
-  document.querySelectorAll('.settings-app-lang-btn').forEach(button => {
-    const lang = button.dataset.appLang;
-    const active = lang === state.appLang;
-    button.classList.toggle('active', active);
-    button.setAttribute('aria-pressed', String(active));
-  });
-}
-
-async function saveAppLanguage(appLang) {
-  const response = await apiFetch('/api/app-language', {
-    method: 'PUT',
-    body: JSON.stringify({ appLang })
-  });
-  if (!response.ok) {
-    const body = await response.json().catch(() => ({}));
-    throw new Error(body.error || tr('settings.couldNotSaveAppLang'));
-  }
-  const body = await response.json();
-  const saved = body.appLang || appLang;
-  state.user.appLang = saved;
-  state.appLang = saved;
-  applyAppLanguage();
-  const direction = defaultTranslateDirection(getLearningLanguage(), getNativeApiLang());
-  state.settings.translateSource = direction.source;
-  state.settings.translateTarget = direction.target;
-  state.lastDetectedSourceLang = '';
-  updateTranslateDirectionUi();
-  resetDailyGlossCache();
-  if (state.todayWords.length) {
-    void ensureAllDailyGlossesLoaded().then(() => {
-      if (state.activeTab === 'daily') renderDailyWord(state.currentWordIndex);
-    }).catch(() => {});
-  }
 }
 
 function authHeaders(extra = {}) {
@@ -458,14 +415,12 @@ function applyUserPayload(payload) {
     id: payload.id,
     username: payload.username,
     isDev: Boolean(payload.isDev),
-    languages: Array.isArray(payload.languages) ? payload.languages : [],
-    appLang: payload.appLang || null
+    languages: Array.isArray(payload.languages) ? payload.languages : []
   };
   document.body.classList.toggle('dev-mode', state.user.isDev);
   document.body.classList.toggle('prod-mode', !state.user.isDev);
   document.getElementById('ops-open-btn')?.classList.toggle('hidden', !state.user.isDev);
   saveUserToStorage(state.user);
-  state.appLang = resolveAppLang(state.user.appLang, navigator.languages);
   applyAppLanguage();
   return state.user;
 }
@@ -699,7 +654,6 @@ function renderSettings() {
       return `<span class="settings-lang-chip">${flag} ${escapeHtml(getModeLabel(modeId))}</span>`;
     }).join('');
   }
-  renderSettingsAppLangButtons();
   if (state.languagePickerContext) renderLanguagePicker(state.languagePickerContext);
 }
 
@@ -2827,18 +2781,6 @@ function setupAuthEvents() {
     window.location.reload();
   });
 
-  document.querySelectorAll('.settings-app-lang-btn').forEach(button => {
-    button.addEventListener('click', async () => {
-      const appLang = button.dataset.appLang;
-      if (!appLang || appLang === state.appLang) return;
-      try {
-        await saveAppLanguage(appLang);
-        renderSettings();
-      } catch (error) {
-        setStatus('daily-save-status', formatError(error), 'error');
-      }
-    });
-  });
 }
 
 function setupFeedbackEvents() {

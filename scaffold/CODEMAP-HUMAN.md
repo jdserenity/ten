@@ -9,7 +9,7 @@ src/client/                 # the PWA I serve as static files (no bundler)
   index.html                # shell, four tabs, settings overlay; English text is first-paint only
   styles.css
   app.js                    # all UI; MODE_CONFIGS; talks to /api/* with X-User-Id
-  i18n.js                   # en + pt-BR catalogs; t(); applyAppLanguage overwrites [data-i18n]
+  i18n.js                   # English catalog only; t(); applyAppLanguage overwrites [data-i18n]
   ten-logic.js              # pure helpers (startup tab, review goal, frequency filters, TTS voice pick, lang-family picker)
   daily-pool.js             # pick/reconcile today's 3/new list; WORDS_PER_DAY; pool-days math
   client-load.js            # planBootDataLoads — priority vs background tab data

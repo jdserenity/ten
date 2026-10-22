@@ -19,7 +19,7 @@ import {
   frequencyEntryMatchesFilter,
   frequencyListTotal,
   getFrequencyTierKey,
-  gradeCountEntries,
+  gradeButtonLabel,
   getLangPickerDialectLabelKey,
   getLangPickerDialects,
   getLangPickerFamilies,
@@ -2065,15 +2065,6 @@ function renderReview() {
   contextEl.textContent = card.context;
   contextEl.classList.toggle('hidden', editing || !card.context);
 
-  const gradeStatsEl = document.getElementById('review-grade-stats');
-  if (gradeStatsEl) {
-    const entries = gradeCountEntries(card.gradeCounts);
-    gradeStatsEl.textContent = entries
-      .map(entry => `${tr(`review.grade.${entry.rating}`)} ×${entry.count}`)
-      .join(' · ');
-    gradeStatsEl.classList.toggle('hidden', editing || !state.reviewAnswerVisible || !entries.length);
-  }
-
   const speakBtn = document.getElementById('review-speak-btn');
   if (speakBtn) {
     speakBtn.disabled = editing || !state.reviewAnswerVisible || !card.back || !speakPhraseAllowed();
@@ -2089,6 +2080,8 @@ function renderReview() {
   if (gradeRow) {
     gradeRow.querySelectorAll('button[data-grade]').forEach(button => {
       button.disabled = gradeButtonsDisabled;
+      const rating = button.dataset.grade;
+      button.textContent = gradeButtonLabel(tr(`review.grade.${rating}`), card.gradeCounts?.[rating]);
     });
   }
 

@@ -46,7 +46,7 @@ import {
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
   collectSentenceRevealAnimationKeys,
-  gradeCountEntries
+  gradeButtonLabel
 } from '../src/client/ten-logic.js';
 
 test('userHasLearningLanguages is false until the user adds a track', () => {
@@ -515,19 +515,13 @@ test('shouldResetDailySentenceReveal only when the headword changes', () => {
   assert.equal(shouldResetDailySentenceReveal('manger', ''), true);
 });
 
-test('gradeCountEntries lists only pressed ratings in again-hard-good-easy order', () => {
-  assert.deepEqual(gradeCountEntries({ again: 3, hard: 0, good: 2, easy: 1 }), [
-    { rating: 'again', count: 3 },
-    { rating: 'good', count: 2 },
-    { rating: 'easy', count: 1 }
-  ]);
-  assert.deepEqual(gradeCountEntries({ easy: 1, again: 2 }), [
-    { rating: 'again', count: 2 },
-    { rating: 'easy', count: 1 }
-  ]);
-  assert.deepEqual(gradeCountEntries({ again: 0, hard: 0, good: 0, easy: 0 }), []);
-  assert.deepEqual(gradeCountEntries(null), []);
-  assert.deepEqual(gradeCountEntries({ again: 'x', hard: -2 }), []);
+test('gradeButtonLabel appends the press count only when the grade was pressed before', () => {
+  assert.equal(gradeButtonLabel('Again', 3), 'Again ×3');
+  assert.equal(gradeButtonLabel('Easy', 1), 'Easy ×1');
+  assert.equal(gradeButtonLabel('Good', 0), 'Good');
+  assert.equal(gradeButtonLabel('Hard', -2), 'Hard');
+  assert.equal(gradeButtonLabel('Hard', 'x'), 'Hard');
+  assert.equal(gradeButtonLabel('Hard', undefined), 'Hard');
 });
 
 test('collectSentenceRevealAnimationKeys replays visible sentences on each open', () => {

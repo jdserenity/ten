@@ -37,12 +37,12 @@ test('review queue keeps the server due-date order instead of re-sorting by card
   assert.doesNotMatch(orderFn[1], /a\.id\s*-\s*b\.id/, 'due cards must stay in earliest-due-first order from the server');
 });
 
-test('flipped review cards show how many times each grade was pressed', () => {
+test('grade counts live inside the grade buttons, not on a separate stats line', () => {
   const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
   const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
-  assert.match(html, /id="review-grade-stats"/);
-  assert.match(app, /gradeCountEntries\(card\.gradeCounts\)/);
-  assert.match(app, /review-grade-stats/);
+  assert.doesNotMatch(html, /review-grade-stats/);
+  assert.doesNotMatch(app, /review-grade-stats/);
+  assert.match(app, /gradeButtonLabel\(/);
 });
 
 test('both study tabs display the same combined daily progress counter', () => {

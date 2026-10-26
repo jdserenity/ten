@@ -1,4 +1,17 @@
 export const DAILY_REVIEW_GOAL = 7;
+export const DAY_RESET_HOUR = 4;
+
+/** Calendar date that owns daily progress: rolls at DAY_RESET_HOUR local time, not midnight. */
+export function studyDayDate(now = new Date(), resetHour = DAY_RESET_HOUR) {
+  const d = new Date(now.getTime());
+  if (d.getHours() < resetHour) d.setDate(d.getDate() - 1);
+  return d;
+}
+
+export function studyDateKey(now = new Date(), resetHour = DAY_RESET_HOUR) {
+  const d = studyDayDate(now, resetHour);
+  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+}
 
 export function userHasLearningLanguages(languages) {
   return Array.isArray(languages) && languages.length > 0;

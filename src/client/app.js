@@ -35,6 +35,8 @@ import {
   canSpeakWithInstalledVoice,
   voiceMatchesSpeechLang,
   resolveStartupTab,
+  studyDateKey,
+  studyDayDate,
   langPickerPrimaryAction,
   shouldCloseLangPickerOnOutsideClick,
   shouldOpenLangPickerOnModeClick,
@@ -1128,12 +1130,11 @@ function loadSavedActiveMode() {
 }
 
 function dateKey() {
-  const d = new Date();
-  return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+  return studyDateKey();
 }
 
 function updateDateLabel() {
-  const now = new Date();
+  const now = studyDayDate();
   const el = document.getElementById('date-label');
   if (!el) return;
   el.textContent = now.toLocaleDateString(localeTagForAppLang(state.appLang), { month: 'short', day: 'numeric' });

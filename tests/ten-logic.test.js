@@ -4,7 +4,10 @@ import {
   buildNotLearnedFrozenPool,
   canonicalizeTranslateLanguage,
   DAILY_REVIEW_GOAL,
+  DAY_RESET_HOUR,
   combinedDailyStudyProgress,
+  studyDateKey,
+  studyDayDate,
   defaultTranslateDirection,
   extractPrimaryWordToken,
   extractSingleLearningWord,
@@ -513,6 +516,32 @@ test('shouldResetDailySentenceReveal only when the headword changes', () => {
   assert.equal(shouldResetDailySentenceReveal('manger', 'manger'), false);
   assert.equal(shouldResetDailySentenceReveal('', 'manger'), true);
   assert.equal(shouldResetDailySentenceReveal('manger', ''), true);
+});
+
+test('study day rolls at 4am local time, not midnight', () => {
+  assert.equal(DAY_RESET_HOUR, 4);
+  // Just before reset: still previous calendar day
+  assert.equal(studyDateKey(new Date(2026, 9, 26, 3, 59, 59)), '2026-9-25');
+  // At reset hour: new study day
+  assert.equal(studyDateKey(new Date(2026, 9, 26, 4, 0, 0)), '2026-9-26');
+  // Midday and late evening stay on calendar day
+  assert.equal(studyDateKey(new Date(2026, 9, 26, 12, 0, 0)), '2026-9-26');
+  assert.equal(studyDateKey(new Date(2026, 9, 26, 23, 59, 59)), '2026-9-26');
+});
+
+test('study day crosses month and year boundaries before 4am', () => {
+  assert.equal(studyDateKey(new Date(2026, 10, 1, 2, 0, 0)), '2026-9-31'); // Nov 1 2am → Oct 31
+  assert.equal(studyDateKey(new Date(2027, 0, 1, 1, 0, 0)), '2026-11-31'); // Jan 1 1am → Dec 31
+  assert.equal(studyDateKey(new Date(2027, 0, 1, 4, 0, 0)), '2027-0-1');
+});
+
+test('studyDayDate returns a Date usable for the header label', () => {
+  const before = studyDayDate(new Date(2026, 9, 26, 2, 30, 0));
+  assert.equal(before.getFullYear(), 2026);
+  assert.equal(before.getMonth(), 9);
+  assert.equal(before.getDate(), 25);
+  const after = studyDayDate(new Date(2026, 9, 26, 4, 0, 0));
+  assert.equal(after.getDate(), 26);
 });
 
 test('gradeButtonLabel appends the press count only when the grade was pressed before', () => {

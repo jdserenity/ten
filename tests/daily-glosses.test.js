@@ -18,11 +18,39 @@ const sampleCard = {
   ]
 };
 
-test('buildDailyGlossFields includes word and present sentences only', () => {
+const sceneCard = {
+  word: 'manger',
+  translation: 'to eat',
+  sentences: [
+    {
+      lines: [
+        { fr: 'Je mange du pain.', en: 'I eat bread.' },
+        { fr: 'Sans ça, j\'ai faim.', en: 'Without that, I am hungry.' }
+      ]
+    },
+    {
+      lines: [
+        { fr: 'Nous avons mangé trop vite.', en: 'We ate too quickly.' },
+        { fr: 'Ensuite plus personne n\'avait faim.', en: 'Afterward nobody was hungry.' }
+      ]
+    }
+  ]
+};
+
+test('buildDailyGlossFields includes word and per-line gloss keys for legacy scenes', () => {
   const fields = buildDailyGlossFields(sampleCard, 'fr');
   assert.equal(fields.length, 4);
   assert.equal(fields[0].key, 'wordGloss');
   assert.equal(fields[0].englishFallback, 'hello');
+  assert.deepEqual(fields.slice(1).map(f => f.key), ['s1l1', 's2l1', 's3l1']);
+  assert.equal(fields[1].englishFallback, 'Hello, how are you?');
+});
+
+test('buildDailyGlossFields emits one field per line in two-sentence scenes', () => {
+  const fields = buildDailyGlossFields(sceneCard, 'fr');
+  assert.deepEqual(fields.map(f => f.key), ['wordGloss', 's1l1', 's1l2', 's2l1', 's2l2']);
+  assert.equal(fields[2].sourceText, 'Sans ça, j\'ai faim.');
+  assert.equal(fields[2].englishFallback, 'Without that, I am hungry.');
 });
 
 test('resolveGlossFromCacheOrFallback uses English JSON without cache lookup', () => {
@@ -63,7 +91,7 @@ test('ensureDailyGlosses stores English fallbacks and only calls provider for mi
   });
   assert.equal(calls.length, 0);
   assert.equal(glossesByWord.bonjour.wordGloss, 'hello');
-  assert.equal(glossesByWord.bonjour.s1Gloss, 'Hello, how are you?');
+  assert.equal(glossesByWord.bonjour.s1l1, 'Hello, how are you?');
   assert.equal(cardGlossesAreComplete(glossesByWord.bonjour, buildDailyGlossFields(sampleCard, 'fr')), true);
 });
 
@@ -73,9 +101,9 @@ test('ensureDailyGlosses reuses stored glosses and fills only missing entries', 
     storedGlossesByWord: {
       bonjour: {
         wordGloss: 'hello',
-        s1Gloss: 'Hello, how are you?',
-        s2Gloss: 'He says hello every morning.',
-        s3Gloss: 'Hello everyone!'
+        s1l1: 'Hello, how are you?',
+        s2l1: 'He says hello every morning.',
+        s3l1: 'Hello everyone!'
       }
     },
     cards: [sampleCard],
@@ -90,7 +118,7 @@ test('ensureDailyGlosses reuses stored glosses and fills only missing entries', 
     }
   });
   assert.equal(calls.length, 0);
-  assert.equal(glossesByWord.bonjour.s3Gloss, 'Hello everyone!');
+  assert.equal(glossesByWord.bonjour.s3l1, 'Hello everyone!');
 });
 
 test('pruneGlossesForCards drops glosses for words no longer in today assignment', () => {

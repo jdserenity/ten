@@ -1,25 +1,26 @@
+import { sceneLines } from '../src/client/ten-logic.js';
+
 export function getSentenceLearningText(sentence, sentenceKey) {
   if (!sentence || typeof sentence !== 'object') return '';
   return String(sentence[sentenceKey] || '').trim();
 }
 
 export function buildDailyGlossFields(card, sentenceKey) {
-  const first = card?.sentences?.[0] || {};
-  const second = card?.sentences?.[1] ? card.sentences[1] : {};
-  const third = card?.sentences?.[2] ? card.sentences[2] : {};
   const fields = [{
     key: 'wordGloss',
     sourceText: String(card?.word || '').trim(),
     englishFallback: String(card?.translation || '').trim()
   }];
-  [
-    { key: 's1Gloss', sentence: first },
-    { key: 's2Gloss', sentence: second },
-    { key: 's3Gloss', sentence: third }
-  ].forEach(({ key, sentence }) => {
-    const sourceText = getSentenceLearningText(sentence, sentenceKey);
-    if (!sourceText) return;
-    fields.push({ key, sourceText, englishFallback: String(sentence.en || '').trim() });
+  const scenes = Array.isArray(card?.sentences) ? card.sentences : [];
+  scenes.slice(0, 3).forEach((scene, sceneIndex) => {
+    sceneLines(scene, sentenceKey).forEach((line, lineIndex) => {
+      if (!line.l2) return;
+      fields.push({
+        key: `s${sceneIndex + 1}l${lineIndex + 1}`,
+        sourceText: line.l2,
+        englishFallback: line.en
+      });
+    });
   });
   return fields;
 }

@@ -6,6 +6,7 @@ import vm from 'node:vm';
 const html = readFileSync(new URL('../src/client/index.html', import.meta.url), 'utf8');
 const app = readFileSync(new URL('../src/client/app.js', import.meta.url), 'utf8');
 const styles = readFileSync(new URL('../src/client/styles.css', import.meta.url), 'utf8');
+const DAILY_LINE_KEYS = ['s1l1', 's1l2', 's2l1', 's2l2'];
 
 test('5/new example sentences are nested dropdowns collapsed by default', () => {
   assert.match(html, /<details id="sentence-reveal-1" class="sentence-reveal">/);
@@ -13,10 +14,10 @@ test('5/new example sentences are nested dropdowns collapsed by default', () => 
   assert.doesNotMatch(html, /id="(?:sentence-reveal-3|s3-[^"]+)"/);
   assert.doesNotMatch(html, /id="sentence-reveal-[123]"[^>]*\sopen/);
 
-  const order = ['sentence-reveal-1', 's1-l2', 'sentence-reveal-2', 's2-l2']
+  const order = ['sentence-reveal-1', 's1l1-l2', 's1l2-l2', 'sentence-reveal-2', 's2l1-l2', 's2l2-l2']
     .map(id => html.indexOf(`id="${id}"`));
   assert.ok(order.every(index => index >= 0), 'nested sentence dropdown ids exist');
-  assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals the next sentence, then another dropdown');
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals scene lines, then another dropdown');
 });
 
 test('5/new sentence dropdown uses the context label instead of language in use', () => {
@@ -48,30 +49,59 @@ test('sentence dropdown CSS uses a rotating triangle and hides nested headers af
   assert.match(styles, /padding-top:\s*14px/);
 });
 
-test('Add all to review saves the word and only the first two examples', async () => {
+test('Add all to review saves the word and every individual sentence line', async () => {
   const handlers = new Map();
   const saved = [];
-  const word = { word: 'bonjour', sentences: [{ fr: 'First' }, { fr: 'Second' }, { fr: 'Third' }] };
+  const word = {
+    word: 'bonjour',
+    sentences: [
+      {
+        lines: [
+          { fr: 'First', en: 'One' },
+          { fr: 'FirstB', en: 'OneB' }
+        ]
+      },
+      {
+        lines: [
+          { fr: 'Second', en: 'Two' },
+          { fr: 'SecondB', en: 'TwoB' }
+        ]
+      },
+      { fr: 'Third', en: 'Three' }
+    ]
+  };
   const original = JSON.stringify(word);
   const context = vm.createContext({
     document: { getElementById: id => ({ addEventListener: (event, handler) => handlers.set(id, handler) }) },
-    state: { todayWords: [word], currentWordIndex: 0, activeTab: 'daily', dailyGlosses: { wordGloss: 'hello', s1Gloss: 'One', s2Gloss: 'Two' } },
-    setStatus() {}, tr: key => key,
-    getSentenceText: sentence => sentence.fr,
+    state: {
+      todayWords: [word],
+      currentWordIndex: 0,
+      activeTab: 'daily',
+      dailyGlosses: { wordGloss: 'hello', s1l1: 'One', s1l2: 'OneB', s2l1: 'Two', s2l2: 'TwoB' }
+    },
+    DAILY_LINE_KEYS,
+    setStatus() {},
+    tr: key => key,
+    collectDailyLineTargets: () => [
+      { key: 's1l1', l2: 'First', gloss: 'One' },
+      { key: 's1l2', l2: 'FirstB', gloss: 'OneB' },
+      { key: 's2l1', l2: 'Second', gloss: 'Two' },
+      { key: 's2l2', l2: 'SecondB', gloss: 'TwoB' }
+    ],
     addCard: async card => { saved.push(card); return true; },
     addSentenceCardWithGloss: async (back, front) => { saved.push({ front, back }); return true; }
   });
   const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
   vm.runInContext(`${setup}; setupDailyEvents();`, context);
   await handlers.get('add-all-btn')();
-  assert.deepEqual(saved.map(card => card.back), ['bonjour', 'First', 'Second']);
-  assert.equal(JSON.stringify(word), original, 'all three stored examples remain intact');
+  assert.deepEqual(saved.map(card => card.back), ['bonjour', 'First', 'FirstB', 'Second', 'SecondB']);
+  assert.equal(JSON.stringify(word), original, 'stored examples remain intact');
 });
 
 test('context translations start hidden behind keyboard-accessible sentence buttons', () => {
-  for (const number of [1, 2]) {
-    assert.match(html, new RegExp(`<button[^>]*id="s${number}-l2"[^>]*type="button"[^>]*aria-expanded="false"[^>]*aria-controls="s${number}-en"`));
-    assert.match(html, new RegExp(`<span class="sentence-en hidden" id="s${number}-en"`));
+  for (const key of DAILY_LINE_KEYS) {
+    assert.match(html, new RegExp(`<button[^>]*id="${key}-l2"[^>]*type="button"[^>]*aria-expanded="false"[^>]*aria-controls="${key}-en"`));
+    assert.match(html, new RegExp(`<span class="sentence-en hidden" id="${key}-en"`));
   }
 });
 
@@ -89,22 +119,23 @@ test('click reveals only the saved translation and changing cards hides both aga
   };
   const context = vm.createContext({
     document: { getElementById: element },
+    DAILY_LINE_KEYS,
     clearSentenceRevealAnimations() {}
   });
   const helpers = app.slice(app.indexOf('function setDailySentenceTranslationVisible('), app.indexOf('function sentenceRevealAnimationElements('));
   const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
   vm.runInContext(`${helpers}\n${setup}\nsetupDailyEvents(); collapseDailySentenceReveals();`, context);
-  element('s1-l2').handlers.click();
-  assert.equal(element('s1-en').hidden, false);
-  assert.equal(element('s2-en').hidden, true);
-  assert.equal(element('s1-en').textContent, 'Saved s1-en');
-  assert.equal(element('s1-l2').attributes['aria-expanded'], 'true');
-  element('s2-l2').handlers.click();
-  assert.equal(element('s2-en').hidden, false);
+  element('s1l1-l2').handlers.click();
+  assert.equal(element('s1l1-en').hidden, false);
+  assert.equal(element('s1l2-en').hidden, true);
+  assert.equal(element('s1l1-en').textContent, 'Saved s1l1-en');
+  assert.equal(element('s1l1-l2').attributes['aria-expanded'], 'true');
+  element('s2l1-l2').handlers.click();
+  assert.equal(element('s2l1-en').hidden, false);
   vm.runInContext('collapseDailySentenceReveals();', context);
-  for (const number of [1, 2]) {
-    assert.equal(element(`s${number}-en`).hidden, true);
-    assert.equal(element(`s${number}-l2`).attributes['aria-expanded'], 'false');
+  for (const key of DAILY_LINE_KEYS) {
+    assert.equal(element(`${key}-en`).hidden, true);
+    assert.equal(element(`${key}-l2`).attributes['aria-expanded'], 'false');
   }
   assert.match(app, /shouldResetDailySentenceReveal\(state\.sentenceRevealWord, nextRevealWord\)\)\s*\{\s*collapseDailySentenceReveals\(\)/);
 });
@@ -112,6 +143,7 @@ test('click reveals only the saved translation and changing cards hides both aga
 test('daily event setup succeeds with only elements present in the current page', () => {
   const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
   const context = vm.createContext({
+    DAILY_LINE_KEYS,
     document: { getElementById: id => ids.has(id) ? { addEventListener() {} } : null }
   });
   const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));

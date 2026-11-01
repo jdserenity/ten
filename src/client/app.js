@@ -51,7 +51,8 @@ import {
   userHasLearningLanguages,
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
-  collectSentenceRevealAnimationKeys
+  collectSentenceRevealAnimationKeys,
+  sceneLines
 } from './ten-logic.js';
 import {
   computePoolDaysLeft,
@@ -167,9 +168,10 @@ const state = {
   dailyGlosses: {
     wordKey: '',
     wordGloss: '',
-    s1Gloss: '',
-    s2Gloss: '',
-    s3Gloss: '',
+    s1l1: '',
+    s1l2: '',
+    s2l1: '',
+    s2l2: '',
     loading: false,
     requestId: 0
   },
@@ -1059,10 +1061,27 @@ function setStatus(elementId, message, tone = '') {
   if (tone) el.classList.add(tone);
 }
 
-function getSentenceText(sentence) {
-  if (!sentence || typeof sentence !== 'object') return '';
-  const mode = getModeConfig();
-  return String(sentence[mode.sentenceKey] || sentence.pt || sentence.fr || sentence.es || '').trim();
+const DAILY_LINE_KEYS = ['s1l1', 's1l2', 's2l1', 's2l2'];
+
+function getSceneLinesForMode(scene) {
+  return sceneLines(scene, getModeConfig().sentenceKey);
+}
+
+function emptyDailyLineGlosses() {
+  return Object.fromEntries(DAILY_LINE_KEYS.map(key => [key, '']));
+}
+
+function collectDailyLineTargets(word, glosses = state.dailyGlosses) {
+  const targets = [];
+  const scenes = Array.isArray(word?.sentences) ? word.sentences.slice(0, 2) : [];
+  scenes.forEach((scene, sceneIndex) => {
+    getSceneLinesForMode(scene).forEach((line, lineIndex) => {
+      if (!line.l2) return;
+      const key = `s${sceneIndex + 1}l${lineIndex + 1}`;
+      targets.push({ key, l2: line.l2, gloss: String(glosses?.[key] || '').trim() });
+    });
+  });
+  return targets;
 }
 
 function getSpeechVoices() {
@@ -1162,23 +1181,20 @@ function updateDailyDots() {
 }
 
 function updateDailyAddButtons(word, glosses) {
-  const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
-  const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
-  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
-  const firstSentenceText = getSentenceText(firstSentence);
-  const secondSentenceText = getSentenceText(secondSentence);
-  const thirdSentenceText = getSentenceText(thirdSentence);
   const loading = glosses.loading;
   const hasWord = !!word.word && !!glosses.wordGloss && !loading;
-  const hasS1 = !!(firstSentenceText && glosses.s1Gloss && !loading);
-  const hasS2 = !!(secondSentenceText && glosses.s2Gloss && !loading);
-  const hasS3 = !!(thirdSentenceText && glosses.s3Gloss && !loading);
   const btnWord = document.getElementById('word-add-btn'); if (btnWord) btnWord.disabled = !hasWord;
-  const btnS1 = document.getElementById('s1-add-btn'); if (btnS1) btnS1.disabled = !hasS1;
-  const btnS2 = document.getElementById('s2-add-btn'); if (btnS2) btnS2.disabled = !hasS2;
-  const btnS3 = document.getElementById('s3-add-btn'); if (btnS3) btnS3.disabled = !hasS3;
-  const required = hasWord && hasS1 && hasS2;
-  const btnAll = document.getElementById('add-all-btn'); if (btnAll) btnAll.disabled = !required;
+  const targets = collectDailyLineTargets(word, glosses);
+  const byKey = Object.fromEntries(targets.map(t => [t.key, t]));
+  DAILY_LINE_KEYS.forEach(key => {
+    const btn = document.getElementById(`${key}-add-btn`);
+    if (!btn) return;
+    const target = byKey[key];
+    btn.disabled = !(target && target.gloss && !loading);
+  });
+  const hasAnyLine = targets.some(t => t.gloss);
+  const btnAll = document.getElementById('add-all-btn');
+  if (btnAll) btnAll.disabled = !(hasWord && hasAnyLine && !loading);
 }
 
 function dailyGlossCacheKey(word) {
@@ -1199,12 +1215,17 @@ function dailyGlossesEnsureKey() {
 
 function normalizeDailyGlossPayload(raw) {
   const unavailable = tr('daily.glossUnavailable');
-  return {
+  const payload = {
     wordGloss: String(raw?.wordGloss || '').trim() || unavailable,
-    s1Gloss: String(raw?.s1Gloss || '').trim(),
-    s2Gloss: String(raw?.s2Gloss || '').trim(),
-    s3Gloss: String(raw?.s3Gloss || '').trim()
+    ...emptyDailyLineGlosses()
   };
+  DAILY_LINE_KEYS.forEach(key => {
+    payload[key] = String(raw?.[key] || '').trim();
+  });
+  // Legacy whole-scene gloss keys → first line of that scene
+  if (!payload.s1l1 && raw?.s1Gloss) payload.s1l1 = String(raw.s1Gloss).trim();
+  if (!payload.s2l1 && raw?.s2Gloss) payload.s2l1 = String(raw.s2Gloss).trim();
+  return payload;
 }
 
 function applyServerGlossesToCache(glossesByWord) {
@@ -1251,22 +1272,23 @@ async function ensureAllDailyGlossesLoaded() {
 
 function showDailyGlossLoadingPlaceholders() {
   document.getElementById('translation').textContent = tr('daily.glossLoading');
-  document.getElementById('s1-en').textContent = tr('daily.glossLoading');
-  document.getElementById('s2-en').textContent = tr('daily.glossLoading');
-  const s3En = document.getElementById('s3-en'); if (s3En) s3En.textContent = tr('daily.glossLoading');
+  DAILY_LINE_KEYS.forEach(key => {
+    const en = document.getElementById(`${key}-en`);
+    if (en) en.textContent = tr('daily.glossLoading');
+  });
 }
 
 function applyDailyGlossPayloadToDom(word, payload, loading) {
   state.dailyGlosses.wordGloss = payload.wordGloss;
-  state.dailyGlosses.s1Gloss = payload.s1Gloss;
-  state.dailyGlosses.s2Gloss = payload.s2Gloss;
-  state.dailyGlosses.s3Gloss = payload.s3Gloss;
+  DAILY_LINE_KEYS.forEach(key => {
+    state.dailyGlosses[key] = payload[key] || '';
+  });
   state.dailyGlosses.loading = loading;
   document.getElementById('translation').textContent = loading ? tr('daily.glossLoading') : payload.wordGloss;
-  document.getElementById('s1-en').textContent = loading ? tr('daily.glossLoading') : payload.s1Gloss;
-  document.getElementById('s2-en').textContent = loading ? tr('daily.glossLoading') : payload.s2Gloss;
-  const s3En = document.getElementById('s3-en');
-  if (s3En) s3En.textContent = loading ? tr('daily.glossLoading') : payload.s3Gloss;
+  DAILY_LINE_KEYS.forEach(key => {
+    const en = document.getElementById(`${key}-en`);
+    if (en) en.textContent = loading ? tr('daily.glossLoading') : (payload[key] || '');
+  });
   updateDailyAddButtons(word, state.dailyGlosses);
 }
 
@@ -1286,9 +1308,7 @@ async function loadDailyGlosses(word) {
 
   state.dailyGlosses.loading = true;
   state.dailyGlosses.wordGloss = '';
-  state.dailyGlosses.s1Gloss = '';
-  state.dailyGlosses.s2Gloss = '';
-  state.dailyGlosses.s3Gloss = '';
+  Object.assign(state.dailyGlosses, emptyDailyLineGlosses());
   showDailyGlossLoadingPlaceholders();
   updateDailyAddButtons(word, state.dailyGlosses);
 
@@ -1297,31 +1317,29 @@ async function loadDailyGlosses(word) {
     if (!isCurrentRequest()) return;
     const payload = dailyGlossCache.get(wordKey) || {
       wordGloss: unavailable,
-      s1Gloss: unavailable,
-      s2Gloss: unavailable,
-      s3Gloss: unavailable
+      ...Object.fromEntries(DAILY_LINE_KEYS.map(key => [key, unavailable]))
     };
     applyDailyGlossPayloadToDom(word, payload, false);
   } catch (_) {
     if (!isCurrentRequest()) return;
     applyDailyGlossPayloadToDom(word, {
       wordGloss: unavailable,
-      s1Gloss: unavailable,
-      s2Gloss: unavailable,
-      s3Gloss: unavailable
+      ...Object.fromEntries(DAILY_LINE_KEYS.map(key => [key, unavailable]))
     }, false);
   } finally {
     if (isCurrentRequest()) state.dailyGlosses.loading = false;
   }
 }
 
-function setDailySentenceTranslationVisible(number, visible) {
-  document.getElementById(`s${number}-en`).classList.toggle('hidden', !visible);
-  document.getElementById(`s${number}-l2`).setAttribute('aria-expanded', String(visible));
+function setDailySentenceTranslationVisible(lineKey, visible) {
+  const en = document.getElementById(`${lineKey}-en`);
+  const l2 = document.getElementById(`${lineKey}-l2`);
+  if (en) en.classList.toggle('hidden', !visible);
+  if (l2) l2.setAttribute('aria-expanded', String(visible));
 }
 
 function collapseDailySentenceReveals() {
-  [1, 2].forEach(number => setDailySentenceTranslationVisible(number, false));
+  DAILY_LINE_KEYS.forEach(key => setDailySentenceTranslationVisible(key, false));
   ['sentence-reveal-1', 'sentence-reveal-2', 'sentence-reveal-3'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.open = false;
@@ -1330,10 +1348,11 @@ function collapseDailySentenceReveals() {
 }
 
 function sentenceRevealAnimationElements() {
+  const sceneSentences = n => [...document.querySelectorAll(`#sentence-reveal-${n} > .sentence:not(.hidden)`)];
   return {
-    s1: document.querySelector('#sentence-reveal-1 > .sentence'),
-    s2: document.querySelector('#sentence-reveal-2 > .sentence'),
-    s3: document.querySelector('#sentence-reveal-3 > .sentence'),
+    s1: sceneSentences(1),
+    s2: sceneSentences(2),
+    s3: sceneSentences(3),
     another2: document.getElementById('sentence-reveal-2'),
     another3: document.getElementById('sentence-reveal-3')
   };
@@ -1353,7 +1372,11 @@ function replaySentenceRevealAnimation(fromLevel) {
   const nodes = collectSentenceRevealAnimationKeys(
     [Boolean(r1?.open), Boolean(r2?.open), Boolean(r3?.open)],
     fromLevel
-  ).map(key => els[key]).filter(el => el && !el.classList.contains('hidden'));
+  ).flatMap(key => {
+    const el = els[key];
+    if (!el) return [];
+    return Array.isArray(el) ? el : [el];
+  }).filter(el => el && !el.classList.contains('hidden'));
   clearSentenceRevealAnimations();
   if (r1) void r1.offsetWidth;
   nodes.forEach(el => el.classList.add('sentence-reveal-animating'));
@@ -1385,20 +1408,12 @@ function renderDailyWord(index) {
     document.getElementById('word').textContent = noLanguage ? tr('daily.addLanguage') : tr('daily.unavailable');
     document.getElementById('translation').textContent = '';
     document.getElementById('daily-frequency-rank').textContent = '';
-    document.getElementById('s1-l2').textContent = '';
-    document.getElementById('s1-en').textContent = '';
-    document.getElementById('s2-l2').textContent = '';
-    document.getElementById('s2-en').textContent = '';
-    const s3L2Empty = document.getElementById('s3-l2'); if (s3L2Empty) s3L2Empty.textContent = '';
-    const s3EnEmpty = document.getElementById('s3-en'); if (s3EnEmpty) s3EnEmpty.textContent = '';
+    fillDailySceneLines([], []);
     updateDailyStudyProgressCounters();
     document.getElementById('prev-btn').disabled = true;
     document.getElementById('next-btn').disabled = true;
     document.getElementById('speak-btn').disabled = true;
-    document.getElementById('s1-speak-btn').disabled = true;
-    document.getElementById('s2-speak-btn').disabled = true;
-    const s3SpeakEmpty = document.getElementById('s3-speak-btn'); if (s3SpeakEmpty) s3SpeakEmpty.disabled = true;
-    ['word-add-btn','s1-add-btn','s2-add-btn','s3-add-btn','add-all-btn'].forEach(id => {
+    ['word-add-btn', 'add-all-btn', ...DAILY_LINE_KEYS.map(key => `${key}-add-btn`), ...DAILY_LINE_KEYS.map(key => `${key}-speak-btn`)].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
     const divider = document.querySelector('#card .divider');
@@ -1415,35 +1430,50 @@ function renderDailyWord(index) {
     markCurrentDailyWordSeen();
   }
 
-  const firstSentence = word.sentences && word.sentences[0] ? word.sentences[0] : {};
-  const secondSentence = word.sentences && word.sentences[1] ? word.sentences[1] : {};
-  const thirdSentence = word.sentences && word.sentences[2] ? word.sentences[2] : {};
-  const firstSentenceText = getSentenceText(firstSentence);
-  const secondSentenceText = getSentenceText(secondSentence);
-  const thirdSentenceText = getSentenceText(thirdSentence);
+  const scene1 = word.sentences && word.sentences[0] ? word.sentences[0] : {};
+  const scene2 = word.sentences && word.sentences[1] ? word.sentences[1] : {};
+  const lines1 = getSceneLinesForMode(scene1);
+  const lines2 = getSceneLinesForMode(scene2);
+  const firstSentenceText = lines1[0]?.l2 || '';
+  const secondSentenceText = lines2[0]?.l2 || '';
 
   document.getElementById('word').textContent = word.word;
   const rank = getCurrentDailyWordFrequencyRank();
   document.getElementById('daily-frequency-rank').textContent = rank
     ? formatFrequencyRankMessage('frequency.rankInput', rank)
     : tr('daily.frequencyRankUnavailable');
-  document.getElementById('s1-l2').textContent = firstSentenceText;
-  document.getElementById('s2-l2').textContent = secondSentenceText;
-  const s3L2 = document.getElementById('s3-l2'); if (s3L2) s3L2.textContent = thirdSentenceText;
+  fillDailySceneLines(lines1, lines2);
   updateDailyStudyProgressCounters();
   document.getElementById('prev-btn').disabled = index === 0;
   document.getElementById('next-btn').disabled = false;
   document.getElementById('speak-btn').disabled = !word.word || !speakPhraseAllowed();
-  document.getElementById('s1-speak-btn').disabled = !firstSentenceText || !speakPhraseAllowed();
-  document.getElementById('s2-speak-btn').disabled = !secondSentenceText || !speakPhraseAllowed();
-  const s3Speak = document.getElementById('s3-speak-btn'); if (s3Speak) s3Speak.disabled = !thirdSentenceText || !speakPhraseAllowed();
 
-  applyDailySentenceRevealVisibility(firstSentenceText, secondSentenceText, thirdSentenceText);
+  applyDailySentenceRevealVisibility(firstSentenceText, secondSentenceText, '');
 
   void loadDailyGlosses(word);
 
   updateDailyDots();
   maybeCelebrateDailyComplete(index);
+}
+
+function fillDailySceneLines(lines1, lines2) {
+  const canSpeak = speakPhraseAllowed();
+  [
+    { scene: 1, lines: lines1 },
+    { scene: 2, lines: lines2 }
+  ].forEach(({ scene, lines }) => {
+    for (let lineIndex = 0; lineIndex < 2; lineIndex += 1) {
+      const key = `s${scene}l${lineIndex + 1}`;
+      const line = lines[lineIndex] || { l2: '', en: '' };
+      const hasText = Boolean(line.l2);
+      const row = document.getElementById(`${key}-row`);
+      const l2 = document.getElementById(`${key}-l2`);
+      const speakBtn = document.getElementById(`${key}-speak-btn`);
+      if (row) row.classList.toggle('hidden', !hasText);
+      if (l2) l2.textContent = line.l2 || '';
+      if (speakBtn) speakBtn.disabled = !hasText || !canSpeak;
+    }
+  });
 }
 
 function advanceDailyWord() {
@@ -2845,9 +2875,9 @@ function setupModeEvents() {
 }
 
 function setupDailyEvents() {
-  [1, 2].forEach(number => {
-    document.getElementById(`s${number}-l2`).addEventListener('click', () => {
-      setDailySentenceTranslationVisible(number, true);
+  DAILY_LINE_KEYS.forEach(key => {
+    document.getElementById(`${key}-l2`)?.addEventListener('click', () => {
+      setDailySentenceTranslationVisible(key, true);
     });
   });
   const reveal1 = document.getElementById('sentence-reveal-1');
@@ -2873,18 +2903,15 @@ function setupDailyEvents() {
     const word = state.todayWords[state.currentWordIndex];
     speakText(word ? word.word : '', document.getElementById('speak-btn'));
   });
-  document.getElementById('s1-speak-btn').addEventListener('click', () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const text = word && word.sentences && word.sentences[0] ? getSentenceText(word.sentences[0]) : '';
-    speakText(text, document.getElementById('s1-speak-btn'));
-  });
-  document.getElementById('s2-speak-btn').addEventListener('click', () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const text = word && word.sentences && word.sentences[1] ? getSentenceText(word.sentences[1]) : '';
-    speakText(text, document.getElementById('s2-speak-btn'));
+  DAILY_LINE_KEYS.forEach(key => {
+    document.getElementById(`${key}-speak-btn`)?.addEventListener('click', () => {
+      const word = state.todayWords[state.currentWordIndex];
+      const target = collectDailyLineTargets(word).find(line => line.key === key);
+      speakText(target?.l2 || '', document.getElementById(`${key}-speak-btn`));
+    });
   });
 
-  // Small + buttons (beside word and each sentence)
+  // Small + buttons (beside word and each sentence line)
   document.getElementById('word-add-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word || !state.dailyGlosses.wordGloss || state.dailyGlosses.loading) {
@@ -2900,46 +2927,36 @@ function setupDailyEvents() {
     }
   });
 
-  document.getElementById('s1-add-btn').addEventListener('click', async () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const sent = word && word.sentences && word.sentences[0] ? word.sentences[0] : null;
-    if (!sent) {
-      setStatus('daily-save-status', tr('daily.noSentence'), 'error');
-      return;
-    }
-    const l2 = getSentenceText(sent);
-    await addSentenceCardWithGloss(l2, state.dailyGlosses.s1Gloss, 'daily-save-status');
+  DAILY_LINE_KEYS.forEach(key => {
+    document.getElementById(`${key}-add-btn`)?.addEventListener('click', async () => {
+      const word = state.todayWords[state.currentWordIndex];
+      const target = collectDailyLineTargets(word).find(line => line.key === key);
+      if (!target?.l2) {
+        setStatus('daily-save-status', tr('daily.noSentence'), 'error');
+        return;
+      }
+      await addSentenceCardWithGloss(target.l2, state.dailyGlosses[key], 'daily-save-status');
+    });
   });
 
-  document.getElementById('s2-add-btn').addEventListener('click', async () => {
-    const word = state.todayWords[state.currentWordIndex];
-    const sent = word && word.sentences && word.sentences[1] ? word.sentences[1] : null;
-    if (!sent) {
-      setStatus('daily-save-status', tr('daily.noSentence'), 'error');
-      return;
-    }
-    const l2 = getSentenceText(sent);
-    await addSentenceCardWithGloss(l2, state.dailyGlosses.s2Gloss, 'daily-save-status');
-  });
-
-
-  // Bottom "Add all to review" — adds word + each example sentence as cards
+  // Bottom "Add all to review" — headword + every individual sentence line
   document.getElementById('add-all-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word) {
       setStatus('daily-save-status', tr('daily.noCard'), 'error');
       return;
     }
-    const s1 = word.sentences && word.sentences[0] ? word.sentences[0] : null;
-    const s2 = word.sentences && word.sentences[1] ? word.sentences[1] : null;
+    const targets = collectDailyLineTargets(word);
 
     setStatus('daily-save-status', tr('daily.savingCards'));
 
     const wOk = await addCard({ front: state.dailyGlosses.wordGloss, back: word.word }, 'daily-save-status');
-    const s1Ok = s1 ? await addSentenceCardWithGloss(getSentenceText(s1), state.dailyGlosses.s1Gloss, 'daily-save-status') : false;
-    const s2Ok = s2 ? await addSentenceCardWithGloss(getSentenceText(s2), state.dailyGlosses.s2Gloss, 'daily-save-status') : false;
+    let lineOk = 0;
+    for (const target of targets) {
+      if (await addSentenceCardWithGloss(target.l2, state.dailyGlosses[target.key], 'daily-save-status')) lineOk += 1;
+    }
 
-    const total = (wOk ? 1 : 0) + (s1Ok ? 1 : 0) + (s2Ok ? 1 : 0);
+    const total = (wOk ? 1 : 0) + lineOk;
     if (total > 0) {
       setStatus('daily-save-status', total > 1 ? tr('daily.addedCardsPlural', { count: total }) : tr('daily.addedCards', { count: total }), 'success');
     }

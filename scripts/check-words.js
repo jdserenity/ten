@@ -7,11 +7,10 @@
 import { readFileSync, readdirSync } from 'fs';
 import { join, dirname, basename } from 'path';
 import { fileURLToPath } from 'url';
+import { sceneLines } from '../src/client/ten-logic.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const CLIENT_DIR = join(__dirname, '../src/client');
-const MIN_SENTENCE_LEN = 20;
-const MAX_SENTENCE_LEN = 140;
 
 const POOL_META = {
   'words.pt-br.json': {
@@ -121,13 +120,29 @@ export function checkWordPool(entries, meta, fileLabel = 'pool') {
     let entryHasDiacritic = DIACRITIC_RE.test(word) || DIACRITIC_RE.test(translation);
     entry.sentences.forEach((sentence, sIndex) => {
       const sloc = `${loc}.sentences[${sIndex}]`;
-      const l2 = getSentenceText(sentence, meta.sentenceKey);
-      const en = String(sentence?.en || '').trim();
+      if (Array.isArray(sentence?.lines)) {
+        if (sentence.lines.length !== 2) {
+          errors.push(`${sloc}: lines scenes must have exactly 2 lines, got ${sentence.lines.length}`);
+        }
+        sentence.lines.forEach((line, lineIndex) => {
+          const lloc = `${sloc}.lines[${lineIndex}]`;
+          const l2 = String(line?.[meta.sentenceKey] || '').trim();
+          const en = String(line?.en || '').trim();
+          if (!l2) errors.push(`${lloc}: missing ${meta.sentenceKey} text`);
+          if (!meta.legacySoft && !en) errors.push(`${lloc}: missing en text`);
+          if (DIACRITIC_RE.test(l2)) entryHasDiacritic = true;
+          if (DIACRITIC_RE.test(en)) entryHasDiacritic = true;
+        });
+        return;
+      }
+      const lines = sceneLines(sentence, meta.sentenceKey);
+      if (!lines.length) {
+        errors.push(`${sloc}: missing ${meta.sentenceKey} text`);
+        return;
+      }
+      const { l2, en } = lines[0];
       if (!l2) errors.push(`${sloc}: missing ${meta.sentenceKey} text`);
       if (!meta.legacySoft && !en) errors.push(`${sloc}: missing en text`);
-      if (l2 && (l2.length < MIN_SENTENCE_LEN || l2.length > MAX_SENTENCE_LEN)) {
-        errors.push(`${sloc}: ${meta.sentenceKey} length ${l2.length} outside ${MIN_SENTENCE_LEN}-${MAX_SENTENCE_LEN}`);
-      }
       if (DIACRITIC_RE.test(l2)) entryHasDiacritic = true;
     });
 

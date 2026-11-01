@@ -113,4 +113,60 @@ describe('checkWordPool', () => {
     assert.equal(result.ok, false);
     assert.match(result.errors.join('\n'), /duplicate/);
   });
+
+  it('accepts two-line scenes and long lines with no character cap', () => {
+    const longFr = 'Je mange du pain tous les matins avec ma sœur parce que c\'est notre petite tradition depuis l\'enfance et on n\'abandonne jamais ça.';
+    const result = checkWordPool([
+      {
+        word: 'manger',
+        level: 'A1',
+        translation: 'to eat',
+        sentences: [
+          {
+            lines: [
+              { fr: longFr, en: 'I eat bread every morning with my sister because it is our little tradition from childhood and we never give that up.' },
+              { fr: 'Sans ça, la journée commence mal.', en: 'Without that, the day starts badly.' }
+            ]
+          },
+          {
+            lines: [
+              { fr: 'Nous avons mangé trop vite hier soir.', en: 'We ate too quickly last night.' },
+              { fr: 'Ensuite personne n\'avait plus faim.', en: 'Afterward nobody was hungry anymore.' }
+            ]
+          }
+        ]
+      }
+    ], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, true, result.errors.join('; '));
+  });
+
+  it('rejects lines scenes that are not exactly two lines', () => {
+    const result = checkWordPool([
+      {
+        word: 'manger',
+        level: 'A1',
+        translation: 'to eat',
+        sentences: [
+          {
+            lines: [
+              { fr: 'Je mange du pain tous les matins.', en: 'I eat bread every morning.' }
+            ]
+          },
+          {
+            lines: [
+              { fr: 'Nous avons mangé trop vite hier soir.', en: 'We ate too quickly last night.' },
+              { fr: 'Ensuite personne n\'avait plus faim.', en: 'Afterward nobody was hungry anymore.' }
+            ]
+          }
+        ]
+      }
+    ], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, false);
+    assert.match(result.errors.join('\n'), /exactly 2 lines/);
+  });
+
+  it('still accepts legacy flat single-line scenes', () => {
+    const result = checkWordPool([frCard()], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, true, result.errors.join('; '));
+  });
 });

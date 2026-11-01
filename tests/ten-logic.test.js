@@ -8,6 +8,7 @@ import {
   combinedDailyStudyProgress,
   studyDateKey,
   studyDayDate,
+  sceneLines,
   defaultTranslateDirection,
   extractPrimaryWordToken,
   extractSingleLearningWord,
@@ -542,6 +543,23 @@ test('studyDayDate returns a Date usable for the header label', () => {
   assert.equal(before.getDate(), 25);
   const after = studyDayDate(new Date(2026, 9, 26, 4, 0, 0));
   assert.equal(after.getDate(), 26);
+});
+
+test('sceneLines normalizes legacy flat scenes and two-line scenes', () => {
+  assert.deepEqual(sceneLines({ fr: 'Bonjour.', en: 'Hello.' }, 'fr'), [
+    { l2: 'Bonjour.', en: 'Hello.' }
+  ]);
+  assert.deepEqual(sceneLines({
+    lines: [
+      { fr: 'Un.', en: 'One.' },
+      { fr: 'Deux.', en: 'Two.' }
+    ]
+  }, 'fr'), [
+    { l2: 'Un.', en: 'One.' },
+    { l2: 'Deux.', en: 'Two.' }
+  ]);
+  assert.deepEqual(sceneLines(null, 'fr'), []);
+  assert.deepEqual(sceneLines({}, 'es'), []);
 });
 
 test('gradeButtonLabel appends the press count only when the grade was pressed before', () => {

@@ -13,6 +13,21 @@ export function studyDateKey(now = new Date(), resetHour = DAY_RESET_HOUR) {
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
 }
 
+/** Normalize a pool scene: legacy `{ fr|es|pt, en }` or `{ lines: [{…}, {…}] }` → `[{ l2, en }, …]`. */
+export function sceneLines(scene, sentenceKey) {
+  if (!scene || typeof scene !== 'object') return [];
+  if (Array.isArray(scene.lines)) {
+    return scene.lines.map(line => ({
+      l2: String(line?.[sentenceKey] || '').trim(),
+      en: String(line?.en || '').trim()
+    }));
+  }
+  const l2 = String(scene[sentenceKey] || '').trim();
+  const en = String(scene.en || '').trim();
+  if (!l2 && !en) return [];
+  return [{ l2, en }];
+}
+
 export function userHasLearningLanguages(languages) {
   return Array.isArray(languages) && languages.length > 0;
 }

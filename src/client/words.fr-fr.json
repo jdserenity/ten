@@ -5433,5 +5433,470 @@
         ]
       }
     ]
+  },
+  {
+    "word": "s'ennuyer",
+    "level": "B1",
+    "translation": "to be bored; to get bored",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je m'ennuie dès que la réunion dépasse une heure.",
+            "en": "I get bored as soon as the meeting goes past an hour."
+          },
+          {
+            "fr": "Je dessine alors des petits croquis dans mon carnet.",
+            "en": "So I sketch little drawings in my notebook."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Les enfants s'ennuyaient sous la pluie à la colonie.",
+            "en": "The kids were bored in the rain at summer camp."
+          },
+          {
+            "fr": "Les moniteurs ont improvisé un jeu dans le réfectoire.",
+            "en": "The counselors improvised a game in the dining hall."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se souvenir",
+    "level": "B1",
+    "translation": "to remember",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Tu te souviens du nom de ce restaurant près du canal ?",
+            "en": "Do you remember the name of that restaurant by the canal?"
+          },
+          {
+            "fr": "On y avait mangé des pâtes excellentes l'été dernier.",
+            "en": "We had excellent pasta there last summer."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je ne me souviens plus où j'ai rangé les clés de la cave.",
+            "en": "I can't remember where I put the cellar keys."
+          },
+          {
+            "fr": "Je vais vérifier dans le tiroir de l'entrée.",
+            "en": "I'll check in the entryway drawer."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "refuser",
+    "level": "B1",
+    "translation": "to refuse, to decline",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a refusé l'augmentation pour garder son temps libre.",
+            "en": "She turned down the raise to keep her free time."
+          },
+          {
+            "fr": "Le nouveau poste demandait trop de déplacements.",
+            "en": "The new role required too much travel."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Le serveur a dû refuser des clients faute de places.",
+            "en": "The waiter had to turn customers away for lack of tables."
+          },
+          {
+            "fr": "Il leur a proposé de revenir dans une heure.",
+            "en": "He suggested they come back in an hour."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "soutenir",
+    "level": "B1",
+    "translation": "to support (a person, idea, or weight)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ses amis l'ont soutenue pendant toute sa recherche d'emploi.",
+            "en": "Her friends supported her through her whole job search."
+          },
+          {
+            "fr": "Ils l'ont même aidée à préparer les entretiens.",
+            "en": "They even helped her prepare for the interviews."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je ne soutiens pas cette décision du conseil municipal.",
+            "en": "I don't support that city council decision."
+          },
+          {
+            "fr": "Couper les arbres du square ne résoudra rien.",
+            "en": "Cutting down the square's trees won't solve anything."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "remarquer",
+    "level": "B1",
+    "translation": "to notice",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "As-tu remarqué que la boulangerie a changé de propriétaire ?",
+            "en": "Did you notice the bakery changed owners?"
+          },
+          {
+            "fr": "Le pain a un goût un peu différent depuis mardi.",
+            "en": "The bread has tasted a bit different since Tuesday."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Personne n'a remarqué mon erreur dans le tableau.",
+            "en": "Nobody noticed my mistake in the spreadsheet."
+          },
+          {
+            "fr": "Heureusement, je l'ai corrigée avant l'envoi.",
+            "en": "Luckily I fixed it before sending."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "constater",
+    "level": "B1",
+    "translation": "to note, to observe (a fact)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le technicien a constaté une fuite derrière le lave-linge.",
+            "en": "The technician noted a leak behind the washing machine."
+          },
+          {
+            "fr": "Il devra revenir demain avec une pièce de rechange.",
+            "en": "He'll have to come back tomorrow with a spare part."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "On constate une baisse des inscriptions cette année.",
+            "en": "We're seeing a drop in enrollments this year."
+          },
+          {
+            "fr": "Le club cherche donc de nouvelles idées pour attirer du monde.",
+            "en": "So the club is looking for new ideas to draw people in."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "prévoir",
+    "level": "B1",
+    "translation": "to plan; to foresee / expect",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On prévoit de partir tôt pour éviter les bouchons.",
+            "en": "We're planning to leave early to avoid traffic jams."
+          },
+          {
+            "fr": "Le GPS estime déjà une heure de plus sur l'autoroute.",
+            "en": "The GPS already estimates an extra hour on the highway."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "La météo prévoit de la neige sur Lyon demain matin.",
+            "en": "The weather forecast expects snow over Lyon tomorrow morning."
+          },
+          {
+            "fr": "Les écoles pourraient fermer si ça s'accumule.",
+            "en": "Schools might close if it piles up."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "craindre",
+    "level": "B1",
+    "translation": "to fear, to be afraid (that)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je crains qu'on rate le dernier bus si on reste ici.",
+            "en": "I'm afraid we'll miss the last bus if we stay here."
+          },
+          {
+            "fr": "Il passe à 23 h 40 et après il n'y a plus rien.",
+            "en": "It comes at 11:40 p.m. and after that there's nothing."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle craignait de parler trop fort dans l'open space.",
+            "en": "She was afraid of speaking too loudly in the open-plan office."
+          },
+          {
+            "fr": "Alors elle a proposé d'appeler depuis une salle fermée.",
+            "en": "So she suggested calling from a closed room."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "oser",
+    "level": "B1",
+    "translation": "to dare",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il n'a pas osé demander une journée de congé.",
+            "en": "He didn't dare ask for a day off."
+          },
+          {
+            "fr": "Pourtant son chef lui avait déjà dit oui deux fois.",
+            "en": "Even though his boss had already said yes twice."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ose lui écrire : le pire, c'est qu'elle ne réponde pas.",
+            "en": "Dare to write to her — the worst is that she doesn't reply."
+          },
+          {
+            "fr": "Tu auras au moins essayé au lieu de ruminer.",
+            "en": "At least you'll have tried instead of stewing on it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "hésiter",
+    "level": "B1",
+    "translation": "to hesitate",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "J'hésite encore entre le train de nuit et l'avion.",
+            "en": "I'm still hesitating between the night train and the plane."
+          },
+          {
+            "fr": "Le train est plus long, mais j'arrive reposé.",
+            "en": "The train takes longer, but I arrive rested."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a hésité une seconde, puis elle a accepté le poste.",
+            "en": "She hesitated for a second, then accepted the job."
+          },
+          {
+            "fr": "Le salaire compensait largement le trajet plus long.",
+            "en": "The salary more than made up for the longer commute."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "regretter",
+    "level": "B1",
+    "translation": "to regret; to miss (wish back)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je regrette d'avoir vendu mon vieux vélo trop vite.",
+            "en": "I regret selling my old bike too quickly."
+          },
+          {
+            "fr": "Le nouveau est plus léger, mais moins solide en ville.",
+            "en": "The new one is lighter, but less sturdy in the city."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Tu ne regretteras pas ce week-end à la mer.",
+            "en": "You won't regret this weekend by the sea."
+          },
+          {
+            "fr": "Même s'il fait un peu frais, l'air change tout.",
+            "en": "Even if it's a bit chilly, the air changes everything."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "souhaiter",
+    "level": "B1",
+    "translation": "to wish; to want (politely)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je vous souhaite un excellent séjour à Bordeaux.",
+            "en": "I wish you an excellent stay in Bordeaux."
+          },
+          {
+            "fr": "N'hésitez pas à nous appeler si vous avez une question.",
+            "en": "Don't hesitate to call us if you have a question."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle souhaite changer de métier d'ici deux ans.",
+            "en": "She wants to change careers within two years."
+          },
+          {
+            "fr": "Elle a déjà commencé une formation le soir.",
+            "en": "She's already started an evening course."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "apprécier",
+    "level": "B1",
+    "translation": "to appreciate; to enjoy / like",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "J'apprécie vraiment qu'il ait prévenu avant d'annuler.",
+            "en": "I really appreciate that he gave notice before canceling."
+          },
+          {
+            "fr": "Ça m'a laissé le temps de trouver un remplaçant.",
+            "en": "It gave me time to find a replacement."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ils apprécient les soirées calmes après le travail.",
+            "en": "They enjoy quiet evenings after work."
+          },
+          {
+            "fr": "Un livre, un thé, et plus personne ne les dérange.",
+            "en": "A book, some tea, and nobody bothers them anymore."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "supporter",
+    "level": "B1",
+    "translation": "to put up with, to stand / tolerate",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je ne supporte pas la clim trop forte dans le bureau.",
+            "en": "I can't stand the AC too strong in the office."
+          },
+          {
+            "fr": "Je ramène toujours un pull pour m'en protéger.",
+            "en": "I always bring a sweater to protect myself from it."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a supporté le bruit des travaux pendant six mois.",
+            "en": "She put up with construction noise for six months."
+          },
+          {
+            "fr": "Quand c'est fini, elle a dormi dix heures d'affilée.",
+            "en": "When it was over, she slept ten hours straight."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "dépendre",
+    "level": "B1",
+    "translation": "to depend (on)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le départ dépendra de l'état des routes demain matin.",
+            "en": "Departure will depend on the road conditions tomorrow morning."
+          },
+          {
+            "fr": "S'il gèle, on reportera la randonnée.",
+            "en": "If it freezes, we'll postpone the hike."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "À cet âge, les enfants dépendent encore beaucoup de leurs parents.",
+            "en": "At that age, kids still depend a lot on their parents."
+          },
+          {
+            "fr": "Mais ils veulent déjà choisir leurs activités tout seuls.",
+            "en": "But they already want to choose their activities on their own."
+          }
+        ]
+      }
+    ]
   }
 ]

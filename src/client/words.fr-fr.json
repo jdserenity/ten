@@ -5898,5 +5898,470 @@
         ]
       }
     ]
+  },
+  {
+    "word": "se tromper",
+    "level": "B1",
+    "translation": "to be mistaken, to make a mistake",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je me suis trompé de quai et j'ai manqué mon train.",
+            "en": "I went to the wrong platform and missed my train."
+          },
+          {
+            "fr": "Le suivant part dans vingt minutes, heureusement.",
+            "en": "The next one leaves in twenty minutes, luckily."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Si je me trompe, corrige-moi tout de suite.",
+            "en": "If I'm wrong, correct me right away."
+          },
+          {
+            "fr": "Je préfère apprendre maintenant que devant le client.",
+            "en": "I'd rather learn now than in front of the client."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "cacher",
+    "level": "B1",
+    "translation": "to hide",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Les enfants ont caché les cadeaux derrière le canapé.",
+            "en": "The kids hid the presents behind the sofa."
+          },
+          {
+            "fr": "Leur père a fait semblant de ne rien voir.",
+            "en": "Their dad pretended not to see anything."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle ne cache plus sa fatigue à ses collègues.",
+            "en": "She no longer hides her tiredness from her colleagues."
+          },
+          {
+            "fr": "Hier, elle est rentrée une heure plus tôt avec l'accord du chef.",
+            "en": "Yesterday she left an hour early with the boss's okay."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "découvrir",
+    "level": "B1",
+    "translation": "to discover; to find out",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On a découvert une petite librairie au fond de la rue.",
+            "en": "We discovered a little bookshop at the end of the street."
+          },
+          {
+            "fr": "Le libraire nous a conseillé un roman local excellent.",
+            "en": "The bookseller recommended an excellent local novel."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a découvert trop tard que le billet n'était pas remboursable.",
+            "en": "She found out too late that the ticket wasn't refundable."
+          },
+          {
+            "fr": "Maintenant elle lit toujours les conditions avant de payer.",
+            "en": "Now she always reads the terms before paying."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "améliorer",
+    "level": "B1",
+    "translation": "to improve",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il veut améliorer son français avant le stage à Lyon.",
+            "en": "He wants to improve his French before the internship in Lyon."
+          },
+          {
+            "fr": "Il écoute un podcast chaque matin dans le métro.",
+            "en": "He listens to a podcast every morning on the metro."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "La mairie a amélioré l'éclairage du parc cet hiver.",
+            "en": "City hall improved the park lighting this winter."
+          },
+          {
+            "fr": "Les riverains se sentent enfin plus en sécurité le soir.",
+            "en": "Residents finally feel safer in the evening."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "augmenter",
+    "level": "B1",
+    "translation": "to increase, to raise",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Les loyers ont augmenté dans tout le quartier cette année.",
+            "en": "Rents have gone up across the whole neighborhood this year."
+          },
+          {
+            "fr": "Plusieurs locataires cherchent déjà plus loin.",
+            "en": "Several tenants are already looking farther out."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Si on augmente le prix, on risque de perdre des clients.",
+            "en": "If we raise the price, we risk losing customers."
+          },
+          {
+            "fr": "Mieux vaut d'abord expliquer clairement ce qui change.",
+            "en": "Better to clearly explain what's changing first."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "diminuer",
+    "level": "B1",
+    "translation": "to decrease, to reduce",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "La pollution a diminué depuis la fermeture de l'usine.",
+            "en": "Pollution has decreased since the factory closed."
+          },
+          {
+            "fr": "Les habitants ouvrent enfin leurs fenêtres le matin.",
+            "en": "Residents are finally opening their windows in the morning."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a diminué sa consommation de café pour mieux dormir.",
+            "en": "She cut back on coffee to sleep better."
+          },
+          {
+            "fr": "Au début c'était dur, mais elle se sent plus reposée.",
+            "en": "It was hard at first, but she feels more rested."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "remplacer",
+    "level": "B1",
+    "translation": "to replace",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il faut remplacer la batterie du vélo avant le week-end.",
+            "en": "We need to replace the bike battery before the weekend."
+          },
+          {
+            "fr": "Sinon on ne tiendra pas jusqu'à la gare.",
+            "en": "Otherwise we won't make it to the station."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Marie remplace Paul pendant ses congés de février.",
+            "en": "Marie is covering for Paul during his February leave."
+          },
+          {
+            "fr": "Elle connaît déjà tous les dossiers en cours.",
+            "en": "She already knows all the open files."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "comparer",
+    "level": "B1",
+    "translation": "to compare",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Avant d'acheter, elle compare les prix sur trois sites.",
+            "en": "Before buying, she compares prices on three sites."
+          },
+          {
+            "fr": "La différence atteint parfois vingt euros.",
+            "en": "The difference sometimes reaches twenty euros."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "On ne peut pas vraiment comparer ces deux offres d'emploi.",
+            "en": "You can't really compare these two job offers."
+          },
+          {
+            "fr": "L'une paie mieux, l'autre laisse plus de temps libre.",
+            "en": "One pays better; the other leaves more free time."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "échapper",
+    "level": "B1",
+    "translation": "to escape; to slip away / get away",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le chien a échappé à son maître près du parc.",
+            "en": "The dog got away from its owner near the park."
+          },
+          {
+            "fr": "Un passant l'a rattrapé devant la boulangerie.",
+            "en": "A passerby caught it in front of the bakery."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ce détail m'avait échappé dans le contrat.",
+            "en": "That detail had escaped me in the contract."
+          },
+          {
+            "fr": "Heureusement mon collègue l'a lu une deuxième fois.",
+            "en": "Luckily my colleague read it a second time."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "échec",
+    "level": "B1",
+    "translation": "failure; setback",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Son premier entretien a été un échec, et ça l'a secoué.",
+            "en": "His first interview was a failure, and it shook him."
+          },
+          {
+            "fr": "Il a repris ses notes et s'est mieux préparé pour le suivant.",
+            "en": "He went back over his notes and prepared better for the next one."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "L'échec du projet n'était pas seulement de sa faute.",
+            "en": "The project's failure wasn't only his fault."
+          },
+          {
+            "fr": "Le budget avait été mal estimé dès le départ.",
+            "en": "The budget had been poorly estimated from the start."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "réussite",
+    "level": "B1",
+    "translation": "success",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "La réussite de l'examen l'a vraiment soulagée.",
+            "en": "Passing the exam really relieved her."
+          },
+          {
+            "fr": "Elle a appelé ses parents avant même de quitter la salle.",
+            "en": "She called her parents before even leaving the room."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Cette réussite collective appartient à toute l'équipe.",
+            "en": "This collective success belongs to the whole team."
+          },
+          {
+            "fr": "Sans les heures du week-end, on n'y serait pas arrivés.",
+            "en": "Without the weekend hours, we wouldn't have made it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "but",
+    "level": "B1",
+    "translation": "goal, aim; (sports) goal",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Mon but cette année, c'est de courir un semi-marathon.",
+            "en": "My goal this year is to run a half marathon."
+          },
+          {
+            "fr": "Je m'entraîne trois matins par semaine avant le travail.",
+            "en": "I train three mornings a week before work."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a marqué le seul but du match à la dernière minute.",
+            "en": "She scored the only goal of the match in the last minute."
+          },
+          {
+            "fr": "Tout le stade s'est levé d'un coup.",
+            "en": "The whole stadium stood up at once."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "moyen",
+    "level": "B1",
+    "translation": "means, way; average; (plural) resources / money",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le vélo reste le moyen le plus rapide pour traverser le centre.",
+            "en": "The bike remains the fastest way to cross downtown."
+          },
+          {
+            "fr": "En voiture, on perd dix minutes rien qu'à chercher une place.",
+            "en": "By car, you lose ten minutes just looking for parking."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ils n'ont pas les moyens de louer un plus grand appartement.",
+            "en": "They can't afford to rent a bigger apartment."
+          },
+          {
+            "fr": "Alors ils ont transformé le balcon en petit bureau.",
+            "en": "So they turned the balcony into a small office."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "métier",
+    "level": "B1",
+    "translation": "job, trade, profession",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a changé de métier à trente-cinq ans sans regret.",
+            "en": "She changed careers at thirty-five with no regrets."
+          },
+          {
+            "fr": "Aujourd'hui elle forme des apprentis en boulangerie.",
+            "en": "Today she trains bakery apprentices."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "C'est un métier difficile, mais il aime le contact avec les gens.",
+            "en": "It's a tough job, but he likes dealing with people."
+          },
+          {
+            "fr": "Chaque journée est différente, et ça lui plaît.",
+            "en": "Every day is different, and that suits him."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "salaire",
+    "level": "B1",
+    "translation": "salary, wages",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Son salaire ne couvre plus le loyer et les transports.",
+            "en": "His salary no longer covers rent and transport."
+          },
+          {
+            "fr": "Il va demander un entretien pour en parler.",
+            "en": "He's going to ask for a meeting to talk about it."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Le salaire proposé était correct, mais les horaires impossibles.",
+            "en": "The salary offered was fine, but the hours were impossible."
+          },
+          {
+            "fr": "Elle a décliné et continué à chercher.",
+            "en": "She declined and kept looking."
+          }
+        ]
+      }
+    ]
   }
 ]

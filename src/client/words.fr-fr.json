@@ -4968,5 +4968,470 @@
         "en": "They danced until midnight at the party."
       }
     ]
+  },
+  {
+    "word": "s'inquiéter",
+    "level": "B1",
+    "translation": "to worry, to get anxious",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle s'inquiète dès que son fils ne répond pas.",
+            "en": "She gets worried as soon as her son doesn't answer."
+          },
+          {
+            "fr": "Au bout d'une heure, elle appelle ses amis pour savoir s'ils l'ont vu.",
+            "en": "After an hour, she calls his friends to ask if they've seen him."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ne t'inquiète pas pour le train : on a encore du temps.",
+            "en": "Don't worry about the train — we still have time."
+          },
+          {
+            "fr": "Sinon on prend simplement le suivant.",
+            "en": "Otherwise we'll just take the next one."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se plaindre",
+    "level": "B1",
+    "translation": "to complain",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Les voisins se plaignent du bruit chaque week-end.",
+            "en": "The neighbors complain about the noise every weekend."
+          },
+          {
+            "fr": "Hier, le gardien est monté pour leur parler.",
+            "en": "Yesterday the building manager came up to talk to them."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Arrête de te plaindre et dis clairement ce qui ne va pas.",
+            "en": "Stop complaining and say clearly what's wrong."
+          },
+          {
+            "fr": "Comme ça, on pourra enfin trouver une solution.",
+            "en": "That way we can finally find a solution."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "éviter",
+    "level": "B1",
+    "translation": "to avoid",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "J'évite cette rue le soir parce qu'elle est mal éclairée.",
+            "en": "I avoid that street at night because it's poorly lit."
+          },
+          {
+            "fr": "Je préfère faire un détour par le boulevard.",
+            "en": "I prefer to take a detour via the boulevard."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Pour éviter les embouteillages, elle part avant sept heures.",
+            "en": "To avoid traffic jams, she leaves before seven."
+          },
+          {
+            "fr": "Elle arrive au bureau presque seule dans le métro.",
+            "en": "She gets to the office with the metro almost empty."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "permettre",
+    "level": "B1",
+    "translation": "to allow, to make possible",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ce badge te permet d'entrer dans le bâtiment après 20 h.",
+            "en": "This badge allows you to enter the building after 8 p.m."
+          },
+          {
+            "fr": "Sans lui, la porte reste fermée.",
+            "en": "Without it, the door stays locked."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ses parents ne lui permettent pas de sortir en semaine.",
+            "en": "His parents don't allow him to go out on weeknights."
+          },
+          {
+            "fr": "Il doit d'abord finir ses devoirs et se coucher tôt.",
+            "en": "He has to finish his homework first and go to bed early."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "empêcher",
+    "level": "B1",
+    "translation": "to prevent, to stop (someone from doing something)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "La grève a empêché beaucoup de voyageurs de rentrer chez eux.",
+            "en": "The strike prevented many travelers from getting home."
+          },
+          {
+            "fr": "Certains ont dormi dans la gare en attendant le premier train.",
+            "en": "Some slept in the station waiting for the first train."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Rien ne m'empêchera de venir te voir demain.",
+            "en": "Nothing will stop me from coming to see you tomorrow."
+          },
+          {
+            "fr": "Même s'il pleut, je prendrai mon vélo.",
+            "en": "Even if it rains, I'll take my bike."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "convaincre",
+    "level": "B1",
+    "translation": "to convince",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il a réussi à convaincre son chef de reporter la réunion.",
+            "en": "He managed to convince his boss to postpone the meeting."
+          },
+          {
+            "fr": "Tout le monde a soufflé de soulagement.",
+            "en": "Everyone breathed a sigh of relief."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je n'arrive pas à la convaincre d'acheter une voiture d'occasion.",
+            "en": "I can't convince her to buy a used car."
+          },
+          {
+            "fr": "Elle veut absolument un modèle neuf, même plus cher.",
+            "en": "She absolutely wants a new model, even if it's more expensive."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "appartenir",
+    "level": "B1",
+    "translation": "to belong",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Cette clé appartient au propriétaire de l'immeuble.",
+            "en": "This key belongs to the building owner."
+          },
+          {
+            "fr": "Si tu la trouves, laisse-la à la loge.",
+            "en": "If you find it, leave it at the concierge desk."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ces idées n'appartiennent à personne en particulier.",
+            "en": "These ideas don't belong to anyone in particular."
+          },
+          {
+            "fr": "On les a construites ensemble au fil des discussions.",
+            "en": "We built them together through our discussions."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "mériter",
+    "level": "B1",
+    "translation": "to deserve",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Tu mérites une vraie pause après cette semaine de travail.",
+            "en": "You deserve a real break after this week of work."
+          },
+          {
+            "fr": "On va dîner quelque part et on ne parle plus du bureau.",
+            "en": "We'll go out for dinner and not talk about the office anymore."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ce film ne méritait pas autant d'attention, franchement.",
+            "en": "That movie didn't deserve that much attention, honestly."
+          },
+          {
+            "fr": "On a quitté la salle avant la fin.",
+            "en": "We left the theater before the end."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "valoir",
+    "level": "B1",
+    "translation": "to be worth; to be better (il vaut mieux)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ce vieux vélo ne vaut presque plus rien, mais je le garde.",
+            "en": "This old bike is worth almost nothing, but I'm keeping it."
+          },
+          {
+            "fr": "Il m'a suivi dans toute la ville pendant des années.",
+            "en": "It's gone with me all over the city for years."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Il vaut mieux partir maintenant si on veut une place assise.",
+            "en": "It's better to leave now if we want a seat."
+          },
+          {
+            "fr": "Le train de 18 h est souvent bondé.",
+            "en": "The 6 p.m. train is often packed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "avis",
+    "level": "B1",
+    "translation": "opinion; notice / announcement",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "À mon avis, on devrait annuler la sortie s'il neige.",
+            "en": "In my opinion, we should cancel the outing if it snows."
+          },
+          {
+            "fr": "Les routes de montagne deviennent dangereuses très vite.",
+            "en": "Mountain roads get dangerous very quickly."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Un avis collé sur la porte annonce des travaux lundi.",
+            "en": "A notice stuck on the door announces work on Monday."
+          },
+          {
+            "fr": "L'ascenseur sera hors service toute la journée.",
+            "en": "The elevator will be out of service all day."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "difficulté",
+    "level": "B1",
+    "translation": "difficulty, trouble",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a eu des difficultés à trouver un logement abordable.",
+            "en": "She had trouble finding affordable housing."
+          },
+          {
+            "fr": "Au final, une amie lui a sous-loué une chambre pour trois mois.",
+            "en": "In the end, a friend sublet her a room for three months."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Si tu rencontres une difficulté, appelle-moi tout de suite.",
+            "en": "If you run into a difficulty, call me right away."
+          },
+          {
+            "fr": "On trouvera une solution ensemble.",
+            "en": "We'll find a solution together."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "occasion",
+    "level": "B1",
+    "translation": "opportunity; occasion; second-hand (d'occasion)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "C'est une bonne occasion de parler français avec des collègues.",
+            "en": "It's a good opportunity to speak French with colleagues."
+          },
+          {
+            "fr": "Le déjeuner d'équipe a lieu tous les jeudis.",
+            "en": "The team lunch happens every Thursday."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "J'ai acheté ce canapé d'occasion pour cent euros.",
+            "en": "I bought this second-hand sofa for a hundred euros."
+          },
+          {
+            "fr": "Il est en parfait état, même les coussins sont neufs.",
+            "en": "It's in perfect condition — even the cushions are new."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "inconvénient",
+    "level": "B1",
+    "translation": "drawback, downside",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le seul inconvénient de cet appartement, c'est le bruit de la rue.",
+            "en": "The only downside of this apartment is the street noise."
+          },
+          {
+            "fr": "Sinon la lumière et la taille sont parfaites.",
+            "en": "Otherwise the light and the size are perfect."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Voyager en train a peu d'inconvénients pour moi.",
+            "en": "Traveling by train has few drawbacks for me."
+          },
+          {
+            "fr": "Je lis, je dors, et j'arrive au centre-ville sans chercher une place.",
+            "en": "I read, I sleep, and I arrive downtown without hunting for parking."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "souci",
+    "level": "B1",
+    "translation": "worry, concern; trouble",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Son plus grand souci en ce moment, c'est le déménagement.",
+            "en": "His biggest worry right now is the move."
+          },
+          {
+            "fr": "Il n'a toujours pas trouvé de cartons assez solides.",
+            "en": "He still hasn't found sturdy enough boxes."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ne te fais pas de souci : le colis arrivera demain.",
+            "en": "Don't worry — the package will arrive tomorrow."
+          },
+          {
+            "fr": "Le livreur a déjà confirmé le créneau.",
+            "en": "The courier already confirmed the time slot."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se dépêcher",
+    "level": "B1",
+    "translation": "to hurry, to hurry up",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Dépêche-toi, le métro part dans deux minutes !",
+            "en": "Hurry up — the metro leaves in two minutes!"
+          },
+          {
+            "fr": "Sinon on devra attendre un quart d'heure.",
+            "en": "Otherwise we'll have to wait fifteen minutes."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle s'est dépêchée de finir le rapport avant la pause.",
+            "en": "She hurried to finish the report before the break."
+          },
+          {
+            "fr": "Son collègue l'attendait déjà dans la salle de réunion.",
+            "en": "Her colleague was already waiting for her in the meeting room."
+          }
+        ]
+      }
+    ]
   }
 ]

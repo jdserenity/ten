@@ -1,6 +1,9 @@
 import { createEmptyCard, State, applyRating, rowToFsrsCard, fsrsCardToRowFields } from './fsrs.js';
 import { getDb, getUserById, normalizeLanguage } from './db.js';
 
+// A card added today stays out of the recall pile until this much time has passed.
+export const NEW_CARD_HOLD_MS = 3 * 24 * 60 * 60 * 1000;
+
 function trimField(value) {
   return String(value || '').trim();
 }
@@ -28,7 +31,7 @@ function mapRowToReviewCard(row) {
   };
 }
 
-export function addCard(userId, language, { front, back, context = '' }) {
+export function addCard(userId, language, { front, back, context = '', nowMs = Date.now() } = {}) {
   const user = getUserById(userId);
   const lang = normalizeLanguage(language);
   const cleanFront = trimField(front);
@@ -36,8 +39,10 @@ export function addCard(userId, language, { front, back, context = '' }) {
   const cleanContext = trimField(context);
   if (!user || !lang || !cleanFront || !cleanBack) return { ok: false, reason: 'invalid' };
 
-  const empty = createEmptyCard();
+  const createdAt = Number(nowMs);
+  const empty = createEmptyCard(new Date(createdAt));
   const fsrsFields = fsrsCardToRowFields(empty);
+  fsrsFields.due = createdAt + NEW_CARD_HOLD_MS;
   try {
     const result = getDb()
       .prepare(`
@@ -113,10 +118,10 @@ export function getReviewQueue(userId, language, nowMs = Date.now()) {
   const newRows = getDb()
     .prepare(`
       SELECT * FROM cards
-      WHERE user_id = ? AND language = ? AND fsrs_state = ?
+      WHERE user_id = ? AND language = ? AND fsrs_state = ? AND due <= ?
       ORDER BY created_at ASC, id ASC
     `)
-    .all(user.id, lang, State.New);
+    .all(user.id, lang, State.New, nowMs);
 
   const dueRows = getDb()
     .prepare(`

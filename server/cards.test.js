@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, beforeEach, describe, it } from 'node:test';
 import { initDb, getDb, findOrCreateUser } from './db.js';
-import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
+import { addCard, answerCard, deleteCard, getReviewQueue, NEW_CARD_HOLD_MS, updateCard } from './cards.js';
 import { State } from './fsrs.js';
 
 let dbPath;
@@ -33,19 +33,41 @@ after(() => {
 });
 
 describe('cards', () => {
-  it('adds a card and returns it in the new queue', t => {
+  it('keeps a card added today out of the recall queue for 3 days', t => {
     if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
-    const added = addCard(userId, 'FR', { front: 'Hello', back: 'Bonjour' });
+    const now = Date.UTC(2026, 10, 7, 15, 0, 0);
+    const added = addCard(userId, 'FR', { front: 'Hello', back: 'Bonjour', nowMs: now });
     assert.equal(added.ok, true);
     assert.ok(added.id > 0);
 
-    const queue = getReviewQueue(userId, 'FR');
-    assert.equal(queue.ok, true);
-    assert.equal(queue.totalCount, 1);
+    const row = getDb().prepare('SELECT due, fsrs_state FROM cards WHERE id = ?').get(added.id);
+    assert.equal(row.fsrs_state, State.New);
+    assert.equal(row.due, now + NEW_CARD_HOLD_MS);
+
+    const today = getReviewQueue(userId, 'FR', now);
+    assert.equal(today.ok, true);
+    assert.equal(today.totalCount, 1);
+    assert.equal(today.cards.length, 0);
+
+    const justBefore = getReviewQueue(userId, 'FR', now + NEW_CARD_HOLD_MS - 1);
+    assert.equal(justBefore.cards.length, 0);
+
+    const ready = getReviewQueue(userId, 'FR', now + NEW_CARD_HOLD_MS);
+    assert.equal(ready.cards.length, 1);
+    assert.equal(ready.cards[0].queueKind, 'new');
+    assert.equal(ready.cards[0].front, 'Hello');
+    assert.equal(ready.cards[0].back, 'Bonjour');
+  });
+
+  it('still shows a new card whose due time has already arrived', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const now = Date.UTC(2026, 10, 7, 15, 0, 0);
+    const added = addCard(userId, 'FR', { front: 'Hello', back: 'Bonjour', nowMs: now });
+    getDb().prepare('UPDATE cards SET due = ? WHERE id = ?').run(now - 1000, added.id);
+    const queue = getReviewQueue(userId, 'FR', now);
     assert.equal(queue.cards.length, 1);
+    assert.equal(queue.cards[0].id, added.id);
     assert.equal(queue.cards[0].queueKind, 'new');
-    assert.equal(queue.cards[0].front, 'Hello');
-    assert.equal(queue.cards[0].back, 'Bonjour');
   });
 
   it('rejects duplicate front/back pairs per language', t => {
@@ -121,8 +143,9 @@ describe('cards', () => {
 describe('grade counts', () => {
   it('starts at zero and counts each rating pressed per card', t => {
     if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
-    const added = addCard(userId, 'FR', { front: 'Bird', back: 'Oiseau' });
-    let queue = getReviewQueue(userId, 'FR');
+    const now = Date.UTC(2026, 10, 7, 15, 0, 0);
+    const added = addCard(userId, 'FR', { front: 'Bird', back: 'Oiseau', nowMs: now });
+    let queue = getReviewQueue(userId, 'FR', now + NEW_CARD_HOLD_MS);
     assert.deepEqual(queue.cards.find(card => card.id === added.id).gradeCounts, { again: 0, hard: 0, good: 0, easy: 0 });
 
     answerCard(userId, added.id, 'again');
@@ -138,10 +161,11 @@ describe('grade counts', () => {
 
   it('does not count an invalid rating', t => {
     if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
-    const added = addCard(userId, 'FR', { front: 'Cat', back: 'Chat' });
+    const now = Date.UTC(2026, 10, 7, 15, 0, 0);
+    const added = addCard(userId, 'FR', { front: 'Cat', back: 'Chat', nowMs: now });
     const result = answerCard(userId, added.id, 'nope');
     assert.equal(result.ok, false);
-    const queue = getReviewQueue(userId, 'FR');
+    const queue = getReviewQueue(userId, 'FR', now + NEW_CARD_HOLD_MS);
     assert.deepEqual(queue.cards.find(card => card.id === added.id).gradeCounts, { again: 0, hard: 0, good: 0, easy: 0 });
   });
 });

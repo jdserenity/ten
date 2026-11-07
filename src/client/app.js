@@ -1461,10 +1461,13 @@ function fillDailySceneLines(lines1, lines2) {
       const key = `s${scene}l${lineIndex + 1}`;
       const line = lines[lineIndex] || { l2: '', en: '' };
       const hasText = Boolean(line.l2);
-      const row = document.getElementById(`${key}-row`);
       const l2 = document.getElementById(`${key}-l2`);
-      if (row) row.classList.toggle('hidden', !hasText);
-      if (l2) l2.textContent = line.l2 || '';
+      const addBtn = document.getElementById(`${key}-add-btn`);
+      if (l2) {
+        l2.textContent = line.l2 || '';
+        l2.classList.toggle('hidden', !hasText);
+      }
+      if (addBtn) addBtn.classList.toggle('hidden', !hasText);
     }
     const speakBtn = document.getElementById(`s${scene}-speak-btn`);
     const sceneText = lines.map(line => line.l2).filter(Boolean).join(' ');

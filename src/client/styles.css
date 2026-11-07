@@ -869,15 +869,19 @@ header h1 {
   line-height: 1.7;
 }
 
-.scene-line.hidden {
-  display: none;
-}
-
-.scene-line .sentence-l2 {
+.scene-line {
   display: inline;
   font-size: inherit;
   line-height: inherit;
   padding: 0;
+}
+
+.scene-line.hidden {
+  display: none;
+}
+
+.scene-line + .scene-line {
+  margin-left: 0.35em;
 }
 
 .sentence-translation-toggle {
@@ -896,23 +900,17 @@ header h1 {
   outline-offset: 3px;
 }
 
-.scene-inline-add {
-  display: inline-flex;
-  width: 22px;
-  height: 22px;
-  font-size: 13px;
-  margin: 0 0.15em 0 0.2em;
-  vertical-align: middle;
-  position: relative;
-  top: -1px;
-}
-
 .scene-actions {
   display: flex;
   flex-direction: column;
+  gap: 6px;
   align-items: center;
   flex-shrink: 0;
   padding-top: 8px;
+}
+
+.scene-line-add.hidden {
+  display: none;
 }
 
 @keyframes sentence-reveal-in {

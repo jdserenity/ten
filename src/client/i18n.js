@@ -67,6 +67,8 @@ const en = {
   'daily.addWord': 'Add word as card',
   'daily.hearSentence': 'Hear sentence',
   'daily.addSentence': 'Add sentence as card',
+  'daily.addSentence1': 'Add sentence 1 as a card',
+  'daily.addSentence2': 'Add sentence 2 as a card',
   'daily.prev': '← Prev',
   'daily.next': 'Next →',
   'daily.addAll': 'Add all to review',

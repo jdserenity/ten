@@ -20,16 +20,22 @@ test('5/new example sentences are nested dropdowns collapsed by default', () => 
   assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals a cohesive scene, then another dropdown');
 });
 
-test('each scene is one prose block with one speak and inline per-sentence add', () => {
+test('each scene is one prose block with speak then numbered 1 and 2 add buttons', () => {
   assert.match(html, /class="scene-prose"/);
   assert.match(html, /id="s1-speak-btn"/);
   assert.match(html, /id="s2-speak-btn"/);
   assert.doesNotMatch(html, /id="s1l1-speak-btn"/);
   assert.doesNotMatch(html, /id="s1l2-speak-btn"/);
-  assert.match(html, /id="s1l1-add-btn"[^>]*class="[^"]*scene-inline-add/);
-  assert.match(html, /id="s1l2-add-btn"[^>]*class="[^"]*scene-inline-add/);
+  assert.match(html, /id="s1l1-add-btn"[^>]*>1</);
+  assert.match(html, /id="s1l2-add-btn"[^>]*>2</);
+  assert.match(html, /id="s2l1-add-btn"[^>]*>1</);
+  assert.match(html, /id="s2l2-add-btn"[^>]*>2</);
+  const s1Order = ['s1-speak-btn', 's1l1-add-btn', 's1l2-add-btn']
+    .map(id => html.indexOf(`id="${id}"`));
+  assert.deepEqual(s1Order, [...s1Order].sort((a, b) => a - b), 'scene 1 actions are speak, then 1, then 2');
   assert.match(styles, /\.scene-prose/);
-  assert.match(styles, /\.scene-inline-add/);
+  assert.match(styles, /\.scene-line-add/);
+  assert.match(styles, /\.scene-actions\s*\{[^}]*flex-direction:\s*column/);
   assert.match(app, /sceneSpeakText/);
 });
 

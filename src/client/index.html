@@ -10,7 +10,7 @@
   <link rel="manifest" href="/manifest.json" />
   <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
   <link rel="apple-touch-icon" href="/icon-192.png" />
-  <link rel="stylesheet" href="/styles.css?v=26" />
+  <link rel="stylesheet" href="/styles.css?v=27" />
 </head>
 <body>
   <div id="loading" data-i18n="app.loading">Loading...</div>
@@ -141,46 +141,40 @@
         <hr class="divider" />
         <details id="sentence-reveal-1" class="sentence-reveal">
           <summary class="sentences-label" id="sentence-language-label" data-i18n="daily.sentenceInUse">new word used in context</summary>
-          <div class="sentence" id="s1l1-row">
-            <div class="sentence-content">
-              <button class="sentence-l2 sentence-translation-toggle" id="s1l1-l2" type="button" aria-expanded="false" aria-controls="s1l1-en"></button>
+          <div class="scene" id="s1-scene">
+            <div class="scene-body">
+              <p class="scene-prose">
+                <span class="scene-line" id="s1l1-row">
+                  <button class="sentence-l2 sentence-translation-toggle" id="s1l1-l2" type="button" aria-expanded="false" aria-controls="s1l1-en"></button><button id="s1l1-add-btn" class="add-btn-small scene-inline-add" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+                </span>
+                <span class="scene-line hidden" id="s1l2-row">
+                  <button class="sentence-l2 sentence-translation-toggle" id="s1l2-l2" type="button" aria-expanded="false" aria-controls="s1l2-en"></button><button id="s1l2-add-btn" class="add-btn-small scene-inline-add" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+                </span>
+              </p>
               <span class="sentence-en hidden" id="s1l1-en"></span>
-            </div>
-            <div class="sentence-actions">
-              <button class="sentence-speak-btn speak-btn" id="s1l1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-              <button id="s1l1-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
-            </div>
-          </div>
-          <div class="sentence hidden" id="s1l2-row">
-            <div class="sentence-content">
-              <button class="sentence-l2 sentence-translation-toggle" id="s1l2-l2" type="button" aria-expanded="false" aria-controls="s1l2-en"></button>
               <span class="sentence-en hidden" id="s1l2-en"></span>
             </div>
-            <div class="sentence-actions">
-              <button class="sentence-speak-btn speak-btn" id="s1l2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-              <button id="s1l2-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+            <div class="scene-actions">
+              <button class="sentence-speak-btn speak-btn" id="s1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
             </div>
           </div>
           <details id="sentence-reveal-2" class="sentence-reveal sentence-reveal-nested">
             <summary class="sentences-label" data-i18n="daily.anotherContext">another</summary>
-            <div class="sentence" id="s2l1-row">
-              <div class="sentence-content">
-                <button class="sentence-l2 sentence-translation-toggle" id="s2l1-l2" type="button" aria-expanded="false" aria-controls="s2l1-en"></button>
+            <div class="scene" id="s2-scene">
+              <div class="scene-body">
+                <p class="scene-prose">
+                  <span class="scene-line" id="s2l1-row">
+                    <button class="sentence-l2 sentence-translation-toggle" id="s2l1-l2" type="button" aria-expanded="false" aria-controls="s2l1-en"></button><button id="s2l1-add-btn" class="add-btn-small scene-inline-add" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+                  </span>
+                  <span class="scene-line hidden" id="s2l2-row">
+                    <button class="sentence-l2 sentence-translation-toggle" id="s2l2-l2" type="button" aria-expanded="false" aria-controls="s2l2-en"></button><button id="s2l2-add-btn" class="add-btn-small scene-inline-add" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+                  </span>
+                </p>
                 <span class="sentence-en hidden" id="s2l1-en"></span>
-              </div>
-              <div class="sentence-actions">
-                <button class="sentence-speak-btn speak-btn" id="s2l1-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-                <button id="s2l1-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
-              </div>
-            </div>
-            <div class="sentence hidden" id="s2l2-row">
-              <div class="sentence-content">
-                <button class="sentence-l2 sentence-translation-toggle" id="s2l2-l2" type="button" aria-expanded="false" aria-controls="s2l2-en"></button>
                 <span class="sentence-en hidden" id="s2l2-en"></span>
               </div>
-              <div class="sentence-actions">
-                <button class="sentence-speak-btn speak-btn" id="s2l2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
-                <button id="s2l2-add-btn" class="add-btn-small" type="button" data-i18n-title="daily.addSentence" data-i18n-aria-label="daily.addSentence" title="Add this example sentence as a card" aria-label="Add sentence as card">＋</button>
+              <div class="scene-actions">
+                <button class="sentence-speak-btn speak-btn" id="s2-speak-btn" type="button" data-i18n-title="daily.hearSentence" data-i18n-aria-label="daily.hearSentence" title="Hear sentence" aria-label="Hear sentence">🔊</button>
               </div>
             </div>
           </details>
@@ -354,6 +348,6 @@
   </div>
 
   <script src="/confetti.browser.js"></script>
-  <script type="module" src="/app.js?v=33"></script>
+  <script type="module" src="/app.js?v=34"></script>
 </body>
 </html>

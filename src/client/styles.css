@@ -841,19 +841,20 @@ header h1 {
   display: none;
 }
 
-.sentence {
+.scene {
   display: flex;
   align-items: flex-start;
+  gap: 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid var(--border);
 }
 
-.sentence-reveal-nested[open] > .sentence:last-child {
+.sentence-reveal-nested[open] > .scene {
   padding-bottom: 0;
   border-bottom: none;
 }
 
-.sentence-content {
+.scene-body {
   flex: 1;
   min-width: 0;
   display: flex;
@@ -861,10 +862,22 @@ header h1 {
   gap: 8px;
 }
 
-.sentence-l2 {
+.scene-prose {
+  margin: 0;
+  padding-top: 14px;
   font-size: 17px;
   line-height: 1.7;
-  padding-top: 14px;
+}
+
+.scene-line.hidden {
+  display: none;
+}
+
+.scene-line .sentence-l2 {
+  display: inline;
+  font-size: inherit;
+  line-height: inherit;
+  padding: 0;
 }
 
 .sentence-translation-toggle {
@@ -872,15 +885,34 @@ header h1 {
   border: 0;
   background: none;
   color: inherit;
-  font-family: inherit;
+  font: inherit;
   text-align: left;
-  padding: 14px 0 0;
+  padding: 0;
   cursor: pointer;
 }
 
 .sentence-translation-toggle:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
+}
+
+.scene-inline-add {
+  display: inline-flex;
+  width: 22px;
+  height: 22px;
+  font-size: 13px;
+  margin: 0 0.15em 0 0.2em;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+
+.scene-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  padding-top: 8px;
 }
 
 @keyframes sentence-reveal-in {
@@ -911,18 +943,14 @@ header h1 {
 }
 
 .sentence-en {
+  display: block;
   font-size: 15px;
   color: var(--muted);
   line-height: 1.55;
 }
 
-.sentence-actions {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  align-items: center;
-  flex-shrink: 0;
-  padding-top: 8px;
+.sentence-en.hidden {
+  display: none;
 }
 
 .add-btn-small {

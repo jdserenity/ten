@@ -1348,11 +1348,10 @@ function collapseDailySentenceReveals() {
 }
 
 function sentenceRevealAnimationElements() {
-  const sceneSentences = n => [...document.querySelectorAll(`#sentence-reveal-${n} > .sentence:not(.hidden)`)];
   return {
-    s1: sceneSentences(1),
-    s2: sceneSentences(2),
-    s3: sceneSentences(3),
+    s1: document.getElementById('s1-scene'),
+    s2: document.getElementById('s2-scene'),
+    s3: document.getElementById('s3-scene'),
     another2: document.getElementById('sentence-reveal-2'),
     another3: document.getElementById('sentence-reveal-3')
   };
@@ -1372,11 +1371,7 @@ function replaySentenceRevealAnimation(fromLevel) {
   const nodes = collectSentenceRevealAnimationKeys(
     [Boolean(r1?.open), Boolean(r2?.open), Boolean(r3?.open)],
     fromLevel
-  ).flatMap(key => {
-    const el = els[key];
-    if (!el) return [];
-    return Array.isArray(el) ? el : [el];
-  }).filter(el => el && !el.classList.contains('hidden'));
+  ).map(key => els[key]).filter(el => el && !el.classList.contains('hidden'));
   clearSentenceRevealAnimations();
   if (r1) void r1.offsetWidth;
   nodes.forEach(el => el.classList.add('sentence-reveal-animating'));
@@ -1413,7 +1408,7 @@ function renderDailyWord(index) {
     document.getElementById('prev-btn').disabled = true;
     document.getElementById('next-btn').disabled = true;
     document.getElementById('speak-btn').disabled = true;
-    ['word-add-btn', 'add-all-btn', ...DAILY_LINE_KEYS.map(key => `${key}-add-btn`), ...DAILY_LINE_KEYS.map(key => `${key}-speak-btn`)].forEach(id => {
+    ['word-add-btn', 'add-all-btn', 's1-speak-btn', 's2-speak-btn', ...DAILY_LINE_KEYS.map(key => `${key}-add-btn`)].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
     const divider = document.querySelector('#card .divider');
@@ -1468,12 +1463,20 @@ function fillDailySceneLines(lines1, lines2) {
       const hasText = Boolean(line.l2);
       const row = document.getElementById(`${key}-row`);
       const l2 = document.getElementById(`${key}-l2`);
-      const speakBtn = document.getElementById(`${key}-speak-btn`);
       if (row) row.classList.toggle('hidden', !hasText);
       if (l2) l2.textContent = line.l2 || '';
-      if (speakBtn) speakBtn.disabled = !hasText || !canSpeak;
     }
+    const speakBtn = document.getElementById(`s${scene}-speak-btn`);
+    const sceneText = lines.map(line => line.l2).filter(Boolean).join(' ');
+    if (speakBtn) speakBtn.disabled = !sceneText || !canSpeak;
   });
+}
+
+function sceneSpeakText(sceneIndex) {
+  const word = state.todayWords[state.currentWordIndex];
+  const scene = word?.sentences?.[sceneIndex];
+  if (!scene) return '';
+  return getSceneLinesForMode(scene).map(line => line.l2).filter(Boolean).join(' ');
 }
 
 function advanceDailyWord() {
@@ -2903,15 +2906,13 @@ function setupDailyEvents() {
     const word = state.todayWords[state.currentWordIndex];
     speakText(word ? word.word : '', document.getElementById('speak-btn'));
   });
-  DAILY_LINE_KEYS.forEach(key => {
-    document.getElementById(`${key}-speak-btn`)?.addEventListener('click', () => {
-      const word = state.todayWords[state.currentWordIndex];
-      const target = collectDailyLineTargets(word).find(line => line.key === key);
-      speakText(target?.l2 || '', document.getElementById(`${key}-speak-btn`));
+  [1, 2].forEach(sceneIndex => {
+    document.getElementById(`s${sceneIndex}-speak-btn`)?.addEventListener('click', () => {
+      speakText(sceneSpeakText(sceneIndex - 1), document.getElementById(`s${sceneIndex}-speak-btn`));
     });
   });
 
-  // Small + buttons (beside word and each sentence line)
+  // Small + buttons (beside word and inline after each sentence)
   document.getElementById('word-add-btn').addEventListener('click', async () => {
     const word = state.todayWords[state.currentWordIndex];
     if (!word || !state.dailyGlosses.wordGloss || state.dailyGlosses.loading) {

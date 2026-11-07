@@ -14,10 +14,23 @@ test('5/new example sentences are nested dropdowns collapsed by default', () => 
   assert.doesNotMatch(html, /id="(?:sentence-reveal-3|s3-[^"]+)"/);
   assert.doesNotMatch(html, /id="sentence-reveal-[123]"[^>]*\sopen/);
 
-  const order = ['sentence-reveal-1', 's1l1-l2', 's1l2-l2', 'sentence-reveal-2', 's2l1-l2', 's2l2-l2']
+  const order = ['sentence-reveal-1', 's1-scene', 's1l1-l2', 's1l2-l2', 'sentence-reveal-2', 's2-scene', 's2l1-l2', 's2l2-l2']
     .map(id => html.indexOf(`id="${id}"`));
-  assert.ok(order.every(index => index >= 0), 'nested sentence dropdown ids exist');
-  assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals scene lines, then another dropdown');
+  assert.ok(order.every(index => index >= 0), 'nested scene dropdown ids exist');
+  assert.deepEqual(order, [...order].sort((a, b) => a - b), 'each open reveals a cohesive scene, then another dropdown');
+});
+
+test('each scene is one prose block with one speak and inline per-sentence add', () => {
+  assert.match(html, /class="scene-prose"/);
+  assert.match(html, /id="s1-speak-btn"/);
+  assert.match(html, /id="s2-speak-btn"/);
+  assert.doesNotMatch(html, /id="s1l1-speak-btn"/);
+  assert.doesNotMatch(html, /id="s1l2-speak-btn"/);
+  assert.match(html, /id="s1l1-add-btn"[^>]*class="[^"]*scene-inline-add/);
+  assert.match(html, /id="s1l2-add-btn"[^>]*class="[^"]*scene-inline-add/);
+  assert.match(styles, /\.scene-prose/);
+  assert.match(styles, /\.scene-inline-add/);
+  assert.match(app, /sceneSpeakText/);
 });
 
 test('5/new sentence dropdown uses the context label instead of language in use', () => {
@@ -46,7 +59,7 @@ test('sentence dropdown CSS uses a rotating triangle and hides nested headers af
   assert.match(styles, /\.sentence-reveal-nested\[open\]\s*>\s*summary/);
   assert.match(styles, /@keyframes\s+sentence-reveal-in/);
   assert.match(styles, /\.sentence-reveal-animating/);
-  assert.match(styles, /padding-top:\s*14px/);
+  assert.match(styles, /\.scene-prose\s*\{[^}]*padding-top:\s*14px/);
 });
 
 test('Add all to review saves the word and every individual sentence line', async () => {
@@ -88,6 +101,7 @@ test('Add all to review saves the word and every individual sentence line', asyn
       { key: 's2l1', l2: 'Second', gloss: 'Two' },
       { key: 's2l2', l2: 'SecondB', gloss: 'TwoB' }
     ],
+    sceneSpeakText: () => '',
     addCard: async card => { saved.push(card); return true; },
     addSentenceCardWithGloss: async (back, front) => { saved.push({ front, back }); return true; }
   });
@@ -120,7 +134,8 @@ test('click reveals only the saved translation and changing cards hides both aga
   const context = vm.createContext({
     document: { getElementById: element },
     DAILY_LINE_KEYS,
-    clearSentenceRevealAnimations() {}
+    clearSentenceRevealAnimations() {},
+    sceneSpeakText: () => ''
   });
   const helpers = app.slice(app.indexOf('function setDailySentenceTranslationVisible('), app.indexOf('function sentenceRevealAnimationElements('));
   const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));
@@ -144,6 +159,7 @@ test('daily event setup succeeds with only elements present in the current page'
   const ids = new Set([...html.matchAll(/\bid="([^"]+)"/g)].map(match => match[1]));
   const context = vm.createContext({
     DAILY_LINE_KEYS,
+    sceneSpeakText: () => '',
     document: { getElementById: id => ids.has(id) ? { addEventListener() {} } : null }
   });
   const setup = app.slice(app.indexOf('function setupDailyEvents()'), app.indexOf('function setupDailyKeyboard()'));

@@ -20,6 +20,8 @@ import {
   frequencyListTotal,
   getFrequencyTierKey,
   gradeButtonLabel,
+  dailyAddButtonAppearance,
+  dailyAddStatusText,
   getLangPickerDialectLabelKey,
   getLangPickerDialects,
   getLangPickerFamilies,
@@ -211,6 +213,7 @@ let dailyWordsInitPromise = null;
 let reviewQueueLoadedModeId = null;
 let reviewQueuePromise = null;
 const dailyGlossCache = new Map();
+const dailyAddedButtonKeys = new Set();
 let dailyGlossCacheScope = '';
 let dailyGlossesEnsurePromise = null;
 let dailyGlossesEnsureScope = '';
@@ -364,6 +367,7 @@ function applyAppLanguage() {
   updateDateLabel();
   syncNoLanguageUi();
   if (state.languagePickerContext) renderLanguagePicker(state.languagePickerContext);
+  syncDailyAddButtons(state.todayWords[state.currentWordIndex]?.word || '');
 }
 
 function authHeaders(extra = {}) {
@@ -1063,6 +1067,63 @@ function setStatus(elementId, message, tone = '') {
 
 const DAILY_LINE_KEYS = ['s1l1', 's1l2', 's2l1', 's2l2'];
 
+function dailyAddButtonIds() {
+  return ['word-add-btn', ...DAILY_LINE_KEYS.map(key => `${key}-add-btn`)];
+}
+
+function dailyAddedButtonKey(wordText, buttonId) {
+  return `${getModeConfig().id}:${dateKey()}:${wordText}:${buttonId}`;
+}
+
+function applyDailyAddButtonAppearance(btn, saved) {
+  if (!btn) return;
+  const rest = btn.dataset.restLabel || btn.textContent;
+  const view = dailyAddButtonAppearance(rest, saved);
+  btn.textContent = view.text;
+  btn.classList.toggle('is-saved', view.saved);
+  if (view.saved) {
+    btn.title = tr('daily.added');
+    btn.setAttribute('aria-label', tr('daily.added'));
+    return;
+  }
+  if (btn.dataset.i18nTitle) btn.title = tr(btn.dataset.i18nTitle);
+  if (btn.dataset.i18nAriaLabel) btn.setAttribute('aria-label', tr(btn.dataset.i18nAriaLabel));
+}
+
+function syncDailyAddButtons(wordText) {
+  const word = String(wordText || '');
+  dailyAddButtonIds().forEach(id => {
+    const btn = document.getElementById(id);
+    if (!btn) return;
+    const saved = Boolean(word) && dailyAddedButtonKeys.has(dailyAddedButtonKey(word, id));
+    applyDailyAddButtonAppearance(btn, saved);
+  });
+}
+
+function rememberDailyAdd(buttonId, wordText) {
+  const word = String(wordText || '');
+  if (!word || !buttonId) return;
+  dailyAddedButtonKeys.add(dailyAddedButtonKey(word, buttonId));
+  const current = state.todayWords[state.currentWordIndex]?.word || '';
+  if (current !== word) return;
+  applyDailyAddButtonAppearance(document.getElementById(buttonId), true);
+}
+
+async function saveDailyAddButton(buttonId, wordText, save) {
+  const btn = document.getElementById(buttonId);
+  if (!btn || btn.classList.contains('is-saved') || btn.dataset.saving === '1') return false;
+  btn.dataset.saving = '1';
+  try {
+    const added = await save();
+    if (!added) return false;
+    setStatus('daily-save-status', dailyAddStatusText(true));
+    rememberDailyAdd(buttonId, wordText);
+    return true;
+  } finally {
+    delete btn.dataset.saving;
+  }
+}
+
 function getSceneLinesForMode(scene) {
   return sceneLines(scene, getModeConfig().sentenceKey);
 }
@@ -1411,6 +1472,7 @@ function renderDailyWord(index) {
     ['word-add-btn', 'add-all-btn', 's1-speak-btn', 's2-speak-btn', ...DAILY_LINE_KEYS.map(key => `${key}-add-btn`)].forEach(id => {
       const b = document.getElementById(id); if (b) b.disabled = true;
     });
+    syncDailyAddButtons('');
     const divider = document.querySelector('#card .divider');
     if (divider) divider.classList.toggle('hidden', true);
     applyDailySentenceRevealVisibility('', '', '');
@@ -1448,6 +1510,7 @@ function renderDailyWord(index) {
   void loadDailyGlosses(word);
 
   updateDailyDots();
+  syncDailyAddButtons(word.word);
   maybeCelebrateDailyComplete(index);
 }
 
@@ -1908,7 +1971,7 @@ async function extractErrorDetails(response) {
   }
 }
 
-async function addCard({ front, back, context }, statusElementId) {
+async function addCard({ front, back, context }, statusElementId, { announce = true } = {}) {
   const mode = getModeConfig();
   const cleanFront = capitalizeFirstWord(front);
   const cleanBack = capitalizeFirstWord(back);
@@ -1919,7 +1982,7 @@ async function addCard({ front, back, context }, statusElementId) {
     return false;
   }
 
-  setStatus(statusElementId, tr('card.saving'));
+  if (announce) setStatus(statusElementId, tr('card.saving'));
 
   try {
     const response = await apiFetch('/api/cards', {
@@ -1942,7 +2005,7 @@ async function addCard({ front, back, context }, statusElementId) {
       throw new Error(`Card request failed (${response.status})${details ? `: ${details}` : '.'}`);
     }
 
-    setStatus(statusElementId, tr('card.saved'), 'success');
+    if (announce) setStatus(statusElementId, tr('card.saved'), 'success');
     return true;
   } catch (error) {
     setStatus(statusElementId, formatError(error), 'error');
@@ -1971,14 +2034,14 @@ async function patchCard(cardId, { front, back, context }) {
   }
 }
 
-async function addSentenceCardWithGloss(l2, nativeGloss, statusElementId) {
+async function addSentenceCardWithGloss(l2, nativeGloss, statusElementId, options) {
   const cleanL2 = String(l2 || '').trim();
   const cleanGloss = String(nativeGloss || '').trim();
   if (!cleanL2 || !cleanGloss || cleanGloss === tr('daily.glossUnavailable')) {
     setStatus(statusElementId, tr('daily.missingSentence'), 'error');
     return false;
   }
-  return await addCard({ front: cleanGloss, back: cleanL2 }, statusElementId);
+  return await addCard({ front: cleanGloss, back: cleanL2 }, statusElementId, options);
 }
 
 function mapApiCardToReviewCard(card) {
@@ -2917,15 +2980,18 @@ function setupDailyEvents() {
 
   // Small + buttons (beside word and inline after each sentence)
   document.getElementById('word-add-btn').addEventListener('click', async () => {
+    const wordBtn = document.getElementById('word-add-btn');
+    if (wordBtn?.classList.contains('is-saved')) return;
     const word = state.todayWords[state.currentWordIndex];
     if (!word || !state.dailyGlosses.wordGloss || state.dailyGlosses.loading) {
       setStatus('daily-save-status', tr('daily.noCardToAdd'), 'error');
       return;
     }
-    const added = await addCard(
+    const added = await saveDailyAddButton('word-add-btn', word.word, () => addCard(
       { front: state.dailyGlosses.wordGloss, back: word.word },
-      'daily-save-status'
-    );
+      'daily-save-status',
+      { announce: false }
+    ));
     if (added && state.activeTab === 'frequency') {
       renderFrequencyDictionary();
     }
@@ -2933,13 +2999,20 @@ function setupDailyEvents() {
 
   DAILY_LINE_KEYS.forEach(key => {
     document.getElementById(`${key}-add-btn`)?.addEventListener('click', async () => {
+      const btn = document.getElementById(`${key}-add-btn`);
+      if (btn?.classList.contains('is-saved')) return;
       const word = state.todayWords[state.currentWordIndex];
       const target = collectDailyLineTargets(word).find(line => line.key === key);
       if (!target?.l2) {
         setStatus('daily-save-status', tr('daily.noSentence'), 'error');
         return;
       }
-      await addSentenceCardWithGloss(target.l2, state.dailyGlosses[key], 'daily-save-status');
+      await saveDailyAddButton(`${key}-add-btn`, word?.word, () => addSentenceCardWithGloss(
+        target.l2,
+        state.dailyGlosses[key],
+        'daily-save-status',
+        { announce: false }
+      ));
     });
   });
 
@@ -2951,20 +3024,35 @@ function setupDailyEvents() {
       return;
     }
     const targets = collectDailyLineTargets(word);
+    let failed = false;
+    let wordSavedNow = false;
 
-    setStatus('daily-save-status', tr('daily.savingCards'));
+    const wordBtn = document.getElementById('word-add-btn');
+    if (!wordBtn?.classList.contains('is-saved')) {
+      const wOk = await saveDailyAddButton('word-add-btn', word.word, () => addCard(
+        { front: state.dailyGlosses.wordGloss, back: word.word },
+        'daily-save-status',
+        { announce: false }
+      ));
+      if (wOk) wordSavedNow = true;
+      else failed = true;
+    }
 
-    const wOk = await addCard({ front: state.dailyGlosses.wordGloss, back: word.word }, 'daily-save-status');
-    let lineOk = 0;
     for (const target of targets) {
-      if (await addSentenceCardWithGloss(target.l2, state.dailyGlosses[target.key], 'daily-save-status')) lineOk += 1;
+      const buttonId = `${target.key}-add-btn`;
+      const btn = document.getElementById(buttonId);
+      if (btn?.classList.contains('is-saved')) continue;
+      const ok = await saveDailyAddButton(buttonId, word.word, () => addSentenceCardWithGloss(
+        target.l2,
+        state.dailyGlosses[target.key],
+        'daily-save-status',
+        { announce: false }
+      ));
+      if (!ok) failed = true;
     }
 
-    const total = (wOk ? 1 : 0) + lineOk;
-    if (total > 0) {
-      setStatus('daily-save-status', total > 1 ? tr('daily.addedCardsPlural', { count: total }) : tr('daily.addedCards', { count: total }), 'success');
-    }
-    if (wOk && state.activeTab === 'frequency') {
+    if (!failed) setStatus('daily-save-status', dailyAddStatusText(true));
+    if (wordSavedNow && state.activeTab === 'frequency') {
       renderFrequencyDictionary();
     }
   });

@@ -983,6 +983,16 @@ header h1 {
   cursor: default;
 }
 
+.add-btn-small.is-saved,
+.add-btn-small.is-saved:hover,
+.add-btn-small.is-saved:disabled {
+  background: var(--green);
+  color: #0f0f0f;
+  border-color: var(--green);
+  opacity: 1;
+  cursor: default;
+}
+
 #daily-nav {
   display: flex;
   gap: 10px;

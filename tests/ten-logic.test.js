@@ -50,7 +50,9 @@ import {
   dailySentenceRevealVisibility,
   shouldResetDailySentenceReveal,
   collectSentenceRevealAnimationKeys,
-  gradeButtonLabel
+  gradeButtonLabel,
+  dailyAddButtonAppearance,
+  dailyAddStatusText
 } from '../src/client/ten-logic.js';
 
 test('userHasLearningLanguages is false until the user adds a track', () => {
@@ -560,6 +562,14 @@ test('sceneLines normalizes legacy flat scenes and two-line scenes', () => {
   ]);
   assert.deepEqual(sceneLines(null, 'fr'), []);
   assert.deepEqual(sceneLines({}, 'es'), []);
+});
+
+test('a saved 3/new add square shows a check and no status line', () => {
+  assert.deepEqual(dailyAddButtonAppearance('＋', false), { text: '＋', saved: false });
+  assert.deepEqual(dailyAddButtonAppearance('1', false), { text: '1', saved: false });
+  assert.deepEqual(dailyAddButtonAppearance('2', true), { text: '✓', saved: true });
+  assert.equal(dailyAddStatusText(true, 'Card saved.'), '');
+  assert.equal(dailyAddStatusText(false, 'Card already exists.'), 'Card already exists.');
 });
 
 test('gradeButtonLabel appends the press count only when the grade was pressed before', () => {

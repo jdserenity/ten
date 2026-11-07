@@ -65,6 +65,7 @@ const en = {
   'tab.mainAria': 'Main tabs',
   'daily.hearWord': 'Hear pronunciation',
   'daily.addWord': 'Add word as card',
+  'daily.added': 'Added',
   'daily.hearSentence': 'Hear sentence',
   'daily.addSentence': 'Add sentence as card',
   'daily.addSentence1': 'Add sentence 1 as a card',

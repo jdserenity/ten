@@ -203,6 +203,20 @@ export function gradeButtonLabel(label, count) {
   return pressed > 0 ? `${label} ×${pressed}` : String(label || '');
 }
 
+export const DAILY_ADD_SAVED_MARK = '✓';
+
+/** Resting label is the square's own mark (＋, 1, 2). A successful add replaces it with a check. */
+export function dailyAddButtonAppearance(restLabel, saved) {
+  const resting = String(restLabel ?? '');
+  if (!saved) return { text: resting, saved: false };
+  return { text: DAILY_ADD_SAVED_MARK, saved: true };
+}
+
+/** 3/new add success is the square itself. Only a failed save still has status text. */
+export function dailyAddStatusText(saved, errorMessage = '') {
+  return saved ? '' : String(errorMessage || '');
+}
+
 export function learningLangFromModeId(modeId) {
   if (modeId === 'pt-br') return 'PT-BR';
   if (modeId === 'fr') return 'FR';

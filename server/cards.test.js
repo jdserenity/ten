@@ -5,7 +5,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { after, before, beforeEach, describe, it } from 'node:test';
 import { initDb, getDb, findOrCreateUser } from './db.js';
-import { addCard, answerCard, deleteCard, getReviewQueue, NEW_CARD_HOLD_MS, updateCard } from './cards.js';
+import { addCard, answerCard, applyNewCardHoldToExistingCards, deleteCard, getReviewQueue, NEW_CARD_HOLD_MS, updateCard } from './cards.js';
 import { State } from './fsrs.js';
 
 let dbPath;
@@ -68,6 +68,42 @@ describe('cards', () => {
     assert.equal(queue.cards.length, 1);
     assert.equal(queue.cards[0].id, added.id);
     assert.equal(queue.cards[0].queueKind, 'new');
+  });
+
+  it('applies the 3-day hold to older new cards that were due immediately', t => {
+    if (!sqliteAvailable) return t.skip('better-sqlite3 bindings unavailable');
+    const now = Date.UTC(2026, 10, 7, 15, 0, 0);
+    const createdSec = Math.floor(now / 1000);
+    getDb().prepare(`
+      INSERT INTO cards (
+        user_id, language, front, back, context, created_at,
+        due, stability, difficulty, elapsed_days, scheduled_days,
+        learning_steps, reps, lapses, fsrs_state, last_review
+      ) VALUES (?, 'FR', 'Today', ?, '', ?, ?, 0, 0, 0, 0, 0, 0, 0, ?, NULL)
+    `).run(userId, "Aujourd'hui", createdSec, now, State.New);
+
+    assert.equal(getReviewQueue(userId, 'FR', now).cards.length, 1);
+    const result = applyNewCardHoldToExistingCards();
+    assert.ok(result.updated >= 1);
+    assert.equal(getReviewQueue(userId, 'FR', now).cards.length, 0);
+
+    const row = getDb().prepare("SELECT due FROM cards WHERE front = 'Today' AND user_id = ?").get(userId);
+    assert.equal(row.due, createdSec * 1000 + NEW_CARD_HOLD_MS);
+    assert.equal(getReviewQueue(userId, 'FR', createdSec * 1000 + NEW_CARD_HOLD_MS).cards.length, 1);
+
+    const olderSec = createdSec - (10 * 24 * 60 * 60);
+    getDb().prepare(`
+      INSERT INTO cards (
+        user_id, language, front, back, context, created_at,
+        due, stability, difficulty, elapsed_days, scheduled_days,
+        learning_steps, reps, lapses, fsrs_state, last_review
+      ) VALUES (?, 'FR', 'Older', 'Plus vieux', '', ?, ?, 0, 0, 0, 0, 0, 0, 0, ?, NULL)
+    `).run(userId, olderSec, olderSec * 1000, State.New);
+    applyNewCardHoldToExistingCards();
+    assert.equal(
+      getReviewQueue(userId, 'FR', now).cards.some(card => card.front === 'Older'),
+      true
+    );
   });
 
   it('rejects duplicate front/back pairs per language', t => {

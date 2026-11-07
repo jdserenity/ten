@@ -31,6 +31,19 @@ function mapRowToReviewCard(row) {
   };
 }
 
+/** created_at is unix seconds; due is ms. Push never-reviewed cards to creation + hold. */
+export function applyNewCardHoldToExistingCards() {
+  const result = getDb()
+    .prepare(`
+      UPDATE cards
+      SET due = (created_at * 1000) + ?
+      WHERE fsrs_state = ?
+        AND due < (created_at * 1000) + ?
+    `)
+    .run(NEW_CARD_HOLD_MS, State.New, NEW_CARD_HOLD_MS);
+  return { updated: Number(result.changes) || 0 };
+}
+
 export function addCard(userId, language, { front, back, context = '', nowMs = Date.now() } = {}) {
   const user = getUserById(userId);
   const lang = normalizeLanguage(language);

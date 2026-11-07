@@ -26,7 +26,7 @@ import {
   setUserLanguages
 } from './db.js';
 import { ensureDailyGlosses } from './daily-glosses.js';
-import { addCard, answerCard, deleteCard, getReviewQueue, updateCard } from './cards.js';
+import { addCard, answerCard, applyNewCardHoldToExistingCards, deleteCard, getReviewQueue, updateCard } from './cards.js';
 import { buildDevOpsPayload, loadWordPools } from './pool-health.js';
 import {
   normalizeDetectedSourceLanguage,
@@ -738,4 +738,5 @@ function listenWithPortFallback(startPort, attemptsLeft = MAX_PORT_SCAN_ATTEMPTS
 }
 
 initDb();
+applyNewCardHoldToExistingCards();
 listenWithPortFallback(BASE_PORT);

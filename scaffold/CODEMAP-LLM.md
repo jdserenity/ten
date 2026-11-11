@@ -1,6 +1,6 @@
 # Code map (agent reference)
 
-Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.md`. Word-pool editorial rules → `scaffold/skills/seed-daily-words/SKILL.md`. Run → root `README.md`.
+Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.md`. Word-pool editorial rules → `scaffold/skills/seed-daily-words/SKILL.md`. Production deploy → `scaffold/skills/deploy-production/SKILL.md`. Run → root `README.md`.
 
 ## Product
 - **Ten** — personal PWA. Tracks: **PT-BR** (intermediate / B1–B2), **FR** (Quebec beginner), **FR-FR** (France beginner; own pool + progress, shared `frequency-fr.json` with FR), **ES-AR** (Argentina beginner), **ES-VE** (Caracas Venezuelan beginner; displayed in English as **Venezuelean Spanish**). Language picker (header `+`, Settings `+`, or tap the active header flag) is two steps: main language (Spanish / French / Portuguese), then dialect (Argentina and Venezuela after Spanish; Quebec and France after French; Brazil after Portuguese). Single-dialect families still show step 2. Dialect rows use the region only (Brazil, Quebec, France, Argentina, Venezuela). Dialect title is Which {language}?. Dialect screen’s only button is Back (no Add/Save; outside click does not close). Checks accumulate across families until Add/Save on the language list; Save still replaces the full set. Header flags and Settings chips stay one-per-track.
@@ -15,6 +15,7 @@ Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.
 - Runtime deps: `better-sqlite3`, `ts-fsrs`, `canvas-confetti` (vendored `confetti.browser.js`), `dotenv`, `node-html-parser` (scripts). No new deps without a strong reason.
 - Self-hosted `npm run start`. No service worker. Static `Cache-Control: no-cache`. `app.js` unregisters leftover workers. PWA icons are committed aurora PNGs (`icon-192.png` / `icon-512.png`) — do not revive a procedural generator.
 - Default **PORT 3001**, scan upward if taken. `better-sqlite3` ≥ 12 on Node 24+.
+- Production runs on VPS host `gp-vps-1` as `linuxuser`, app dir `prod-apps/ten`, systemd unit `ten`. Reachable only when Tailscale is up. Deploy steps → `scaffold/skills/deploy-production/SKILL.md`.
 
 ## Modes (`MODE_CONFIGS` in `app.js`)
 | id | pool | sentence key | learning lang | speech |

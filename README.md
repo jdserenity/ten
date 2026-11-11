@@ -18,4 +18,5 @@ npm run deepl:check / google:check
 npm run import:anki              # one-shot; needs Anki Desktop + AnkiConnect
 ```
 
-Word-pool editorial rules: `scaffold/skills/seed-daily-words/SKILL.md`.
+Word-pool editorial rules: `scaffold/skills/seed-daily-words/SKILL.md`.  
+Production deploy: `scaffold/skills/deploy-production/SKILL.md`.

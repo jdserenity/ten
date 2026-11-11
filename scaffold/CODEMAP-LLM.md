@@ -15,7 +15,7 @@ Confirmed product/system facts. File/flow/state map → `scaffold/CODEMAP-HUMAN.
 - Runtime deps: `better-sqlite3`, `ts-fsrs`, `canvas-confetti` (vendored `confetti.browser.js`), `dotenv`, `node-html-parser` (scripts). No new deps without a strong reason.
 - Self-hosted `npm run start`. No service worker. Static `Cache-Control: no-cache`. `app.js` unregisters leftover workers. PWA icons are committed aurora PNGs (`icon-192.png` / `icon-512.png`) — do not revive a procedural generator.
 - Default **PORT 3001**, scan upward if taken. `better-sqlite3` ≥ 12 on Node 24+.
-- Production runs on VPS host `gp-vps-1` as `linuxuser`, app dir `prod-apps/ten`, systemd unit `ten`. Reachable only when Tailscale is up. Deploy steps → `scaffold/skills/deploy-production/SKILL.md`.
+- Production runs on VPS host `gp-vps-1` as `linuxuser`, app dir `prod-apps/ten`, systemd unit `ten`. Reachable only when Tailscale is up. After a successful push to `origin`, agents deploy automatically (no waiting for the maintainer to ask). Deploy steps → `scaffold/skills/deploy-production/SKILL.md`.
 
 ## Modes (`MODE_CONFIGS` in `app.js`)
 | id | pool | sentence key | learning lang | speech |

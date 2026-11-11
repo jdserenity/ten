@@ -1,18 +1,21 @@
 ---
 name: deploy-production
 description: >-
-  Push Ten to the production VPS over Tailscale (ssh linuxuser@gp-vps-1,
-  git pull, systemctl restart ten). Use when the user asks to deploy, ship to
-  production, push to prod, restart the live app, or update the VPS.
+  Automatically deploy Ten to the production VPS over Tailscale after a
+  successful git push (ssh linuxuser@gp-vps-1, git pull, systemctl restart ten).
+  Also use when the user asks to deploy, ship to production, push to prod,
+  restart the live app, or update the VPS.
 ---
 
 # Deploy Ten to production
 
-Do this only when the maintainer asks to deploy / ship / update production. Do not deploy after every commit on your own.
+After every successful `git push` of task work to `origin`, deploy to production in the same turn — do not wait for the maintainer to ask. Same steps if they explicitly ask to deploy / ship / update prod.
+
+Skip only when nothing was pushed (push failed, or no remote update).
 
 ## Preconditions
 
-1. The commits to ship are already on the git remote the VPS pulls from (`origin`, usually `main`). If local work is unpushed, push it first and confirm.
+1. The commits to ship are on the git remote the VPS pulls from (`origin`, usually `main`). Push first; deploy only after that push succeeds.
 2. **Tailscale must be open** on this machine. Check with `tailscale status` (or ping/`ssh` reachability to `gp-vps-1`). If Tailscale is down or the host is unreachable, stop and tell the maintainer to open Tailscale — do not invent another path.
 
 ## Deploy steps

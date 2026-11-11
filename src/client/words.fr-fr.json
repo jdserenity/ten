@@ -6828,5 +6828,470 @@
         ]
       }
     ]
+  },
+  {
+    "word": "promettre",
+    "level": "B1",
+    "translation": "to promise",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il a promis d'appeler dès qu'il arriverait à la gare.",
+            "en": "He promised to call as soon as he got to the station."
+          },
+          {
+            "fr": "Trois heures plus tard, le téléphone n'avait toujours pas sonné.",
+            "en": "Three hours later, the phone still hadn't rung."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je te promets que ce sera la dernière fois qu'on déménage cette année.",
+            "en": "I promise you this will be the last time we move this year."
+          },
+          {
+            "fr": "Le carton « cuisine » me poursuit jusque dans mes rêves.",
+            "en": "The “kitchen” box is chasing me even in my dreams."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "féliciter",
+    "level": "B1",
+    "translation": "to congratulate",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Tout le monde l'a félicitée pour sa promotion.",
+            "en": "Everyone congratulated her on her promotion."
+          },
+          {
+            "fr": "Elle a offert un café à l'équipe pour fêter ça.",
+            "en": "She bought the team coffee to celebrate."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je tiens à vous féliciter pour la qualité de ce dossier.",
+            "en": "I want to congratulate you on the quality of this file."
+          },
+          {
+            "fr": "Le client a signé sans demander une seule révision.",
+            "en": "The client signed without asking for a single revision."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "remercier",
+    "level": "B1",
+    "translation": "to thank",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a remercié le chauffeur qui l'avait aidée avec ses valises.",
+            "en": "She thanked the driver who had helped her with her bags."
+          },
+          {
+            "fr": "Il a refusé un pourboire et lui a souhaité bon voyage.",
+            "en": "He refused a tip and wished her a good trip."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je voulais te remercier pour hier soir : sans toi, j'étais coincé.",
+            "en": "I wanted to thank you for last night — without you I was stuck."
+          },
+          {
+            "fr": "Le prochain resto, c'est moi qui invite.",
+            "en": "Next restaurant is on me."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "exprimer",
+    "level": "B1",
+    "translation": "to express",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il a du mal à exprimer ce qu'il ressent au travail.",
+            "en": "He has trouble expressing what he feels at work."
+          },
+          {
+            "fr": "Sa sœur lui a conseillé d'en parler clairement à son chef.",
+            "en": "His sister advised him to talk about it clearly with his boss."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Dans ce mail, exprime juste le besoin, sans t'excuser dix fois.",
+            "en": "In this email, just express the need — don't apologize ten times."
+          },
+          {
+            "fr": "Tu as le droit de demander de l'aide.",
+            "en": "You're allowed to ask for help."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "interrompre",
+    "level": "B1",
+    "translation": "to interrupt; to stop (temporarily)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Désolé de t'interrompre, mais le client est déjà en ligne.",
+            "en": "Sorry to interrupt you, but the client is already on the line."
+          },
+          {
+            "fr": "Tu peux reprendre ton idée juste après.",
+            "en": "You can pick up your thought right after."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "La panne a interrompu le concert pendant vingt minutes.",
+            "en": "The outage interrupted the concert for twenty minutes."
+          },
+          {
+            "fr": "Le public a applaudi quand le son est revenu.",
+            "en": "The audience clapped when the sound came back."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "résoudre",
+    "level": "B1",
+    "translation": "to solve, to resolve",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On a enfin résolu le problème de facturation.",
+            "en": "We finally solved the billing problem."
+          },
+          {
+            "fr": "Le client a reçu un avoir et un mail d'excuses.",
+            "en": "The client got a credit note and an apology email."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Cette équation, je n'arrive pas à la résoudre seule.",
+            "en": "I can't solve this equation on my own."
+          },
+          {
+            "fr": "Tu peux m'expliquer la méthode une dernière fois ?",
+            "en": "Can you explain the method one more time?"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "rassurer",
+    "level": "B1",
+    "translation": "to reassure",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le médecin l'a rassuré : ce n'était qu'une grippe.",
+            "en": "The doctor reassured him — it was only the flu."
+          },
+          {
+            "fr": "Il est rentré soulagé et s'est couché tôt.",
+            "en": "He went home relieved and went to bed early."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Rassure-toi, le colis est bien parti ce matin.",
+            "en": "Don't worry — the package did go out this morning."
+          },
+          {
+            "fr": "Tu auras un SMS dès qu'il sera en livraison.",
+            "en": "You'll get a text as soon as it's out for delivery."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "décevoir",
+    "level": "B1",
+    "translation": "to disappoint",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le film m'a déçu après toutes ces critiques élogieuses.",
+            "en": "The movie disappointed me after all those glowing reviews."
+          },
+          {
+            "fr": "On est partis à la mi-séance prendre un verre.",
+            "en": "We left at intermission to grab a drink."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je ne veux pas te décevoir, mais je ne pourrai pas venir samedi.",
+            "en": "I don't want to disappoint you, but I won't be able to come Saturday."
+          },
+          {
+            "fr": "On peut se voir dimanche midi si tu es libre.",
+            "en": "We can meet Sunday at noon if you're free."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "surprendre",
+    "level": "B1",
+    "translation": "to surprise; to catch (someone off guard)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Sa réaction m'a vraiment surpris : elle a tout de suite dit oui.",
+            "en": "Her reaction really surprised me — she said yes right away."
+          },
+          {
+            "fr": "Je m'attendais à une longue discussion.",
+            "en": "I was expecting a long discussion."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Le contrôleur l'a surpris sans billet dans le train.",
+            "en": "The ticket inspector caught him without a ticket on the train."
+          },
+          {
+            "fr": "Il a dû descendre à la prochaine gare et en racheter un.",
+            "en": "He had to get off at the next station and buy another one."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "s'attendre",
+    "level": "B1",
+    "translation": "to expect (s'attendre à)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je ne m'attendais pas à autant de monde à la bibliothèque.",
+            "en": "I wasn't expecting so many people at the library."
+          },
+          {
+            "fr": "Toutes les places assises étaient déjà prises.",
+            "en": "All the seats were already taken."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Tu peux t'attendre à un mail de confirmation ce soir.",
+            "en": "You can expect a confirmation email tonight."
+          },
+          {
+            "fr": "S'il n'arrive pas, rappelle-moi demain matin.",
+            "en": "If it doesn't come, call me back tomorrow morning."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se passer",
+    "level": "B1",
+    "translation": "to happen; to do without; to go (well/badly)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Qu'est-ce qui s'est passé hier dans le hall ?",
+            "en": "What happened yesterday in the lobby?"
+          },
+          {
+            "fr": "Deux voisins se disputaient à cause d'un colis ouvert.",
+            "en": "Two neighbors were arguing over an opened package."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "L'entretien s'est bien passé : ils rappellent lundi.",
+            "en": "The interview went well — they're calling back Monday."
+          },
+          {
+            "fr": "Elle a déjà commencé à imaginer son premier jour.",
+            "en": "She's already started imagining her first day."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se demander",
+    "level": "B1",
+    "translation": "to wonder",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Je me demande s'il a reçu mon message.",
+            "en": "I wonder if he got my message."
+          },
+          {
+            "fr": "Ça fait deux jours et il n'a toujours pas répondu.",
+            "en": "It's been two days and he still hasn't replied."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle se demandait pourquoi le bus était si vide.",
+            "en": "She was wondering why the bus was so empty."
+          },
+          {
+            "fr": "Puis elle a vu l'alerte grève sur son téléphone.",
+            "en": "Then she saw the strike alert on her phone."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se taire",
+    "level": "B1",
+    "translation": "to be quiet, to keep quiet",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Tais-toi une seconde, j'essaie d'écouter les annonces.",
+            "en": "Be quiet for a second — I'm trying to hear the announcements."
+          },
+          {
+            "fr": "Sinon on va rater le changement de quai.",
+            "en": "Otherwise we'll miss the platform change."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Il a préféré se taire plutôt que de relancer la dispute.",
+            "en": "He preferred to keep quiet rather than restart the argument."
+          },
+          {
+            "fr": "Le lendemain, ils en ont reparlé calmement.",
+            "en": "The next day they talked about it calmly."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se battre",
+    "level": "B1",
+    "translation": "to fight; to struggle / fight for",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Deux adolescents se battaient devant le lycée.",
+            "en": "Two teenagers were fighting in front of the high school."
+          },
+          {
+            "fr": "Un surveillant est sorti et les a séparés.",
+            "en": "A supervisor came out and separated them."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle se bat depuis des mois pour un meilleur contrat.",
+            "en": "She's been fighting for months for a better contract."
+          },
+          {
+            "fr": "Le syndicat l'aide à préparer le prochain rendez-vous.",
+            "en": "The union is helping her prepare for the next meeting."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se contenter",
+    "level": "B1",
+    "translation": "to make do with; to settle for",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On s'est contentés d'un sandwich dans le train.",
+            "en": "We made do with a sandwich on the train."
+          },
+          {
+            "fr": "Le wagon-bar était déjà fermé.",
+            "en": "The café car was already closed."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Il ne se contente plus d'un poste sans perspectives.",
+            "en": "He no longer settles for a job with no prospects."
+          },
+          {
+            "fr": "Il a commencé à postuler ailleurs le week-end.",
+            "en": "He started applying elsewhere on the weekends."
+          }
+        ]
+      }
+    ]
   }
 ]

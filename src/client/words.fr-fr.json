@@ -7293,5 +7293,470 @@
         ]
       }
     ]
+  },
+  {
+    "word": "délai",
+    "level": "B1",
+    "translation": "deadline; time limit / delay period",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le délai pour rendre le dossier tombe vendredi soir.",
+            "en": "The deadline to hand in the file is Friday evening."
+          },
+          {
+            "fr": "Si on rate ça, il faudra attendre le mois prochain.",
+            "en": "If we miss it, we'll have to wait until next month."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ils ont demandé un délai supplémentaire de deux jours.",
+            "en": "They asked for an extra two-day extension."
+          },
+          {
+            "fr": "Le client a accepté, à condition d'avoir une mise à jour demain.",
+            "en": "The client agreed, on condition of getting an update tomorrow."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "échéance",
+    "level": "B1",
+    "translation": "due date; payment deadline",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "L'échéance du prêt arrive le 15 du mois.",
+            "en": "The loan payment is due on the 15th of the month."
+          },
+          {
+            "fr": "Il met un rappel sur son téléphone la veille.",
+            "en": "He sets a phone reminder the day before."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Avec trois échéances le même jour, le budget est serré.",
+            "en": "With three due dates on the same day, the budget is tight."
+          },
+          {
+            "fr": "Elle a reporté un achat non urgent à la semaine suivante.",
+            "en": "She put off a non-urgent purchase to the following week."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "formation",
+    "level": "B1",
+    "translation": "training course; education / training",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle suit une formation en comptabilité deux soirs par semaine.",
+            "en": "She's taking an accounting course two evenings a week."
+          },
+          {
+            "fr": "L'examen final est prévu en décembre.",
+            "en": "The final exam is set for December."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "La boîte offre une formation interne aux nouveaux arrivants.",
+            "en": "The company offers internal training for new hires."
+          },
+          {
+            "fr": "Sans ça, personne ne comprendrait le logiciel maison.",
+            "en": "Without it, nobody would understand the in-house software."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "stage",
+    "level": "B1",
+    "translation": "internship; training placement",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il commence un stage de trois mois dans une start-up à Nantes.",
+            "en": "He's starting a three-month internship at a startup in Nantes."
+          },
+          {
+            "fr": "Le premier jour, on lui a confié un petit projet client.",
+            "en": "On day one they gave him a small client project."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ce stage lui a ouvert la porte vers un vrai CDI.",
+            "en": "That internship opened the door to a real permanent contract."
+          },
+          {
+            "fr": "Le manager l'avait déjà recommandé en interne.",
+            "en": "The manager had already recommended him internally."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "horaires",
+    "level": "B1",
+    "translation": "schedule, opening / working hours",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Les horaires de la médiathèque changent pendant les vacances.",
+            "en": "The library's hours change during the holidays."
+          },
+          {
+            "fr": "Le mercredi, elle n'ouvre qu'après-midi.",
+            "en": "On Wednesdays it only opens in the afternoon."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ses horaires de travail ne collent plus avec la crèche.",
+            "en": "His work hours no longer line up with daycare."
+          },
+          {
+            "fr": "Il a demandé un aménagement sur quatre jours.",
+            "en": "He asked for a four-day work arrangement."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "trajet",
+    "level": "B1",
+    "translation": "trip / commute (the journey itself)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Son trajet domicile-travail dure presque une heure.",
+            "en": "His commute from home to work takes almost an hour."
+          },
+          {
+            "fr": "Il en a profité pour apprendre l'italien en podcast.",
+            "en": "He's used that time to learn Italian with podcasts."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "On a raccourci le trajet en coupant à travers le parc.",
+            "en": "We shortened the trip by cutting through the park."
+          },
+          {
+            "fr": "Sans ça, on serait arrivés trempés sous l'orage.",
+            "en": "Without that, we'd have arrived soaked in the storm."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "déménager",
+    "level": "B1",
+    "translation": "to move house",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ils déménagent samedi : le camion arrive à huit heures.",
+            "en": "They're moving on Saturday — the truck arrives at eight."
+          },
+          {
+            "fr": "Les voisins ont déjà proposé un coup de main pour les cartons.",
+            "en": "The neighbors already offered a hand with the boxes."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a déménagé trois fois en cinq ans pour le travail.",
+            "en": "She's moved three times in five years for work."
+          },
+          {
+            "fr": "Cette fois, elle veut rester au moins jusqu'à la fin du bail.",
+            "en": "This time she wants to stay at least until the lease ends."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "emménager",
+    "level": "B1",
+    "translation": "to move in",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On emménage lundi : l'eau et l'électricité sont déjà ouvertes.",
+            "en": "We're moving in Monday — water and electricity are already on."
+          },
+          {
+            "fr": "Il reste juste à brancher la box internet.",
+            "en": "We just need to plug in the internet box."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Le nouveau colocataire a emménagé hier soir avec deux valises.",
+            "en": "The new roommate moved in last night with two suitcases."
+          },
+          {
+            "fr": "Le reste de ses affaires arrive ce week-end.",
+            "en": "The rest of his stuff arrives this weekend."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "immeuble",
+    "level": "B1",
+    "translation": "apartment building",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "L'immeuble a six étages et un ascenseur capricieux.",
+            "en": "The building has six floors and a temperamental elevator."
+          },
+          {
+            "fr": "Hier, tout le monde a monté à pied avec les courses.",
+            "en": "Yesterday everyone walked up with their groceries."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Dans cet immeuble, le recyclage se fait au fond de la cour.",
+            "en": "In this building, recycling goes at the back of the courtyard."
+          },
+          {
+            "fr": "Un avis rappelle les jours de collecte chaque semaine.",
+            "en": "A notice reminds everyone of collection days each week."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "panne",
+    "level": "B1",
+    "translation": "breakdown, outage, failure",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Une panne d'électricité a plongé tout le quartier dans le noir.",
+            "en": "A power outage plunged the whole neighborhood into darkness."
+          },
+          {
+            "fr": "Les voisins ont sorti des bougies et joué aux cartes.",
+            "en": "The neighbors brought out candles and played cards."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ma voiture est en panne sur le bas-côté de la nationale.",
+            "en": "My car has broken down on the shoulder of the main road."
+          },
+          {
+            "fr": "Le dépanneur arrive dans une vingtaine de minutes.",
+            "en": "The tow truck should be here in about twenty minutes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "trottoir",
+    "level": "B1",
+    "translation": "sidewalk, pavement",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le trottoir est trop étroit pour deux poussettes côte à côte.",
+            "en": "The sidewalk is too narrow for two strollers side by side."
+          },
+          {
+            "fr": "L'une des mamans a dû descendre sur la chaussée une seconde.",
+            "en": "One of the moms had to step into the street for a second."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ils ont refait le trottoir devant chez nous la semaine dernière.",
+            "en": "They redid the sidewalk in front of our place last week."
+          },
+          {
+            "fr": "On marche enfin sans écraser des nids-de-poule.",
+            "en": "We can finally walk without stepping in potholes."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "carrefour",
+    "level": "B1",
+    "translation": "intersection, crossroads",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Au prochain carrefour, tourne à gauche après la pharmacie.",
+            "en": "At the next intersection, turn left after the pharmacy."
+          },
+          {
+            "fr": "Si tu rates, tu peux faire demi-tour au rond-point.",
+            "en": "If you miss it, you can turn around at the roundabout."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ce carrefour est dangereux quand il pleut : les feux sont mal visibles.",
+            "en": "This intersection is dangerous when it rains — the lights are hard to see."
+          },
+          {
+            "fr": "La mairie a promis de renforcer l'éclairage.",
+            "en": "City hall promised to improve the lighting."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "ralentir",
+    "level": "B1",
+    "translation": "to slow down",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ralentis : il y a une école juste après le virage.",
+            "en": "Slow down — there's a school right after the bend."
+          },
+          {
+            "fr": "Les enfants sortent dans cinq minutes.",
+            "en": "The kids get out in five minutes."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Les ventes ont ralenti depuis le mois de novembre.",
+            "en": "Sales have slowed since November."
+          },
+          {
+            "fr": "L'équipe prépare une promo pour relancer décembre.",
+            "en": "The team is preparing a promo to boost December."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "dépasser",
+    "level": "B1",
+    "translation": "to overtake; to exceed / go beyond",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ne dépasse pas ici : la ligne est continue.",
+            "en": "Don't overtake here — the line is solid."
+          },
+          {
+            "fr": "Attends le prochain tronçon, c'est plus sûr.",
+            "en": "Wait for the next stretch — it's safer."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "On a dépassé le budget prévu de trois cents euros.",
+            "en": "We went three hundred euros over the planned budget."
+          },
+          {
+            "fr": "Il faudra couper ailleurs pour compenser.",
+            "en": "We'll have to cut elsewhere to make up for it."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "stationner",
+    "level": "B1",
+    "translation": "to park (a vehicle)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "On ne peut pas stationner ici après 18 h.",
+            "en": "You can't park here after 6 p.m."
+          },
+          {
+            "fr": "Il y a un parking gratuit deux rues plus loin.",
+            "en": "There's free parking two streets away."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle a stationné devant chez sa mère juste le temps de charger les sacs.",
+            "en": "She parked in front of her mom's just long enough to load the bags."
+          },
+          {
+            "fr": "Un agent passait déjà au bout de la rue.",
+            "en": "An officer was already coming down the end of the street."
+          }
+        ]
+      }
+    ]
   }
 ]

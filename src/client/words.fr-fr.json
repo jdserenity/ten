@@ -6363,5 +6363,470 @@
         ]
       }
     ]
+  },
+  {
+    "word": "entretien",
+    "level": "B1",
+    "translation": "job interview; maintenance / upkeep",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "J'ai un entretien demain matin pour un poste de commercial.",
+            "en": "I have a job interview tomorrow morning for a sales role."
+          },
+          {
+            "fr": "Je révise encore les questions qu'on m'a posées la dernière fois.",
+            "en": "I'm still reviewing the questions they asked me last time."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "L'entretien de la chaudière est prévu chaque année en octobre.",
+            "en": "Boiler maintenance is scheduled every year in October."
+          },
+          {
+            "fr": "Sans ça, on risque une panne au premier froid.",
+            "en": "Without it, we risk a breakdown at the first cold snap."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "candidature",
+    "level": "B1",
+    "translation": "job / school application",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a envoyé sa candidature avant la date limite.",
+            "en": "She sent in her application before the deadline."
+          },
+          {
+            "fr": "Le recruteur a répondu en moins de quarante-huit heures.",
+            "en": "The recruiter replied in under forty-eight hours."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Sa candidature a été refusée, mais il va retenter en janvier.",
+            "en": "His application was rejected, but he'll try again in January."
+          },
+          {
+            "fr": "Il va d'abord renforcer son dossier avec un stage.",
+            "en": "First he'll strengthen his file with an internship."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "diplôme",
+    "level": "B1",
+    "translation": "diploma, degree, certificate",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a décroché son diplôme d'infirmière en juin.",
+            "en": "She got her nursing diploma in June."
+          },
+          {
+            "fr": "Ses parents ont pleuré de joie à la remise des diplômes.",
+            "en": "Her parents cried with joy at the graduation ceremony."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Sans ce diplôme, le poste n'est même pas ouvert.",
+            "en": "Without that degree, the job isn't even open."
+          },
+          {
+            "fr": "Il a donc repris des cours du soir pendant deux ans.",
+            "en": "So he went back to evening classes for two years."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "embouteillage",
+    "level": "B1",
+    "translation": "traffic jam",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il y a un embouteillage énorme sur le périphérique ce matin.",
+            "en": "There's a huge traffic jam on the ring road this morning."
+          },
+          {
+            "fr": "Le GPS nous fait sortir deux sorties plus tôt.",
+            "en": "The GPS has us getting off two exits earlier."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Pour éviter les embouteillages, elle prend le RER depuis l'année dernière.",
+            "en": "To avoid traffic jams, she's been taking the RER since last year."
+          },
+          {
+            "fr": "Elle lit pendant le trajet et arrive moins stressée.",
+            "en": "She reads during the ride and arrives less stressed."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "loyer",
+    "level": "B1",
+    "translation": "rent (money paid for housing)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Le loyer augmente de cinquante euros en janvier.",
+            "en": "The rent goes up by fifty euros in January."
+          },
+          {
+            "fr": "Ils cherchent déjà un colocataire pour partager les frais.",
+            "en": "They're already looking for a roommate to share the costs."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Elle paie le loyer le premier de chaque mois, sans retard.",
+            "en": "She pays the rent on the first of each month, never late."
+          },
+          {
+            "fr": "Le propriétaire lui a même proposé de renouveler le bail.",
+            "en": "The landlord even offered to renew the lease."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "facture",
+    "level": "B1",
+    "translation": "bill, invoice",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "La facture d'électricité a doublé ce trimestre.",
+            "en": "The electricity bill doubled this quarter."
+          },
+          {
+            "fr": "Ils vont vérifier s'il y a une erreur de relevé.",
+            "en": "They're going to check whether there's a meter-reading error."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "N'oublie pas de demander une facture pour te faire rembourser.",
+            "en": "Don't forget to ask for an invoice so you can get reimbursed."
+          },
+          {
+            "fr": "Sans ça, la compta refuse le paiement.",
+            "en": "Without it, accounting won't process the payment."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "épargner",
+    "level": "B1",
+    "translation": "to save (money); to spare",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ils épargnent chaque mois pour un voyage au Japon.",
+            "en": "They save every month for a trip to Japan."
+          },
+          {
+            "fr": "D'ici un an, le billet d'avion sera presque payé.",
+            "en": "Within a year, the plane ticket will almost be paid for."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Épargne-toi ce stress : on peut livrer demain sans problème.",
+            "en": "Spare yourself that stress — we can deliver tomorrow no problem."
+          },
+          {
+            "fr": "Le client a déjà accepté le nouveau créneau.",
+            "en": "The client already accepted the new time slot."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "rembourser",
+    "level": "B1",
+    "translation": "to reimburse, to pay back",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "La compagnie a remboursé le billet annulé en cinq jours.",
+            "en": "The company reimbursed the canceled ticket in five days."
+          },
+          {
+            "fr": "L'argent est déjà revenu sur son compte.",
+            "en": "The money is already back in her account."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Je te rembourse dès que je touche mon salaire.",
+            "en": "I'll pay you back as soon as I get my paycheck."
+          },
+          {
+            "fr": "Merci d'avoir avancé l'argent pour le resto.",
+            "en": "Thanks for covering the restaurant bill for now."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "signer",
+    "level": "B1",
+    "translation": "to sign",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Ils ont signé le bail ce matin chez l'agence.",
+            "en": "They signed the lease this morning at the agency."
+          },
+          {
+            "fr": "Les clés leur seront remises demain après-midi.",
+            "en": "They'll get the keys tomorrow afternoon."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Signe ici, s'il te plaît, et garde une copie.",
+            "en": "Sign here, please, and keep a copy."
+          },
+          {
+            "fr": "Sans signature, le dossier reste incomplet.",
+            "en": "Without a signature, the file stays incomplete."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "confondre",
+    "level": "B1",
+    "translation": "to confuse, to mix up",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "J'ai confondu les deux frères : ils se ressemblent trop.",
+            "en": "I mixed up the two brothers — they look too alike."
+          },
+          {
+            "fr": "Heureusement, ils ont ri au lieu de se vexer.",
+            "en": "Luckily they laughed instead of getting offended."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ne confonds pas « prêt » et « près » à l'écrit.",
+            "en": "Don't mix up “prêt” and “près” in writing."
+          },
+          {
+            "fr": "Une faute comme ça peut changer tout le sens.",
+            "en": "A mistake like that can change the whole meaning."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se fâcher",
+    "level": "B1",
+    "translation": "to get angry; to fall out (with someone)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle s'est fâchée quand il a encore oublié leur rendez-vous.",
+            "en": "She got angry when he forgot their appointment again."
+          },
+          {
+            "fr": "Il a dû s'excuser avant même de rentrer.",
+            "en": "He had to apologize before he even got home."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ils se sont fâchés pendant des mois pour une histoire d'argent.",
+            "en": "They fell out for months over a money issue."
+          },
+          {
+            "fr": "Un ami commun les a enfin réconciliés.",
+            "en": "A mutual friend finally got them to make up."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "s'énerver",
+    "level": "B1",
+    "translation": "to get annoyed / worked up",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Il s'énerve dès que la connexion saute pendant une visio.",
+            "en": "He gets annoyed as soon as the connection drops during a video call."
+          },
+          {
+            "fr": "Ses collègues le voient taper plus fort sur le clavier.",
+            "en": "His colleagues see him typing harder on the keyboard."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Ne t'énerve pas : on a encore le temps de tout ranger.",
+            "en": "Don't get worked up — we still have time to put everything away."
+          },
+          {
+            "fr": "Les invités n'arrivent pas avant vingt heures.",
+            "en": "The guests aren't arriving before eight."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "s'habituer",
+    "level": "B1",
+    "translation": "to get used to",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle s'habitue peu à peu aux horaires du matin.",
+            "en": "She's gradually getting used to the morning schedule."
+          },
+          {
+            "fr": "Au début, elle dormait encore dans le métro.",
+            "en": "At first she was still falling asleep on the metro."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "On s'est vite habitués au bruit du tram sous les fenêtres.",
+            "en": "We quickly got used to the tram noise under the windows."
+          },
+          {
+            "fr": "Maintenant le silence le week-end nous paraît bizarre.",
+            "en": "Now the weekend silence feels weird to us."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "se méfier",
+    "level": "B1",
+    "translation": "to be wary / distrustful (of)",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Méfie-toi des mails qui demandent ton mot de passe.",
+            "en": "Be wary of emails that ask for your password."
+          },
+          {
+            "fr": "La banque ne te le demandera jamais comme ça.",
+            "en": "The bank will never ask you for it that way."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Il se méfie encore des nouvelles applications de paiement.",
+            "en": "He's still wary of new payment apps."
+          },
+          {
+            "fr": "Il préfère payer en carte physique quand c'est possible.",
+            "en": "He prefers paying with a physical card when he can."
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "word": "insister",
+    "level": "B1",
+    "translation": "to insist",
+    "sentences": [
+      {
+        "lines": [
+          {
+            "fr": "Elle a insisté pour payer l'addition elle-même.",
+            "en": "She insisted on paying the bill herself."
+          },
+          {
+            "fr": "On n'a pas réussi à la faire changer d'avis.",
+            "en": "We couldn't get her to change her mind."
+          }
+        ]
+      },
+      {
+        "lines": [
+          {
+            "fr": "Si tu insistes, je peux rester encore une demi-heure.",
+            "en": "If you insist, I can stay another half hour."
+          },
+          {
+            "fr": "Après ça, je dois vraiment filer au train.",
+            "en": "After that I really have to run for the train."
+          }
+        ]
+      }
+    ]
   }
 ]

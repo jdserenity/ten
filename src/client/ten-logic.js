@@ -450,12 +450,10 @@ export function canSpeakWithInstalledVoice(voices, speechLang) {
 
 export function dailySentenceRevealVisibility(hasSentenceTexts) {
   const s1 = Boolean(hasSentenceTexts?.[0]);
-  const s2 = Boolean(hasSentenceTexts?.[1]);
-  const s3 = Boolean(hasSentenceTexts?.[2]);
   return {
     showOuter: s1,
-    showNested2: s1 && s2,
-    showNested3: s1 && s2 && s3
+    showNested2: false,
+    showNested3: false
   };
 }
 
@@ -465,21 +463,8 @@ export function shouldResetDailySentenceReveal(previousWord, nextWord) {
 
 export function collectSentenceRevealAnimationKeys(openFlags, fromLevel = 0) {
   const outer = Boolean(openFlags?.[0]);
-  const nested2 = Boolean(openFlags?.[1]);
-  const nested3 = Boolean(openFlags?.[2]);
   const start = Math.max(0, Number(fromLevel) || 0);
-  const keys = [];
-  if (start === 0 && !outer) return keys;
-  if (start <= 0) keys.push('s1');
-  if (!nested2) {
-    if (start <= 0) keys.push('another2');
-    return keys;
-  }
-  if (start <= 1) keys.push('s2');
-  if (!nested3) {
-    if (start <= 1) keys.push('another3');
-    return keys;
-  }
-  if (start <= 2) keys.push('s3');
-  return keys;
+  if (start === 0 && !outer) return [];
+  if (start <= 0 && outer) return ['s1'];
+  return [];
 }

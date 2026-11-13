@@ -491,15 +491,10 @@ test('canSpeakWithInstalledVoice is false when only English voices are installed
   assert.equal(canSpeakWithInstalledVoice([english], 'es-AR'), false);
 });
 
-test('dailySentenceRevealVisibility peels one nested dropdown per sentence', () => {
+test('dailySentenceRevealVisibility shows only the outer one-scene dropdown', () => {
   assert.deepEqual(dailySentenceRevealVisibility([true, true, true]), {
     showOuter: true,
-    showNested2: true,
-    showNested3: true
-  });
-  assert.deepEqual(dailySentenceRevealVisibility([true, true, false]), {
-    showOuter: true,
-    showNested2: true,
+    showNested2: false,
     showNested3: false
   });
   assert.deepEqual(dailySentenceRevealVisibility([true, false, false]), {
@@ -581,11 +576,8 @@ test('gradeButtonLabel appends the press count only when the grade was pressed b
   assert.equal(gradeButtonLabel('Hard', undefined), 'Hard');
 });
 
-test('collectSentenceRevealAnimationKeys replays visible sentences on each open', () => {
-  assert.deepEqual(collectSentenceRevealAnimationKeys([false, false, false], 0), []);
-  assert.deepEqual(collectSentenceRevealAnimationKeys([true, false, false], 0), ['s1', 'another2']);
-  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, false], 0), ['s1', 's2', 'another3']);
-  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, true], 0), ['s1', 's2', 's3']);
-  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, false], 1), ['s2', 'another3']);
-  assert.deepEqual(collectSentenceRevealAnimationKeys([true, true, true], 2), ['s3']);
+test('collectSentenceRevealAnimationKeys replays the single scene on each open', () => {
+  assert.deepEqual(collectSentenceRevealAnimationKeys([false], 0), []);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true], 0), ['s1']);
+  assert.deepEqual(collectSentenceRevealAnimationKeys([true], 1), []);
 });

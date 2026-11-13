@@ -88,7 +88,6 @@ const en = {
   'daily.addLanguage': 'Add a language!',
   'daily.pickLanguage': 'Pick at least one language.',
   'daily.sentenceInUse': 'new word used in context',
-  'daily.anotherContext': 'another',
   'daily.goToCard': 'Go to card {n}',
   'translate.title': 'Translate',
   'translate.directionAria': 'Translation direction',

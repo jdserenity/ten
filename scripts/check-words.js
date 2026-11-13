@@ -16,13 +16,14 @@ const POOL_META = {
   'words.pt-br.json': {
     sentenceKey: 'pt',
     requireDiacritics: false,
-    allowedSentenceCounts: [2, 3],
+    // 1 = current UI; 2–3 = legacy pool entries still unused beyond the first scene
+    allowedSentenceCounts: [1, 2, 3],
     legacySoft: true
   },
-  'words.fr-ca.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [3] },
-  'words.fr-fr.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [2, 3] },
-  'words.es-ar.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] },
-  'words.es-ve.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [3] }
+  'words.fr-ca.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] },
+  'words.fr-fr.json': { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] },
+  'words.es-ar.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] },
+  'words.es-ve.json': { sentenceKey: 'es', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] }
 };
 
 /** Glue / function words banned as headwords (all flavours). */

@@ -2,8 +2,8 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { checkWordPool, isGlueHeadword } from '../scripts/check-words.js';
 
-const frMeta = { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [2, 3] };
-const ptMeta = { sentenceKey: 'pt', requireDiacritics: true, allowedSentenceCounts: [2, 3] };
+const frMeta = { sentenceKey: 'fr', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] };
+const ptMeta = { sentenceKey: 'pt', requireDiacritics: true, allowedSentenceCounts: [1, 2, 3] };
 
 function frCard(overrides = {}) {
   return {
@@ -40,7 +40,26 @@ describe('checkWordPool', () => {
     assert.match(result.errors.join('\n'), /glue/);
   });
 
-  it('accepts the two example sentences required for new French cards', () => {
+  it('accepts one two-line scene for new cards', () => {
+    const result = checkWordPool([
+      {
+        word: 'manger',
+        level: 'A1',
+        translation: 'to eat',
+        sentences: [
+          {
+            lines: [
+              { fr: 'Je mange du pain tous les matins.', en: 'I eat bread every morning.' },
+              { fr: 'Sans ça, la journée commence mal.', en: 'Without that, the day starts badly.' }
+            ]
+          }
+        ]
+      }
+    ], frMeta, 'words.fr-fr.json');
+    assert.equal(result.ok, true, result.errors.join('; '));
+  });
+
+  it('still accepts legacy multi-scene cards', () => {
     const card = frCard();
     card.sentences = card.sentences.slice(0, 2);
     const result = checkWordPool([card], frMeta, 'words.fr-fr.json');
@@ -49,10 +68,10 @@ describe('checkWordPool', () => {
 
   it('rejects a wrong sentence count', () => {
     const card = frCard();
-    card.sentences = card.sentences.slice(0, 1);
+    card.sentences = [];
     const result = checkWordPool([card], frMeta, 'words.fr-fr.json');
     assert.equal(result.ok, false);
-    assert.match(result.errors.join('\n'), /expected 2 or 3/);
+    assert.match(result.errors.join('\n'), /expected 1 or 2 or 3/);
   });
 
   it('rejects ASCII-only French entries', () => {
@@ -127,12 +146,6 @@ describe('checkWordPool', () => {
               { fr: longFr, en: 'I eat bread every morning with my sister because it is our little tradition from childhood and we never give that up.' },
               { fr: 'Sans ça, la journée commence mal.', en: 'Without that, the day starts badly.' }
             ]
-          },
-          {
-            lines: [
-              { fr: 'Nous avons mangé trop vite hier soir.', en: 'We ate too quickly last night.' },
-              { fr: 'Ensuite personne n\'avait plus faim.', en: 'Afterward nobody was hungry anymore.' }
-            ]
           }
         ]
       }
@@ -150,12 +163,6 @@ describe('checkWordPool', () => {
           {
             lines: [
               { fr: 'Je mange du pain tous les matins.', en: 'I eat bread every morning.' }
-            ]
-          },
-          {
-            lines: [
-              { fr: 'Nous avons mangé trop vite hier soir.', en: 'We ate too quickly last night.' },
-              { fr: 'Ensuite personne n\'avait plus faim.', en: 'Afterward nobody was hungry anymore.' }
             ]
           }
         ]

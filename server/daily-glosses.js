@@ -12,7 +12,7 @@ export function buildDailyGlossFields(card, sentenceKey) {
     englishFallback: String(card?.translation || '').trim()
   }];
   const scenes = Array.isArray(card?.sentences) ? card.sentences : [];
-  scenes.slice(0, 3).forEach((scene, sceneIndex) => {
+  scenes.slice(0, 1).forEach((scene, sceneIndex) => {
     sceneLines(scene, sentenceKey).forEach((line, lineIndex) => {
       if (!line.l2) return;
       fields.push({

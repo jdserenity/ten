@@ -37,18 +37,18 @@ const sceneCard = {
   ]
 };
 
-test('buildDailyGlossFields includes word and per-line gloss keys for legacy scenes', () => {
+test('buildDailyGlossFields includes word and first-scene gloss keys for legacy scenes', () => {
   const fields = buildDailyGlossFields(sampleCard, 'fr');
-  assert.equal(fields.length, 4);
+  assert.equal(fields.length, 2);
   assert.equal(fields[0].key, 'wordGloss');
   assert.equal(fields[0].englishFallback, 'hello');
-  assert.deepEqual(fields.slice(1).map(f => f.key), ['s1l1', 's2l1', 's3l1']);
+  assert.deepEqual(fields.slice(1).map(f => f.key), ['s1l1']);
   assert.equal(fields[1].englishFallback, 'Hello, how are you?');
 });
 
-test('buildDailyGlossFields emits one field per line in two-sentence scenes', () => {
+test('buildDailyGlossFields emits only the first scene lines', () => {
   const fields = buildDailyGlossFields(sceneCard, 'fr');
-  assert.deepEqual(fields.map(f => f.key), ['wordGloss', 's1l1', 's1l2', 's2l1', 's2l2']);
+  assert.deepEqual(fields.map(f => f.key), ['wordGloss', 's1l1', 's1l2']);
   assert.equal(fields[2].sourceText, 'Sans ça, j\'ai faim.');
   assert.equal(fields[2].englishFallback, 'Without that, I am hungry.');
 });
